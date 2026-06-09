@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Order - PETRO OMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="orders.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="/images/app-icon.png" />
+
+
+    <script src="../product.js"></script>
+</head>
+
+<body>
+
+    <!-- Whatsapp Section -->
+    <div class="whats_link">
+        <a target="_blank" href="https://wa.me/918000007336?text=">
+            <img src="/images/whatsapp_logo.png" alt="" id="whatsapp-icon" /></a>
+    </div>
+
+    <!-- Phone Section -->
+    <div class="phone_link">
+        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
+            <img src="/images/app.webp" alt="" id="whatsapp-icon" /></a>
+    </div>
+    <!-- Top Navbar -->
+    <div class="top-bar" style="background: #108082;">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                    <div class="contact-details">
+                        <ul class="d-flex">
+                            <li>
+                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                            </li>
+                            <li>
+                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                    contact@petroindustech.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                    <div class="news-box">
+                        <ul class="footer-social topnav-social-icon">
+                            <li>
+                                <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                        class="fa-brands fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                        class="fa-brands fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                        class="fa-brands fa-youtube"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/Petroindustech" target="_blank"><i
+                                        class="fa-brands fa-x-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                        class="fa-brands fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+        <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+
+            <!-- LEFT : LOGO -->
+            <a class="navbar-brand" href="https://order-management-petro.netlify.app/">
+                <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+            </a>
+
+            <!-- RIGHT : ADMIN -->
+            <div class="d-flex align-items-center">
+
+                <!-- DARK MODE -->
+                <label class="toggle-switch mb-0 mr-3">
+                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+
+                <!-- ADMIN DROPDOWN -->
+                <div class="dropdown">
+                    <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="border-radius:20px;">
+
+                        <i class="fa fa-user-circle text-success mr-2"></i>
+                        <span id="adminName">Admin</span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                        <a class="dropdown-item" href="/admin-profile.html">
+                            <i class="fa fa-user mr-2"></i> Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/login.html" onclick="logout()">
+                            <i class="fa fa-sign-out mr-2"></i> Logout
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h3>Edit Order</h3>
+
+        <div id="loader" style="padding:20px; font-size:18px;">Loading order...</div>
+
+        <div id="editArea" style="display:none">
+
+            <!-- ORDER DETAILS -->
+            <div class="petro-card">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Order No</label>
+                        <input id="orderNo" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Status</label>
+                        <select id="orderStatus" required>
+                            <option value="Pending">Pending</option>
+                            <option value="Quotation Sent">Quotation Sent</option>
+                            <option value="Payment Received">Payment Received</option>
+                            <option value="Partial Delivered">Partial Delivered</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Hold">Hold</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <!-- Cancel Remark Popup -->
+                    <div id="cancelRemarkModal" style="
+        display:none;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+">
+
+                        <div style="
+        background:#fff;
+        padding:20px;
+        border-radius:10px;
+        width:350px;
+        box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    ">
+
+                            <h3 style="margin-bottom:10px;">
+                                Cancel Order
+                            </h3>
+
+                            <label>
+                                Reason for Cancellation:
+                            </label>
+
+                            <textarea id="cancelRemark" rows="3" class="form-control" placeholder="Enter reason..."
+                                style="margin-top:8px;"></textarea>
+
+                            <div style="
+            margin-top:15px;
+            text-align:right;
+        ">
+
+                                <button class="btn btn-secondary" onclick="closeCancelPopup()">
+                                    Cancel
+                                </button>
+
+                                <button class="btn btn-danger" onclick="confirmCancelRemark()">
+                                    OK
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <label>Party Name</label>
+                        <input id="partyName" class="form-control">
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+
+
+                    <div class="col-md-4">
+                        <label>Party Type</label>
+                        <select id="partyType" class="form-control">
+                            <option value="">Select</option>
+                            <option value="Primary">Primary</option>
+                            <option value="Secondary">Secondary</option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label>Party Mobile</label>
+                        <input id="partyMobile" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Party GST Number</label>
+                        <input id="partyGST" class="form-control">
+                    </div>
+
+                    <div class="col-md-12 mt-2">
+                        <label>Party Address</label>
+                        <input id="partyAddress" class="form-control">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ITEMS TABLE -->
+            <div class="petro-card">
+                <h5>Order Items</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Item Code</th>
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th>Unit</th>
+                            <th>Rate (₹)</th>
+                            <th>Amount (₹)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="itemsBody"></tbody>
+                </table>
+
+                <button class="btn btn-success btn-sm" onclick="addItemRow()">+ Add Item</button>
+            </div>
+
+            <!-- CATEGORY DISCOUNTS -->
+            <div class="petro-card">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label><b>Hardware Discount (%)</b></label>
+                        <input id="hardwareDisc" type="number" class="form-control" value="0" min="0" max="100"
+                            oninput="calcTotals()">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label><b>Bathroom Discount (%)</b></label>
+                        <input id="bathroomDisc" type="number" class="form-control" value="0" min="0" max="100"
+                            oninput="calcTotals()">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label><b>SS Discount (%)</b></label>
+                        <input id="stainlesssteelDisc" type="number" class="form-control" value="0" min="0" max="100"
+                            oninput="calcTotals()">
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- BILLING AREA -->
+            <div class="petro-card">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Freight</label>
+                        <input id="freight" type="number" class="form-control" value="0" oninput="calcTotals()">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Special Discount</label>
+                        <input id="specialDiscount" type="number" class="form-control" value="0" oninput="calcTotals()">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>GST %</label>
+                        <input id="gstPercent" type="number" class="form-control" value="0" oninput="calcTotals()">
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Subtotal</label>
+                        <input id="subTotal" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>GST Amount</label>
+                        <input id="gstAmount" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Grand Total</label>
+                        <input id="grandTotal" class="form-control" readonly>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- UPDATE BUTTON -->
+
+            <button class="btn btn-primary btn-lg btn-block" onclick="updateOrder()">Update Order</button>
+
+        </div>
+
+    </div>
+
+    <div id="suggestBox" style="position:absolute;background:#fff;border:1px solid #ccc;
+     max-height:180px;overflow-y:auto;display:none;z-index:9999;
+     border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,0.15);width:260px;">
+    </div>
+    <script type="module" src="edit-order.js"></script>
+    
+    <script src="/js/dev.js"></script>
+
+    <br><br><br>
+
+</body>
+
+
+</html>

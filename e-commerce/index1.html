@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Order Management System - PETRO</title>
+    <meta name="description"
+        content="Visit Petro Industech’s About Us page to see why dealers and customers buy from us. We deliver quality bathroom accessories and racks in bulk." />
+    <script src="/product.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font CSS & CDN -->
+    <link href="/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styless.css">
+</head>
+
+<body>
+    <div class="fixed-cart-bar" id="fixedCartBar" style="display:none">
+
+        <div class="fixed-cart-info">
+            🛒 <span id="cartCount">0</span> Items | ₹<span id="cartAmount">0</span>
+        </div>
+
+        <a href="cart.html" class="fixed-cart-btn">
+            View Cart →
+        </a>
+
+    </div>
+    <!-- Top Navbar -->
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                    <div class="contact-details">
+                        <ul class="d-flex">
+                            <li>
+                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                            </li>
+                            <li>
+                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                    contact@petroindustech.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                    <div class="news-box">
+                        <ul class="footer-social topnav-social-icon">
+                            <li>
+                                <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                        class="fa-brands fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                        class="fa-brands fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                        class="fa-brands fa-youtube"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/Petroindustech" target="_blank"><i
+                                        class="fa-brands fa-x-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                        class="fa-brands fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+        <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+            <!-- LEFT : LOGO -->
+            <a class="navbar-brand" href="https://order-management-petro.netlify.app/">
+                <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+            </a>
+
+            <!-- RIGHT : ADMIN -->
+            <div class="d-flex align-items-center">
+                <!-- DARK MODE -->
+                <label class="toggle-switch mb-0 mr-3">
+                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+
+                <!-- ADMIN DROPDOWN -->
+                <div class="dropdown">
+                    <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="border-radius:20px;">
+                        <i class="fa fa-user-circle text-success mr-2"></i>
+                        <span id="adminName">Login</span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                        <a class="dropdown-item" href="/login.html">
+                            <i class="fa fa-user mr-2"></i> Admin
+                        </a>
+                        <a class="dropdown-item" href="/sales-login.html">
+                            <i class="fa fa-user mr-2"></i> Salesman
+                        </a>
+                    </div>
+                </div>
+
+                <div class="dropdown ml-3 cart-wrapper">
+
+                    <a href="#" class="cart-btn dropdown-toggle" id="cartDropdown" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart-text">Cart</span>
+
+                        <span id="cartBadge" class="cart-badge">0</span>
+
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right cart-dropdown" aria-labelledby="cartDropdown">
+
+                        <div class="cart-header">
+                            <span>Your Cart</span>
+                        </div>
+
+                        <div id="cartItemsList" class="cart-items"></div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="cart-actions">
+                            <a href="cart.html" class="cart-view-btn">View Cart</a>
+                            <a href="checkout.html" class="cart-checkout-btn">Checkout</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container-fluid mt-5" id="product-display">
+        <div class="product-heading">
+            <h2>Explore Our Products</h2>
+            <p>Choose from our wide range of bathroom accessories and hardware products</p>
+        </div>
+
+        <div class="product-collection">
+            <!-- Category Filter Dropdown -->
+            <div class="product-filters">
+
+                <input type="text" id="searchFilter" placeholder="Search by item code or product name">
+                <select id="categoryFilter">
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
+                    <option value="bathroom">
+                        Bathroom
+                    </option>
+
+                    <option value="hardware">
+                        Hardware
+                    </option>
+
+                    <!-- ✅ STAINLESS STEEL -->
+                    <option value="stainlesssteel">
+                        Stainless Steel
+                    </option>
+
+                </select>
+
+                <select id="unitFilter">
+                    <option value="all">All Units</option>
+                    <option value="PKT">PKT</option>
+                    <option value="CTN">CTN</option>
+                    <option value="PCS">PCS</option>
+                    <option value="SET">SET</option>
+                    <option value="KIT">KIT</option>
+                </select>
+
+                <select id="priceFilter">
+                    <option value="all">All Prices</option>
+                    <option value="0-100">Below ₹100</option>
+                    <option value="100-500">₹100 - ₹500</option>
+                    <option value="500-1000">₹500 - ₹1000</option>
+                </select>
+
+            </div>
+
+
+        </div>
+        <div id="product-list">
+            <!-- Product Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Unit Selection Modal -->
+    <div class="modal fade" id="unitModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content petro-modal">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-box"></i> Select Unit
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <label style="color:red; font-size:13px; margin-right:10px;">Select unit</label>
+                    <select id="unitSelectionDropdown"></select>
+
+                    <div class="qty-wrapper">
+                        <span>Quantity</span>
+                        <div class="qty-box">
+                            <button onclick="changeModalQty(-1)">-</button>
+                            <input id="modalQty" type="number" value="1" min="1">
+                            <button onclick="changeModalQty(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" onclick="addToCartWithUnit()">Add To Cart</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--FOOTER SECTION-->
+    <footer class="footer mt-5">
+        <div class="container bottom_border mt-3">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="/images/petro-circle-logo.webp" alt="" class="img-fluid" />
+                    </div>
+
+                    <ul class="mt-3 social-link-foot">
+                        <li>
+                            <i class="fa-solid fa-briefcase"></i><span style="font-weight: bold; color: yellow">
+                                Corporate Office:- </span><br />
+                            <b> Petro Industech Private Limited</b> <br />
+                            A-47B, Naresh Park Extension, Nangloi, New Delhi - 110041
+                        </li>
+                        <li>
+                            <a href="https://g.co/kgs/KhszSVx">
+                                <i class="fa-solid fa-location-dot"></i><span style="font-weight: bold; color: yellow">
+                                    Manufacturing (Unit - I) :- </span>
+                                A-48D, Naresh Park Extension, Nangloi, New Delhi - 110041</a>
+                        </li>
+                        <li>
+                            <a href="https://g.co/kgs/Vv9FQjM"><i class="fa-solid fa-location-dot"></i><span
+                                    style="font-weight: bold; color: yellow">
+                                    Manufacturing (Unit - II):- </span>
+                                Plot No. 812/F-45, Samtal Zone, RIICO Industrial Area, BHIWADI
+                                (Distt:- Khairthal-Tijara), Rajasthan - 301019, India</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="news-box">
+                        <h5 class="headin5_amrc col_white_amrc pt2">
+                            Connect With Social Media
+                        </h5>
+
+                        <ul class="footer-social">
+                            <li>
+                                <a class="facebook hb-xs-margin" target="_blank"
+                                    href="https://www.facebook.com/www.petroindustries.in/"><span
+                                        class="hb hb-xs spin hb-facebook"><i class="fab fa-facebook-f"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="instagram hb-xs-margin" target="_blank"
+                                    href="https://www.instagram.com/petroindustries/"><span
+                                        class="hb hb-xs spin hb-instagram"><i class="fab fa-instagram"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank" href="https://x.com/Petroindustech"
+                                    target="_blank"><span class="hb hb-xs spin hb-x-twitter"><i
+                                            class="fab fa-x-twitter"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank"
+                                    href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><span
+                                        class="hb hb-xs spin hb-google-plus"><i class="fab fa-youtube"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank"
+                                    href="https://in.pinterest.com/petroindustech/" target="_blank"><span
+                                        class="hb hb-xs spin hb-google-plus"><i class="fab fa-pinterest"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank"
+                                    href="https://wa.me/918000007336"><span class="hb hb-xs spin hb-whatsapp"><i
+                                            class="fab fa-whatsapp"></i></span></a>
+                            </li>
+                            <br />
+                            <li>
+                                <i class="fa-solid fa-phone"></i><a href="tel:+91-8000007336"> +91-8000007336</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto: contact@petroindustech.com">
+                                    contact@petroindustech.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <p class="copyright text-center">
+                Copyright Petro Industech Pvt Ltd © 2025. All Rights Reserved
+            </p>
+        </div>
+    </footer>
+
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery.appear.js"></script>
+    <script src="/js/script.js"></script>
+
+    <script type="module" src="/js/home-logic.js"></script>
+    <script type="module" src="/js/main.js"></script>
+    <script src="mains.js"></script>
+
+    <script src="/js/dev.js"></script>
+</body>
+
+</html>

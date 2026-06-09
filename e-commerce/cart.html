@@ -1,0 +1,2412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart - Petro OMS</title>
+
+    <link rel="stylesheet" href="styless.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <style>
+        .cart-page {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 35px 20px 50px;
+        }
+
+        .cart-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 28px;
+            padding: 28px 30px;
+            border-radius: 24px;
+            background: #108082;
+            color: #fff;
+            box-shadow: 0 18px 40px rgba(25, 135, 84, 0.22);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cart-hero::before {
+            content: "";
+            position: absolute;
+            right: -60px;
+            top: -60px;
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .cart-hero::after {
+            content: "";
+            position: absolute;
+            right: 80px;
+            bottom: -70px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .cart-hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cart-hero h1 {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .cart-hero p {
+            font-size: 15px;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        .cart-hero-icon {
+            position: relative;
+            z-index: 2;
+            width: 78px;
+            height: 78px;
+            min-width: 78px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .cart-card,
+        .summary-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 24px;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+
+        .cart-card {
+            padding: 24px;
+        }
+
+        .cart-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .cart-card-header h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            color: #111827;
+        }
+
+        .cart-count-badge {
+            background: #e8fff2;
+            color: #0f8a4b;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 9px 14px;
+            border-radius: 999px;
+            border: 1px solid #caefd9;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            min-width: 760px;
+        }
+
+        thead th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            font-weight: 700;
+            border: none;
+        }
+
+        thead th:first-child {
+            border-radius: 14px 0 0 14px;
+        }
+
+        thead th:last-child {
+            border-radius: 0 14px 14px 0;
+        }
+
+        tbody tr {
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        }
+
+        tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border: none;
+        }
+
+        tbody tr td:first-child {
+            border-radius: 16px 0 0 16px;
+        }
+
+        tbody tr td:last-child {
+            border-radius: 0 16px 16px 0;
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+
+
+        .mobile-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .product-thumb {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+        }
+
+        .product-text h4 {
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .product-text p {
+            font-size: 11px;
+            margin: 0;
+        }
+
+
+        .unit-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #eefbf3;
+            color: #0f8a4b;
+            font-weight: 700;
+            font-size: 12px;
+            border: 1px solid #d5f3df;
+        }
+
+        .price-text,
+        .line-total {
+            font-size: 16px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 20px;
+            padding: 4px 8px;
+            gap: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #108082;
+            color: #fff;
+        }
+
+        .qty-value {
+            min-width: 22px;
+            text-align: center;
+            font-weight: 800;
+            color: #111827;
+            font-size: 15px;
+        }
+
+        .remove-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 20px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .summary-card {
+            padding: 24px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .summary-card h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 0;
+            color: #475569;
+            font-size: 15px;
+            border-bottom: 1px dashed #dbe4ee;
+        }
+
+        .summary-row strong {
+            color: #111827;
+        }
+
+        .summary-total {
+            padding-top: 18px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .summary-note {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .cart-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-main,
+        .btn-secondary {
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+            padding: 15px 18px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.28s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, #198754, #0f5132);
+            color: #fff;
+            box-shadow: 0 14px 28px rgba(25, 135, 84, 0.22);
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #111827;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            transform: translateY(-2px);
+            color: #111827;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 55px 20px 40px;
+        }
+
+        .empty-cart-icon {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 18px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #eefbf3, #ffffff);
+            color: #198754;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            box-shadow: inset 0 0 0 1px #dceee4;
+        }
+
+        .empty-cart h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .empty-cart p {
+            font-size: 15px;
+            color: #64748b;
+            max-width: 420px;
+            margin: 0 auto 22px;
+            line-height: 1.7;
+        }
+
+        .mobile-cart-list {
+            display: none;
+        }
+
+        .mobile-cart-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 1px solid #eee;
+            box-shadow: none;
+        }
+
+
+        .mobile-middle {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 13px;
+            margin: 6px 0;
+        }
+
+        .mobile-middle div {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mobile-label {
+            font-size: 11px;
+            color: #777;
+            margin: 0;
+        }
+
+        .mobile-value {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .mobile-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        /* ================= LARGE SCREENS ================= */
+
+        @media (min-width:1600px) {
+
+            .cart-page {
+                max-width: 1500px;
+            }
+
+            .summary-card {
+                padding: 30px;
+            }
+
+            .summary-total {
+                font-size: 26px;
+            }
+
+        }
+
+
+        /* ================= LAPTOP ================= */
+
+        @media (max-width:1200px) {
+
+            .cart-layout {
+                grid-template-columns: 1.5fr 1fr;
+            }
+
+            .cart-page {
+                padding: 25px 16px;
+            }
+
+        }
+
+
+        /* ================= TABLET ================= */
+
+        @media (max-width:992px) {
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: relative;
+                top: 0;
+                margin-top: 20px;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width:768px) {
+
+            .cart-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .summary-card,
+            .cart-card {
+                width: 100%;
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            .desktop-cart-table {
+                display: none;
+            }
+
+            .mobile-cart-list {
+                display: block;
+            }
+
+            .cart-hero {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 22px 20px;
+            }
+
+            .cart-hero h1 {
+                font-size: 24px;
+            }
+
+            .cart-hero-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+
+            .mobile-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            .product-text {
+                flex: 1;
+            }
+
+            .unit-pill {
+                margin-left: auto;
+            }
+
+            .summary-row {
+                font-size: 14px;
+            }
+
+            .summary-row input {
+                width: 65px;
+            }
+
+            .summary-total {
+                font-size: 20px;
+            }
+
+        }
+
+
+        /* ================= SMALL MOBILE ================= */
+
+        @media (max-width:480px) {
+
+            .cart-page {
+                padding: 14px 10px 30px;
+            }
+
+            .cart-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .cart-count-badge {
+                font-size: 12px;
+            }
+
+            .qty-box {
+                gap: 6px;
+            }
+
+            .qty-btn {
+                width: 30px;
+                height: 30px;
+            }
+
+            .btn-main,
+            .btn-secondary {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+
+            .summary-total {
+                font-size: 20px;
+            }
+
+        }
+
+        .fixed-cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #108082;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            z-index: 999;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .fixed-cart-info {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .fixed-cart-btn {
+            background: #fff;
+            color: #108082;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        /* Container to center the button */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            /* Horizontally centers the button */
+            align-items: center;
+            /* Vertically centers the button */
+        }
+
+        /* Clear Button Styles */
+        button.clear-btn {
+            font-family: "Roboto", sans-serif;
+            font-size: 16px;
+            padding: 12px 24px;
+            background-color: #108082;
+            /* Primary brand color */
+            color: #fff;
+            /* White text */
+            border: 2px solid #108082;
+            /* Border matching the primary color */
+            border-radius: 25px;
+            /* Rounded corners */
+            text-transform: uppercase;
+            /* Uppercase text */
+            letter-spacing: 1px;
+            /* Spacing between letters */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+            font-weight: 600;
+            /* Bold text */
+            transition: background-color 0.3s, color 0.3s;
+            /* Smooth transition for background and text color */
+        }
+
+        button.clear-btn:hover {
+            background-color: #e0f8f1;
+            /* Light greenish color for hover */
+            color: #108082;
+            /* Text color changes to primary color */
+        }
+
+        button.clear-btn:active {
+            background-color: #c1e8e0;
+            /* Slightly darker greenish color when clicked */
+            transform: scale(0.98);
+            /* Shrink effect on click */
+        }
+
+        button.clear-btn:focus {
+            outline: none;
+            /* Remove focus outline */
+        }
+
+        /* For mobile screens (Responsive button) */
+        @media (max-width: 768px) {
+            button.clear-btn {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* =========================
+   PREMIUM MODAL CONTAINER
+========================= */
+
+        .premium-modal {
+
+            width: 440px;
+            max-width: 95%;
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            border: none;
+
+            box-shadow:
+
+                0 40px 80px rgba(0, 0, 0, 0.25);
+
+            animation: premiumPop 0.3s ease;
+
+        }
+
+        /* Animation */
+
+        @keyframes premiumPop {
+
+            from {
+
+                transform: translateY(40px);
+                opacity: 0;
+
+            }
+
+            to {
+
+                transform: translateY(0);
+                opacity: 1;
+
+            }
+
+        }
+
+        /* =========================
+   HEADER
+========================= */
+
+        .premium-header {
+
+            background:
+
+                linear-gradient(135deg,
+                    #0f766e,
+                    #108082);
+
+            padding: 18px;
+
+            text-align: center;
+
+            position: relative;
+
+        }
+
+        .premium-title {
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: 600;
+
+        }
+
+        /* CLOSE BUTTON */
+
+        .premium-close {
+
+            position: absolute;
+
+            right: 14px;
+            top: 10px;
+
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: rgba(255, 255, 255, 0.25);
+
+            color: white;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+        }
+
+        .premium-close:hover {
+
+            background: rgba(255, 255, 255, 0.4);
+
+        }
+
+        /* =========================
+   BODY
+========================= */
+
+        .premium-body {
+
+            padding: 70px 29px 24px 29px;
+
+            text-align: center;
+
+        }
+
+        /* SUCCESS ICON */
+
+        .premium-icon {
+
+            width: 90px;
+            height: 90px;
+
+            margin: -50px auto 10px;
+
+            background: #e6f7f6;
+
+            border-radius: 50%;
+
+            font-size: 44px;
+
+            color: #108082;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+
+                0 12px 30px rgba(16, 128, 130, 0.25);
+
+        }
+
+        /* HEADING */
+
+        .premium-heading {
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+            margin-top: 10px;
+
+            color: #222;
+
+        }
+
+        /* TEXT */
+
+        .premium-text {
+
+            margin-top: 8px;
+
+            font-size: 15px;
+            text-align: centers;
+
+            color: #555;
+
+            line-height: 1.6;
+
+        }
+
+        /* =========================
+   FOOTER
+========================= */
+
+        .premium-footer {
+
+            padding: 22px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 16px;
+
+        }
+
+        /* BUTTON */
+
+        .premium-btn {
+
+            padding: 12px 30px;
+
+            border-radius: 10px;
+
+            border: none;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+        /* NEW ORDER */
+
+        .premium-danger {
+
+            background: #ef4444;
+            cursor: pointer;
+
+            color: white;
+
+        }
+
+        .premium-danger:hover {
+
+            background: #dc2626;
+
+        }
+
+        /* CONTINUE */
+
+        .premium-success {
+
+            background: #108082;
+            cursor: pointer;
+
+            color: white;
+
+        }
+
+        .premium-success:hover {
+
+            background: #0b5f61;
+
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 576px) {
+
+            .premium-footer {
+
+                flex-direction: column;
+
+            }
+
+            .premium-btn {
+
+                width: 100%;
+
+            }
+
+        }
+    </style>
+</head>
+
+<body class="main-page">
+
+    <!-- Top Navbar -->
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                    <div class="contact-details">
+                        <ul class="d-flex">
+                            <li>
+                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                            </li>
+                            <li>
+                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                    contact@petroindustech.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                    <div class="news-box">
+                        <ul class="footer-social topnav-social-icon">
+                            <li>
+                                <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                        class="fa-brands fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                        class="fa-brands fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                        class="fa-brands fa-youtube"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/Petroindustech" target="_blank"><i
+                                        class="fa-brands fa-x-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                        class="fa-brands fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+        <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+            <!-- LEFT : LOGO -->
+            <a class="navbar-brand" href="https://order-management-petro.netlify.app/">
+                <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+            </a>
+
+            <!-- RIGHT : ADMIN -->
+            <div class="d-flex align-items-center">
+                <!-- DARK MODE -->
+                <label class="toggle-switch mb-0 mr-3">
+                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+
+                <!-- ADMIN DROPDOWN -->
+                <div class="dropdown">
+                    <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="border-radius:20px;">
+                        <i class="fa fa-user-circle text-success mr-2"></i>
+                        <span id="adminName">Login</span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                        <a class="dropdown-item" href="/login.html">
+                            <i class="fa fa-user mr-2"></i> Admin
+                        </a>
+                        <a class="dropdown-item" href="/sales-login.html">
+                            <i class="fa fa-user mr-2"></i> Salesman
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="cart-page">
+
+        <div class="cart-hero">
+            <div class="cart-hero-content">
+                <h1><i class="fa-solid fa-cart-shopping"></i> Your Cart</h1>
+                <p>Review your selected products, update quantity and proceed to checkout.</p>
+            </div>
+            <div class="cart-hero-icon">
+                <i class="fa-solid fa-basket-shopping"></i>
+            </div>
+        </div>
+
+        <div class="petro-card">
+            <div class="petro-row">
+                <div class="petro-col-4">
+                    <label>Salesman Name</label>
+                    <select id="salesman" required>
+                        <option value="">Select Salesman</option>
+                        <option>Rup Ranjan Bora</option>
+                        <option>Sariya Murtuza</option>
+                        <option>Roshan Sharma</option>
+                        <option>Ankit Kalra</option>
+                        <option>Vivek Srivastava</option>
+                        <option>Amit Soni</option>
+                                <option>Prashant Kumar</option>  
+                                <option>Mahesh Kumar</option>
+                    </select>
+                </div>
+                <div class="petro-col-4"><label>Order No.</label><input id="orderNo" placeholder="AUTO" readonly></div>
+                <div class="petro-col-4"><label>Date</label><input type="date" id="orderDate"></div>
+            </div>
+
+            <div class="petro-row">
+                <div class="petro-col-4">
+                    <label>Party Name </label>
+                    <input id="partyName" placeholder="Party name">
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Party Type</label>
+                    <select id="partyType">
+                        <option value="">Select</option>
+                        <option value="Primary">Primary</option>
+                        <option value="Secondary">Secondary</option>
+                    </select>
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Party Address</label>
+                    <input id="partyAddress" placeholder="Full address">
+                </div>
+                <div class="petro-col-4"><label>Party GST No.</label><input id="partyGST" placeholder="GSTIN"
+                        style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+                <div class="petro-col-4"><label>Party Mobile No.</label><input id="partyMobile"
+                        placeholder="Contact No."></div>
+                <div class="petro-col-4"><label>Party Marka / Transport</label><input id="partyTransport"
+                        placeholder="Marka / Transport"></div>
+            </div>
+
+            <div class="petro-row">
+                <div class="petro-col-4"><label>Payment Type</label><select id="paymentType">
+                        <option>Advance</option>
+                        <option>Credit</option>
+                    </select></div>
+                <div class="petro-col-4"><label>Expected Dispatch</label><input type="date" id="dispatchDate"></div>
+                <div class="petro-col-4"><label>Notes</label><input id="orderNotes"
+                        placeholder="Any special instruction"></div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="clear-btn" onclick="clearFormAndCart()">
+                Clear Data
+            </button>
+        </div>
+
+        <div class="cart-layout">
+            <!-- Left -->
+            <div class="cart-card">
+                <div class="cart-card-header">
+                    <h2>Cart Items</h2>
+                    <div class="cart-count-badge" id="cartItemCountBadge">0 Items</div>
+                </div>
+
+                <!-- Desktop Table -->
+                <div class="table-wrap desktop-cart-table" id="desktopCartWrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Unit</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartItemsList"></tbody>
+                    </table>
+
+                </div>
+
+                <!-- Mobile Cards -->
+                <div class="mobile-cart-list" id="mobileCartList"></div>
+
+                <!-- Empty State -->
+                <div class="empty-cart" id="emptyCartState" style="display:none;">
+                    <div class="empty-cart-icon">
+                        <i class="fa-solid fa-cart-arrow-down"></i>
+                    </div>
+                    <h3>Your cart is empty</h3>
+                    <p>Add some amazing Petro products to your cart and come back here to review your order beautifully.
+                    </p>
+                    <a href="index1.html" class="btn-main" style="max-width:240px; margin:0 auto;">
+                        <i class="fa-solid fa-bag-shopping"></i> Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary Section -->
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+
+                <!-- Total Items -->
+                <div class="summary-row">
+                    <span>Total Items</span>
+                    <strong id="summaryItems">0</strong>
+                </div>
+
+                <!-- hardware Discount -->
+                <div class="summary-row">
+                    <span>hardware Discount (%)</span>
+                    <input type="number" id="hardwareDisc" value="0" min="0" max="100" style="width:70px"
+                        oninput="recalc()">
+                </div>
+
+                <!-- Bathroom Discount -->
+                <div class="summary-row">
+                    <span>Bathroom Discount (%)</span>
+                    <input type="number" id="bathroomDisc" value="0" min="0" max="100" style="width:70px"
+                        oninput="recalc()">
+                </div>
+
+                <div class="summary-row">
+
+                    <span>
+                        SS Discount (%)
+                    </span>
+
+                    <input type="number" id="stainlesssteelDisc" value="0" min="0" max="100" style="width:70px"
+                        oninput="recalc()">
+
+                </div>
+
+                <!-- Freight & Forwarding -->
+                <div class="summary-row">
+                    <span>Freight & Forwarding</span>
+                    <input type="number" id="freight" value="0" style="width:90px" oninput="recalc()">
+                </div>
+
+                <!-- Special Discount -->
+                <div class="summary-row">
+                    <span>Special Discount</span>
+                    <input type="number" id="specialDiscount" value="0" style="width:90px" oninput="recalc()">
+                </div>
+
+                <!-- GST Percentage -->
+                <div class="summary-row">
+                    <span>GST %</span>
+                    <input type="number" id="gstPercent" value="18" style="width:70px" oninput="recalc()">
+                </div>
+
+                <!-- Subtotal -->
+                <div class="summary-row">
+                    <span>SubTotal</span>
+                    <strong>
+                        <span id="cartSubtotal">0</span></strong>
+                </div>
+
+                <!-- GST Amount -->
+                <div class="summary-row">
+                    <span>GST Amount</span>
+                    <strong><span id="gstAmount">0</span></strong>
+                </div>
+
+                <!-- Estimated Charges -->
+                <div class="summary-row">
+                    <span>Estimated Charges</span>
+                    <strong>₹<span id="extraCharges">0</span></strong>
+                </div>
+
+                <!-- Grand Total -->
+                <div class="summary-total">
+                    <span>Grand Total</span>
+                    <span><span id="cartTotal">0</span></span>
+                </div>
+
+                <!-- Security Note -->
+                <div class="summary-note">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    Your selected items are stored securely in browser storage until checkout.
+                </div>
+
+                <!-- Cart Actions -->
+                <div class="cart-actions">
+                    <button class="btn-main" id="submitBtn">
+                        <i class="fa-solid fa-credit-card"></i> Submit Order
+                    </button>
+
+                    <a href="index1.html" class="btn-secondary">
+                        <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ORDER SUBMITTED MODAL -->
+
+    <!-- Modal for Order Submitted -->
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content premium-modal">
+                <div class="premium-header">
+                    <div class="premium-title">Order Submitted</div>
+                    <button type="button" class="premium-close" data-dismiss="modal" onclick="closeModal()"> × </button>
+                </div>
+                <div class="premium-body">
+                    <div class="premium-icon">✓</div>
+                    <h3 class="premium-heading">Success!</h3>
+                    <p class="premium-text">Your order has been submitted successfully.</p>
+                </div>
+                <div class="premium-footer">
+                    <button class="premium-btn premium-danger" onclick="window.location.reload()">New Order</button>
+                    <button class="premium-btn premium-success" onclick="closeModal()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Modal -->
+    <div id="printModal" style="display: none;">
+        <div class="modal-content">
+            <h3>Order Summary</h3>
+            <p>Your order has been submitted successfully. Do you want to print it?</p>
+            <button onclick="confirmPrint()">Print</button>
+            <button onclick="closePrintModal()">Close</button>
+        </div>
+    </div>
+
+
+    <div id="customerContainer">
+        <!-- Customer data will be dynamically rendered here -->
+    </div>
+
+
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery.appear.js"></script>
+    <script src="/js/script.js"></script>
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/home-logic.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getFirestore, doc, addDoc, collection, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
+            authDomain: "petro-oms.firebaseapp.com",
+            projectId: "petro-oms",
+            storageBucket: "petro-oms.firebasestorage.app",
+            messagingSenderId: "562472760628",
+            appId: "1:562472760628:web:384f4eda2c862b6e3ce161"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function addToCart(product) {
+            let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            cartItems.push(product); // Add the product to the cart
+            localStorage.setItem("cart", JSON.stringify(cartItems)); // Save cart back to localStorage
+        }
+
+        function savePartyDetails() {
+            const partyDetails = {
+                name: document.getElementById("partyName").value,
+                address: document.getElementById("partyAddress").value,
+                gst: document.getElementById("partyGST").value,
+                mobile: document.getElementById("partyMobile").value,
+                transport: document.getElementById("partyTransport").value,
+                type: "Primary"
+            };
+            localStorage.setItem("partyDetails", JSON.stringify(partyDetails)); // Save party details to localStorage
+        }
+
+
+
+        async function submitCartOrderData() {
+            const btn = document.getElementById("submitBtn");
+            btn.disabled = true;
+            btn.innerText = "Saving...";
+
+            try {
+                const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+                const partyDetails = {
+                    partyName: document.getElementById("partyName")?.value.trim() || "",
+                    partyType: document.getElementById("partyType")?.value || "",
+                    address: document.getElementById("partyAddress")?.value.trim() || "",
+                    gst: document.getElementById("partyGST")?.value.trim() || "",
+                    mobile: document.getElementById("partyMobile")?.value.trim() || "",
+                    transport: document.getElementById("partyTransport")?.value.trim() || "",
+                    salesman: document.getElementById("salesman")?.value || "",
+                    orderNo: document.getElementById("orderNo")?.value || "",
+                    orderDate: document.getElementById("orderDate")?.value || "",
+                    paymentType: document.getElementById("paymentType")?.value || "",
+                    dispatchDate: document.getElementById("dispatchDate")?.value || "",
+                    notes: document.getElementById("orderNotes")?.value.trim() || ""
+                };
+                const freight =
+                    parseFloat(document.getElementById("freight")?.value) || 0;
+
+                const specialDiscountValue =
+                    parseFloat(document.getElementById("specialDiscount")?.value) || 0;
+
+                if (!cartItems.length) {
+                    alert("❌ Cart is empty!");
+                    btn.disabled = false;
+                    btn.innerText = "Submit Order";
+                    return;
+                }
+
+                if (!partyDetails.partyName) {
+                    alert("❌ Please enter Party Name!");
+                    btn.disabled = false;
+                    btn.innerText = "Submit Order";
+                    return;
+                }
+
+                let grandTotal = 0;
+
+                let categoryDiscounts = {
+
+                    bathroom: 0,
+
+                    hardware: 0,
+
+                    stainlesssteel: 0
+
+                };
+
+                cartItems.forEach(item => {
+                    grandTotal += (item.price || 0) * (item.quantity || 0);
+                });
+
+                const hardwareDiscountPercent =
+                    parseFloat(document.getElementById("hardwareDisc")?.value) || 0;
+
+                const bathroomDiscountPercent =
+                    parseFloat(document.getElementById("bathroomDisc")?.value) || 0;
+
+                const stainlesssteelDiscountPercent =
+                    parseFloat(
+                        document.getElementById(
+                            "stainlesssteelDisc"
+                        )?.value
+                    ) || 0;
+                let hardwareTotal = 0;
+
+                let bathroomTotal = 0;
+
+                let stainlesssteelTotal = 0;
+
+                cartItems.forEach(item => {
+
+                    if ((item.category || "").toLowerCase() === "hardware") {
+                        hardwareTotal += (item.price || 0) * (item.quantity || 0);
+                    }
+
+                    if ((item.category || "").toLowerCase() === "bathroom") {
+                        bathroomTotal += (item.price || 0) * (item.quantity || 0);
+                    }
+                    if (
+                        (item.category || "")
+                            .toLowerCase()
+                            .trim() === "stainlesssteel"
+                    ) {
+
+                        stainlesssteelTotal +=
+                            (item.price || 0)
+                            *
+                            (item.quantity || 0);
+
+                    }
+
+                });
+                categoryDiscounts.hardware =
+                    hardwareTotal * hardwareDiscountPercent / 100;
+
+                categoryDiscounts.bathroom =
+                    bathroomTotal * bathroomDiscountPercent / 100;
+
+                categoryDiscounts.stainlesssteel =
+
+                    stainlesssteelTotal
+                    *
+                    stainlesssteelDiscountPercent
+                    / 100;
+
+                const categoryDiscountPercents = {
+
+                    hardware:
+                        hardwareDiscountPercent + "% Off",
+
+                    bathroom:
+                        bathroomDiscountPercent + "% Off",
+
+                    stainlesssteel:
+                        stainlesssteelDiscountPercent + "% Off"
+
+                };
+                const gstAmount =
+                    parseFloat(
+                        document.getElementById("gstAmount")
+                            .textContent
+                            .replace(/[₹,]/g, "")
+                    ) || 0;
+
+                const totalDiscount =
+
+                    categoryDiscounts.hardware +
+
+                    categoryDiscounts.bathroom +
+
+                    categoryDiscounts.stainlesssteel;
+
+                const grandTotalText =
+                    document.getElementById("cartTotal")
+                        .textContent
+                        .replace(/[₹,]/g, "");
+
+                const finalTotal =
+                    parseFloat(grandTotalText) || 0;
+
+                const totalCategoryDiscount =
+
+                    categoryDiscounts.hardware +
+
+                    categoryDiscounts.bathroom +
+
+                    categoryDiscounts.stainlesssteel;
+
+                const taxableAmount =
+                    Math.max(
+                        0,
+                        grandTotal
+                        + freight
+                        - totalDiscount
+                        - specialDiscountValue
+                    );
+
+
+
+
+
+                const orderData = {
+                    cartItems,
+                    partyDetails,
+                    orderDate: new Date(),
+
+                    freight: freight,
+                    specialDiscount: specialDiscountValue,
+
+                    categoryDiscounts,
+                    categoryDiscountPercents,
+
+                    gstAmount,
+                    gstPercent: 18,
+                    grandTotal: finalTotal,   // ⭐ ADD THIS LINE
+
+                    createdAt: new Date()
+                };
+
+                const docRef = await addDoc(collection(db, "products"), orderData);
+                console.log("Order submitted successfully:", docRef.id);
+
+                localStorage.removeItem("cart");
+
+                alert("✅ Order submitted successfully!");
+                window.location.replace(
+                    window.location.pathname + "?t=" + new Date().getTime()
+                );
+            } catch (error) {
+                console.error("Error submitting order:", error);
+                alert("❌ Error submitting order, please try again.");
+            }
+
+            btn.disabled = false;
+            btn.innerText = "Submit Order";
+        }
+        // Add event listener for the Submit Order button
+        document.getElementById("submitBtn").addEventListener("click", submitCartOrderData);
+
+        // Function to show the modal when the user clicks "Proceed to Checkout"
+        function checkout() {
+            $('#orderModal').modal('show'); // Show the modal
+        }
+
+
+        window.openPrintModal = function () {
+            const printModal = document.getElementById("printModal");
+            if (printModal) {
+                printModal.style.display = "flex"; // Open the modal
+            } else {
+                console.error("Modal not found!");
+            }
+        };
+        /* CONTINUE */
+
+        function closeModal() {
+
+            $('#orderModal').modal('hide');
+
+        }
+
+
+        /* NEW ORDER */
+
+        function clearData() {
+
+            if (!confirm("Start a new order?")) return;
+
+            console.log("Clearing data...");
+
+            /* Clear only order data */
+
+            localStorage.removeItem("cart");
+
+            localStorage.removeItem("petro_cart_and_form_draft");
+
+            localStorage.removeItem("petro_order_data");
+
+            $('#orderModal').modal('hide');
+
+            setTimeout(function () {
+
+                location.reload();
+
+            }, 300);
+
+        }
+
+        function clearOrder() {
+            $('#orderModal').modal('hide'); // Hide the modal
+            clearAll();  // Clear the current order and cart 
+        }
+
+
+        window.clearFormAndCart = function () {
+
+            try {
+
+                localStorage.removeItem("petro_order_data");
+
+                localStorage.removeItem("cart");
+
+                localStorage.removeItem("petro_order_auto_draft");
+
+                localStorage.removeItem("petro_cart_and_form_draft");
+
+                console.log("All data cleared.");
+
+                location.reload();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error clearing data:",
+                    error
+                );
+
+            }
+
+        };
+
+        // Add event listeners to the form fields to trigger real-time saving
+        document.querySelectorAll("#salesman, #orderNo, #orderDate, #partyName, #partyType, #partyAddress, #partyGST, #partyMobile, #partyTransport, #paymentType, #dispatchDate, #orderNotes")
+            .forEach(inputField => {
+                inputField.addEventListener("input", saveFormDataRealTime);
+            });
+
+        // Save form data in localStorage
+        function saveFormDataRealTime() {
+
+            const formData = {
+
+                orderNo:
+                    document.getElementById("orderNo").value,
+
+                orderDate:
+                    document.getElementById("orderDate").value,
+
+                salesman:
+                    document.getElementById("salesman").value,
+
+                partyName:
+                    document.getElementById("partyName").value,
+
+                partyType:
+                    document.getElementById("partyType").value,
+
+                partyAddress:
+                    document.getElementById("partyAddress").value,
+
+                partyGST:
+                    document.getElementById("partyGST").value,
+
+                partyMobile:
+                    document.getElementById("partyMobile").value,
+
+                partyTransport:
+                    document.getElementById("partyTransport").value,
+
+                paymentType:
+                    document.getElementById("paymentType").value,
+
+                dispatchDate:
+                    document.getElementById("dispatchDate").value,
+
+                orderNotes:
+                    document.getElementById("orderNotes").value
+
+            };
+
+            const cartData =
+                JSON.parse(
+                    localStorage.getItem("cart")
+                ) || [];
+
+            const combinedData = {
+
+                form: formData,
+
+                cart: cartData
+
+            };
+
+            localStorage.setItem(
+
+                "petro_cart_and_form_draft",
+
+                JSON.stringify(combinedData)
+
+            );
+
+            console.log("Draft saved");
+
+        }
+
+
+
+
+        function loadFormAndCart() {
+            const data = JSON.parse(localStorage.getItem("petro_order_data") || "null");
+            if (data) {
+                // Populate Form Data
+                const formData = data.form;
+                document.getElementById("orderNo").value = formData.orderNo || '';
+                document.getElementById("orderDate").value = formData.orderDate || '';
+                document.getElementById("salesman").value = formData.salesman || '';
+                document.getElementById("partyName").value = formData.partyName || '';
+                document.getElementById("partyType").value = formData.partyType || '';
+                document.getElementById("partyAddress").value = formData.partyAddress || '';
+                document.getElementById("partyGST").value = formData.partyGST || '';
+                document.getElementById("partyMobile").value = formData.partyMobile || '';
+                document.getElementById("partyTransport").value = formData.partyTransport || '';
+                document.getElementById("paymentType").value = formData.paymentType || 'Advance';
+                document.getElementById("dispatchDate").value = formData.dispatchDate || '';
+                document.getElementById("orderNotes").value = formData.orderNotes || '';
+
+                // Load Cart Data
+                const cartItems = data.cart;
+                if (cartItems && cartItems.length > 0) {
+                    cartItems.forEach(item => addRow(item));  // Add the items to the cart table
+                    recalc();  // Recalculate totals
+                } else {
+                    console.log("No cart items found in the saved draft.");
+                }
+            } else {
+                console.log("No saved cart data found.");
+            }
+        }
+
+        window.addEventListener("load", function () {
+
+
+            renderCart();
+
+            loadCartAndFormDraft();
+
+        });
+
+        function collectData() {
+            const orderData = {
+                orderNo: orderNo.value.trim() || autoOrderNo(),
+                orderDate: orderDate.value,
+                salesman: salesman.value.trim(),
+                party: {
+                    name: partyName.value.trim(),
+                    type: partyType.value || "",
+                    address: partyAddress.value.trim(),
+                    gst: partyGST.value.trim(),
+                    mobile: partyMobile.value.trim(),
+                    transport: partyTransport.value.trim()
+                },
+                paymentType: paymentType.value,
+                dispatchDate: dispatchDate.value,
+                notes: orderNotes.value.trim(),
+                items: [], // List of items added to the order (you can collect them from the cart)
+                categoryDiscounts: {
+                    hardware: +hardwareDisc.value || 0,
+                    bathroom: +bathroomDisc.value || 0
+                },
+                freight: +freight.value || 0,
+                specialDiscount: +specialDiscount.value || 0,
+                gstPercent: +gstPercent.value || 18,
+                subTotal: +subTotal.textContent || 0,
+                grandTotal: +grandTotal.textContent || 0,
+                preparedBy: preparedBy.value.trim(),
+                savedAt: new Date().toISOString()
+            };
+
+            // Collect items in the cart
+            const tbody =
+                document.getElementById('cartItemsList') ||
+                document.querySelector('tbody');
+            [...tbody.children].forEach(tr => {
+                const item = {
+                    code: tr.querySelector('.item-code').value,
+                    name: tr.querySelector('.item-name').value,
+                    qty: +tr.querySelector('.qty').value || 0,
+                    unit: tr.querySelector('.unit').value,
+                    rate: +tr.querySelector('.rate').value || 0,
+                    amount: +tr.querySelector('.amt').textContent || 0
+                };
+                orderData.items.push(item);
+            });
+
+            return orderData;
+        }
+
+        // Function to get cart data from localStorage
+        function getCart() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            return cart;
+        }
+
+        // Function to save cart data to localStorage
+        function saveCart(cart) {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        // Function to get form data (Salesman, Party, etc.)
+        function getFormData() {
+            return {
+                salesman: document.getElementById("salesman").value.trim(),
+                orderNo: document.getElementById("orderNo").value.trim(),
+                orderDate: document.getElementById("orderDate").value,
+                partyName: document.getElementById("partyName").value.trim(),
+                partyType: document.getElementById("partyType").value,
+                partyAddress: document.getElementById("partyAddress").value.trim(),
+                partyGST: document.getElementById("partyGST").value.trim(),
+                partyMobile: document.getElementById("partyMobile").value.trim(),
+                partyTransport: document.getElementById("partyTransport").value.trim(),
+                paymentType: document.getElementById("paymentType").value,
+                dispatchDate: document.getElementById("dispatchDate").value,
+                orderNotes: document.getElementById("orderNotes").value.trim(),
+            };
+        }
+
+        // Function to save form and cart data as a draft
+        function saveCartAndFormDraft() {
+            const cartData = getCart();
+            const formData = getFormData();
+            const combinedData = {
+                cart: cartData,
+                form: formData
+            };
+            console.log("Saving data to draft:", combinedData); // Debugging log
+            localStorage.setItem("petro_cart_and_form_draft", JSON.stringify(combinedData));
+            console.log("Cart and Form draft saved.");
+        }
+
+
+        // Function to get customer data by customerId
+        async function getCustomerData(customerId) {
+            const customerDocRef = doc(db, "customers", customerId);  // Reference to the customer document
+            const customerDoc = await getDoc(customerDocRef);  // Get the customer document
+
+            if (customerDoc.exists()) {
+                return customerDoc.data();  // Return the customer data (party and categories)
+            } else {
+                return null;
+            }
+        }
+
+        // Function to render customer data (including categories and products)
+        async function renderCustomerData(customerId) {
+            const customerData = await getCustomerData(customerId);
+
+            if (customerData) {
+                let customerHTML = `<h2>Customer: ${customerData.party.name}</h2>`;
+                customerHTML += `<p>Address: ${customerData.party.address}</p>`;
+                customerHTML += `<p>GST: ${customerData.party.gst}</p>`;
+                customerHTML += `<p>Mobile: ${customerData.party.mobile}</p>`;
+
+                // Render products for each category (Bathroom, hardware)
+                for (let category in customerData.categories) {
+                    let categoryHTML = `<h3>${category} Products</h3>`;
+                    customerData.categories[category].forEach(product => {
+                        categoryHTML += `
+                    <div class="product">
+                        <h4>${product.name}</h4>
+                        <p>Price: ₹${product.price}</p>
+                        <p>Quantity: ${product.quantity}</p>
+                        <p>Unit: ${product.unit}</p>
+                    </div>
+                `;
+                    });
+                    customerHTML += categoryHTML;
+                }
+
+                // Insert the generated HTML into the page
+                document.getElementById("customerContainer").innerHTML = customerHTML;
+            }
+        }
+
+        // Call the function to render data when the page loads (e.g., for customer ID '12345')
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCustomerData("12345");
+        });
+        // Function to load cart and form data from draft
+        function loadCartAndFormDraft() {
+            const draft = JSON.parse(localStorage.getItem("petro_cart_and_form_draft") || "null");
+            if (!draft) {
+                return;
+            }
+
+            // Set form data
+            const formData = draft.form || {};
+            document.getElementById("salesman").value = formData.salesman || '';
+            document.getElementById("orderNo").value = formData.orderNo || '';
+            document.getElementById("orderDate").value = formData.orderDate || '';
+            document.getElementById("partyName").value = formData.partyName || '';
+            document.getElementById("partyType").value = formData.partyType || '';
+            document.getElementById("partyAddress").value = formData.partyAddress || '';
+            document.getElementById("partyGST").value = formData.partyGST || '';
+            document.getElementById("partyMobile").value = formData.partyMobile || '';
+            document.getElementById("partyTransport").value = formData.partyTransport || '';
+            document.getElementById("paymentType").value = formData.paymentType || 'Advance';
+            document.getElementById("dispatchDate").value = formData.dispatchDate || '';
+            document.getElementById("orderNotes").value = formData.orderNotes || '';
+
+            // Load cart items into the table
+            const cartItems = draft.cart || [];
+            cartItems.forEach(item => addRow(item));
+
+            // Recalculate totals
+            recalc();
+        }
+
+        // Function to handle changing quantity of an item in the cart
+        window.changeQty = function (index, change) {
+            let cart = getCart();
+            if (!cart[index]) return;
+
+            cart[index].quantity += change;
+
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+
+            saveCart(cart);
+            renderCart();
+            saveCartAndFormDraft();
+        };
+
+        // Function to remove an item from the cart
+        window.removeItem = function (index) {
+            let cart = getCart();
+
+            if (!cart[index]) return;
+
+            cart.splice(index, 1);
+
+            saveCart(cart);
+
+            renderCart();
+
+            saveCartAndFormDraft();  // Save the updated draft after removal
+        };
+
+
+        // Function to render cart items and totals
+        function renderCart() {
+            const cart = getCart();
+            const cartItemsList = document.getElementById("cartItemsList");
+            const mobileCartList = document.getElementById("mobileCartList");
+            const cartTotal = document.getElementById("cartTotal");
+            const cartSubtotal = document.getElementById("cartSubtotal");
+            const summaryItems = document.getElementById("summaryItems");
+            const extraCharges = document.getElementById("extraCharges");
+            const cartItemCountBadge = document.getElementById("cartItemCountBadge");
+            const emptyCartState = document.getElementById("emptyCartState");
+            const desktopCartWrapper = document.getElementById("desktopCartWrapper");
+
+            cartItemsList.innerHTML = "";
+            mobileCartList.innerHTML = "";
+
+            let total = 0;
+            let totalItems = 0;
+
+            const hardwareDisc = +document.getElementById("hardwareDisc")?.value || 0;
+            const bathroomDisc = +document.getElementById("bathroomDisc")?.value || 0;
+            const stainlesssteelDisc =
+                +document.getElementById(
+                    "stainlesssteelDisc"
+                )?.value || 0;
+            const freight = +document.getElementById("freight")?.value || 0;
+            const specialDiscount = +document.getElementById("specialDiscount")?.value || 0;
+            const gstPercent = +document.getElementById("gstPercent")?.value || 18;
+
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                let amt = item.price * item.quantity;
+
+                if (item.category === "hardware") {
+                    amt = amt * (1 - hardwareDisc / 100);
+                }
+
+                if ((item.category || "").toLowerCase().trim() === "bathroom") {
+                    amt = amt * (1 - bathroomDisc / 100);
+                }
+                if (
+                    (item.category || "")
+                        .toLowerCase()
+                        .trim() === "stainlesssteel"
+                ) {
+
+                    amt =
+                        amt *
+                        (
+                            1 -
+                            stainlesssteelDisc / 100
+                        );
+
+                }
+
+                subtotal += amt;
+            });
+
+            let subFinal = subtotal + freight - specialDiscount;
+            let gstAmount = subFinal * (gstPercent / 100);
+            let grandTotal = subFinal + gstAmount;
+
+            document.getElementById("cartSubtotal").textContent = subFinal.toFixed(2);
+            document.getElementById("gstAmount").textContent = gstAmount.toFixed(2);
+            document.getElementById("cartTotal").textContent = grandTotal.toFixed(2);
+
+            if (cart.length === 0) {
+                emptyCartState.style.display = "block";
+                desktopCartWrapper.style.display = "none";
+                mobileCartList.style.display = "none";
+
+                cartTotal.textContent = "0";
+                cartSubtotal.textContent = "0";
+                summaryItems.textContent = "0";
+                extraCharges.textContent = "0";
+                cartItemCountBadge.textContent = "0 Items";
+                return;
+            }
+
+            emptyCartState.style.display = "none";
+
+            if (window.innerWidth <= 768) {
+                desktopCartWrapper.style.display = "none";
+                mobileCartList.style.display = "block";
+            } else {
+                desktopCartWrapper.style.display = "block";
+                mobileCartList.style.display = "none";
+            }
+
+            cart.forEach((item, index) => {
+                let itemTotal = item.price * item.quantity;
+
+                if (item.category === "hardware") {
+                    itemTotal = itemTotal * (1 - hardwareDisc / 100);
+                }
+
+                if ((item.category || "").toLowerCase().trim() === "bathroom") {
+                    itemTotal = itemTotal * (1 - bathroomDisc / 100);
+                }
+
+                if (
+                    (item.category || "")
+                        .toLowerCase()
+                        .trim() === "stainlesssteel"
+                ) {
+
+                    itemTotal =
+                        itemTotal *
+                        (
+                            1 -
+                            stainlesssteelDisc / 100
+                        );
+
+                }
+                total += itemTotal;
+                totalItems += item.quantity;
+
+                // Desktop row
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>
+                <div class="product-info">
+                    <div class="product-thumb">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <div class="product-text">
+                        <h4>${item.name}</h4>
+                        <p>Premium Petro Product</p>
+                    </div>
+                </div>
+            </td>
+            <td><span class="unit-pill">${item.unit}</span></td>
+            <td><span class="price-text">₹${item.price.toFixed(2)}</span></td>
+            <td>
+                <div class="qty-box">
+                    <button class="qty-btn" onclick="changeQty(${index}, -1)">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <span class="qty-value">${item.quantity}</span>
+                    <button class="qty-btn" onclick="changeQty(${index}, 1)">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </td>
+          <td><span class="line-total">₹${itemTotal.toFixed(2)}</span></td>
+            <td>
+                <button class="remove-btn" onclick="removeItem(${index})">
+                    <i class="fa-solid fa-trash"></i> Remove
+                </button>
+            </td>
+        `;
+                cartItemsList.appendChild(row);
+
+                // Mobile card
+                const mobileCard = document.createElement("div");
+                mobileCard.className = "mobile-cart-item";
+                mobileCard.innerHTML = `
+            <div class="mobile-top">
+                <div class="product-thumb">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <div class="product-text">
+                    <h4>${item.name}</h4>
+                    <p>Premium Petro Product</p>
+                </div>
+            </div>
+
+            <div class="mobile-middle">
+                <div>
+                    <div class="mobile-label">Unit</div>
+                    <div class="mobile-value"><span class="unit-pill">${item.unit}</span></div>
+                </div>
+                <div>
+                    <div class="mobile-label">Price</div>
+                    <div class="mobile-value">₹${item.price.toFixed(2)}</div>
+                </div>
+                <div>
+                    <div class="mobile-label">Quantity</div>
+                    <div class="mobile-value">${item.quantity}</div>
+                </div>
+                <div>
+                    <div class="mobile-label">Total</div>
+                   <div class="mobile-value">₹${itemTotal.toFixed(2)}</div>
+                </div>
+            </div>
+
+            <div class="mobile-bottom">
+                <div class="qty-box">
+                    <button class="qty-btn" onclick="changeQty(${index}, -1)">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <span class="qty-value">${item.quantity}</span>
+                    <button class="qty-btn" onclick="changeQty(${index}, 1)">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <button class="remove-btn" onclick="removeItem(${index})">
+                    <i class="fa-solid fa-trash"></i> Remove
+                </button>
+            </div>
+        `;
+                mobileCartList.appendChild(mobileCard);
+            });
+
+            summaryItems.textContent = totalItems;
+            cartItemCountBadge.textContent = `${totalItems} Item${totalItems > 1 ? "s" : ""}`;
+        }
+
+
+        // Format number to 2 decimal places
+        function money(value) {
+
+            const num = Number(value || 0);
+
+            return num.toFixed(2);
+
+        }
+        function recalc() {
+
+            let sub = 0;
+
+            const tbody =
+                document.getElementById('cartItemsList') ||
+                document.querySelector('tbody');
+
+            if (!tbody) {
+                console.error("tbody not found.");
+                return;
+            }
+
+            // Detect correct summary elements (cart OR order page)
+            const freightEl = document.getElementById('freight');
+            const specialDiscountEl = document.getElementById('specialDiscount');
+            const gstPercentEl = document.getElementById('gstPercent');
+
+            const subTotalEl =
+                document.getElementById('cartSubtotal') ||
+                document.getElementById('subTotal');
+
+            const gstAmountEl = document.getElementById('gstAmount');
+
+            const grandTotalEl =
+                document.getElementById('cartTotal') ||
+                document.getElementById('grandTotal');
+
+            if (!subTotalEl || !gstAmountEl || !grandTotalEl) {
+                console.error("Summary elements missing.");
+                return;
+            }
+
+            // Loop rows
+            [...tbody.children].forEach(tr => {
+
+                const qtyInput = tr.querySelector('.qty');
+                const rateInput = tr.querySelector('.rate');
+                const amtElement = tr.querySelector('.amt');
+
+                if (!qtyInput || !rateInput || !amtElement) {
+                    return;
+                }
+
+                const qty = +qtyInput.value || 0;
+                const rate = +rateInput.value || 0;
+
+                let amt = qty * rate;
+
+                amtElement.textContent = money(amt);
+
+                sub += amt;
+            });
+
+            const freight = +freightEl?.value || 0;
+            const spDis = +specialDiscountEl?.value || 0;
+            const gstP = +gstPercentEl?.value || 18;
+
+            const subF = Math.max(0, sub + freight - spDis);
+
+            const gstA = subF * (gstP / 100);
+
+            const grand = subF + gstA;
+
+            subTotalEl.textContent = money(subF);
+            gstAmountEl.textContent = money(gstA);
+            grandTotalEl.textContent = money(grand);
+        }
+
+        // Collect product data from the cart or form
+        function collectProductData() {
+            const productData = {
+                category: document.getElementById("productCategory").value,
+                code: document.getElementById("productCode").value,
+                name: document.getElementById("productName").value,
+                description: document.getElementById("productDescription").value,
+                photo: document.getElementById("productPhoto").value, // Could be an image URL
+                price: parseFloat(document.getElementById("productPrice").value) || 0,
+                unit: document.getElementById("productUnit").value
+            };
+
+            return productData;
+        }
+        // Save cart and form data on page load
+        window.addEventListener("load", () => {
+            renderCart();
+            loadCartAndFormDraft();  // Load saved draft data
+            [
+                "hardwareDisc",
+
+                "bathroomDisc",
+
+                "stainlesssteelDisc",
+
+                "freight",
+
+                "specialDiscount",
+
+                "gstPercent"
+            ]
+                .forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener("input", () => {
+                            renderCart();  // Re-render the cart on discount/input change
+                            saveCartAndFormDraft();  // Save updated data
+                        });
+                    }
+                });
+        });
+
+        // Function to add product to the cart dynamically
+
+
+        // Function to add product to the cart (and Firestore)
+        window.addToCartWithUnit = function () {
+            const selectedUnitCard = document.querySelector(".unit-card.active");
+
+            if (!selectedUnitCard) {
+                alert("Please select a unit.");
+                return;
+            }
+
+            const selectedUnit = selectedUnitCard.dataset.unit;
+            const unitPrice = selectedProduct.units[selectedUnit].rate;
+            const quantity = parseInt(document.getElementById("modalQty").value) || 1;
+
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            // Find if the product is already in the cart
+            const productIndex = cart.findIndex(
+                item => item.name === selectedProduct.name && item.unit === selectedUnit
+            );
+
+            if (productIndex === -1) {
+                // If not in the cart, add the product to the cart
+                cart.push({
+                    name: selectedProduct.name,
+                    price: unitPrice,
+                    unit: selectedUnit,
+                    quantity: quantity,
+                    category: selectedProduct.category,
+                    code: selectedProduct.code // Add product code if needed
+                });
+
+                // Send product data to Firestore (add to "products" collection)
+                const newProduct = {
+                    name: selectedProduct.name,
+                    code: selectedProduct.code,
+                    unit: selectedUnit,
+                    price: unitPrice,
+                    category: selectedProduct.category,
+                    description: selectedProduct.description || "",
+                    photo: selectedProduct.photo || "",
+                };
+                // addProductToFirestore(newProduct); // Add product to Firestore
+            } else {
+                // If the product is already in the cart, update the quantity
+                cart[productIndex].quantity += quantity;
+            }
+
+            // Save the cart to localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            // Update the cart display
+            updateCartBadge(cart);
+            displayCartItems(cart);
+            updateFixedCart();
+        }
+
+        // Function to add product to Firestore
+        async function addProductToFirestore(product) {
+
+            try {
+                const docRef = await addDoc(collection(db, "products"), {
+                    name: product.name,
+                    code: product.code,
+                    unit: product.unit,
+                    price: product.price,
+                    category: product.category,
+                    description: product.description || "", // Optional description
+                    photo: product.photo || "", // Optional photo link
+                });
+                console.log("Product added with ID: ", docRef.id);
+            } catch (e) {
+                console.error("Error adding product: ", e);
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+
+            recalc();                // IMPORTANT
+
+        });
+    </script>
+    
+    <script src="/js/dev.js"></script>
+</body>
+
+</html>

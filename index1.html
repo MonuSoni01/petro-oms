@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Favicon Icon -->
+    <link rel="icon" href="./images/app-icon.png" />
+    <title>Order Management System - PETRO</title>
+    <meta name="description"
+        content="Visit Petro Industech’s About Us page to see why dealers and Customers buy from us. We deliver quality bathroom accessories and racks in bulk." />
+
+    <!-- ✅ PWA: Manifest & Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a6ebd">
+
+    <!-- ✅ PWA: Apple / iOS support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <script src="product.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font CSS & CDN -->
+    <link href="css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link href="css/style.css" rel="stylesheet" />
+    <style>
+        /* General styling for the status bar */
+        .status-bar {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #e8f5e9;
+            /* Light green background */
+            color: #2e7d32;
+            /* Dark green text */
+            border: 1px solid #c8e6c9;
+            text-align: center;
+            /* Center the text */
+            transition: all 0.5s ease-in-out;
+            /* Smooth transition */
+        }
+
+        /* Success message styling */
+        .status-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #c8e6c9;
+        }
+
+        /* Info message styling */
+        .status-info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border-color: #bbdefb;
+        }
+
+        /* Warning message styling */
+        .status-warning {
+            background: #fff3e0;
+            color: #ef6c00;
+            border-color: #ffe0b2;
+        }
+
+        /* Add a slide-in effect */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Apply the slide-in animation */
+        .status-bar.show {
+            animation: slideIn 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+
+
+    <!-- Top Navbar -->
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                    <div class="contact-details">
+                        <ul class="d-flex">
+                            <li>
+                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                            </li>
+                            <li>
+                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                    contact@petroindustech.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                    <div class="news-box">
+                        <ul class="footer-social topnav-social-icon">
+                            <li>
+                                <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                        class="fa-brands fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                        class="fa-brands fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                        class="fa-brands fa-youtube"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/Petroindustech" target="_blank"><i
+                                        class="fa-brands fa-x-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                        class="fa-brands fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+        <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+
+            <!-- LEFT : LOGO -->
+            <a class="navbar-brand" href="https://order-management-petro.netlify.app">
+                <img src="images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+            </a>
+
+            <!-- RIGHT : ADMIN -->
+            <div class="d-flex align-items-center">
+
+                <!-- DARK MODE -->
+                <label class="toggle-switch mb-0 mr-3">
+                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+
+                <!-- ADMIN DROPDOWN -->
+                <div class="dropdown">
+                    <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="border-radius:20px;">
+
+                        <i class="fa fa-user-circle text-success mr-2"></i>
+                        <span id="adminName">Login</span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                        <a class="dropdown-item" href="login.html">
+                            <i class="fa fa-user mr-2"></i> Admin
+                        </a>
+                        <a class="dropdown-item" href="sales-dashboard.html">
+                            <i class="fa fa-user mr-2"></i> Salesman
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    <!-- STATUS MESSAGE BAR -->
+    <div id="statusMsg" class="status-bar">
+        Ready to start new order
+    </div>
+    <!-- PRINT HEADER -->
+    <div class="print-header">
+        <h2>PETRO INDUSTECH PVT. LTD.</h2>
+        <h4>Order Management System</h4>
+        <hr>
+    </div>
+
+    <!-- ✅ Print Confirmation Modal -->
+    <div id="printModal" class="custom-modal-overlay" style="display:none;">
+        <div class="custom-modal">
+            <h3>Order Saved</h3>
+            <p>Do you want to print this order?</p>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closePrintModal()">Cancel</button>
+                <button class="btn-confirm" onclick="confirmPrint()">Print</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="petro-container">
+        <div class="petro-card">
+            <div class="petro-row">
+                <div class="petro-col-4">
+                    <label>
+                        Salesman Name
+                        <span style="color:red;">*</span>
+                    </label>
+                    <select id="salesman" required>
+                        <option value="">Select Salesman</option>
+                        <option>Sariya Murtuza</option>
+                        <option>Roshan Sharma</option>
+                        <option>Rup Ranjan Bora</option>
+                        <option>Ankit Kalra</option>
+                        <option>Vivek Srivastava</option>
+                        <option>Amit Soni</option>
+                        <option>Prashant Kumar</option>
+                        <option>Mahesh Kumar</option>
+                    </select>
+                    <small id="salesmanError" style="
+                            display:none;
+                            color:#dc3545;
+                            font-size:13px;
+                            font-weight:600;
+                            margin-top:5px;
+                            ">
+                        ● Salesman selection is mandatory
+                    </small>
+                </div>
+                <div class="petro-col-4"><label>Order No.</label><input id="orderNo" placeholder="AUTO" readonly></div>
+                <div class="petro-col-4"><label>Date</label><input type="date" id="orderDate"></div>
+            </div>
+
+            <div class="petro-row">
+                <div class="petro-col-4">
+                    <label>Party Name </label>
+                    <input id="partyName" placeholder="Party name">
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Party Type</label>
+                    <select id="partyType">
+                        <option value="">Select</option>
+                        <option value="Primary">Primary</option>
+                        <option value="Secondary">Secondary</option>
+                    </select>
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Party Address</label>
+                    <input id="partyAddress" placeholder="Full address">
+                </div>
+                <div class="petro-col-4"><label>Party GST No.</label><input id="partyGST" placeholder="GSTIN"
+                        style="text-transform:uppercase" maxlength="15"></div>
+                <div class="petro-col-4"><label>Party Mobile No.</label><input id="partyMobile" maxlength="10"
+                        inputmode="numeric" pattern="[0-9]{10}" placeholder="10 digit mobile no."></div>
+                <div class="petro-col-4"><label>Party Marka / Transport</label><input id="partyTransport"
+                        placeholder="Marka / Transport"></div>
+            </div>
+
+            <div class="petro-row">
+                <div class="petro-col-4"><label>Payment Type</label><select id="paymentType">
+                        <option>Advance</option>
+                        <option>Credit</option>
+                    </select></div>
+                <div class="petro-col-4"><label>Expected Dispatch</label><input type="date" id="dispatchDate"></div>
+                <div class="petro-col-4"><label>Notes</label><input id="orderNotes"
+                        placeholder="Any special instruction"></div>
+            </div>
+        </div>
+
+        <div class="petro-card">
+            <div class="petro-sep"></div>
+
+            <div class="petro-table-wrapper">
+                <div class="table-header-bar">
+                    <h6>Columns mirror your paper format (Item Serial/Name, Qty, Unit, Rate, Discount).</h6>
+                    <button class="add-icon-btn no-print" onclick="addRow()" title="Add Item">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <table id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Item Code</th>
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th>Unit</th>
+                            <th>Rate (₹)</th>
+                            <th>Amount (₹)</th>
+                            <th class="no-print">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+
+            <div class="petro-sep"></div>
+            <!-- 🔥 CATEGORY DISCOUNT SECTION -->
+
+
+            <div class="petro-totals">
+
+                <!-- 🔥 CATEGORY DISCOUNT (NOW LIKE TOTALS ROWS) -->
+                <div><label><b>Hardware Discount (%)</b></label></div>
+                <div>
+                    <input type="number" id="hardwareDisc" value="0" min="0" max="100"
+                        oninput="applyCategoryDiscount()">
+                </div>
+
+                <div><label><b>Bathroom Discount (%)</b></label></div>
+                <div>
+                    <input type="number" id="bathroomDisc" value="0" min="0" max="100"
+                        oninput="applyCategoryDiscount()">
+                </div>
+
+                <!-- ✅ NEW STAINLESS STEEL -->
+
+                <div>
+
+                    <label>
+                        <b>SS Discount (%)</b>
+                    </label>
+
+                </div>
+
+                <div>
+
+                    <input type="number" id="stainlesssteelDisc" value="0" min="0" max="100"
+                        oninput="applyCategoryDiscount()">
+
+                </div>
+
+                <!-- normal totals continue -->
+                <div><label>Freight & Forwarding (₹)</label></div>
+                <div><input id="freight" type="number" step="0.01" value="0" oninput="recalc()"></div>
+
+                <div><label>Special Discount (₹)</label></div>
+                <div><input id="specialDiscount" type="number" step="0.01" value="0" oninput="recalc()"></div>
+
+                <div><label>GST %</label></div>
+                <div><input id="gstPercent" type="number" value="18" readonly></div>
+
+                <div><label>Sub-Total (₹)</label></div>
+                <div class="petro-right"><strong id="subTotal">0.00</strong></div>
+
+                <div><label>GST Amount (₹)</label></div>
+                <div class="petro-right"><strong id="gstAmount">0.00</strong></div>
+
+                <div><label>Grand Total (₹)</label></div>
+                <div class="petro-right"><strong id="grandTotal">0.00</strong></div>
+
+            </div>
+
+
+            <div class="action-bar no-print mt-3">
+                <button onclick="clearAll()">Clear</button>
+                <button onclick="saveDraft()">Save Draft</button>
+                <button onclick="loadDraft()">Load Draft</button>
+                <button id="submitBtn" class="primary" style="background: #108282;color: #fff;"
+                    onclick="submitTableOrder()">Submit Order</button>
+            </div>
+            <div class="petro-container" id="invoiceArea"> </div>
+
+
+        </div>
+
+
+    </div>
+    <!-- 🔍 Suggestion Box (for live search) -->
+    <div id="suggestBox" style="position:absolute;background:#fff;border:1px solid #ccc;
+            max-height:180px;overflow-y:auto;display:none;
+            z-index:9999;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,0.15);width:240px;">
+    </div>
+
+    <!-- SUCCESS POPUP -->
+
+    <div id="successPopup" class="success-popup">
+
+        <div class="success-box">
+
+            <div class="success-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <h3>Order Submitted</h3>
+
+            <p>
+                Your order has been saved successfully.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+
+    <!--FOOTER SECTION-->
+    <footer class="footer mt-5">
+        <div class="container bottom_border mt-3">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="images/petro-circle-logo.webp" alt="" class="img-fluid" />
+                    </div>
+
+                    <ul class="mt-3 social-link-foot">
+                        <li>
+                            <i class="fa-solid fa-briefcase"></i><span style="font-weight: bold; color: yellow">
+                                Corporate Office:- </span><br />
+                            <b> Petro Industech Private Limited</b> <br />
+                            A-47B, Naresh Park Extension, Nangloi, New Delhi - 110041
+                        </li>
+                        <li>
+                            <a href="https://g.co/kgs/KhszSVx">
+                                <i class="fa-solid fa-location-dot"></i><span style="font-weight: bold; color: yellow">
+                                    Manufacturing (Unit - I) :- </span>
+                                A-48D, Naresh Park Extension, Nangloi, New Delhi - 110041</a>
+                        </li>
+                        <li>
+                            <a href="https://g.co/kgs/Vv9FQjM"><i class="fa-solid fa-location-dot"></i><span
+                                    style="font-weight: bold; color: yellow">
+                                    Manufacturing (Unit - II):- </span>
+                                Plot No. 812/F-45, Samtal Zone, RIICO Industrial Area, BHIWADI
+                                (Distt:- Khairthal-Tijara), Rajasthan - 301019, India</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="news-box">
+                        <h5 class="headin5_amrc col_white_amrc pt2">
+                            Connect With Social Media
+                        </h5>
+
+                        <ul class="footer-social">
+                            <li>
+                                <a class="facebook hb-xs-margin" target="_blank"
+                                    href="https://www.facebook.com/www.petroindustries.in/"><span
+                                        class="hb hb-xs spin hb-facebook"><i class="fab fa-facebook-f"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="instagram hb-xs-margin" target="_blank"
+                                    href="https://www.instagram.com/petroindustries/"><span
+                                        class="hb hb-xs spin hb-instagram"><i class="fab fa-instagram"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank" href="https://x.com/Petroindustech"
+                                    target="_blank"><span class="hb hb-xs spin hb-x-twitter"><i
+                                            class="fab fa-x-twitter"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank"
+                                    href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><span
+                                        class="hb hb-xs spin hb-google-plus"><i class="fab fa-youtube"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank"
+                                    href="https://in.pinterest.com/petroindustech/" target="_blank"><span
+                                        class="hb hb-xs spin hb-google-plus"><i class="fab fa-pinterest"></i></span></a>
+                            </li>
+                            <li>
+                                <a class="googleplus hb-xs-margin" target="_blank"
+                                    href="https://wa.me/918000007336"><span class="hb hb-xs spin hb-whatsapp"><i
+                                            class="fab fa-whatsapp"></i></span></a>
+                            </li>
+                            <br />
+                            <li>
+                                <i class="fa-solid fa-phone"></i><a href="tel:+91-8000007336"> +91-8000007336</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto: contact@petroindustech.com">
+                                    contact@petroindustech.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <p class="copyright text-center">
+                Copyright Petro Industech Pvt Ltd © 2025. All Rights Reserved
+            </p>
+        </div>
+    </footer>
+
+
+
+    <!-- Javascript & CDN -->
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.appear.js"></script>
+    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/home-logic.js"></script>
+    <script src="js/dev.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,710 @@
+/* ===============================
+        PRODUCT DISPLAY SECTION
+=============================== */
+
+#product-display {
+    padding: 10px 120px !important;
+}
+
+.modal-title {
+    text-align: center;
+}
+
+/* ===============================
+        PRODUCT GRID
+=============================== */
+
+#product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+
+/* laptop */
+
+@media (max-width:1400px) {
+    #product-list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+
+/* tablet */
+
+@media (max-width:1024px) {
+    #product-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+/* mobile */
+
+@media (max-width:768px) {
+
+    #product-display {
+        padding: 10px 25px !important;
+    }
+
+    #product-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+}
+
+
+/* small phone */
+
+@media (max-width:420px) {
+
+    #product-display {
+        padding: 10px 20px !important;
+    }
+
+    #product-list {
+        gap: 12px;
+        margin-left: 1px;
+    }
+
+}
+
+
+
+/* ===============================
+PRODUCT CARD
+=============================== */
+
+.product-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: .3s;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+
+/* ===============================
+IMAGE  (YOUR ORIGINAL STYLE)
+=============================== */
+
+.product-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+@media (max-width:426px) {
+    .product-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-bottom: 1px solid #ddd;
+    }
+
+}
+
+/* ===============================
+PRODUCT BADGE
+=============================== */
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #108082;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+
+
+/* ===============================
+PRODUCT INFO
+=============================== */
+
+.product-info {
+    padding: 12px;
+    text-align: left;
+}
+
+.product-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+
+
+/* ===============================
+UNIT + PRICE
+=============================== */
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-unit {
+    font-size: 12px;
+    color: #777;
+}
+
+.product-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a8a7b;
+}
+
+
+
+/* ===============================
+ADD TO CART BUTTON
+=============================== */
+/* =====================
+CART BUTTON
+===================== */
+
+.cart-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border-radius: 30px;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    transition: 0.2s;
+}
+
+.cart-btn:hover {
+    background: #f7f7f7;
+    text-decoration: none;
+}
+
+.cart-btn i {
+    font-size: 16px;
+    color: #108082;
+}
+
+/* badge */
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #e53935;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 50px;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* =====================
+DROPDOWN
+===================== */
+
+.cart-dropdown {
+    width: 260px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+/* header */
+
+.cart-header {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 8px;
+}
+
+/* items */
+
+.cart-items {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+/* actions */
+
+.cart-actions {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+}
+
+/* buttons */
+
+.cart-view-btn {
+    flex: 1;
+    background: #eee;
+    padding: 8px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #333;
+}
+
+.cart-checkout-btn {
+    flex: 1;
+    background: #108082;
+    color: #fff;
+    padding: 8px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.cart-checkout-btn:hover {
+    background: #0c6d6f;
+    color: #fff;
+    text-decoration: none;
+}
+
+.cart-view-btn:hover {
+    background: #ddd;
+    text-decoration: none;
+}
+
+.add-cart-btn {
+    width: 100%;
+    background: #111;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: .2s;
+}
+
+.add-cart-btn:hover {
+    background: #000;
+}
+
+
+
+/* ===============================
+PRODUCT HEADING
+=============================== */
+
+.product-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.product-heading h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.product-heading p {
+    font-size: 14px;
+    color: #777;
+    max-width: 500px;
+    margin: auto;
+}
+
+
+@media (max-width:768px) {
+
+    .product-heading h2 {
+        font-size: 22px;
+    }
+
+    .product-heading p {
+        font-size: 13px;
+        padding: 0 10px;
+    }
+
+}
+
+/* =========================
+FILTER BAR
+========================= */
+
+.product-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+    /* desktop me ek line */
+    margin-bottom: 25px;
+}
+
+/* search */
+
+.product-filters input {
+    flex: 1;
+    /* search bar stretch hogi */
+    min-width: 320px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background: #fff;
+}
+
+/* dropdown */
+
+.product-filters select {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background: #fff;
+    min-width: 170px;
+    cursor: pointer;
+}
+
+/* focus */
+
+.product-filters input:focus,
+.product-filters select:focus {
+    outline: none;
+    border-color: #108082;
+    box-shadow: 0 0 0 2px rgba(16, 128, 130, 0.1);
+}
+
+@media (max-width:768px) {
+
+    .product-filters {
+        flex-wrap: wrap;
+        /* mobile me wrap */
+    }
+
+    .product-filters input {
+        flex: 100%;
+        min-width: 100%;
+    }
+
+    .product-filters select {
+        flex: 1;
+        min-width: 140px;
+    }
+
+}
+
+.unit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.unit-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    background: #fff;
+}
+
+.unit-card:hover {
+    border-color: #108082;
+}
+
+.unit-card.active {
+    background: #108082;
+    color: #fff;
+    border-color: #108082;
+}
+
+/* ===============================
+QUANTITY BOX
+=============================== */
+
+.qty-wrapper {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qty-wrapper span {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+/* qty container */
+
+.qty-box {
+    display: flex;
+    align-items: center;
+    width: 120px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* buttons */
+
+.qty-box button {
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: #f3f3f3;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.qty-box button:hover {
+    background: #108082;
+    color: #fff;
+}
+
+/* input */
+
+.qty-box input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+}
+
+.summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    font-size: 15px;
+    color: #475569;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.summary-row span {
+    font-weight: 500;
+}
+
+.summary-row strong {
+    font-weight: 700;
+    color: #111827;
+}
+
+.summary-row input {
+    width: 80px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    text-align: right;
+    transition: all .2s;
+}
+
+.summary-row input:focus {
+    outline: none;
+    border-color: #108082;
+    box-shadow: 0 0 0 2px rgba(16, 128, 130, 0.15);
+}
+
+.summary-row:nth-last-child(4),
+.summary-row:nth-last-child(3) {
+    font-weight: 600;
+    color: #111827;
+}
+
+.summary-total {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #108082, #0f6b6d);
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(16, 128, 130, 0.25);
+}
+
+#cartSubtotal,
+#gstAmount,
+#cartTotal {
+    font-variant-numeric: tabular-nums;
+}
+
+.fixed-cart-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #108082;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    z-index: 999;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.fixed-cart-info {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.fixed-cart-btn {
+    background: #fff;
+    color: #108082;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+/* ===============================
+MODAL DROPDOWN + QUANTITY + BUTTON ALIGN
+=============================== */
+.petro-modal .modal-body {
+    display: flex;
+    flex-direction: row;
+    /* Ek line me items */
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    /* mobile me wrap */
+}
+
+.petro-modal #unitSelection select {
+    flex: 1;
+    min-width: 120px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+.petro-modal .qty-wrapper {
+    display: flex;
+    flex-direction: row;
+    /* quantity horizontal */
+    align-items: center;
+    gap: 6px;
+}
+
+.petro-modal .qty-wrapper span {
+    margin: 0;
+}
+
+.petro-modal .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Modal Body Flex for one-line alignment */
+.petro-modal .modal-body {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    flex-wrap: wrap;
+    /* small screen wrap */
+}
+
+/* Dropdown styling */
+.petro-modal #unitSelectionDropdown {
+    flex: 1;
+    min-width: 120px;
+    max-width: 200px;
+    /* ensure same width across items */
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* Quantity Box */
+.petro-modal .qty-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Quantity Input + buttons */
+.petro-modal .qty-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 120px;
+}
+
+.petro-modal .qty-box input {
+    flex: 1;
+    text-align: center;
+    border: none;
+    outline: none;
+}
+
+.petro-modal .qty-box button {
+    width: 35px;
+    height: 35px;
+    border: none;
+    cursor: pointer;
+    background: #f3f3f3;
+    transition: 0.2s;
+}
+
+.petro-modal .qty-box button:hover {
+    background: #108082;
+    color: #fff;
+}
+
+/* Footer buttons */
+.petro-modal .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

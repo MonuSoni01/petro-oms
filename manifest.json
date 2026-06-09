@@ -1,0 +1,21 @@
+{
+  "name": "PETRO Order Management",
+  "short_name": "PETRO OMS",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a6ebd",
+  "icons": [
+    {
+      "src": "/images/app-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

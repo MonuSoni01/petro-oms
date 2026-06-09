@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Profile | PETRO OMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .profile-card {
+            max-width: 500px;
+            margin: 60px auto;
+            border-radius: 10px;
+        }
+
+        .profile-header {
+            background: #108082;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+
+        .profile-body {
+            padding: 25px;
+        }
+
+        .profile-body p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card profile-card shadow">
+        <div class="profile-header">
+            <i class="fa fa-user-circle fa-3x mb-2"></i>
+            <h4>Admin Profile</h4>
+        </div>
+
+        <div class="profile-body">
+            <p><b>Name:</b> <span id="adminName">Loading...</span></p>
+            <p><b>Email:</b> <span id="adminEmail">Loading...</span></p>
+            <p><b>Role:</b> <span id="adminRole">Admin</span></p>
+            <p><b>Last Login:</b> <span id="lastLogin">-</span></p>
+
+            <hr>
+
+            <button class="btn btn-warning btn-block mb-2" onclick="changePassword()">
+                <i class="fa fa-key"></i> Change Password
+            </button>
+
+            <button class="btn btn-danger btn-block" onclick="logout()">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </button>
+
+            <a href="admin-dashboard.html" class="btn btn-secondary btn-block mt-2">
+                <i class="fa fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+    <script>
+        /* ===============================
+           FIREBASE INIT
+        ================================ */
+        firebase.initializeApp({
+            apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
+            authDomain: "petro-oms.firebaseapp.com",
+            projectId: "petro-oms"
+        });
+
+        const auth = firebase.auth();
+
+        /* ===============================
+           AUTH CHECK + LOAD PROFILE
+        ================================ */
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            document.getElementById("adminName").innerText =
+                user.displayName || "Admin";
+
+            document.getElementById("adminEmail").innerText =
+                user.email;
+
+            document.getElementById("adminRole").innerText =
+                "Super Admin"; // future me Firestore se aayega
+
+            if (user.metadata?.lastSignInTime) {
+                document.getElementById("lastLogin").innerText =
+                    new Date(user.metadata.lastSignInTime).toLocaleString();
+            }
+        });
+
+        /* ===============================
+           CHANGE PASSWORD
+        ================================ */
+        function changePassword() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            auth.sendPasswordResetEmail(user.email)
+                .then(() => {
+                    alert("Password reset link sent to your email.");
+                })
+                .catch(err => {
+                    alert(err.message);
+                });
+        }
+
+        /* ===============================
+           LOGOUT
+        ================================ */
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = "login.html";
+            });
+        }
+    </script>
+    <script src="js/dev.js"></script>
+
+</body>
+</html>

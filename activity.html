@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>PETRO OMS | Activity Logs</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+   <style>
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+
+    body{
+
+        background:
+        linear-gradient(
+        135deg,
+        #edf3f5,
+        #f7fafb
+        );
+
+        font-family:
+        "Segoe UI",
+        sans-serif;
+
+        min-height:100vh;
+
+        color:#222;
+    }
+
+    /* ====================================
+       TOPBAR
+    ==================================== */
+
+    .topbar{
+
+        background:
+        linear-gradient(
+        135deg,
+        #0c6f72,
+        #108082
+        );
+
+        color:#fff;
+
+        padding:14px 24px;
+
+        display:flex;
+
+        justify-content:space-between;
+
+        align-items:center;
+
+        position:sticky;
+
+        top:0;
+
+        z-index:999;
+
+        box-shadow:
+        0 6px 20px rgba(0,0,0,.08);
+    }
+
+    .topbar div{
+
+        font-size:20px;
+
+        font-weight:700;
+
+        letter-spacing:.3px;
+    }
+
+    .topbar i{
+
+        margin-right:8px;
+    }
+
+    .topbar button{
+
+        border:none;
+
+        background:#fff;
+
+        color:#108082;
+
+        padding:9px 16px;
+
+        border-radius:12px;
+
+        font-size:14px;
+
+        font-weight:700;
+
+        transition:.2s;
+    }
+
+    .topbar button:hover{
+
+        transform:translateY(-1px);
+
+        box-shadow:
+        0 8px 18px rgba(0,0,0,.10);
+    }
+
+    /* ====================================
+       CONTAINER
+    ==================================== */
+
+    .container{
+
+        max-width:1180px;
+    }
+
+    /* ====================================
+       FILTER BOX
+    ==================================== */
+
+    .filter-box{
+
+        background:
+        rgba(255,255,255,.82);
+
+        backdrop-filter:
+        blur(10px);
+
+        border:
+        1px solid rgba(255,255,255,.5);
+
+        border-radius:20px;
+
+        padding:18px;
+
+        margin-bottom:20px;
+
+        box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+    }
+
+    .filter-box label{
+
+        font-size:13px;
+
+        font-weight:700;
+
+        color:#555;
+
+        margin-bottom:6px;
+    }
+
+    .form-control{
+
+        height:44px;
+
+        border-radius:12px;
+
+        border:
+        1px solid #dbe5ea;
+
+        font-size:14px;
+
+        box-shadow:none !important;
+
+        transition:.2s;
+    }
+
+    .form-control:focus{
+
+        border-color:#108082;
+
+        box-shadow:
+        0 0 0 4px rgba(16,128,130,.10)
+        !important;
+    }
+
+    .btn-primary{
+
+        height:44px;
+
+        border:none;
+
+        border-radius:12px;
+
+        background:
+        linear-gradient(
+        135deg,
+        #108082,
+        #0d6f72
+        );
+
+        font-size:14px;
+
+        font-weight:700;
+
+        transition:.2s;
+    }
+
+    .btn-primary:hover{
+
+        transform:translateY(-1px);
+
+        box-shadow:
+        0 10px 20px rgba(16,128,130,.18);
+    }
+
+    /* ====================================
+       ACTIVITY CARD
+    ==================================== */
+
+    .activity-card{
+
+        background:
+        rgba(255,255,255,.88);
+
+        backdrop-filter:
+        blur(12px);
+
+        border:
+        1px solid rgba(255,255,255,.45);
+
+        border-radius:20px;
+
+        padding:16px 18px;
+
+        margin-bottom:14px;
+
+        box-shadow:
+        0 8px 22px rgba(0,0,0,.05);
+
+        position:relative;
+
+        overflow:hidden;
+
+        transition:.2s;
+    }
+
+    .activity-card::before{
+
+        content:"";
+
+        position:absolute;
+
+        left:0;
+        top:0;
+
+        width:4px;
+        height:100%;
+
+        background:
+        linear-gradient(
+        180deg,
+        #108082,
+        #1dc7cc
+        );
+    }
+
+    .activity-card:hover{
+
+        transform:translateY(-2px);
+
+        box-shadow:
+        0 14px 28px rgba(0,0,0,.08);
+    }
+
+    /* ====================================
+       HEADER
+    ==================================== */
+
+    .activity-header{
+
+        display:flex;
+
+        justify-content:space-between;
+
+        align-items:center;
+
+        margin-bottom:10px;
+
+        gap:10px;
+    }
+
+    .activity-user{
+
+        font-size:16px;
+
+        font-weight:700;
+
+        color:#108082;
+    }
+
+    .activity-time{
+
+        font-size:12px;
+
+        color:#888;
+
+        font-weight:600;
+
+        white-space:nowrap;
+    }
+
+    /* ====================================
+       ROLE BADGE
+    ==================================== */
+
+    .badge-role{
+
+        display:inline-flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        padding:5px 10px;
+
+        border-radius:999px;
+
+        font-size:10px;
+
+        font-weight:700;
+
+        text-transform:uppercase;
+
+        letter-spacing:.5px;
+
+        color:#fff;
+
+        margin-left:8px;
+    }
+
+    .admin{
+
+        background:
+        linear-gradient(
+        135deg,
+        #ff4d6d,
+        #d90429
+        );
+    }
+
+    .sales{
+
+        background:
+        linear-gradient(
+        135deg,
+        #1db954,
+        #129445
+        );
+    }
+
+    .unknown{
+
+        background:
+        linear-gradient(
+        135deg,
+        #777,
+        #555
+        );
+    }
+
+    /* ====================================
+       MESSAGE
+    ==================================== */
+
+    .activity-action{
+
+        margin-top:5px;
+
+        font-size:14px;
+
+        line-height:1.5;
+
+        color:#333;
+
+        background:#f9fcfc;
+
+        padding:10px 14px;
+
+        border-radius:14px;
+
+        border:
+        1px dashed #dbe8ea;
+    }
+
+    /* ====================================
+       ORDER CHIP
+    ==================================== */
+
+    .activity-order{
+
+        margin-top:10px;
+
+        display:inline-flex;
+
+        align-items:center;
+
+        background:
+        linear-gradient(
+        135deg,
+        #edf9f9,
+        #f7ffff
+        );
+
+        color:#108082;
+
+        padding:7px 12px;
+
+        border-radius:999px;
+
+        font-size:12px;
+
+        font-weight:700;
+
+        border:
+        1px solid #d4ecec;
+    }
+
+    /* ====================================
+       LOADING / EMPTY
+    ==================================== */
+
+    .loading-box,
+    .empty-state{
+
+        background:#fff;
+
+        border-radius:20px;
+
+        padding:50px 20px;
+
+        text-align:center;
+
+        box-shadow:
+        0 8px 24px rgba(0,0,0,.05);
+
+        color:#666;
+    }
+
+    .loading-box i{
+
+        color:#108082;
+
+        margin-right:8px;
+
+        font-size:18px;
+    }
+
+    .empty-state i{
+
+        color:#108082;
+
+        opacity:.7;
+    }
+
+    /* ====================================
+       SCROLLBAR
+    ==================================== */
+
+    ::-webkit-scrollbar{
+
+        width:8px;
+    }
+
+    ::-webkit-scrollbar-thumb{
+
+        background:#108082;
+
+        border-radius:20px;
+    }
+
+    ::-webkit-scrollbar-track{
+
+        background:#edf3f5;
+    }
+
+    /* ====================================
+       MOBILE
+    ==================================== */
+
+    @media(max-width:768px){
+
+        .topbar{
+
+            flex-direction:column;
+
+            gap:12px;
+
+            text-align:center;
+
+            padding:16px;
+        }
+
+        .topbar div{
+
+            font-size:18px;
+        }
+
+        .activity-header{
+
+            flex-direction:column;
+
+            align-items:flex-start;
+        }
+
+        .filter-box{
+
+            padding:16px;
+        }
+
+        .activity-card{
+
+            padding:14px;
+        }
+
+        .activity-user{
+
+            font-size:15px;
+        }
+
+        .activity-action{
+
+            font-size:13px;
+        }
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+        <div>
+            <i class="fa fa-clock-rotate-left"></i>
+            PETRO OMS Activity Logs
+        </div>
+
+        <div>
+            <button class="btn btn-light btn-sm" onclick="location.href='orders/orders.html'">
+                <i class="fa fa-arrow-left"></i>
+                Back
+            </button>
+        </div>
+
+    </div>
+
+    <div class="container mt-4">
+
+        <!-- FILTERS -->
+        <div class="filter-box">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label>Search User / Order</label>
+
+                    <input type="text" id="searchBox" class="form-control" placeholder="Search..." autocomplete="off">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Role</label>
+
+                    <select id="roleFilter" class="form-control">
+
+                        <option value="">
+                            All Roles
+                        </option>
+
+                        <option value="admin">
+                            Admin
+                        </option>
+
+                        <option value="sales">
+                            Sales
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label>Action</label>
+
+                    <select id="actionFilter" class="form-control">
+
+                        <option value="">
+                            All Actions
+                        </option>
+
+                        <option value="updated">
+                            Updated
+                        </option>
+
+                        <option value="created">
+                            Created
+                        </option>
+
+                        <option value="deleted">
+                            Deleted
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary btn-block" onclick="applyFilters()">
+
+                        <i class="fa fa-filter"></i>
+                        Filter
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- LOADER -->
+        <div id="loader" class="loading-box">
+            <i class="fa fa-spinner fa-spin"></i>
+            Loading Activities...
+        </div>
+
+        <!-- EMPTY -->
+        <div id="emptyState" class="empty-state" style="display:none;">
+
+            <i class="fa fa-folder-open fa-3x mb-3"></i>
+
+            <h4>
+                No Activities Found
+            </h4>
+
+        </div>
+
+        <!-- ACTIVITIES -->
+        <div id="activityContainer"></div>
+        <div class="text-center mt-3">
+    <button id="loadMoreBtn" class="btn btn-primary">
+        Load More
+    </button>
+</div>
+
+    </div>
+
+    <script>
+
+        /* ======================================================
+           FIREBASE CONFIG
+        ====================================================== */
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
+
+            authDomain: "petro-oms.firebaseapp.com",
+
+            projectId: "petro-oms",
+
+            storageBucket: "petro-oms.firebasestorage.app",
+
+            messagingSenderId: "562472760628",
+
+            appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
+
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.firestore();
+
+        /* ======================================================
+           GLOBALS
+        ====================================================== */
+        let allActivities = [];
+
+        const activityContainer =
+            document.getElementById("activityContainer");
+
+        const loader =
+            document.getElementById("loader");
+
+        const emptyState =
+            document.getElementById("emptyState");
+
+        /* ======================================================
+           FETCH ACTIVITIES
+        ====================================================== */
+       const PAGE_SIZE = 25;
+let lastVisibleActivity = null;
+
+db.collection("order_activities")
+    .orderBy("timestamp", "desc")
+    .limit(PAGE_SIZE)
+    .get()
+    .then((snapshot) => {
+
+        if (!snapshot.empty) {
+            lastVisibleActivity =
+                snapshot.docs[snapshot.docs.length - 1];
+        }
+
+                allActivities =
+                    snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+
+                loader.style.display = "none";
+
+                renderActivities(allActivities);
+
+            });
+
+        /* ======================================================
+           RENDER ACTIVITIES
+        ====================================================== */
+        function renderActivities(list) {
+
+            if (!list.length) {
+
+                emptyState.style.display = "block";
+
+                activityContainer.innerHTML = "";
+
+                return;
+
+            }
+
+            emptyState.style.display = "none";
+
+            activityContainer.innerHTML =
+                list.map(a => {
+
+                    const role =
+                        (a.role || "unknown")
+                            .toLowerCase();
+
+                    const time =
+                        formatDate(a.timestamp);
+
+                    return `
+
+                <div class="activity-card">
+
+                    <div class="activity-header">
+
+                        <div>
+
+                            <span class="activity-user">
+                                ${a.user || "Unknown"}
+                            </span>
+
+                            <span class="badge-role ${role}">
+                                ${role}
+                            </span>
+
+                        </div>
+
+                        <div class="activity-time">
+                            ${time}
+                        </div>
+
+                    </div>
+
+                    <div class="activity-action">
+                        ${a.message || "-"}
+                    </div>
+
+                    <div class="activity-order">
+                        Order :
+                        ${a.orderNo || "-"}
+                    </div>
+
+                </div>
+
+            `;
+
+                }).join("");
+
+        }
+
+        /* ======================================================
+           FORMAT DATE
+        ====================================================== */
+        function formatDate(timestamp) {
+
+            if (!timestamp) return "-";
+
+            let d;
+
+            if (timestamp.seconds) {
+
+                d =
+                    new Date(timestamp.seconds * 1000);
+
+            } else {
+
+                d =
+                    new Date(timestamp);
+
+            }
+
+            return d.toLocaleString();
+
+        }
+
+        /* ======================================================
+           FILTERS
+        ====================================================== */
+        function applyFilters() {
+
+            let filtered = [...allActivities];
+
+            const search =
+                document
+                    .getElementById("searchBox")
+                    .value
+                    .toLowerCase();
+
+            const role =
+                document
+                    .getElementById("roleFilter")
+                    .value
+                    .toLowerCase();
+
+            const action =
+                document
+                    .getElementById("actionFilter")
+                    .value
+                    .toLowerCase();
+
+            // SEARCH
+            if (search) {
+
+                filtered =
+                    filtered.filter(a =>
+
+                        (a.user || "")
+                            .toLowerCase()
+                            .includes(search)
+
+                        ||
+
+                        (a.orderNo || "")
+                            .toLowerCase()
+                            .includes(search)
+
+                        ||
+
+                        (a.message || "")
+                            .toLowerCase()
+                            .includes(search)
+
+                    );
+
+            }
+
+            // ROLE
+            if (role) {
+
+                filtered =
+                    filtered.filter(a =>
+
+                        (a.role || "")
+                            .toLowerCase()
+                            .includes(role)
+
+                    );
+
+            }
+
+            // ACTION
+            if (action) {
+
+                filtered =
+                    filtered.filter(a =>
+
+                        (a.action || "")
+                            .toLowerCase()
+                            .includes(action)
+
+                    );
+
+            }
+
+            renderActivities(filtered);
+
+        }
+
+        document
+    .getElementById("loadMoreBtn")
+    .addEventListener("click", loadMoreActivities);
+
+async function loadMoreActivities() {
+
+    if (!lastVisibleActivity) return;
+
+    const snapshot = await db.collection("order_activities")
+        .orderBy("timestamp", "desc")
+        .startAfter(lastVisibleActivity)
+        .limit(PAGE_SIZE)
+        .get();
+
+    if (snapshot.empty) {
+        document.getElementById("loadMoreBtn").style.display = "none";
+        alert("No More Activities");
+        return;
+    }
+
+    lastVisibleActivity =
+        snapshot.docs[snapshot.docs.length - 1];
+
+    const newActivities = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }));
+
+    allActivities.push(...newActivities);
+
+    renderActivities(allActivities);
+}
+    </script>
+
+    <script src="js/dev.js"></script>
+</body>
+
+</html>

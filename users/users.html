@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PETRO OMS - Users</title>
+    <link rel="icon" href="/images/logo.webp" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="icon" href="/images/app-icon.png" />
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .password-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .password-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 2;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .password-wrap input {
+            padding-left: 42px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            z-index: 3;
+            color: #888;
+            padding: 0;
+            outline: none;
+        }
+
+        .password-toggle-btn:hover {
+            color: #108082;
+        }
+
+        .password-wrap input {
+            padding-left: 42px;
+            padding-right: 42px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-confirm-delete i,
+        .btn-cancel-delete i {
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .filter-card {
+            background: #fff;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid #e8eeee;
+            box-shadow: 0 4px 12px rgba(16, 128, 130, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-row .form-control {
+            height: 42px;
+            border-radius: 8px;
+            border: 1px solid #d8e4e4;
+            font-size: 13px;
+            min-width: 160px;
+            flex: 1;
+            box-shadow: none;
+        }
+
+        .filter-row .form-control:focus {
+            border-color: #108082;
+            box-shadow: 0 0 0 2px rgba(16, 128, 130, 0.08);
+        }
+
+        .filter-row .btn {
+            height: 42px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 120px;
+            border: none;
+        }
+
+        .btn-clear {
+            background: #f3f7f7;
+            color: #333;
+            border: 1px solid #d8e4e4;
+        }
+
+        .btn-download {
+            background: #108082;
+            color: #fff;
+        }
+
+        .btn-download:hover {
+            background: #0d6d6f;
+        }
+
+        @media(max-width:1200px) {
+            .filter-row .form-control {
+                min-width: 220px;
+            }
+        }
+
+        /* SIMPLE MODAL OVERLAY */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            display: none;
+            /* JS will set flex */
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        /* SIMPLE MODAL BOX */
+        .custom-modal {
+            background: #ffffff;
+            color: #111111;
+            width: 92%;
+            max-width: 600px;
+            border-radius: 8px;
+            padding: 18px 20px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        /* HEADER */
+        .custom-modal h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* CLOSE BUTTON */
+        .custom-modal .btn-danger {
+            background: #dc3545;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 10px;
+        }
+
+        /* CONTENT */
+        #modalContent {
+            margin-top: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        #modalContent .line {
+            padding: 6px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        #modalContent .line:last-child {
+            border-bottom: none;
+        }
+
+        #modalContent {
+            text-align: left;
+        }
+
+
+        #modalContent b {
+            font-weight: 600;
+            color: #000;
+        }
+
+        /* MOBILE */
+        @media (max-width: 576px) {
+            .custom-modal {
+                padding: 14px;
+            }
+
+            #modalContent {
+                font-size: 13px;
+            }
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .btn-success i {
+            font-size: 14px;
+        }
+
+        .table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .table thead th:nth-child(1),
+        .table tbody td:nth-child(1) {
+            width: 11%;
+        }
+
+        /* User Name */
+        .table thead th:nth-child(2),
+        .table tbody td:nth-child(2) {
+            width: 18%;
+        }
+
+        /* Party Type */
+        .table thead th:nth-child(3),
+        .table tbody td:nth-child(3) {
+            width: 12%;
+        }
+
+        /* Mobile */
+        .table thead th:nth-child(4),
+        .table tbody td:nth-child(4) {
+            width: 13%;
+        }
+
+        /* City */
+        .table thead th:nth-child(5),
+        .table tbody td:nth-child(5) {
+            width: 12%;
+        }
+
+        /* Status */
+        .table thead th:nth-child(6),
+        .table tbody td:nth-child(6) {
+            width: 12%;
+        }
+
+        /* Grand Total */
+        .table thead th:nth-child(7),
+        .table tbody td:nth-child(7) {
+            width: 12%;
+            text-align: center;
+        }
+
+        /* Action */
+        .table thead th:nth-child(8),
+        .table tbody td:nth-child(8) {
+            width: 10%;
+            text-align: center;
+        }
+
+        .delete-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 15, 20, 0.55);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        .delete-modal-box {
+            width: 92%;
+            max-width: 430px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+            animation: popupFade .25s ease;
+        }
+
+        @keyframes popupFade {
+            from {
+                transform: translateY(20px) scale(.96);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .delete-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #ffe8e8;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .delete-close-btn {
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .delete-modal-box h4 {
+            margin-top: 18px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f1f1f;
+        }
+
+        .delete-modal-box p {
+            color: #666;
+            font-size: 14px;
+            margin: 10px 0 18px;
+            line-height: 1.6;
+        }
+
+        #adminDeletePassword {
+            height: 46px;
+            border-radius: 10px;
+            border: 1px solid #d8e4e4;
+            margin-bottom: 20px;
+        }
+
+        .delete-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cancel-delete,
+        .btn-confirm-delete {
+            flex: 1;
+            height: 46px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancel-delete {
+            background: #f3f6f7;
+            color: #333;
+        }
+
+        .btn-confirm-delete {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .btn-confirm-delete:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar & Header Already in Your Layout -->
+
+    <aside id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/petro-circle-logo.webp" alt="PETRO" />
+        </div>
+        <ul class="sidebar-menu">
+
+            <li onclick="location.href='/admin-dashboard.html'">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </li>
+
+            <li onclick="location.href='/orders/orders.html'">
+                <i class="fa-solid fa-list"></i> Orders
+            </li>
+
+            <li class="active" onclick="location.href='/users/users.html'">
+                <i class="fa-solid fa-user"></i> Customers
+            </li>
+            <li onclick="location.href='/dashboard/sales.html'">
+                <i class="fa-solid fa-box"></i> Products Sales Report
+            </li>
+
+            <li onclick="location.href='/activity.html'">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                <span>
+                    Activity Logs
+                </span>
+
+            </li>
+
+
+            <li onclick="location.href='/login.html'">
+                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </li>
+
+        </ul>
+    </aside>
+
+    <main id="main">
+        <!-- USER VIEW MODAL -->
+        <div id="modal" class="custom-modal-overlay" style="display:none;">
+            <div class="custom-modal" style="max-width:600px;">
+
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <h4>User Details</h4>
+                    <button onclick="closeModal()" class="btn btn-sm btn-danger">✖</button>
+                </div>
+
+                <hr>
+
+                <div id="modalContent">
+                    <!-- JS will inject content here -->
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Top Navbar -->
+        <div class="top-bar" style="background: #108082;">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                        <div class="contact-details">
+                            <ul class="d-flex">
+                                <li>
+                                    <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                                </li>
+                                <li>
+                                    <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                        contact@petroindustech.com</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                        <div class="news-box">
+                            <ul class="footer-social topnav-social-icon">
+                                <li>
+                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                            class="fa-brands fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                            class="fa-brands fa-instagram"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                            class="fa-brands fa-youtube"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://x.com/Petroindustech" target="_blank"><i
+                                            class="fa-brands fa-x-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                            class="fa-brands fa-pinterest"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navbar Section -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+
+                <!-- LEFT : LOGO -->
+                <a class="navbar-brand" href="https://order-management-petro.netlify.app/">
+                    <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+                </a>
+
+                <!-- RIGHT : ADMIN -->
+                <div class="d-flex align-items-center">
+
+                    <!-- DARK MODE -->
+                    <label class="toggle-switch mb-0 mr-3">
+                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                        <span class="slider"></span>
+                    </label>
+
+                    <!-- ADMIN DROPDOWN -->
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            style="border-radius:20px;">
+
+                            <i class="fa fa-user-circle text-success mr-2"></i>
+                            <span id="adminName">Admin</span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                            <a class="dropdown-item" href="/admin-profile.html">
+                                <i class="fa fa-user mr-2"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/login.html" onclick="logout()">
+                                <i class="fa fa-sign-out mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="page-container p-5">
+            <h2 class="page-title">All Users</h2>
+
+            <!-- FILTERS -->
+            <div class="filter-card">
+                <div class="filter-row">
+
+                    <input type="text" id="filterOrderNo" class="form-control" placeholder="Order No">
+
+                    <input type="text" id="filterPartyName" class="form-control" placeholder="Party Name">
+
+                    <input type="text" id="filterPartyMobile" class="form-control" placeholder="Mobile Number">
+
+                    <select id="filterSalesman" class="form-control">
+                        <option value="">All Salesman</option>
+                    </select>
+
+                    <input type="date" id="filterFromDate" class="form-control">
+
+                    <input type="date" id="filterToDate" class="form-control">
+
+                    <button class="btn btn-clear" onclick="resetFilters()">
+                        <i class="fa fa-refresh"></i> Clear
+                    </button>
+
+                    <button class="btn btn-download" onclick="downloadCSV()">
+                        <i class="fa fa-download"></i> CSV
+                    </button>
+
+                </div>
+            </div>
+
+
+
+            <!-- TABLE -->
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Order No</th>
+                            <th>User Name</th>
+                            <th>Party Type</th>
+                            <th>Mobile</th>
+                            <th>City</th>
+                            <th>Status</th>
+                            <th style="cursor:pointer" onclick="sortByAmount()">
+                                Grand Total <i class="fa fa-sort"></i>
+                            </th>
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="usersBody"></tbody>
+
+                    <tfoot>
+                        <tr style="background:#f1f1f1;font-weight:bold;">
+                            <td colspan="6" class="text-right">TOTAL</td>
+                            <td id="grandTotalSum">₹ 0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="text-center mt-3">
+                    <button id="loadMoreBtn" class="btn btn-primary">
+                        Load More
+                    </button>
+                </div>
+            </div>
+
+            <p id="emptyState" class="text-center mt-3" style="display:none;">No users found.</p>
+        </div>
+
+    </main>
+    <!-- DELETE MODAL -->
+    <div id="deleteModal" class="delete-modal-overlay">
+
+        <div class="delete-modal-box">
+
+            <div class="delete-modal-header">
+                <div class="delete-icon">
+                    <i class="fa fa-trash"></i>
+                </div>
+
+                <button onclick="closeDeleteModal()" class="delete-close-btn">
+                    ✕
+                </button>
+            </div>
+
+            <h4>Delete User</h4>
+
+            <p id="deleteOrderText">
+                Are you sure you want to delete this order?
+            </p>
+
+            <div class="password-wrap">
+                <i class="fa fa-lock password-icon"></i>
+
+                <input type="password" id="adminDeletePassword" class="form-control" placeholder="Enter Admin Password">
+
+                <button type="button" class="password-toggle-btn" onclick="toggleDeletePassword()">
+                    <i id="passwordToggleIcon" class="fa fa-eye"></i>
+                </button>
+            </div>
+
+            <div class="delete-modal-actions">
+                <button type="button" onclick="closeDeleteModal()" class="btn-cancel-delete">
+                    <i class="fa fa-times mr-2"></i> Cancel
+                </button>
+
+                <button type="button" onclick="confirmDeleteOrder()" class="btn-confirm-delete">
+                    <i class="fa fa-trash mr-2"></i> Delete Permanently
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <!-- jQuery FIRST -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4.1.1 -->
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="users.js"></script>
+
+    <script src="/js/dev.js"></script>
+</body>
+
+</html>

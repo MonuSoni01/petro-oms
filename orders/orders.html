@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>PETRO OMS | Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="/images/app-icon.png" />
+    <link rel="stylesheet" href="orders.css">
+</head>
+
+<body>
+
+    <!-- Whatsapp Section -->
+    <div class="whats_link">
+        <a target="_blank" href="https://wa.me/918000007336?text=">
+            <img src="/images/whatsapp_logo.png" alt="" id="whatsapp-icon" /></a>
+    </div>
+
+    <!-- Phone Section -->
+    <div class="phone_link">
+        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
+            <img src="/images/app.webp" alt="" id="whatsapp-icon" /></a>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+
+        <div class="sidebar-logo">
+            <img src="/images/petro-circle-logo.webp" alt="PETRO" />
+        </div>
+        <ul class="sidebar-menu">
+
+            <li onclick="location.href='/admin-dashboard.html'">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </li>
+
+            <li class="active" onclick="location.href='/orders/orders.html'">
+                <i class="fa-solid fa-list"></i> Orders
+            </li>
+
+            <li onclick="location.href='/users/users.html'">
+                <i class="fa-solid fa-user"></i> Customers
+            </li>
+
+            <li onclick="location.href='/dashboard/sales.html'">
+                <i class="fa-solid fa-box"></i> Products Sales Report
+            </li>
+            <li onclick="location.href='/activity.html'">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                <span>
+                    Activity Logs
+                </span>
+
+            </li>
+
+
+            <li onclick="location.href='/login.html'">
+                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </li>
+
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main">
+
+        <!-- Top Navbar -->
+        <div class="top-bar" style="background: #108082;">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                        <div class="contact-details">
+                            <ul class="d-flex">
+                                <li>
+                                    <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                                </li>
+                                <li>
+                                    <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                        contact@petroindustech.com</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                        <div class="news-box">
+                            <ul class="footer-social topnav-social-icon">
+                                <li>
+                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                            class="fa-brands fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                            class="fa-brands fa-instagram"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                            class="fa-brands fa-youtube"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://x.com/Petroindustech" target="_blank"><i
+                                            class="fa-brands fa-x-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                            class="fa-brands fa-pinterest"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navbar Section -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+
+                <!-- LEFT : LOGO -->
+                <a class="navbar-brand" href="https://order-management-petro.netlify.app/">
+                    <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+                </a>
+
+                <!-- RIGHT : ADMIN -->
+                <div class="d-flex align-items-center">
+
+                    <!-- DARK MODE -->
+                    <label class="toggle-switch mb-0 mr-3">
+                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                        <span class="slider"></span>
+                    </label>
+
+                    <!-- ADMIN DROPDOWN -->
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            style="border-radius:20px;">
+
+                            <i class="fa fa-user-circle text-success mr-2"></i>
+                            <span id="adminName">Admin</span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                            <a class="dropdown-item" href="/admin-profile.html">
+                                <i class="fa fa-user mr-2"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/login.html">
+                                <i class="fa fa-sign-out mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <!-- FILTER SECTION -->
+        <div class="filters-box mb-4 mt-5 p-5">
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label>Date From</label>
+                    <input type="date" id="dateFrom" class="form-control">
+                </div>
+
+                <div class="col-md-2">
+                    <label>Date To</label>
+                    <input type="date" id="dateTo" class="form-control">
+                </div>
+
+                <div class="col-md-2">
+                    <label>Status</label>
+                    <select id="filterStatus" class="form-control">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Quotation Sent">Quotation Sent</option>
+                        <option value="Payment Received">Payment Received</option>
+                        <option value="Partial Delivered">Partial Delivered</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Hold">Hold</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+
+
+                </div>
+
+                <div class="col-md-3">
+                    <label>Search</label>
+                    <input type="search" id="searchBox" name="petro_order_search_xyz_2026" class="form-control"
+                        placeholder="Search Order No / Party Name" autocomplete="off" autocorrect="off"
+                        autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="col-md-2">
+                    <label>Salesman</label>
+                    <select id="salesmanFilter" class="form-control">
+                        <option value="">
+                            All Salesman
+                        </option>
+                    </select>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!-- ORDERS TABLE -->
+        <div class="orders-table-card mt-5 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">All Orders</h4>
+
+                <button class="btn btn-success" onclick="openExportModal()">
+                    <i class="fa fa-download"></i> Download Data
+                </button>
+            </div>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAllRows" onchange="toggleAllRows(this)">
+                        </th>
+                        <th>Sr No</th>
+                        <th>Salesman</th>
+                        <th>Order No</th>
+                        <th>Party Name</th>
+                        <th>Type</th>
+                        <th>Total (₹)</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                        <th>Bill Image</th>
+                    </tr>
+                </thead>
+
+                <tbody id="ordersBody"></tbody>
+
+
+            </table>
+            <div class="text-center mt-3">
+                <button id="loadMoreBtn" class="btn btn-primary">
+                    Load More Orders
+                </button>
+            </div>
+
+            <p id="emptyState" class="text-center mt-3" style="display:none;">No orders found.</p>
+        </div>
+
+
+        <div id="exportModal" class="modal-overlay" style="display:none;">
+            <div class="modal-box" style="max-width:650px; padding:22px;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Download Custom Report</h4>
+                    <button class="btn btn-light btn-sm" onclick="closeExportModal()">✖</button>
+                </div>
+
+                <input type="text" id="columnSearch" class="form-control mb-3" placeholder="Search columns..."
+                    oninput="renderExportColumns()">
+
+                <div class="export-top-bar">
+                    <label class="export-select-all">
+                        <input type="checkbox" id="selectAllColumns" onchange="toggleAllColumns(this)">
+                        Select All Columns
+                    </label>
+
+                    <b id="selectedColumnCount" style="color:#108082;">0 Selected</b>
+                </div>
+
+                <div id="exportColumnsList"
+                    style="max-height:350px; overflow-y:auto; border:1px solid #ddd; border-radius:10px; padding:10px;">
+                </div>
+
+                <div class="export-btn-wrap">
+                    <button class="btn btn-secondary w-50" onclick="closeExportModal()">Cancel</button>
+                    <button class="btn btn-success w-50" onclick="downloadCustomCSV()">Download CSV</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for viewing image -->
+    <div id="imageModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <!-- Close Button -->
+            <span class="testingclose" onclick="closeImageModal()">✖</span>
+
+            <!-- Skeleton Loader -->
+            <div id="imageSkeleton" class="skeleton-loader"></div>
+
+            <!-- Modal Image -->
+            <img id="modalImage" src="" alt="Order Image"
+                style="width:100%; height:auto; border-radius: 12px; display: none;">
+        </div>
+    </div>
+    <!-- Modal for viewing image -->
+
+    <div id="modal">
+        <div id="modalBox">
+            <!-- 
+            <span class="closeBtn" onclick="closeModal()">✖</span> -->
+
+            <div id="modalContent">
+                <!-- Dynamic content from JS will come here -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DELETE POPUP -->
+    <div id="deleteModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <h3 style="color:#d93025;margin-bottom:10px;">Delete Order</h3>
+            <p style="font-size:15px;margin-bottom:10px;">
+                Enter admin password to delete this order.
+            </p>
+            <p id="deleteMsg" style="
+                display:none;
+                margin-top:10px;
+                font-weight:600;
+                text-align:center;
+            ">
+            </p>
+
+            <input type="text" style="display:none">
+            <input type="password" style="display:none">
+
+            <div class="password-wrapper">
+                <input type="password" id="deletePass" class="form-control" placeholder="Enter Admin Password"
+                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+
+
+                <i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
+            </div>
+
+
+            <button class="btn btn-danger btn-block mt-2" onclick="confirmDelete()">Delete</button>
+            <button class="btn btn-secondary btn-block mt-2" onclick="closeDeleteModal()">Cancel</button>
+
+        </div>
+    </div>
+
+
+    <!-- FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <!-- jQuery FIRST -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap 4.1.1 -->
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Common JS -->
+    <script src="../js/script.js"></script>
+
+    <!-- Page JS -->
+    <script src="orders.js"></script>
+
+    <!-- <script src="/js/dev.js"></script> -->
+</body>
+
+</html>

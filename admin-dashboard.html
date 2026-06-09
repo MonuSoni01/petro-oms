@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>PETRO OMS - Admin Panel</title>
+    <link rel="icon" href="/images/app-icon.png" />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Firebase v9 Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font CSS & CDN -->
+    <link href="css/all.css" rel="stylesheet" />
+    <style>
+        body {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Whatsapp Section -->
+    <div class="whats_link">
+        <a target="_blank" href="https://wa.me/918000007336?text=">
+            <img src="images/whatsapp_logo.png" alt="" id="whatsapp-icon" /></a>
+    </div>
+
+    <!-- Phone Section -->
+    <div class="phone_link">
+        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
+            <img src="https://www.petroindustech.com/images/app.webp" alt="" id="whatsapp-icon" /></a>
+    </div>
+
+
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+
+        <div class="sidebar-logo">
+            <img src="/images/petro-circle-logo.webp" alt="PETRO" />
+        </div>
+        <ul class="sidebar-menu">
+
+            <li class="active" onclick="location.href='admin-dashboard.html'">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </li>
+
+            <li onclick="location.href='orders/orders.html'">
+                <i class="fa-solid fa-list"></i> Orders
+            </li>
+
+            <li onclick="location.href='users/users.html'">
+                <i class="fa-solid fa-user"></i> Customers
+            </li>
+            <li onclick="location.href='dashboard/sales.html'">
+                <i class="fa-solid fa-box"></i> Products Sales Report
+            </li>
+
+            <li onclick="location.href='activity.html'">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                <span>
+                    Activity Logs
+                </span>
+
+            </li>
+
+
+            <li onclick="location.href='login.html'">
+                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </li>
+
+        </ul>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main id="main">
+
+        <!-- Top Navbar -->
+        <div class="top-bar" style="background: #108082;">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                        <div class="contact-details">
+                            <ul class="d-flex">
+                                <li>
+                                    <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                                </li>
+                                <li>
+                                    <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                        contact@petroindustech.com</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                        <div class="news-box">
+                            <ul class="footer-social topnav-social-icon">
+                                <li>
+                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
+                                            class="fa-brands fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
+                                            class="fa-brands fa-instagram"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
+                                            class="fa-brands fa-youtube"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://x.com/Petroindustech" target="_blank"><i
+                                            class="fa-brands fa-x-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
+                                            class="fa-brands fa-pinterest"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navbar Section -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+
+                <!-- LEFT : LOGO -->
+                <a class="navbar-brand" href="https://order-management-petro.netlify.app/">
+                    <img src="images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+                </a>
+
+                <!-- RIGHT : ADMIN -->
+                <div class="d-flex align-items-center">
+
+                    <!-- DARK MODE -->
+                    <label class="toggle-switch mb-0 mr-3">
+                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                        <span class="slider"></span>
+                    </label>
+
+                    <!-- ADMIN DROPDOWN -->
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            style="border-radius:20px;">
+
+                            <i class="fa fa-user-circle text-success mr-2"></i>
+                            <span id="adminName">Admin</span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                            <a class="dropdown-item" href="admin-profile.html">
+                                <i class="fa fa-user mr-2"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="login.html" onclick="logout()">
+                                <i class="fa fa-sign-out mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+
+        <!-- TOP CARDS -->
+        <div class="container-fluid mt-5 p-5">
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Orders</div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Sales (₹)</div>
+                        <div class="stat-value" id="totalSales">0</div>
+                        <div class="stat-icon"><i class="fa-solid fa-money-bill"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Today Orders</div>
+                        <div class="stat-value" id="todayOrders">0</div>
+                        <div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Users</div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid mt-4">
+            <div class="table-card">
+                <h4 class="table-title">Display Recent Orders</h4>
+
+                <table class="table table-hover mt-3">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Party Name</th>
+                            <th>Party Type</th>
+                            <th>Grand Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody id="recentProductsBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- RECENT ORDERS TABLE -->
+        <div class="container-fluid mt-4">
+            <div class="table-card">
+                <h4 class="table-title">Recent Orders</h4>
+
+                <table class="table table-hover mt-3">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Party Name</th>
+                            <th>Party Type</th>
+                            <th>Grand Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody id="recentOrdersBody"></tbody>
+                    <!-- <tbody id="recentProductsBody"></tbody> -->
+                </table>
+            </div>
+        </div>
+
+
+    </main>
+
+
+
+    <script>
+        function showPopup(type, title, message) {
+            const modal = document.getElementById("popupModal");
+            const icon = document.getElementById("modalIcon");
+            const modalTitle = document.getElementById("modalTitle");
+            const modalMessage = document.getElementById("modalMessage");
+
+            if (type === "success") {
+                icon.innerHTML = "✅";
+                modalTitle.style.color = "#108082";
+            } else {
+                icon.innerHTML = "❌";
+                modalTitle.style.color = "#d93025";
+            }
+
+            modalTitle.innerText = title;
+            modalMessage.innerText = message;
+            modal.style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("popupModal").style.display = "none";
+        }
+    </script>
+
+
+    <button onclick="logout()">Logout</button>
+
+    <script>
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                localStorage.clear();
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+
+
+
+
+    <script>
+        /* ==============================
+           FIREBASE CONFIG (ONLY ONCE)
+        ==============================*/
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
+            authDomain: "petro-oms.firebaseapp.com",
+            projectId: "petro-oms",
+            storageBucket: "petro-oms.firebasestorage.app",
+            messagingSenderId: "562472760628",
+            appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let orders = [];
+
+        /* ==============================
+           REALTIME FETCH ORDERS
+        ==============================*/
+        db.collection("orders")
+            .orderBy("savedAt", "desc") 
+            .onSnapshot((snap) => {
+                // Get all orders and update the dashboard and orders table
+                orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                loadDashboard();
+                loadRecentOrders();
+            });
+        /* ==============================
+     DASHBOARD STATS
+  ==============================*/
+        function loadDashboard() {
+            // Display total orders
+            document.getElementById("totalOrders").innerText = orders.length;
+
+            // Calculate total sales by summing up the grandTotal of each order
+            const totalSales = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+            document.getElementById("totalSales").innerText = "₹" + totalSales.toLocaleString();
+
+            // Get today's date and filter orders placed today
+            const today = new Date().toISOString().split("T")[0];
+            const todayOrders = orders.filter(o => o.orderDate === today).length;
+            document.getElementById("todayOrders").innerText = todayOrders;
+
+            // Count unique users by counting unique Party Names
+            const uniqueUsers = new Set(orders.map(o => o.party?.name)); // Assuming 'party.name' is the identifier
+            document.getElementById("totalUsers").innerText = uniqueUsers.size;
+        }
+        // <td>
+        //     ${o.items.map(i => `
+        //         <div>• ${i.name} (Qty: ${i.qty})</div>
+        //     `).join("")}
+        // </td>  
+
+        /* ==============================
+   RECENT ORDERS TABLE
+==============================*/
+        function loadRecentOrders() {
+            const tbody = document.getElementById("recentOrdersBody");
+
+            // If no orders, display message
+            if (orders.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='6' class='text-center'>No recent orders</td></tr>";
+                return;
+            }
+
+            // Show all orders in the table
+            tbody.innerHTML = orders
+                .filter(o =>
+                    o.orderNo &&
+                    o.party &&
+                    o.party.name &&
+                    Number(o.grandTotal || 0) > 0
+                )
+                .slice(0, 10)
+                .map(o => `
+        <tr>
+            <td>${o.orderNo}</td>
+            <td>${o.party?.name || "-"}</td>
+            <td>${o.party?.type || "-"}</td> <!-- Show Party Type -->
+            <td>₹${o.grandTotal}/-</td>
+            <td>
+                <span class="status-badge ${getStatusClass(o.status)}">
+                    ${o.status || "PENDING"}
+                </span>
+            </td>
+            <td>${o.orderDate}</td>
+        </tr>
+    `).join("");
+        }
+
+        /* ==============================
+           FETCH PRODUCTS ORDER DATA
+        ==============================*/
+
+        let productOrders = [];
+
+        db.collection("products")
+            .orderBy("createdAt", "desc")
+            .limit(10)
+            .onSnapshot((snapshot) => {
+
+                productOrders = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                loadRecentProductOrders();
+
+            });
+
+
+
+        /* ==============================
+           LOAD PRODUCTS INTO TABLE
+        ==============================*/
+
+        function loadRecentProductOrders() {
+
+            const tbody =
+                document.getElementById("recentProductsBody");
+
+            if (!tbody) return;
+
+            if (productOrders.length === 0) {
+
+                tbody.innerHTML =
+                    "<tr><td colspan='6' class='text-center'>No product orders found</td></tr>";
+
+                return;
+            }
+
+            tbody.innerHTML =
+                productOrders.map(order => `
+
+        <tr>
+
+            <td>
+                ${order.partyDetails?.orderNo || "-"}
+            </td>
+
+            <td>
+                ${order.partyDetails?.partyName || "-"}
+            </td>
+
+            <td>
+                ${order.partyDetails?.partyType || "-"}
+            </td>
+
+            <td>
+                ₹${order.grandTotal || 0}/-
+            </td>
+
+            <td>
+                <span class="status-badge pending">
+                    PENDING
+                </span>
+            </td>
+
+            <td>
+                ${order.partyDetails?.orderDate || "-"}
+            </td>
+
+        </tr>
+
+    `).join("");
+
+        }
+
+
+        /* ==============================
+           STATUS BADGE COLOR
+        ==============================*/
+        function getStatusClass(status) {
+
+            if (!status)
+                return "pending";
+
+            status =
+                status.toLowerCase();
+
+            if (
+                status.includes("delivered")
+            )
+                return "success";
+
+            if (
+                status.includes("partial")
+            )
+                return "partial";
+
+            if (
+                status.includes("hold")
+            )
+                return "hold";
+
+            if (
+                status.includes("cancel")
+            )
+                return "cancelled";
+
+            if (
+                status.includes("payment")
+            )
+                return "payment";
+
+            if (
+                status.includes("quotation")
+            )
+                return "quotation";
+
+            return "pending";
+
+        }
+
+
+        /* ==============================
+           SIDEBAR ACTIVE HIGHLIGHT
+        ==============================*/
+        let current = location.pathname.split("/").pop();
+
+        document.querySelectorAll(".sidebar-menu li a").forEach(a => {
+            if (a.href.includes(current)) {
+                a.parentElement.classList.add("active");
+            }
+        });
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // ✅ Login hai → page dikhao
+                document.body.style.display = "block";
+            } else {
+                // ❌ Login nahi → LOGIN PAGE
+                window.location.replace("login.html");
+            }
+        });
+    </script>
+
+
+
+
+    <script src="/vendor/jquery/jquery.min.js    "></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery.appear.js"></script>
+    <script src="product.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/dev.js"></script>
+</body>
+
+</html>

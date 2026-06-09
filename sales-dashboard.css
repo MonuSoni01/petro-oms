@@ -1,0 +1,4103 @@
+/* =========================================================
+   PETRO OMS — FULL PREMIUM RESPONSIVE CSS
+   FOR COMPLETE SALES DASHBOARD
+========================================================= */
+
+:root {
+
+  --primary: #108082;
+  --primary-dark: #0c6a6c;
+
+  --blue: #1976d2;
+  --blue-dark: #0f5fb5;
+
+  --green: #16a34a;
+  --green-dark: #15803d;
+
+  --orange: #ff9800;
+  --orange-dark: #e88400;
+
+  --bg: #f4f7fb;
+
+  --text: #0f172a;
+  --muted: #64748b;
+
+  --border: #e7edf3;
+
+  --white: #ffffff;
+
+  --shadow-sm:
+    0 4px 16px rgba(15, 23, 42, .05);
+
+  --shadow-md:
+    0 10px 30px rgba(15, 23, 42, .08);
+
+  --radius: 20px;
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+
+  font-family:
+    "Segoe UI",
+    sans-serif;
+
+  background: var(--bg);
+
+  color: var(--text);
+
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.myq-page {
+
+  width: 100%;
+
+  max-width: 1500px;
+
+  margin: auto;
+
+  padding: 18px;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.erp-topbar {
+
+  width: 100%;
+
+  background:
+    linear-gradient(135deg,
+      #ffffff 0%,
+      #f7fbfb 100%);
+
+  border: 1px solid var(--border);
+
+  border-radius: 26px;
+
+  padding: 22px 26px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow-sm);
+
+  margin-bottom: 22px;
+}
+
+/* Glow */
+
+.erp-topbar::before {
+
+  content: "";
+
+  position: absolute;
+
+  right: -80px;
+  top: -80px;
+
+  width: 220px;
+  height: 220px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(rgba(16, 128, 130, .10),
+      transparent 70%);
+}
+
+/* LEFT */
+
+.erp-user-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+/* ICON */
+
+.erp-user-icon {
+
+  width: 72px;
+  height: 72px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(135deg,
+      #108082,
+      #16b4b7);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #fff;
+
+  font-size: 30px;
+
+  flex-shrink: 0;
+
+  box-shadow:
+    0 10px 24px rgba(16, 128, 130, .22);
+}
+
+/* TEXT */
+
+.erp-welcome-text {
+
+  font-size: 13px;
+
+  color: var(--muted);
+
+  margin-bottom: 5px;
+}
+
+.erp-user-name {
+
+  margin: 0;
+
+  font-size: 34px;
+
+  color: var(--text);
+
+  line-height: 1.1;
+}
+
+/* RIGHT ICON */
+
+.erp-top-icon {
+
+  width: 62px;
+  height: 62px;
+
+  border-radius: 20px;
+
+  background: #fff;
+
+  border: 1px solid var(--border);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: var(--green);
+
+  font-size: 28px;
+
+  position: relative;
+
+  z-index: 2;
+
+  box-shadow:
+    0 4px 16px rgba(15, 23, 42, .05);
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+/* =========================================================
+   CLEAN MODERN ERP STATS CARDS
+========================================================= */
+
+.dashboard-stats {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.stat-card {
+
+  position: relative;
+
+  background: #ffffff;
+
+  border: 1px solid #e9eef5;
+
+  border-radius: 20px;
+
+  padding: 22px 24px;
+
+  min-height: 120px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  overflow: hidden;
+
+  transition: .25s ease;
+
+  box-shadow:
+    0 4px 18px rgba(15, 23, 42, .04);
+}
+
+/* Hover */
+
+.stat-card:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 28px rgba(15, 23, 42, .08);
+}
+
+/* =========================================================
+   LEFT CONTENT
+========================================================= */
+
+.stat-card>div:last-child {
+
+  position: relative;
+
+  z-index: 2;
+}
+
+/* NUMBER */
+
+.stat-card span {
+
+  display: block;
+
+  font-size: 42px;
+
+  line-height: 1;
+
+
+
+  color: #0f172a;
+
+  margin-bottom: 10px;
+}
+
+/* LABEL */
+
+.stat-card p {
+
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #64748b;
+}
+
+/* =========================================================
+   ICON WRAP
+========================================================= */
+
+.stat-icon {
+  color: var(--bg) !important;
+
+  width: 68px;
+
+  height: 68px;
+
+  border-radius: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #fff;
+
+  font-size: 15px;
+
+  position: relative;
+
+  z-index: 2;
+
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   ICON COLORS
+========================================================= */
+
+.stat-icon.blue {
+
+  background:
+    linear-gradient(135deg,
+      #1976d2,
+      #0f5fb5);
+}
+
+.stat-icon.orange {
+
+  background:
+    linear-gradient(135deg,
+      #ff9800,
+      #ea8500);
+}
+
+.stat-icon.green {
+
+  background:
+    linear-gradient(135deg,
+      #16a34a,
+      #15803d);
+}
+
+/* =========================================================
+   SOFT BACKGROUND GLOW
+========================================================= */
+
+.stat-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  right: -35px;
+  top: -35px;
+
+  width: 120px;
+  height: 120px;
+
+  border-radius: 50%;
+
+  opacity: .06;
+}
+
+/* BLUE */
+
+.stat-card:not(.pending):not(.delivered)::before {
+
+  background: #1976d2;
+}
+
+/* ORANGE */
+
+.stat-card.pending::before {
+
+  background: #ff9800;
+}
+
+/* GREEN */
+
+.stat-card.delivered::before {
+
+  background: #16a34a;
+}
+
+/* =========================================================
+   CARD BORDER COLORS
+========================================================= */
+
+.stat-card.pending {
+
+  border-color: #ffe3b3;
+}
+
+.stat-card.delivered {
+
+  border-color: #c8f1d3;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px) {
+
+  .dashboard-stats {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 10px;
+  }
+
+  .stat-card {
+
+    min-height: 95px;
+
+    padding: 14px;
+
+    border-radius: 16px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+  }
+
+  .stat-card span {
+
+    font-size: 24px;
+
+    margin-bottom: 4px;
+  }
+
+  .stat-card p {
+
+    font-size: 11px;
+
+    line-height: 1.2;
+  }
+
+  .stat-icon {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL
+========================================================= */
+
+@media(max-width:480px) {
+
+  .dashboard-stats {
+
+    gap: 8px;
+  }
+
+  .stat-card {
+
+    padding: 12px;
+
+    min-height: 88px;
+  }
+
+  .stat-card span {
+
+    font-size: 20px;
+  }
+
+  .stat-card p {
+
+    font-size: 10px;
+  }
+
+  .stat-icon {
+
+    width: 38px;
+    height: 38px;
+
+    font-size: 14px;
+  }
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-wrap {
+
+  position: relative;
+
+  margin-bottom: 22px;
+}
+
+.search-icon {
+
+  position: absolute;
+
+  left: 20px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #64748b;
+
+  font-size: 18px;
+
+  z-index: 2;
+}
+
+#orderSearch {
+
+  width: 100%;
+
+  height: 58px;
+
+  border-radius: 18px;
+
+  border: 1px solid var(--border);
+
+  background: #fff;
+
+  padding: 0 18px 0 56px;
+
+  font-size: 14px;
+  color: var(--text);
+
+  outline: none;
+
+  box-shadow: var(--shadow-sm);
+
+  transition: .2s ease;
+}
+
+#orderSearch:focus {
+
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 4px rgba(16, 128, 130, .10);
+}
+
+#orderSearch::placeholder {
+
+  color: #94a3b8;
+}
+
+/* =========================================================
+   TABLE WRAP
+========================================================= */
+/* =========================================================
+   PREMIUM ERP TABLE UI
+========================================================= */
+
+/* =========================================================
+   WRAP
+========================================================= */
+
+.myq-table-wrap {
+
+  width: 100%;
+
+  background: #ffffff;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  border: 1px solid #e8edf3;
+
+  box-shadow:
+    0 10px 35px rgba(15, 23, 42, .05);
+
+  margin-top: 18px;
+}
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+.erp-table-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 18px 22px;
+
+  background:
+    linear-gradient(180deg,
+      #ffffff,
+      #fbfcfd);
+
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* TITLE */
+
+.erp-table-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 20px;
+
+
+
+  color: #0f172a;
+}
+
+.erp-table-title i {
+
+  color: #108082;
+
+  font-size: 18px;
+}
+
+/* COUNT */
+
+.erp-table-count {
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #64748b;
+}
+
+.erp-table-count span {
+
+  color: #108082;
+
+  font-size: 18px;
+
+
+}
+
+/* =========================================================
+   TABLE SCROLL
+========================================================= */
+
+.erp-table-scroll {
+
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.myq-table {
+
+  width: 100%;
+
+  min-width: 1200px;
+
+  border-collapse: separate;
+
+  border-spacing: 0;
+}
+
+/* =========================================================
+   TABLE HEAD
+========================================================= */
+
+.myq-table thead th {
+
+  background:
+    linear-gradient(135deg,
+      #108082,
+      #0c6a6c);
+
+  color: #ffffff;
+
+  padding: 18px 16px;
+
+  font-size: 13px;
+
+
+
+  text-align: left;
+
+  white-space: nowrap;
+
+  border: none;
+
+  letter-spacing: .3px;
+}
+
+/* Rounded */
+
+.myq-table thead th:first-child {
+
+  border-top-left-radius: 14px;
+}
+
+.myq-table thead th:last-child {
+
+  border-top-right-radius: 14px;
+}
+
+/* ICON */
+
+.myq-table thead th i {
+
+  margin-right: 7px;
+
+  opacity: .95;
+}
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.myq-table tbody td {
+  border-bottom: 1px solid #eef2f7;
+
+  vertical-align: middle;
+
+  background: #ffffff;
+
+  font-size: 13px;
+
+  color: #0f172a;
+
+  transition: .2s ease;
+}
+
+/* HOVER */
+
+.myq-table tbody tr {
+
+  transition: .2s ease;
+}
+
+.myq-table tbody tr:hover td {
+
+  background: #f8fbfd;
+}
+
+/* =========================================================
+   ORDER SECTION
+========================================================= */
+
+.erp-order-id {
+
+  font-size: 18px;
+  color: var(--text);
+
+  margin-bottom: 8px;
+}
+
+.erp-order-date {
+
+  display: none;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 12px;
+
+  color: #64748b;
+
+  margin-bottom: 10px;
+}
+
+/* =========================================================
+   STATUS CHIP
+========================================================= */
+
+.erp-status-chip {
+
+
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  min-width: 120px;
+
+  height: 34px;
+
+  padding: 0 14px;
+
+  border-radius: 30px;
+
+  font-size: 12px;
+
+
+}
+
+/* Delivered */
+
+.erp-status-delivered {
+
+  background: #eaf8ef;
+
+  color: #15803d;
+
+  border: 1px solid #bbf7d0;
+}
+
+/* Pending */
+
+.erp-status-pending {
+
+  background: #fff7e6;
+
+  color: #f59e0b;
+
+  border: 1px solid #ffe2a8;
+}
+
+/* =========================================================
+   INFO BOX
+========================================================= */
+
+.erp-info-box {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+}
+
+/* ICON */
+
+.erp-info-icon {
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  font-size: 15px;
+}
+
+/* COLORS */
+
+.erp-info-icon.party {
+
+  background: #eef7ff;
+
+  color: #1976d2;
+}
+
+.erp-info-icon.total {
+
+  background: #eefbf2;
+
+  color: #16a34a;
+}
+
+/* LABEL */
+
+.erp-label {
+  display: none;
+
+  font-size: 10px;
+
+
+
+  color: #94a3b8;
+
+  margin-bottom: 4px;
+
+  letter-spacing: .7px;
+
+  text-transform: uppercase;
+}
+
+/* VALUE */
+
+.erp-value {
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #0f172a;
+
+  line-height: 1.4;
+}
+
+/* AMOUNT */
+
+.erp-amount {
+
+  font-size: 18px;
+
+  color: #0f172a;
+
+  margin-bottom: 4px;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.erp-action-wrap {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+/* COMMON BTN */
+
+.myq-btn {
+
+  height: 40px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 13px;
+
+
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+}
+
+/* Hover */
+
+.myq-btn:hover {
+
+  transform: translateY(-2px);
+}
+
+/* VIEW */
+
+.myq-btn-view {
+
+  background:
+    linear-gradient(135deg,
+      #1976d2,
+      #0f5fb5);
+
+  box-shadow:
+    0 8px 20px rgba(25, 118, 210, .20);
+}
+
+/* LOCK */
+
+.myq-btn-lock {
+
+  background: #9ca3af;
+
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   STATUS DROPDOWN
+========================================================= */
+
+.status-dropdown {
+
+  width: 190px;
+
+  height: 42px;
+
+  border-radius: 12px;
+
+  border: 1px solid #dbe4ee;
+
+  padding: 0 14px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  background: #ffffff;
+
+  color: #0f172a;
+
+  outline: none;
+}
+
+.status-dropdown:focus {
+
+  border-color: #108082;
+
+  box-shadow:
+    0 0 0 4px rgba(16, 128, 130, .10);
+}
+
+/* =========================================================
+   DELIVERED STATUS
+========================================================= */
+
+.status-approved {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  min-width: 140px;
+
+  height: 40px;
+
+  padding: 0 18px;
+
+  border-radius: 30px;
+
+  background: #eaf8ef;
+
+  color: #15803d;
+
+  border: 1px solid #bbf7d0;
+
+  font-size: 13px;
+
+
+}
+
+/* =========================================================
+   BILL PENDING
+========================================================= */
+
+.erp-bill-pending {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  min-width: 160px;
+
+  height: 40px;
+
+  padding: 0 18px;
+
+  border-radius: 14px;
+
+  background: #fff7e6;
+
+  color: #f59e0b;
+
+  border: 1px solid #ffe2a8;
+
+  font-size: 13px;
+
+
+}
+
+/* =========================================================
+   BILL AMOUNT
+========================================================= */
+
+.bill-amt-display {
+
+  font-size: 18px;
+
+  color: #0f172a;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px) {
+
+  .myq-table-wrap {
+
+    border-radius: 18px;
+  }
+
+  /* TOPBAR */
+
+  .erp-table-header {
+
+    padding: 14px;
+  }
+
+  .erp-table-title {
+
+    font-size: 15px;
+  }
+
+  .erp-table-count {
+
+    font-size: 11px;
+  }
+
+  .erp-table-count span {
+
+    font-size: 13px;
+  }
+
+  /* TABLE */
+
+  .myq-table {
+
+    min-width: 1000px;
+  }
+
+  .myq-table thead th {
+
+    padding: 14px 12px;
+
+    font-size: 11px;
+  }
+
+  .myq-table tbody td {
+
+    font-size: 12px;
+  }
+
+  /* ORDER */
+
+  .erp-order-id {
+
+    font-size: 15px;
+  }
+
+  .erp-amount {
+
+    font-size: 18px;
+  }
+
+  /* BUTTONS */
+
+  .myq-btn {
+
+    height: 36px;
+
+    font-size: 12px;
+
+    padding: 0 14px;
+  }
+
+  /* DROPDOWN */
+
+  .status-dropdown {
+
+    width: 160px;
+
+    height: 38px;
+
+    font-size: 12px;
+  }
+
+  /* STATUS */
+
+  .status-approved,
+  .erp-bill-pending {
+
+    min-width: 130px;
+
+    height: 36px;
+
+    font-size: 12px;
+  }
+
+  /* BILL */
+
+  .bill-amt-display {
+
+    font-size: 16px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:992px) {
+
+  .dashboard-stats {
+
+    grid-template-columns: 1fr;
+  }
+
+  .erp-user-name {
+
+    font-size: 28px;
+  }
+
+  .stat-card {
+
+    min-height: 120px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px) {
+
+  .myq-page {
+
+    padding: 10px;
+  }
+
+  /* TOPBAR */
+
+  .erp-topbar {
+
+    padding: 16px;
+
+    border-radius: 20px;
+  }
+
+  .erp-user-left {
+
+    gap: 12px;
+  }
+
+  .erp-user-icon {
+
+    width: 54px;
+    height: 54px;
+
+    border-radius: 16px;
+
+    font-size: 22px;
+  }
+
+  .erp-user-name {
+
+    font-size: 20px;
+  }
+
+  .erp-top-icon {
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 14px;
+
+    font-size: 20px;
+  }
+
+  /* STATS */
+
+  .dashboard-stats {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 10px;
+  }
+
+  .stat-card {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    padding: 14px;
+
+    border-radius: 18px;
+
+    min-height: 100px;
+  }
+
+  .stat-icon {
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 14px;
+
+    font-size: 18px;
+  }
+
+  .stat-card span {
+
+    font-size: 24px;
+
+    margin-bottom: 4px;
+  }
+
+  .stat-card p {
+
+    font-size: 11px;
+  }
+
+  /* SEARCH */
+
+  #orderSearch {
+
+    height: 50px;
+
+    border-radius: 16px;
+
+    font-size: 13px;
+  }
+
+  /* TABLE */
+
+  .erp-table-header {
+
+    padding: 16px;
+  }
+
+  .erp-table-title {
+
+    font-size: 15px;
+  }
+
+  .erp-table-count {
+
+    font-size: 11px;
+  }
+
+  .myq-table {
+
+    min-width: 1000px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL
+========================================================= */
+
+@media(max-width:480px) {
+  .erp-order-date {
+    display: flex;
+  }
+
+  .erp-label {
+    display: block;
+  }
+
+  .erp-status-chip {
+    display: block;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    min-width: 120px;
+
+    height: 34px;
+
+    padding: 0 14px;
+
+    border-radius: 30px;
+
+    font-size: 12px;
+
+  }
+
+  .dashboard-stats {
+
+    gap: 8px;
+  }
+
+  .stat-card {
+
+    padding: 12px;
+  }
+
+  .stat-card span {
+
+    font-size: 20px;
+  }
+
+  .stat-card p {
+
+    font-size: 10px;
+  }
+
+  .stat-icon {
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+  }
+
+  .erp-user-name {
+
+    font-size: 18px;
+  }
+
+  .erp-user-icon {
+
+    width: 48px;
+    height: 48px;
+
+    font-size: 18px;
+  }
+}
+
+/* =========================================================
+   COMPACT ERP DASHBOARD FIX
+========================================================= */
+
+/* PAGE */
+
+.myq-page {
+
+  padding: 12px 14px;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.erp-topbar {
+
+  padding: 16px 20px;
+
+  border-radius: 18px;
+
+  margin-bottom: 14px;
+}
+
+/* USER */
+
+.erp-user-left {
+
+  gap: 14px;
+}
+
+/* ICON */
+
+.erp-user-icon {
+
+  width: 54px;
+  height: 54px;
+
+  border-radius: 16px;
+
+  font-size: 22px;
+}
+
+/* TEXT */
+
+.erp-welcome-text {
+
+  font-size: 12px;
+
+  margin-bottom: 2px;
+}
+
+.erp-user-name {
+
+  font-size: 20px;
+
+
+}
+
+/* RIGHT ICON */
+
+.erp-top-icon {
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 14px;
+
+  font-size: 20px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.dashboard-stats {
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+/* CARD */
+
+.stat-card {
+
+  min-height: 95px;
+
+  padding: 16px 18px;
+
+  border-radius: 18px;
+}
+
+/* NUMBER */
+
+.stat-card span {
+
+  font-size: 30px;
+
+  margin-bottom: 4px;
+}
+
+/* TEXT */
+
+.stat-card p {
+
+  font-size: 13px;
+}
+
+/* ICON */
+
+.stat-icon {
+
+  width: 52px;
+  height: 52px;
+
+  border-radius: 14px;
+
+  font-size: 18px;
+}
+
+/* GLOW */
+
+.stat-card::before {
+
+  width: 90px;
+  height: 90px;
+
+  right: -25px;
+  top: -25px;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-wrap {
+
+  margin-bottom: 14px;
+}
+
+#orderSearch {
+
+  height: 50px;
+
+  border-radius: 14px;
+
+  font-size: 13px;
+
+  padding-left: 50px;
+}
+
+.search-icon {
+
+  left: 18px;
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   TABLE TOP
+========================================================= */
+
+.erp-table-header {
+
+  padding: 16px 18px;
+}
+
+.erp-table-title {
+
+  font-size: 16px;
+}
+
+.erp-table-count {
+
+  font-size: 12px;
+}
+
+.erp-table-count span {
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px) {
+
+  .erp-topbar {
+
+    padding: 14px;
+  }
+
+  .erp-user-name {
+
+    font-size: 17px;
+  }
+
+  .dashboard-stats {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 8px;
+  }
+
+  .stat-card {
+
+    min-height: 82px;
+
+    padding: 12px;
+  }
+
+  .stat-card span {
+
+    font-size: 20px;
+  }
+
+  .stat-card p {
+
+    font-size: 10px;
+  }
+
+  .stat-icon {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+  }
+
+  #orderSearch {
+
+    height: 46px;
+
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   MOBILE UI FIX — CLEAN COMPACT ERP
+========================================================= */
+
+@media(max-width:768px) {
+
+  /* PAGE */
+
+  .myq-page {
+
+    padding: 10px;
+  }
+
+  /* =====================================================
+       TOPBAR
+    ===================================================== */
+
+  .erp-topbar {
+
+    padding: 12px 14px;
+
+    border-radius: 16px;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+  }
+
+  .erp-user-left {
+
+    gap: 10px;
+
+    align-items: center;
+  }
+
+  /* USER ICON */
+
+  .erp-user-icon {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    flex-shrink: 0;
+  }
+
+  /* TEXT */
+
+  .erp-welcome-text {
+
+    font-size: 10px;
+
+    margin-bottom: 1px;
+  }
+
+  .erp-user-name {
+
+    font-size: 14px;
+
+    line-height: 1.1;
+
+
+
+    word-break: break-word;
+  }
+
+  /* RIGHT ICON */
+
+  .erp-top-icon {
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    flex-shrink: 0;
+  }
+
+  /* =====================================================
+       STATS
+    ===================================================== */
+
+  .dashboard-stats {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+  }
+
+  /* CARD */
+
+  .stat-card {
+
+    min-height: 74px;
+
+    padding: 10px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 6px;
+  }
+
+  /* NUMBER */
+
+  .stat-card span {
+
+    font-size: 16px;
+
+    line-height: 1;
+
+    margin-bottom: 2px;
+  }
+
+  /* LABEL */
+
+  .stat-card p {
+
+    font-size: 9px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+  }
+
+  /* ICON */
+
+  .stat-icon {
+
+    font-size: 12px !important;
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+  }
+
+  /* GLOW */
+
+  .stat-card::before {
+
+    width: 55px;
+    height: 55px;
+
+    top: -14px;
+    right: -14px;
+  }
+
+  /* =====================================================
+       SEARCH
+    ===================================================== */
+
+  .search-wrap {
+
+    margin-bottom: 12px;
+  }
+
+  #orderSearch {
+
+    height: 42px;
+
+    border-radius: 12px;
+
+    font-size: 12px;
+
+    padding-left: 42px;
+  }
+
+  .search-icon {
+
+    left: 14px;
+
+    font-size: 13px;
+  }
+
+  /* =====================================================
+       TABLE HEADER
+    ===================================================== */
+
+  .erp-table-header {
+
+    padding: 12px 14px;
+  }
+
+  .erp-table-title {
+
+    font-size: 13px;
+
+    gap: 6px;
+  }
+
+  .erp-table-count {
+
+    font-size: 10px;
+  }
+
+  .erp-table-count span {
+
+    font-size: 12px;
+  }
+}
+
+/* ==================================================
+   PETRO OMS – SALES DASHBOARD FULL RESPONSIVE
+================================================== */
+
+:root {
+  --primary: #108082;
+  --primary-dark: #0c6a6c;
+  --blue: #1976d2;
+  --blue-dark: #125aa3;
+  --orange: #ff9800;
+  --orange-dark: #e68900;
+  --green: #2e7d32;
+  --green-soft: #dff3e3;
+  --yellow-soft: #fff3cd;
+  --yellow-text: #856404;
+  --red-soft: #f8d7da;
+  --red-text: #721c24;
+  --gray: #9e9e9e;
+  --gray-dark: #6b7280;
+  --bg: #f4f6f9;
+  --white: #ffffff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.18);
+  --radius: 12px;
+}
+
+/* ==================================================
+   RESET
+================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.myq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.myq-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.myq-btn-back {
+  padding: 10px 16px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.myq-btn-back:hover {
+  background: var(--blue-dark);
+  transform: translateY(-1px);
+}
+
+/* ==================================================
+   PAGE WRAPPER
+================================================== */
+
+.myq-page {
+  max-width: 1450px;
+  margin: 18px auto 28px;
+  padding: 0 16px 24px;
+}
+
+.myq-subtitle {
+  font-size: 15px;
+  color: #444;
+  margin: 0 0 16px;
+  font-weight: 600;
+}
+
+
+.search-wrap {
+  margin-bottom: 14px;
+}
+
+#orderSearch {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d7dce1;
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--white);
+  color: var(--text);
+  transition: 0.2s ease;
+}
+
+#orderSearch::placeholder {
+  color: #8b95a1;
+}
+
+#orderSearch:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 128, 130, 0.12);
+}
+
+/* ==================================================
+   TABLE WRAP
+================================================== */
+
+.myq-table-wrap {
+  width: 100%;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid #edf0f2;
+  overflow-x: auto;
+  padding: 14px;
+}
+
+
+/* ==================================================
+   TABLE
+================================================== */
+
+tbody input,
+tbody select {
+  text-align: left !important;
+  height: 0% !important;
+  width: 0% !important;
+}
+
+.myq-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  min-width: 1080px;
+}
+
+.myq-table thead {
+  background: var(--primary);
+}
+
+.myq-table th {
+  background: #108082;
+  color: #fff;
+  padding: 13px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.myq-table td {
+  padding: 14px 12px;
+  font-size: 13px;
+  color: #333;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  background: #fff;
+}
+
+.myq-table tbody tr {
+  transition: 0.15s ease;
+}
+
+.myq-table tbody tr:hover {
+  background: #f7fbfb;
+}
+
+.myq-table tbody tr:hover td {
+  background: #f7fbfb;
+}
+
+.myq-table td:nth-child(3),
+.myq-table td:nth-child(8) {
+  white-space: nowrap;
+}
+
+.myq-table td:nth-child(5) {
+  min-width: 170px;
+}
+
+.myq-table td:nth-child(6) {
+  min-width: 170px;
+}
+
+.myq-table td:nth-child(7) {
+  min-width: 120px;
+}
+
+.myq-table td:nth-child(8) {
+  min-width: 110px;
+}
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.myq-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.2s ease;
+  margin-right: 6px;
+  min-height: 34px;
+}
+
+.myq-btn:last-child {
+  margin-right: 0;
+}
+
+.myq-btn-view {
+  background: var(--blue);
+}
+
+.myq-btn-view:hover {
+  background: var(--blue-dark);
+  transform: translateY(-1px);
+}
+
+.myq-btn-edit {
+  background: var(--orange);
+}
+
+.myq-btn-edit:hover {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+}
+
+.myq-btn-lock {
+  background: var(--gray);
+  cursor: not-allowed;
+}
+
+.myq-btn-lock:hover {
+  transform: none;
+}
+
+/* ==================================================
+   STATUS BADGES
+================================================== */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background: var(--yellow-soft);
+  color: var(--yellow-text);
+}
+
+.status-approved {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.status-rejected {
+  background: var(--red-soft);
+  color: var(--red-text);
+}
+
+/* ==================================================
+   STATUS DROPDOWN
+================================================== */
+
+.status-dropdown {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d6dbe1;
+  font-size: 13px;
+  font-weight: 600;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+  min-width: 140px;
+  transition: 0.2s ease;
+}
+
+.status-dropdown:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 128, 130, 0.15);
+}
+
+/* ==================================================
+   MODAL
+================================================== */
+
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+#modalBox {
+  padding: 10px !important;
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#modalContent {
+  padding: 26px 24px 24px;
+  overflow-y: auto;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #444;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: #e5e7eb;
+  transform: rotate(90deg);
+}
+
+/* ==================================================
+   ORDER VIEW MODAL
+================================================== */
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 18px;
+  text-align: center;
+  padding-right: 30px;
+}
+
+.modal-section {
+  margin-bottom: 22px;
+  background: #fafbfc;
+  border: 1px solid #eef1f4;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.modal-section h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-section p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* ==================================================
+   MODAL ITEMS TABLE
+================================================== */
+
+.modal-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.modal-items-table th {
+  background: #f1f5f9;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 12px 8px;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+}
+
+.modal-items-table td {
+  font-size: 13px;
+  padding: 11px 8px;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  background: #fff;
+}
+
+.modal-items-table td:nth-child(3),
+.modal-items-table td:nth-child(4),
+.modal-items-table td:nth-child(5) {
+  text-align: right;
+}
+
+/* ==================================================
+   BILLING ROWS
+================================================== */
+
+.billing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  padding: 7px 0;
+  color: #374151;
+}
+
+.billing-row.total {
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px solid #1f2937;
+  color: #111827;
+}
+
+/* ==================================================
+   BILL UPLOAD MODAL
+================================================== */
+
+.ubill-wrap {
+  width: 100%;
+}
+
+.ubill-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 14px;
+  color: var(--text);
+  padding-right: 30px;
+}
+
+.ubill-meta {
+  text-align: center;
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.ubill-drop {
+  width: 100%;
+  min-height: 190px;
+  border: 2px dashed var(--primary);
+  border-radius: 14px;
+  background: #f8fbfb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+  padding: 18px;
+  position: relative;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.ubill-drop:hover {
+  border-color: var(--primary-dark);
+  background: #f3fbfb;
+  transform: translateY(-1px);
+}
+
+.ubill-drop.is-drag {
+  background: #eefafa;
+  border-color: var(--primary-dark);
+}
+
+.ubill-drop-inner {
+  text-align: center;
+  width: 100%;
+}
+
+.ubill-drop-icon {
+  font-size: 26px;
+  color: var(--primary);
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.ubill-drop-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.ubill-drop-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ubill-drop input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ubill-preview {
+  width: 100%;
+  max-height: 30vh;
+  object-fit: contain;
+  border-radius: 12px;
+  margin: 10px 0 14px;
+  border: 1px solid var(--border);
+  display: none;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+.ubill-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #d7dce1;
+  margin-bottom: 16px;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.ubill-input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 128, 130, 0.12);
+}
+
+.ubill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 13px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--orange);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.ubill-btn:hover {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+}
+
+/* ==================================================
+   GENERIC MODAL BUTTON
+================================================== */
+
+#modalContent button:not(.myq-btn):not(.closeBtn):not(.ubill-btn) {
+  padding: 11px 20px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#modalContent button:not(.myq-btn):not(.closeBtn):not(.ubill-btn):hover {
+  background: var(--primary-dark);
+}
+
+/* ==================================================
+   SKELETON
+================================================== */
+
+.skeleton-loader,
+.skeleton-text,
+.skeleton-image {
+  background: #f6f7f8;
+  background-image: linear-gradient(90deg,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
+  background-repeat: no-repeat;
+  display: block;
+  position: relative;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeleton-loader {
+  width: 100%;
+  height: 42px;
+  background-size: 800px 42px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 20px;
+  background-size: 800px 20px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 250px;
+  background-size: 800px 250px;
+  border-radius: 10px;
+  margin: 16px 0;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* ==================================================
+   SAVE BUTTON LOADING
+================================================== */
+
+#saveButton.loading {
+  background: #a7a7a7;
+  cursor: not-allowed;
+  pointer-events: none;
+  position: relative;
+}
+
+#saveButton.loading::after {
+  content: " Saving...";
+  font-weight: 700;
+}
+
+/* ==================================================
+   HELPER
+================================================== */
+
+.bill-amt-display {
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 15px;
+}
+
+/* ==================================================
+   TABLET
+================================================== */
+
+
+
+/* ==================================================
+   DASHBOARD STATS - GRID LAYOUT
+================================================== */
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 equal-width columns */
+  gap: 18px;
+  margin: 18px 0 16px;
+}
+
+/* Each stat card */
+.stat-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid #edf0f2;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add Icons and Unique Colors */
+.stat-card.total-orders {
+  background-color: #e3f2fd;
+  /* Light blue */
+  border-color: #bbdefb;
+}
+
+.stat-card.pending {
+  background-color: #fff3e0;
+  /* Light yellow */
+  border-color: #ffe0b2;
+}
+
+.stat-card.delivered {
+  background-color: #e8f5e9;
+  /* Light green */
+  border-color: #c8e6c9;
+}
+
+
+
+/* Numbers and Description */
+.stat-card span {
+  display: block;
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #108082;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Hover Effects */
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card:hover i {
+  transform: scale(1.1);
+  /* Slight zoom effect on icon */
+}
+
+/* ==================================================
+   RESPONSIVE DESIGN (Mobile)
+================================================== */
+/* =========================
+   DESKTOP TABLE
+========================= */
+
+@media(min-width:992px) {
+
+  .erp-mobile-card td {
+
+    vertical-align: middle;
+
+    padding: 18px 14px;
+
+    white-space: nowrap;
+  }
+
+  .erp-order-top {
+    display: block;
+  }
+
+  .erp-order-left {
+    display: block;
+  }
+
+  .erp-order-id {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .erp-order-date {
+    font-size: 13px;
+    color: #666;
+  }
+
+  .erp-info-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .erp-info-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .erp-label {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  .erp-value,
+  .erp-amount {
+    font-size: 14px;
+  }
+
+  .erp-action-wrap {
+    display: flex;
+    gap: 8px;
+  }
+
+  .myq-btn {
+    height: 38px;
+    padding: 0 16px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .status-dropdown {
+    width: 160px;
+  }
+
+  .erp-bill-pending {
+    width: 170px;
+    min-height: 40px;
+  }
+
+  .status-approved {
+    width: 150px;
+    min-height: 40px;
+  }
+
+  .bill-amt-display {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+
+/* =========================
+   MOBILE CARD UI
+========================= */
+
+@media(max-width:991px) {
+
+  .erp-mobile-card {
+    display: block;
+    margin-bottom: 18px;
+    border-radius: 18px;
+    background: #fff;
+    padding: 16px;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, .06);
+  }
+
+  .erp-mobile-card td {
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 8px 0;
+  }
+
+  thead {
+    display: none;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(3, 1fr);
+    /* 2 items per row on smaller screens */
+  }
+
+  .stat-card {
+    padding: 12px;
+    /* Adjust padding on very small screens */
+  }
+
+  .stat-card span {
+    font-size: 24px;
+    /* Smaller font size for very small screens */
+  }
+
+  .stat-card p {
+    font-size: 12px;
+    /* Smaller font size for very small screens */
+  }
+
+  .myq-title {
+    font-size: 17px;
+  }
+
+  .myq-btn-back {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+
+  #orderSearch {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+
+  .myq-table tr {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .myq-table td:nth-child(1) {
+    font-size: 16px;
+  }
+
+  .myq-table td {
+    font-size: 13px;
+  }
+
+  .closeBtn {
+    width: 34px;
+    height: 34px;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  body {
+    background: #f4f7fb;
+  }
+
+  .myq-page {
+    padding: 10px;
+    margin-top: 8px;
+  }
+
+  /* ================= STATS ================= */
+
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 10px 0 14px;
+  }
+
+  .stat-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 8px;
+    text-align: center;
+    border: 1px solid #edf1f5;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  }
+
+  .stat-card span {
+    display: block;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 800;
+    color: #108082;
+  }
+
+  .stat-card p {
+    margin: 5px 0 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: #6b7280;
+  }
+
+  /* ================= SEARCH ================= */
+
+  .search-wrap {
+    margin-bottom: 14px;
+  }
+
+  #orderSearch {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #e5eaf0;
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  #orderSearch:focus {
+    outline: none;
+    border-color: #108082;
+    box-shadow: 0 0 0 3px rgba(16, 128, 130, 0.12);
+  }
+
+  /* ================= TABLE TO CARD ================= */
+
+  .myq-table-wrap {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .myq-table {
+    min-width: 100%;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+  }
+
+  .myq-table thead {
+    display: none;
+  }
+
+  .myq-table,
+  .myq-table tbody,
+  .myq-table tr,
+  .myq-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .myq-table tr {
+    position: relative;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 14px 14px 16px;
+    border: 1px solid #e9eef4;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  }
+
+  .myq-table tr::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #108082;
+  }
+
+  .myq-table td {
+    border: none;
+    padding: 0;
+    margin-bottom: 11px;
+    background: transparent !important;
+  }
+
+  .myq-table td:last-child {
+    margin-bottom: 0;
+  }
+
+  .myq-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+
+  /* ================= NEW ERP JS CLASSES ================= */
+
+  .erp-order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .erp-order-id {
+    font-size: 17px;
+    font-weight: 900;
+    color: #108082;
+    line-height: 1.2;
+  }
+
+  .erp-order-date {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 700;
+  }
+
+  .erp-order-date i {
+    margin-right: 5px;
+    color: #94a3b8;
+  }
+
+  .erp-status-chip {
+    display: none;
+    flex-shrink: 0;
+    background: #fff7e6;
+    color: #f59e0b;
+    border: 1px solid #ffe0a3;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .erp-info-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 14px;
+    padding: 10px;
+  }
+
+  .erp-info-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: #e8f7f7;
+    color: #108082;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .erp-info-icon.green {
+    background: #eaf8ef;
+    color: #16a34a;
+  }
+
+  .erp-info-icon i {
+    font-size: 15px;
+  }
+
+  .erp-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+
+  .erp-value {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.2;
+  }
+
+  .erp-amount {
+    font-size: 17px;
+    font-weight: 900;
+    color: #111827;
+    line-height: 1.2;
+  }
+
+  .erp-action-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Hide labels for designed custom rows */
+  .td-order-no::before,
+  .myq-table td[data-label="Actions"]::before {
+    display: none;
+  }
+
+  /* ================= BUTTONS ================= */
+
+  .myq-btn {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 12px;
+    margin: 0;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #ffffff;
+    box-shadow: none;
+  }
+
+  .myq-btn i {
+    font-size: 12px;
+  }
+
+  .myq-btn-view {
+    background: linear-gradient(135deg, #1976d2, #0f5fb5);
+  }
+
+  .myq-btn-edit {
+    background: linear-gradient(135deg, #ff9800, #e88400);
+  }
+
+  .myq-btn-lock {
+    background: #a3a3a3;
+    color: #ffffff;
+    cursor: not-allowed;
+  }
+
+  /* ================= STATUS ================= */
+
+  .status-dropdown {
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid #e5eaf0;
+    background: #ffffff;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #334155;
+  }
+
+  .status-dropdown:focus {
+    outline: none;
+    border-color: #108082;
+    box-shadow: 0 0 0 3px rgba(16, 128, 130, 0.12);
+  }
+
+  .status-badge {
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .status-approved {
+    background: #e8f5e9;
+    color: #15803d;
+  }
+
+  /* ================= BILL ================= */
+
+  .erp-bill-pending,
+  .bill-pending-text {
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    background: #fff7e6;
+    color: #f59e0b;
+    border: 1px solid #ffe5b0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .bill-amt-display {
+    display: block;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 900;
+    color: #16a34a;
+    text-align: center;
+  }
+
+  .myq-table td[data-label="Bill"] .myq-btn {
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  /* ================= EMPTY STATE ================= */
+
+  .myq-table td[colspan] {
+    background: #ffffff !important;
+    border-radius: 16px;
+    padding: 18px !important;
+    text-align: center;
+    color: #64748b;
+    font-weight: 700;
+  }
+
+  .myq-table td[colspan]::before {
+    display: none;
+  }
+
+  /* ================= MODAL ================= */
+
+  #modal {
+    padding: 8px;
+  }
+
+  #modalBox {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 18px;
+  }
+
+  #modalContent {
+    padding: 18px 14px 16px;
+  }
+
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+  }
+
+  .modal-title,
+  .ubill-title {
+    font-size: 17px;
+    font-weight: 900;
+  }
+
+  .modal-section {
+    border-radius: 14px;
+    padding: 13px;
+  }
+
+  .modal-section h4 {
+    font-size: 14px;
+  }
+
+  .modal-section p {
+    font-size: 12px;
+  }
+
+  .modal-items-table th,
+  .modal-items-table td {
+    font-size: 11px;
+    padding: 7px 5px;
+  }
+
+  .billing-row {
+    font-size: 12px;
+  }
+
+  .billing-row.total {
+    font-size: 15px;
+  }
+
+  /* ================= UPLOAD MODAL ================= */
+
+  .ubill-drop {
+    min-height: 130px;
+    border-radius: 14px;
+  }
+
+  .ubill-drop-icon {
+    font-size: 22px;
+  }
+
+  .ubill-drop-text {
+    font-size: 13px;
+  }
+
+  .ubill-drop-sub {
+    font-size: 11px;
+  }
+
+  .ubill-preview {
+    max-height: 24vh;
+    border-radius: 14px;
+  }
+
+  .ubill-input {
+    height: 44px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+
+  .ubill-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+}
+
+
+@media (max-width: 420px) {
+
+  .myq-page {
+    padding: 8px;
+  }
+
+  .dashboard-stats {
+    gap: 6px;
+  }
+
+  .stat-card {
+    padding: 10px 6px;
+  }
+
+  .stat-card span {
+    font-size: 18px;
+  }
+
+  .stat-card p {
+    font-size: 9px;
+  }
+
+  .myq-table tr {
+    border-radius: 18px;
+    padding: 12px;
+  }
+
+  .erp-order-id {
+    font-size: 16px;
+  }
+
+  .erp-value {
+    font-size: 13px;
+  }
+
+  .erp-amount {
+    font-size: 16px;
+  }
+
+  .myq-btn {
+    height: 38px;
+    font-size: 11px;
+  }
+
+  .status-dropdown,
+  .erp-bill-pending,
+  .bill-pending-text,
+  .status-badge {
+    height: 38px;
+    font-size: 11px;
+  }
+
+  /* =========================================
+   STATUS DROPDOWN
+========================================= */
+
+  .status-dropdown {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    outline: none;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+
+    background-size: 16px;
+
+    transition: .2s ease;
+  }
+
+  .status-dropdown:focus {
+    border-color: #108082;
+    box-shadow: 0 0 0 3px rgba(16, 128, 130, .10);
+  }
+
+  .status-dropdown option {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+
+  /* =========================================
+   BILL PENDING BOX
+========================================= */
+
+  .erp-bill-pending {
+    width: 100%;
+    min-height: 42px;
+
+    border: 1px solid #ffe2a8;
+
+    border-radius: 12px;
+
+    background: linear-gradient(180deg,
+        #fffaf0 0%,
+        #fff6e6 100%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 14px;
+
+    color: #f59e0b;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    text-align: center;
+
+    box-sizing: border-box;
+  }
+
+  .erp-bill-pending i {
+    font-size: 12px;
+  }
+
+
+  /* =========================================
+   DELIVERED BADGE
+========================================= */
+
+  .status-approved {
+    width: 100%;
+    min-height: 42px;
+
+    border-radius: 12px;
+
+    background: #eaf8ef;
+
+    border: 1px solid #bbf7d0;
+
+    color: #15803d;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    padding: 10px 14px;
+
+    box-sizing: border-box;
+  }
+
+  .status-approved i {
+    font-size: 13px;
+  }
+
+
+  /* =========================================
+   VIEW BILL BUTTON
+========================================= */
+
+  .myq-btn-view {
+    width: 100%;
+    height: 42px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: linear-gradient(135deg,
+        #1976d2,
+        #0f5fb5);
+
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    box-shadow:
+      0 4px 12px rgba(25, 118, 210, .18);
+
+    transition: .2s ease;
+  }
+
+  .myq-btn-view:active {
+    transform: scale(.98);
+  }
+
+  .myq-btn-view i {
+    font-size: 12px;
+  }
+}
+
+.pdf-open-box {
+
+  padding: 40px 20px;
+
+  text-align: center;
+}
+
+.pdf-open-box i {
+
+  font-size: 70px;
+
+  color: #dc2626;
+
+  margin-bottom: 18px;
+}
+
+.pdf-open-box h3 {
+
+  font-size: 22px;
+
+  margin-bottom: 10px;
+}
+
+.pdf-open-box p {
+
+  color: #666;
+
+  margin-bottom: 22px;
+}
+
+.pdf-open-btn {
+
+  width: 220px !important;
+
+  margin: auto;
+}
+
+/* IMAGE VIEW */
+
+.bill-view-wrap {
+  width: 100%;
+}
+
+.bill-view-top {
+  margin-bottom: 14px;
+}
+
+.bill-image-wrap {
+  position: relative;
+  text-align: center;
+}
+
+.bill-preview-img {
+
+  max-width: 100%;
+
+  max-height: 75vh;
+
+  border-radius: 16px;
+
+  display: none;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, .15);
+}
+
+/* =========================================================
+   PREMIUM ERP TOPBAR
+========================================================= */
+
+.erp-topbar {
+
+  width: 100%;
+
+  background:
+    linear-gradient(135deg,
+      #ffffff 0%,
+      #f7fbfb 100%);
+
+  border: 1px solid #e7edf3;
+
+  border-radius: 24px;
+
+  padding: 20px 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 18px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 8px 30px rgba(15, 23, 42, .05);
+
+  margin-bottom: 22px;
+}
+
+/* Soft Glow */
+
+.erp-topbar::before {
+
+  content: "";
+
+  position: absolute;
+
+  right: -80px;
+  top: -80px;
+
+  width: 220px;
+  height: 220px;
+
+  background:
+    radial-gradient(rgba(16, 128, 130, .10),
+      transparent 70%);
+
+  border-radius: 50%;
+}
+
+/* =========================================================
+   LEFT USER SECTION
+========================================================= */
+
+.erp-user-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+/* =========================================================
+   USER ICON
+========================================================= */
+
+.erp-user-icon {
+
+  width: 70px;
+  height: 70px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(135deg,
+      #108082,
+      #16b4b7);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #ffffff;
+
+  font-size: 30px;
+
+  flex-shrink: 0;
+
+  box-shadow:
+    0 12px 24px rgba(16, 128, 130, .20);
+}
+
+.erp-user-icon i {
+
+  transform: translateY(1px);
+}
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+.erp-welcome-text {
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #64748b;
+
+  margin-bottom: 5px;
+
+  letter-spacing: .3px;
+}
+
+
+/* =========================================================
+   RIGHT ICON
+========================================================= */
+
+.erp-top-icon {
+
+  width: 62px;
+  height: 62px;
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e8edf3;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #16a34a;
+
+  font-size: 28px;
+
+  flex-shrink: 0;
+
+  position: relative;
+
+  z-index: 2;
+
+  box-shadow:
+    0 4px 18px rgba(15, 23, 42, .06);
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:992px) {
+
+  .erp-topbar {
+
+    padding: 18px 20px;
+  }
+
+  .erp-user-name {
+
+    font-size: 28px;
+  }
+
+  .erp-user-icon {
+
+    width: 62px;
+    height: 62px;
+
+    font-size: 26px;
+  }
+
+  .erp-top-icon {
+
+    width: 56px;
+    height: 56px;
+
+    font-size: 24px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px) {
+
+  .erp-topbar {
+
+    padding: 16px;
+
+    border-radius: 20px;
+
+    gap: 12px;
+  }
+
+  .erp-user-left {
+
+    gap: 12px;
+  }
+
+  .erp-user-icon {
+
+    width: 52px;
+    height: 52px;
+
+    border-radius: 16px;
+
+    font-size: 20px;
+  }
+
+  .erp-welcome-text {
+
+    font-size: 11px;
+
+    margin-bottom: 3px;
+  }
+
+  .erp-user-name {
+
+    font-size: 20px;
+
+    line-height: 1.2;
+  }
+
+  .erp-top-icon {
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 14px;
+
+    font-size: 20px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+========================================================= */
+
+@media(max-width:480px) {
+
+  .erp-topbar {
+
+    padding: 14px;
+  }
+
+  .erp-user-name {
+
+    font-size: 18px;
+  }
+
+  .erp-user-icon {
+
+    width: 48px;
+    height: 48px;
+
+    font-size: 18px;
+  }
+
+  .erp-top-icon {
+
+    width: 42px;
+    height: 42px;
+
+    font-size: 18px;
+  }
+}
+
+.myq-btn-download {
+
+  background:
+    linear-gradient(135deg,
+      #16a34a,
+      #15803d);
+
+  color: #fff;
+}
+
+/* =========================================
+   VIEW ORDER HEADER FIX
+========================================= */
+
+.view-order-header{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:14px;
+
+    margin-bottom:20px;
+
+    padding-bottom:14px;
+
+    border-bottom:1px solid #edf2f7;
+}
+
+/* LEFT */
+
+.view-order-left{
+
+    flex:1;
+
+    min-width:0;
+}
+
+/* TITLE */
+
+.modal-title{
+
+    font-size:28px;
+
+    line-height:1.3;
+
+    font-weight:900;
+
+    color:#0f172a;
+
+    margin:0;
+
+    word-break:break-word;
+}
+
+/* DOWNLOAD BTN */
+
+.myq-btn-download{
+
+    min-width:150px;
+
+    height:46px;
+
+    padding:0 20px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #16a34a,
+    #15803d
+    );
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    flex-shrink:0;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.myq-btn-download:hover{
+
+    transform:translateY(-2px);
+}
+
+/* =========================================
+   MOBILE FIX
+========================================= */
+
+@media(max-width:768px){
+
+    .view-order-header{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+        gap:14px;
+    }
+
+    .modal-title{
+
+        font-size:20px;
+
+        line-height:1.4;
+    }
+
+    .myq-btn-download{
+
+        width:100%;
+
+        min-width:100%;
+
+        height:44px;
+
+        border-radius:12px;
+
+        font-size:13px;
+    }
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Login - PETRO OMS</title>
+    <link rel="icon" href="/images/app-icon.png" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eef2f5;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .login-box {
+            width: 90%;
+            max-width: 420px;
+            background: #fff;
+            padding: 35px 28px;
+            border-radius: 14px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: fadeIn .3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-box img {
+            width: 160px;
+            margin-bottom: 14px;
+        }
+
+        h3 {
+            color: #108082;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #108082;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* 🔥 Password Modal */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-box {
+            position: relative;
+            background: #fff;
+            padding: 25px 20px;
+            width: 90%;
+            max-width: 350px;
+            border-radius: 12px;
+            text-align: center;
+            animation: fadeIn .2s ease-out;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .error-text {
+            color: #d93025;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: #108082;
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #btn-section {
+            display: flex;
+            justify-content: center;
+            /* This ensures the buttons are spaced out */
+            gap: 10px;
+            /* Space between buttons */
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 14px;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <img src="images/logo.webp">
+
+        <h3>Sales Team Login</h3>
+
+        <select id="salesman">
+            <option value="">-- Select Salesman --</option>
+            <option>Rup Ranjan Bora</option>
+            <option>Sariya Murtuza</option>
+            <option>Roshan Sharma</option>
+            <option>Ankit Kalra</option>
+            <option>Vivek Srivastava </option>
+            <option>Amit Soni </option>
+            <option>Prashant Kumar</option>
+            <option>Mahesh Kumar</option>
+        </select>
+
+        <div id="btn-section">
+
+            <button class="modal-btn" onclick="goBack()">Back</button>
+
+            <button class="login-btn" onclick="openPasswordModal()">Login</button>
+        </div>
+    </div>
+
+    <!-- 🔥 PASSWORD MODAL -->
+    <div class="modal-bg" id="passwordModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <h3 style="color:#108082; margin-bottom:10px;">Enter Password</h3>
+
+            <div style="position:relative;">
+                <input type="password" id="passwordField" placeholder="Enter Password" autocomplete="new-password"
+                    data-lpignore="true" />
+
+
+                <i class="fa-solid fa-eye" id="togglePassword" onclick="togglePassword()" style="
+                    position:absolute;
+                    right:14px;
+                    top:50%;
+                    transform:translateY(-50%);
+                    cursor:pointer;
+                    color:#666;
+                ">
+                </i>
+            </div>
+
+            <p class="error-text" id="errorMsg" style="display:none;">❌ Wrong Password!</p>
+            <button class="modal-btn" onclick="verifyPassword()">Login</button>
+        </div>
+    </div>
+
+    <script src="sales-login.js"></script>
+    <!-- <script src="js/dev.js"></script> -->
+
+</body>
+
+</html>
