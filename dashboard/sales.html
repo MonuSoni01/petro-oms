@@ -472,6 +472,15 @@
                             <option value="Cancelled">Cancelled</option>
                         </select>
                     </div>
+                    <div class="col-md-2">
+                        <label for="categoryFilter">Filter by Category</label>
+                        <select id="categoryFilter" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Bathroom">Bathroom</option>
+                            <option value="SS">Stainless Steel</option>
+                        </select>
+                    </div>
 
                     <!-- Product Code Filter -->
                     <div class="col-md-3">
@@ -605,6 +614,13 @@
                     ...doc.data()
                 }));
 
+                console.log("=== ITEM KEYS DEBUG ===");
+        orders.forEach((order, i) => {
+            if (order.items && order.items[0]) {
+                console.log(`Order ${i} first item:`, order.items[0]);
+            }
+        });
+
                 populateSalesmanFilter();
                 applyFilters();
             });
@@ -643,6 +659,14 @@
                 const exactMatch =
                     document.getElementById('exactMatchBtn').checked;
 
+                const categoryFilter = document.getElementById('categoryFilter').value;
+                if (categoryFilter) {
+                    const hasMatch = order.items?.some(item =>
+                        (item.category || "").toLowerCase() === categoryFilter.toLowerCase()
+                    );
+                    if (!hasMatch) return false;
+                }
+
                 // Status Filter
                 const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
                 if (
@@ -653,19 +677,27 @@
                 // Product Code Filter
                 if (productCodeFilter) {
 
-                    const hasMatchingProduct =
-                        order.items &&
-                        order.items.some(item => {
+                    const productCodes =
+    productCodeFilter
+        .split(",")
+        .map(c => c.trim().toLowerCase())
+        .filter(Boolean);
 
-                            const code =
-                                (item.code || "")
-                                    .toString()
-                                    .toLowerCase();
+const hasMatchingProduct =
+    order.items &&
+    order.items.some(item => {
 
-                            return exactMatch
-                                ? code === productCodeFilter
-                                : code.includes(productCodeFilter);
-                        });
+        const code =
+            (item.code || "")
+                .toString()
+                .toLowerCase();
+
+        return productCodes.some(searchCode =>
+            exactMatch
+                ? code === searchCode
+                : code.includes(searchCode)
+        );
+    });
 
                     if (!hasMatchingProduct) return false;
                 }
@@ -694,6 +726,10 @@
 
             const salesData = {};
 
+            const productCodeFilter = document.getElementById('productCodeFilter').value.trim().toLowerCase();
+            const exactMatch = document.getElementById('exactMatchBtn').checked;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+
             filteredOrders.forEach(order => {
                 const salesman = order.salesman || "N/A";
                 const orderNo =
@@ -703,7 +739,6 @@
                     order.order_no ||
                     "N/A";
 
-                // PARTY FIELD
                 const partyName =
                     order.partyName?.name ||
                     order.partyName?.partyName ||
@@ -717,41 +752,39 @@
 
                 if (!order.items || !Array.isArray(order.items)) return;
 
-                const productCodeFilter =
-                    document.getElementById('productCodeFilter')
-                        .value
-                        .trim()
-                        .toLowerCase();
-
-                const exactMatch =
-                    document.getElementById('exactMatchBtn').checked;
-
                 order.items.forEach(item => {
 
-                    const currentCode =
-                        (item.code || "")
-                            .toString()
-                            .toLowerCase();
+                    // ✅ Category filter - INSIDE loop
+                    if (categoryFilter && (item.category || "").toLowerCase() !== categoryFilter.toLowerCase()) return;
 
-                    if (productCodeFilter) {
-                        const matched = exactMatch
-                            ? currentCode === productCodeFilter
-                            : currentCode.includes(productCodeFilter);
+                    const currentCode = (item.code || "").toString().toLowerCase();
 
-                        if (!matched) return;
-                    }
+                    // Product Code filter
+                   if (productCodeFilter) {
+
+    const productCodes =
+        productCodeFilter
+            .split(",")
+            .map(c => c.trim().toLowerCase())
+            .filter(Boolean);
+
+    const matched =
+        productCodes.some(searchCode =>
+            exactMatch
+                ? currentCode === searchCode
+                : currentCode.includes(searchCode)
+        );
+
+    if (!matched) return;
+}
+
                     const productCode = item.code || "N/A";
                     const productName = item.name || "N/A";
                     const quantitySold = Number(item.qty || 0);
                     const totalSale = Number(item.amount || 0);
 
-                    if (!salesData[salesman]) {
-                        salesData[salesman] = {};
-                    }
-
-                    if (!salesData[salesman][partyName]) {
-                        salesData[salesman][partyName] = {};
-                    }
+                    if (!salesData[salesman]) salesData[salesman] = {};
+                    if (!salesData[salesman][partyName]) salesData[salesman][partyName] = {};
 
                     if (!salesData[salesman][partyName][productCode]) {
                         salesData[salesman][partyName][productCode] = {
@@ -775,7 +808,6 @@
                         const product = salesData[salesman][partyName][productCode];
 
                         const row = document.createElement('tr');
-
                         row.innerHTML = `
                     <td>${sno++}</td>
                     <td>${product.orderNo}</td>
@@ -786,7 +818,6 @@
                     <td>${product.totalQuantitySold}</td>
                     <td>₹${product.totalSales.toFixed(2)}</td>
                 `;
-
                         tableBody.appendChild(row);
                     }
                 }
@@ -802,6 +833,8 @@
 
         document.getElementById('exactMatchBtn')
             .addEventListener('change', applyFilters);
+            document.getElementById('categoryFilter')
+    .addEventListener('change', applyFilters);
 
         let isDescending = true; // Initially, sort in descending order
 
@@ -844,7 +877,8 @@
             document.getElementById('productCodeFilter').value = "";
             document.getElementById('dateFrom').value = "";
             document.getElementById('dateTo').value = "";
-            document.getElementById('exactMatchBtn').checked = false;
+            document.getElementById('exactMatchBtn').checked = false; 
+            document.getElementById('categoryFilter').value = "";
 
             applyFilters();
         });

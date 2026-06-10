@@ -79,8 +79,7 @@ const SALESMAN_PREFIX = {
     "Amit Soni": "AS",
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
-    "Rup Ranjan Bora": "RRB",
-    "Prashant Kumar": "PM",
+    "Rup Ranjan Bora": "RRB", 
     "Mahesh Kumar": "MK",
 };
 
@@ -798,20 +797,48 @@ function collectData() {
     if (!tbody) return {}; // Return empty object if tbody is not found
 
     const items = [...tbody.children].map(tr => {
-        return {
-            code: tr.querySelector('.item-code') ? tr.querySelector('.item-code').value.trim() : '',
-            name: tr.querySelector('.item-name') ? tr.querySelector('.item-name').value.trim() : '',
-            qty: tr.querySelector('.qty') ? +tr.querySelector('.qty').value || 0 : 0,
-            unit: tr.querySelector('.unit') ? tr.querySelector('.unit').value : '',
-            rate: tr.querySelector('.rate') ? +tr.querySelector('.rate').value || 0 : 0,
-            amount:
-                parseFloat(
-                    tr.querySelector('.amt')
-                        ?.textContent
-                        .replace(/[₹,]/g, "")
-                ) || 0
-        };
-    });
+
+    const code =
+        tr.querySelector('.item-code')
+            ? tr.querySelector('.item-code').value.trim().toUpperCase()
+            : '';
+
+    return {
+
+        code: code,
+
+        name:
+            tr.querySelector('.item-name')
+                ? tr.querySelector('.item-name').value.trim()
+                : '',
+
+        // ⭐ NEW FIELD
+        category:
+            itemMaster[code]?.category || "",
+
+        qty:
+            tr.querySelector('.qty')
+                ? +tr.querySelector('.qty').value || 0
+                : 0,
+
+        unit:
+            tr.querySelector('.unit')
+                ? tr.querySelector('.unit').value
+                : '',
+
+        rate:
+            tr.querySelector('.rate')
+                ? +tr.querySelector('.rate').value || 0
+                : 0,
+
+        amount:
+            parseFloat(
+                tr.querySelector('.amt')
+                    ?.textContent
+                    .replace(/[₹,]/g, "")
+            ) || 0
+    };
+});
 
     // Log the items and other order data
     // console.log("Collected order data:", {

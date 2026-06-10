@@ -77,7 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
     "Amit Soni": "AS",
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
-    "Rup Ranjan Bora": "RRB",
+    "Rup Ranjan Bora": "RRB", 
+    "Mahesh Kumar": "MK",
   };
 
   const prefix = SALESMAN_PREFIX[salesman];
