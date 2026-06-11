@@ -19,8 +19,210 @@
     <!-- Font CSS & CDN -->
     <link href="css/all.css" rel="stylesheet" />
     <style>
+        .renewal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #fff1f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc3545;
+            font-size: 38px;
+        }
+
+        .api-renew-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .api-renew-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .api-renew-box input:focus {
+            outline: none;
+            border-color: #108082;
+        }
+
+        .btn-api {
+            background: #0f172a;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #apiErrorMsg {
+            color: #dc3545;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
         body {
             display: none;
+        }
+
+        #renewalAlert {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+        }
+
+        .renewal-warning {
+            background: linear-gradient(90deg, #fff3cd, #ffe69c);
+            color: #856404;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            border-bottom: 2px solid #ffc107;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .renewal-expired {
+            background: linear-gradient(90deg, #dc3545, #b02a37);
+            color: #fff;
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 700;
+            border-bottom: 2px solid #8b1e2b;
+            box-shadow: 0 2px 15px rgba(220, 53, 69, 0.25);
+        }
+
+        .renewal-expired i,
+        .renewal-warning i {
+            margin-right: 8px;
+        }
+
+        .renewal-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .75);
+            backdrop-filter: blur(6px);
+            z-index: 999999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn .3s ease;
+        }
+
+        .renewal-modal-box {
+            width: 520px;
+            max-width: 92%;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, .25),
+                0 5px 15px rgba(0, 0, 0, .08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .renewal-modal-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #dc3545, #ff6b6b);
+        }
+
+        .renewal-modal-box h3 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #dc3545;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        .renewal-modal-box p {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #5b6475;
+            margin-bottom: 30px;
+        }
+
+        .renewal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-renew {
+            background: linear-gradient(135deg, #dc3545, #ff4d5a);
+            color: #fff;
+            border: none;
+            min-width: 170px;
+            padding: 13px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .btn-renew:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 53, 69, .35);
+        }
+
+        .btn-ok {
+            background: #108082;
+            color: #fff;
+            border: none;
+            min-width: 120px;
+            padding: 13px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .btn-ok:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 128, 130, .35);
+        }
+
+        .renewal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #fff1f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc3545;
+            font-size: 38px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 
@@ -86,6 +288,7 @@
 
     <!-- MAIN CONTENT -->
     <main id="main">
+
 
         <!-- Top Navbar -->
         <div class="top-bar" style="background: #108082;">
@@ -179,6 +382,7 @@
         </nav>
 
 
+        <div id="renewalAlert"></div>
         <!-- TOP CARDS -->
         <div class="container-fluid mt-5 p-5">
             <div class="row g-3">
@@ -262,7 +466,55 @@
                 </table>
             </div>
         </div>
+        <div id="renewalModal" class="renewal-modal">
 
+            <div class="renewal-modal-box">
+
+                <div class="renewal-icon">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+
+                <h3 id="renewalModalTitle">
+                    Plan Expired
+                </h3>
+
+                <p id="renewalModalMessage">
+                    Your subscription has expired.
+                </p>
+
+                <div class="api-renew-box">
+
+                    <input type="text" id="renewalApiInput" placeholder="Enter Renewal API Key">
+
+                    <button class="btn-api" onclick="verifyRenewalApi()">
+
+                        Submit API Key
+
+                    </button>
+
+                    <small id="apiErrorMsg"></small>
+
+                </div>
+
+                <div class="renewal-actions">
+
+                    <button class="btn-renew" onclick="contactSupport()">
+
+                        Renew Subscription
+
+                    </button>
+
+                    <button class="btn-ok" onclick="closeRenewalModal()">
+
+                        Close
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </main>
 
@@ -324,13 +576,185 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        /* ==============================
+           RENEWAL CHECK (FIXED)
+        ==============================*/
+        let renewalChecked = false; // run only once per page load
+
+        async function loadRenewalData() {
+
+            try {
+                let data = null;
+
+                // Try the known doc ID first
+                const knownDoc = await db
+                    .collection("subscription")
+                    .doc("TZxEjESFJ6xuT9V3ZGfM")
+                    .get();
+
+                if (knownDoc.exists) {
+                    data = knownDoc.data();
+                    subscriptionData = data;
+                } else {
+                    console.warn("Subscription doc ID not found, fetching first doc in collection...");
+                    const snap = await db.collection("subscription").limit(1).get();
+                    if (snap.empty) {
+                        console.error("No documents found in 'subscription' collection at all.");
+                        return;
+                    }
+                    data = snap.docs[0].data();
+                }
+
+                checkRenewalStatus(data.renewalDate);
+
+            } catch (err) {
+                console.error("Renewal fetch error:", err);
+            }
+        }
+
+        function showRenewalModal(title, message) {
+            document.getElementById("renewalModalTitle").innerText = title;
+            document.getElementById("renewalModalMessage").innerText = message;
+            document.getElementById("renewalModal").style.display = "flex";
+        }
+
+        function closeRenewalModal() {
+            document.getElementById("renewalModal").style.display = "none";
+        }
+
+        function checkRenewalStatus(renewalDate) {
+
+            if (!renewalDate) {
+                console.warn("renewalDate is empty/undefined");
+                return;
+            }
+
+            // Handle Firestore Timestamp objects as well as strings
+            let expireDate;
+            if (renewalDate && typeof renewalDate.toDate === "function") {
+                expireDate = renewalDate.toDate();
+            } else {
+                // Trim whitespace from string values (fixes "2026-06-11 " issue)
+                const cleanStr = String(renewalDate).trim();
+                expireDate = new Date(cleanStr + "T00:00:00");
+            }
+
+            if (isNaN(expireDate.getTime())) {
+                console.error("Invalid renewalDate value:", JSON.stringify(renewalDate));
+                return;
+            }
+
+            expireDate.setHours(0, 0, 0, 0);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const diffDays = Math.round(
+                (expireDate - today) / (1000 * 60 * 60 * 24)
+            );
+
+
+            // Reset alert bar each time
+            document.getElementById("renewalAlert").innerHTML = "";
+
+            if (diffDays === 0) {
+                showRenewalModal(
+                    "⚠️ Plan Expiring Today",
+                    "Your subscription will expire today. Please renew immediately."
+                );
+                document.getElementById("renewalAlert").innerHTML = `
+                    <div class="renewal-expired">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Your plan expires TODAY. Please renew immediately.
+                    </div>
+                `;
+                return;
+            }
+
+            if (diffDays < 0) {
+                showRenewalModal(
+                    "❌ Plan Expired",
+                    "Your subscription has expired. Please renew your plan."
+                );
+                document.getElementById("renewalAlert").innerHTML = `
+                    <div class="renewal-expired">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        Your plan has expired. Please renew your plan.
+                    </div>
+                `;
+                return;
+            }
+
+            if (diffDays > 0 && diffDays <= 7) {
+                document.getElementById("renewalAlert").innerHTML = `
+                    <div class="renewal-warning">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Plan Expiring in ${diffDays} Day(s)
+                    </div>
+                `;
+            }
+        }
+
         let orders = [];
+        let subscriptionData = {};
+
+        function contactSupport() {
+
+            window.open(
+                "https://rankchahiye.com/services/dashboard.html",
+                "_blank"
+            );
+
+        }
+
+        async function verifyRenewalApi() {
+
+            const enteredKey =
+                document.getElementById(
+                    "renewalApiInput"
+                ).value.trim();
+
+            const error =
+                document.getElementById(
+                    "apiErrorMsg"
+                );
+
+            if (!enteredKey) {
+
+                error.innerText =
+                    "Please enter API Key";
+
+                return;
+            }
+
+            const firestoreKey =
+                subscriptionData.apiKey;
+
+            if (
+                enteredKey !== firestoreKey
+            ) {
+
+                error.innerText =
+                    "Invalid API Key";
+
+                return;
+            }
+
+            error.innerText = "";
+
+            alert(
+                "Subscription Activated Successfully"
+            );
+
+            closeRenewalModal();
+
+        }
 
         /* ==============================
            REALTIME FETCH ORDERS
         ==============================*/
         db.collection("orders")
-            .orderBy("savedAt", "desc") 
+            .orderBy("savedAt", "desc")
             .onSnapshot((snap) => {
                 // Get all orders and update the dashboard and orders table
                 orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -357,11 +781,6 @@
             const uniqueUsers = new Set(orders.map(o => o.party?.name)); // Assuming 'party.name' is the identifier
             document.getElementById("totalUsers").innerText = uniqueUsers.size;
         }
-        // <td>
-        //     ${o.items.map(i => `
-        //         <div>• ${i.name} (Qty: ${i.qty})</div>
-        //     `).join("")}
-        // </td>  
 
         /* ==============================
    RECENT ORDERS TABLE
@@ -408,7 +827,7 @@
 
         db.collection("products")
             .orderBy("createdAt", "desc")
-            .limit(10)
+            .limit(2)
             .onSnapshot((snapshot) => {
 
                 productOrders = snapshot.docs.map(doc => ({
@@ -540,21 +959,31 @@
             if (user) {
                 // ✅ Login hai → page dikhao
                 document.body.style.display = "block";
+
+                if (!renewalChecked) {
+                    renewalChecked = true;
+                    loadRenewalData();
+                }
             } else {
                 // ❌ Login nahi → LOGIN PAGE
                 window.location.replace("login.html");
             }
         });
+
+        // NOTE: removed duplicate window.addEventListener("load", loadRenewalData)
+        // It was firing before auth/Firestore was ready and could silently fail.
+        // onAuthStateChanged above is the single source of truth now.
     </script>
 
 
 
 
-    <script src="/vendor/jquery/jquery.min.js    "></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery.appear.js"></script>
     <script src="product.js"></script>
     <script src="js/script.js"></script>
+
     <!-- <script src="js/dev.js"></script> -->
 </body>
 

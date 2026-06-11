@@ -1003,7 +1003,7 @@ const hasMatchingProduct =
                 .collection("orders")
                 .orderBy("savedAt", "desc")
                 .startAfter(lastVisibleDoc)
-                .limit(PAGE_SIZE)
+                // .limit(PAGE_SIZE)
                 .get();
 
             if (snapshot.empty) {
