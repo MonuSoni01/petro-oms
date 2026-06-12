@@ -6,13 +6,13 @@ window.itemMaster = {
   // NYLON SLEEVE (COLOURED)  //
   // ------------------------- //
 
-
+  
   "101": {
     "name": "25mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 75.30 },
-      "CTN": { "rate": 75.30 * 60 }
+      "PKT": { "rate": 81.80 },
+      "CTN": { "rate": 81.80 * 60 }
     },
     "photo": "/images/products/hardware/101.webp"
   },
@@ -21,8 +21,8 @@ window.itemMaster = {
     "name": "30mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 39.40 },
-      "CTN": { "rate": 39.40 * 60 }
+      "PKT": { "rate": 42.80 },
+      "CTN": { "rate": 42.80 * 60 }
     },
     "photo": "/images/products/hardware/102.webp"
   },
@@ -31,8 +31,8 @@ window.itemMaster = {
     "name": "35mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 40.90 },
-      "CTN": { "rate": 40.90 * 50 }
+      "PKT": { "rate": 44.40 },
+      "CTN": { "rate": 44.40 * 50 }
     },
     "photo": "/images/products/hardware/103.webp"
   },
@@ -41,8 +41,8 @@ window.itemMaster = {
     "name": "38mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 42.50 },
-      "CTN": { "rate": 42.50 * 50 }
+      "PKT": { "rate": 46.10 },
+      "CTN": { "rate": 46.10 * 50 }
     },
     "photo": "/images/products/hardware/104.webp"
   },
@@ -51,8 +51,8 @@ window.itemMaster = {
     "name": "38mm Square (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 47.60 },
-      "CTN": { "rate": 47.60 * 50 }
+      "PKT": { "rate": 51.70 },
+      "CTN": { "rate": 51.70 * 50 }
     },
     "photo": "/images/products/hardware/104-A.webp"
   },
@@ -61,8 +61,8 @@ window.itemMaster = {
     "name": "40mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 62.80 },
-      "CTN": { "rate": 62.80 * 48 }
+      "PKT": { "rate": 68.20 },
+      "CTN": { "rate": 68.20 * 48 }
     },
     "photo": "/images/products/hardware/105.webp"
   },
@@ -71,8 +71,8 @@ window.itemMaster = {
     "name": "50x8mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 89.30 },
-      "CTN": { "rate": 89.30 * 30 }
+      "PKT": { "rate": 97.00 },
+      "CTN": { "rate": 97.00 * 30 }
     },
     "photo": "/images/products/hardware/106-A.webp"
   },
@@ -81,8 +81,8 @@ window.itemMaster = {
     "name": "50x10mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 92.30 },
-      "CTN": { "rate": 92.30 * 25 }
+      "PKT": { "rate": 100.20 },
+      "CTN": { "rate": 100.20 * 25 }
     },
     "photo": "/images/products/hardware/106.webp"
   },
@@ -91,8 +91,8 @@ window.itemMaster = {
     "name": "50x10mm Square (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 99.00 },
-      "CTN": { "rate": 99.00 * 25 }
+      "PKT": { "rate": 107.50 },
+      "CTN": { "rate": 107.50 * 25 }
     },
     "photo": "/images/products/hardware/107.webp"
   },
@@ -101,8 +101,8 @@ window.itemMaster = {
     "name": "60mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 168.00 },
-      "CTN": { "rate": 168.00 * 16 }
+      "PKT": { "rate": 182.00 },
+      "CTN": { "rate": 182.00 * 16 }
     },
     "photo": "/images/products/hardware/108.webp"
   },
@@ -111,8 +111,8 @@ window.itemMaster = {
     "name": "75mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 126.00 },
-      "CTN": { "rate": 126.00 * 25 }
+      "PKT": { "rate": 137.00 },
+      "CTN": { "rate": 137.00 * 25 }
     },
     "photo": "/images/products/hardware/109.webp"
   },
@@ -121,11 +121,12 @@ window.itemMaster = {
     "name": "100mm (Coloured) Nylon Sleeve",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 234.00 },
-      "CTN": { "rate": 234.00 * 20 }
+      "PKT": { "rate": 254.00 },
+      "CTN": { "rate": 254.00 * 20 }
     },
     "photo": "/images/products/hardware/110.webp"
   },
+
   "111": {
     "name": "25mm (White) Nylon Sleeve",
     "category": "hardware",
@@ -204,7 +205,7 @@ window.itemMaster = {
       "CTN": { "rate": 139.00 * 25 }
     },
     "photo": "/images/products/hardware/116.webp"
-  }, "117": {
+  },"117": {
     "name": "50x10mm Square (White) Nylon Sleeve",
     "category": "hardware",
     "units": {
@@ -343,12 +344,13 @@ window.itemMaster = {
     },
     "photo": "/images/products/hardware/136.webp"
   },
+
   "137": {
     "name": "Nylon Buffer No. 7",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 560.00 },
-      "CTN": { "rate": 560.00 * 10 }
+      "PKT": { "rate": 460.00 },
+      "CTN": { "rate": 460.00 * 10 }
     },
     "photo": "/images/products/hardware/137.webp"
   },
@@ -427,8 +429,8 @@ window.itemMaster = {
     "name": "Magnetic Catcher PETRO M-10 (Long Body)",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 820.00 },
-      "CTN": { "rate": 820.00 * 10 }
+      "PKT": { "rate": 1140.00 },
+      "CTN": { "rate": 1140.00 * 10 }
     },
     "photo": "/images/products/hardware/155.webp"
   },
@@ -444,11 +446,11 @@ window.itemMaster = {
   },
 
   "157": {
-    "name": "IFCON (M-5)",
+    "name": "Magnetic Catcher IFCON (M-5)",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 650.00 },
-      "CTN": { "rate": 650.00 * 10 }
+      "PKT": { "rate": 810.00 },
+      "CTN": { "rate": 810.00 * 10 }
     },
     "photo": "/images/products/hardware/157.webp"
   },
@@ -457,8 +459,8 @@ window.itemMaster = {
     "name": "Magnetic Door Holder PETRO (Export Quality)",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 650.00 },
-      "CTN": { "rate": 650.00 * 10 }
+      "PKT": { "rate": 750.00 },
+      "CTN": { "rate": 750.00 * 10 }
     },
     "photo": "/images/products/hardware/162.webp"
   },
@@ -584,8 +586,8 @@ window.itemMaster = {
     name: "Mini Sixer Fix - Powder Coated",
     category: "hardware",
     units: {
-      PKT: { rate: 220.00 },
-      CTN: { rate: 220.00 * 40 }
+      PKT: { rate: 244.00 },
+      CTN: { rate: 244.00 * 40 }
     },
     photo: "/images/products/hardware/207.webp"
   },
@@ -593,8 +595,8 @@ window.itemMaster = {
     name: "Mini Sixer Revolving - Powder Coated",
     category: "hardware",
     units: {
-      PKT: { rate: 255.00 },
-      CTN: { rate: 255.00 * 40 }
+      PKT: { rate: 322.00 },
+      CTN: { rate: 322.00 * 40 }
     },
     photo: "/images/products/hardware/208.webp"
   },
@@ -638,8 +640,8 @@ window.itemMaster = {
     name: "Single Yellow Wheel Castor 50mm (Plate) - Heavy Nickel Finish",
     category: "hardware",
     units: {
-      PKT: { rate: 305.00 },
-      CTN: { rate: 305.00 * 15 }
+      PKT: { rate: 340.00 },
+      CTN: { rate: 340.00 * 15 }
     },
     photo: "/images/products/hardware/241.webp"
   },
@@ -647,8 +649,8 @@ window.itemMaster = {
     name: "Single Black Wheel Castor 50mm (Plate) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 700.00 },
-      CTN: { rate: 700.00 * 15 }
+      PKT: { rate: 745.00 },
+      CTN: { rate: 745.00 * 15 }
     },
     photo: "/images/products/hardware/257.webp"
   },
@@ -656,8 +658,8 @@ window.itemMaster = {
     name: "Double Yellow Wheel Castor 50mm (Plate) - Heavy Nickel Finish",
     category: "hardware",
     units: {
-      PKT: { rate: 400.00 },
-      CTN: { rate: 400.00 * 15 }
+      PKT: { rate: 430.00 },
+      CTN: { rate: 430.00 * 15 }
     },
     photo: "/images/products/hardware/264.webp"
   },
@@ -665,8 +667,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 42mm (Thread 8mm)",
     category: "hardware",
     units: {
-      PKT: { rate: 270.00 },
-      CTN: { rate: 270.00 * 30 }
+      PKT: { rate: 302.00 },
+      CTN: { rate: 302.00 * 30 }
     },
     photo: "/images/products/hardware/302.webp"
   },
@@ -674,8 +676,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 42mm (Thread 8mm) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 420.00 },
-      CTN: { rate: 420.00 * 30 }
+      PKT: { rate: 468.00 },
+      CTN: { rate: 468.00 * 30 }
     },
     photo: "/images/products/hardware/303.webp"
   },
@@ -683,8 +685,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 42mm (Thread 3/8)",
     category: "hardware",
     units: {
-      PKT: { rate: 270.00 },
-      CTN: { rate: 270.00 * 30 }
+      PKT: { rate: 302.00 },
+      CTN: { rate: 302.00 * 30 }
     },
     photo: "/images/products/hardware/312.webp"
   },
@@ -692,8 +694,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 42mm (Thread 3/8) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 420.00 },
-      CTN: { rate: 420.00 * 30 }
+      PKT: { rate: 468.00 },
+      CTN: { rate: 468.00 * 30 }
     },
     photo: "/images/products/hardware/313.webp"
   },
@@ -701,8 +703,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 52mm (Thread 3/8) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 300.00 },
-      CTN: { rate: 300.00 * 15 }
+      PKT: { rate: 335.00 },
+      CTN: { rate: 335.00 * 15 }
     },
     photo: "/images/products/hardware/316-B.webp"
   },
@@ -710,8 +712,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 50mm Super Deluxe (Thread 3/8)",
     category: "hardware",
     units: {
-      PKT: { rate: 280.00 },
-      CTN: { rate: 280.00 * 15 }
+      PKT: { rate: 312.00 },
+      CTN: { rate: 312.00 * 15 }
     },
     photo: "/images/products/hardware/317.webp"
   },
@@ -719,8 +721,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 52mm Medium (Thread 3/8)",
     category: "hardware",
     units: {
-      PKT: { rate: 220.00 },
-      CTN: { rate: 220.00 * 15 }
+      PKT: { rate: 244.00 },
+      CTN: { rate: 244.00 * 15 }
     },
     photo: "/images/products/hardware/318.webp"
   },
@@ -732,8 +734,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 42mm (Plate)",
     category: "hardware",
     units: {
-      PKT: { rate: 305.00 },
-      CTN: { rate: 305.00 * 30 }
+      PKT: { rate: 340.00 },
+      CTN: { rate: 340.00 * 30 }
     },
     photo: "/images/products/hardware/322.webp"
   },
@@ -742,8 +744,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 42mm (Plate) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 235.00 },
-      CTN: { rate: 235.00 * 15 }
+      PKT: { rate: 258.00 },
+      CTN: { rate: 258.00 * 15 }
     },
     photo: "/images/products/hardware/323.webp"
   },
@@ -752,8 +754,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 52mm (Plate) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 340.00 },
-      CTN: { rate: 340.00 * 15 }
+      PKT: { rate: 376.00 },
+      CTN: { rate: 376.00 * 15 }
     },
     photo: "/images/products/hardware/326-B.webp"
   },
@@ -762,8 +764,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 50mm Super Deluxe (Plate)",
     category: "hardware",
     units: {
-      PKT: { rate: 320.00 },
-      CTN: { rate: 320.00 * 15 }
+      PKT: { rate: 356.00 },
+      CTN: { rate: 356.00 * 15 }
     },
     photo: "/images/products/hardware/327.webp"
   },
@@ -772,8 +774,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 52mm Medium (Plate)",
     category: "hardware",
     units: {
-      PKT: { rate: 253.00 },
-      CTN: { rate: 253.00 * 15 }
+      PKT: { rate: 281.00 },
+      CTN: { rate: 281.00 * 15 }
     },
     photo: "/images/products/hardware/328.webp"
   },
@@ -782,8 +784,8 @@ window.itemMaster = {
     name: "Nylon Double Wheel Castor Black 50mm Super Deluxe (Pin)",
     category: "hardware",
     units: {
-      PKT: { rate: 320.00 },
-      CTN: { rate: 320.00 * 15 }
+      PKT: { rate: 356.00 },
+      CTN: { rate: 356.00 * 15 }
     },
     photo: "/images/products/hardware/347.webp"
   },
@@ -792,8 +794,8 @@ window.itemMaster = {
     name: "White Ball Castor 50mm (Plate) Nickel Finish",
     category: "hardware",
     units: {
-      PKT: { rate: 350.00 },
-      CTN: { rate: 350.00 * 15 }
+      PKT: { rate: 430.00 },
+      CTN: { rate: 430.00 * 15 }
     },
     photo: "/images/products/hardware/384.webp"
   },
@@ -802,8 +804,8 @@ window.itemMaster = {
     name: "Hydraulic Door Closer PETRO (Pelmet Arm) 90 Degree Hold",
     category: "hardware",
     units: {
-      PKT: { rate: 1700.00 },
-      CTN: { rate: 1700.00 * 20 }
+      PKT: { rate: 2100.00 },
+      CTN: { rate: 2100.00 * 20 }
     },
     photo: "/images/products/hardware/411.webp"
   },
@@ -812,8 +814,8 @@ window.itemMaster = {
     name: "Sliding Door Roller 35mm B-1 Special PETRO",
     category: "hardware",
     units: {
-      PKT: { rate: 540.00 },
-      CTN: { rate: 540.00 * 20 }
+      PKT: { rate: 599.00 },
+      CTN: { rate: 599.00 * 20 }
     },
     photo: "/images/products/hardware/451.webp"
   },
@@ -822,8 +824,8 @@ window.itemMaster = {
     name: "Sliding Door Roller 35mm B-1 Regular IFCON",
     category: "hardware",
     units: {
-      PKT: { rate: 465.00 },
-      CTN: { rate: 465.00 * 20 }
+      PKT: { rate: 516.00 },
+      CTN: { rate: 516.00 * 20 }
     },
     photo: "/images/products/hardware/453.webp"
   },
@@ -832,8 +834,8 @@ window.itemMaster = {
     name: "Sliding Glass Sticker PETRO Oval Design (Clear)",
     category: "hardware",
     units: {
-      PKT: { rate: 480.00 },
-      CTN: { rate: 480.00 * 15 }
+      PKT: { rate: 548.00 },
+      CTN: { rate: 548.00 * 15 }
     },
     photo: "/images/products/hardware/460.webp"
   },
@@ -852,8 +854,8 @@ window.itemMaster = {
     name: "Angle Bracket Zinc 25mm x 25mm",
     category: "hardware",
     units: {
-      PKT: { rate: 750.00 },
-      CTN: { rate: 750.00 * 30 }
+      PKT: { rate: 868.00 },
+      CTN: { rate: 868.00 * 30 }
     },
     photo: "/images/products/hardware/472.webp"
   },
@@ -862,8 +864,8 @@ window.itemMaster = {
     name: "Angle Bracket Zinc 40mm x 40mm",
     category: "hardware",
     units: {
-      PKT: { rate: 750.00 },
-      CTN: { rate: 750.00 * 30 }
+      PKT: { rate: 868.00 },
+      CTN: { rate: 868.00 * 30 }
     },
     photo: "/images/products/hardware/474.webp"
   },
@@ -872,8 +874,8 @@ window.itemMaster = {
     name: "Angle Bracket Zinc 50mm x 50mm",
     category: "hardware",
     units: {
-      PKT: { rate: 750.00 },
-      CTN: { rate: 750.00 * 30 }
+      PKT: { rate: 868.00 },
+      CTN: { rate: 868.00 * 30 }
     },
     photo: "/images/products/hardware/475.webp"
   },
@@ -882,8 +884,8 @@ window.itemMaster = {
     name: "Angle Bracket Zinc 65mm x 65mm",
     category: "hardware",
     units: {
-      PKT: { rate: 750.00 },
-      CTN: { rate: 750.00 * 30 }
+      PKT: { rate: 868.00 },
+      CTN: { rate: 868.00 * 30 }
     },
     photo: "/images/products/hardware/476.webp"
   },
@@ -892,8 +894,8 @@ window.itemMaster = {
     name: "Angle Bracket Zinc 75mm x 75mm",
     category: "hardware",
     units: {
-      PKT: { rate: 750.00 },
-      CTN: { rate: 750.00 * 30 }
+      PKT: { rate: 868.00 },
+      CTN: { rate: 868.00 * 30 }
     },
     photo: "/images/products/hardware/477.webp"
   },
@@ -902,8 +904,8 @@ window.itemMaster = {
     name: "Angle Bracket Zinc 100mm x 100mm",
     category: "hardware",
     units: {
-      PKT: { rate: 750.00 },
-      CTN: { rate: 750.00 * 15 }
+      PKT: { rate: 868.00 },
+      CTN: { rate: 868.00 * 15 }
     },
     photo: "/images/products/hardware/478.webp"
   }, "502": {
@@ -940,8 +942,8 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 50mm (Plate Type)",
     category: "hardware",
     units: {
-      PKT: { rate: 440.00 },
-      CTN: { rate: 440.00 * 15 }
+      PKT: { rate: 465.00 },
+      CTN: { rate: 465.00 * 15 }
     },
     photo: "/images/products/hardware/551.webp"
   },
@@ -950,8 +952,8 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 50mm (Plate Type) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 610.00 },
-      CTN: { rate: 610.00 * 15 }
+      PKT: { rate: 671.00 },
+      CTN: { rate: 671.00 * 15 }
     },
     photo: "/images/products/hardware/554.webp"
   },
@@ -960,7 +962,7 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 50mm (Plate Type) All Brake 4x4",
     category: "hardware",
     units: {
-      PKT: { rate: 780.00 }
+      PKT: { rate: 878.00 }
     },
     photo: "/images/products/hardware/557.webp"
   },
@@ -979,8 +981,8 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 75mm (Plate Type)",
     category: "hardware",
     units: {
-      PKT: { rate: 860.00 },
-      CTN: { rate: 860.00 * 30 }
+      PKT: { rate: 960.00 },
+      CTN: { rate: 960.00 * 30 }
     },
     photo: "/images/products/hardware/571.webp"
   },
@@ -989,8 +991,8 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 75mm (Plate Type) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 1040.00 },
-      CTN: { rate: 1040.00 * 30 }
+      PKT: { rate: 1170.00 },
+      CTN: { rate: 1170.00 * 30 }
     },
     photo: "/images/products/hardware/574.webp"
   },
@@ -999,7 +1001,7 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 75mm (Plate Type) All Brake 4x4",
     category: "hardware",
     units: {
-      PKT: { rate: 1210.00 }
+      PKT: { rate: 1375.00 }
     },
     photo: "/images/products/hardware/577.webp"
   },
@@ -1008,8 +1010,8 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 100mm (Plate Type)",
     category: "hardware",
     units: {
-      PKT: { rate: 1000.00 },
-      CTN: { rate: 1000.00 * 30 }
+      PKT: { rate: 1105.00 },
+      CTN: { rate: 1105.00 * 30 }
     },
     photo: "/images/products/hardware/581.webp"
   },
@@ -1018,8 +1020,8 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 100mm (Plate Type) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 1170.00 },
-      CTN: { rate: 1170.00 * 30 }
+      PKT: { rate: 1320.00 },
+      CTN: { rate: 1320.00 * 30 }
     },
     photo: "/images/products/hardware/584.webp"
   },
@@ -1028,7 +1030,7 @@ window.itemMaster = {
     name: "Single White Wheel Castor Solid 100mm (Plate Type) All Brake 4x4",
     category: "hardware",
     units: {
-      PKT: { rate: 1340.00 }
+      PKT: { rate: 1520.00 }
     },
     photo: "/images/products/hardware/587.webp"
   },
@@ -1037,8 +1039,8 @@ window.itemMaster = {
     name: "Single Red Wheel Castor PVC 50mm (Plate Type) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 725.00 },
-      CTN: { rate: 725.00 * 15 }
+      PKT: { rate: 820.00 },
+      CTN: { rate: 820.00 * 15 }
     },
     photo: "/images/products/hardware/592.webp"
   },
@@ -1047,8 +1049,8 @@ window.itemMaster = {
     name: "Single Red Wheel Castor PVC 75mm (Plate Type) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 1070.00 },
-      CTN: { rate: 1070.00 * 30 }
+      PKT: { rate: 1210.00 },
+      CTN: { rate: 1210.00 * 30 }
     },
     photo: "/images/products/hardware/593.webp"
   },
@@ -1057,8 +1059,8 @@ window.itemMaster = {
     name: "Single Red Wheel Castor PVC 100mm (Plate Type) Brake 2+2",
     category: "hardware",
     units: {
-      PKT: { rate: 1190.00 },
-      CTN: { rate: 1190.00 * 30 }
+      PKT: { rate: 1375.00 },
+      CTN: { rate: 1375.00 * 30 }
     },
     photo: "/images/products/hardware/594.webp"
   },
@@ -1097,8 +1099,8 @@ window.itemMaster = {
     name: "Pelmet Strip Zinc 100mm",
     category: "hardware",
     units: {
-      PKT: { rate: 700.00 },
-      CTN: { rate: 700.00 * 20 }
+      PKT: { rate: 810.00 },
+      CTN: { rate: 810.00 * 20 }
     },
     photo: "/images/products/hardware/612.webp"
   },
@@ -1107,8 +1109,8 @@ window.itemMaster = {
     name: "Pelmet Strip Zinc 125mm",
     category: "hardware",
     units: {
-      PKT: { rate: 700.00 },
-      CTN: { rate: 700.00 * 20 }
+      PKT: { rate: 810.00 },
+      CTN: { rate: 810.00 * 20 }
     },
     photo: "/images/products/hardware/613.webp"
   },
@@ -1117,8 +1119,8 @@ window.itemMaster = {
     name: "Angle Corner Bracket Zinc 45x25mm",
     category: "hardware",
     units: {
-      PKT: { rate: 610.00 },
-      CTN: { rate: 610.00 * 20 }
+      PKT: { rate: 710.00 },
+      CTN: { rate: 710.00 * 20 }
     },
     photo: "/images/products/hardware/615.webp"
   },
@@ -1127,8 +1129,8 @@ window.itemMaster = {
     name: "Window Corner Bracket Zinc 75x75mm",
     category: "hardware",
     units: {
-      PKT: { rate: 650.00 },
-      CTN: { rate: 650.00 * 20 }
+      PKT: { rate: 755.00 },
+      CTN: { rate: 755.00 * 20 }
     },
     photo: "/images/products/hardware/616.webp"
   }, "622": {
@@ -1205,8 +1207,8 @@ window.itemMaster = {
     name: "Nylon Sleeve Pouch Coloured 35mm",
     category: "hardware",
     units: {
-      PKT: { rate: 17.70 },
-      BAG: { rate: 17.70 * 200 }
+      PKT: { rate: 19.20 },
+      BAG: { rate: 19.20 * 200 }
     },
     photo: "/images/products/hardware/903.webp"
   },
@@ -1215,8 +1217,8 @@ window.itemMaster = {
     name: "Nylon Sleeve Pouch Coloured 38mm",
     category: "hardware",
     units: {
-      PKT: { rate: 18.30 },
-      BAG: { rate: 18.30 * 200 }
+      PKT: { rate: 19.90 },
+      BAG: { rate: 19.90 * 200 }
     },
     photo: "/images/products/hardware/904.webp"
   },
@@ -1225,8 +1227,8 @@ window.itemMaster = {
     name: "Nylon Sleeve Pouch Coloured 50mm",
     category: "hardware",
     units: {
-      PKT: { rate: 35.00 },
-      BAG: { rate: 35.00 * 150 }
+      PKT: { rate: 38.00 },
+      BAG: { rate: 38.00 * 150 }
     },
     photo: "/images/products/hardware/906.webp"
   },
@@ -1752,16 +1754,6 @@ window.itemMaster = {
       KIT: { rate: 350 }
     },
     photo: "/images/products/bathroom/1078.webp"
-  },
-  "1079": {
-    name: "Health Faucet (Round)",
-    category: "bathroom",
-    units: {
-      PCS: { rate: 970 },
-      SET: { rate: 970 },
-      KIT: { rate: 970 }
-    },
-    photo: "/images/products/bathroom/1079.webp"
   },
 
   "1101": {

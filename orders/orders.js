@@ -13,14 +13,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// ✅ ENABLE OFFLINE CACHE — repeat visits / re-renders won't re-read from server
+db.enablePersistence().catch((err) => {
+  console.warn("Firestore persistence not enabled:", err.code);
+});
+
 /* ============================================================
    GLOBAL VARIABLES
 ============================================================ */
 let orders = [];
+let productOrders = [];
 let deleteOrderId = null;
 let deleteOrderSource = "orders";
 let currentRenderedOrders = [];
 let lastVisibleOrder = null;
+let lastVisibleProduct = null;
 
 const ordersBody = document.getElementById("ordersBody");
 const emptyState = document.getElementById("emptyState");
@@ -30,17 +37,18 @@ const dateFrom = document.getElementById("dateFrom");
 const dateTo = document.getElementById("dateTo");
 const searchBox = document.getElementById("searchBox");
 
-const ADMIN_DELETE_PASSWORD = "PETRO123";
+const ADMIN_DELETE_PASSWORD = "2003";
 
 /* ============================================================
-   FETCH ORDERS (REALTIME)
+   FETCH ORDERS (REDUCED PAGE SIZE — saves reads)
 ============================================================ */
-const PAGE_SIZE = 25;
+// ✅ Reduced from 25 -> 10. Adjust as needed.
+const PAGE_SIZE = 10;
 
 db.collection("orders")
   .orderBy("savedAt", "desc")
   .limit(PAGE_SIZE)
-  .get()
+  .get({ source: "default" })
   .then((snapshot) => {
 
     lastVisibleOrder =
@@ -52,12 +60,16 @@ db.collection("orders")
       ...doc.data(),
     }));
 
+    pageCache[1] = orders;
+    hasNextPage = snapshot.docs.length === PAGE_SIZE;
+    updatePaginationUI();
+
     mergeOrdersAndRender();
-  }); 
+  });
 
 
 /* ============================================================
- RENDER ORDERS TABLE (Updated)
+ RENDER ORDERS TABLE
 ============================================================ */
 function renderOrders(list) {
   currentRenderedOrders = list;
@@ -69,50 +81,47 @@ function renderOrders(list) {
 
   emptyState.style.display = "none";
 
+  const srNoOffset = isSearchMode ? 0 : (currentPage - 1) * PAGE_SIZE;
+
   ordersBody.innerHTML = list
     .map((o, index) => {
-      const partyType = o.party?.type || "Secondary";  // ✅ Type column
-      const statusText = o.status || "Pending";        // ✅ Status column
-      const orderDate = o.orderDate || "-";
+      const partyType = o.party?.type || "Secondary";
+      const statusText = o.status || "Pending";
       const total = Number(o.grandTotal ?? 0);
-      const billImage = o.billImage || null; // Assuming you have the image URL in `billImage` 
+      const billImage = o.billImage || null;
 
-       const viewImageButton = billImage
-  ? `<a href="${billImage}"
+      const viewImageButton = billImage
+        ? `<a href="${billImage}"
        target="_blank"
        class="btn btn-info btn-sm">
        View Image
      </a>`
-  : "Not Uploaded";
+        : "Not Uploaded";
 
       return `
       <tr>
   <td>
     <input type="checkbox" class="rowCheck" value="${o.id}">
   </td>
-  <td>${index + 1}</td>
+  <td>${srNoOffset + index + 1}</td>
           <td>${o.salesman || "-"}</td>
-          <td>${o.orderNo || "-"}</td> 
+          <td>${o.orderNo || "-"}</td>
           <td>${o.party?.name || "-"}</td>
 
-          <!-- ✅ TYPE -->
           <td>
             <span class="badge ${partyType === "Primary" ? "badge-success" : "badge-warning"}">
               ${partyType}
             </span>
           </td>
 
-          <!-- ✅ TOTAL -->
           <td>₹${total.toFixed(2)}</td>
 
-          <!-- ✅ STATUS -->
           <td>
             <span class="badge-status ${statusClass(statusText)}">
               ${statusText}
             </span>
           </td>
- 
-          <!-- ✅ ACTION -->
+
           <td>
             <button class="btn btn-warning btn-sm" onclick="editOrder('${o.id}', '${o.source || "orders"}')">✏ Edit</button>
             <button class="btn btn-primary btn-sm" onclick="viewOrder('${o.id}')">
@@ -123,9 +132,8 @@ function renderOrders(list) {
             </button>
           </td>
 
-          <!-- ✅ BILL IMAGE -->
           <td>
-            ${viewImageButton}  <!-- View Image Button if image exists -->
+            ${viewImageButton}
           </td>
         </tr>
       `;
@@ -134,64 +142,56 @@ function renderOrders(list) {
 }
 
 /* ============================================================
-   OPEN IMAGE MODAL (Updated)
+   OPEN IMAGE MODAL
 ============================================================ */
-/* Open Image Modal with Skeleton Loader */
 function openImageModal(imageUrl) {
   const modal = document.getElementById("imageModal");
   const modalImage = document.getElementById("modalImage");
   const imageSkeleton = document.getElementById("imageSkeleton");
 
-  // Show skeleton loader
   imageSkeleton.style.display = "block";
-  modalImage.style.display = "none";  // Hide the image until it's loaded
+  modalImage.style.display = "none";
 
-  // Load image
   const img = new Image();
   img.onload = function () {
-    // When the image is loaded, hide the skeleton and show the image
     modalImage.src = imageUrl;
-    imageSkeleton.style.display = "none";  // Hide skeleton loader
-    modalImage.style.display = "block";  // Show image
+    imageSkeleton.style.display = "none";
+    modalImage.style.display = "block";
   };
 
-  img.src = imageUrl;  // Start loading the image
+  img.src = imageUrl;
 
-  // Show the modal
   modal.style.display = "flex";
-  document.body.style.overflow = "hidden";  // Disable scrolling when modal is open
+  document.body.style.overflow = "hidden";
 }
 
 function closeImageModal() {
-  document.getElementById("imageModal").style.display = "none"; // Close the modal
+  document.getElementById("imageModal").style.display = "none";
 }
 
 /* ============================================================
    VIEW IMAGE (ONLY BILL IMAGE)
 ============================================================ */
 function viewImage(id) {
-  const o = orders.find(x => x.id === id);
+  const o = orders.find(x => x.id === id) || productOrders.find(x => x.id === id);
   if (!o || !o.billImage) return;
 
   const div = document.getElementById("modalContent");
 
-  // Display the bill image in the modal
   div.innerHTML = `
     <div style="font-size:24px; font-weight:600; margin-bottom: 15px;">Bill Image for Order #${o.orderNo}</div>
     <img src="${o.billImage}" alt="Bill Image" style="max-width: 100%; height: auto; border-radius: 12px;">
     <button class="btn btn-secondary mt-3" onclick="closeModal()">Close</button>
   `;
 
-  // Show the modal
   document.getElementById("modal").style.display = "flex";
-  document.body.style.overflow = "hidden";  // Disable scrolling when modal is open
+  document.body.style.overflow = "hidden";
 }
 
 function closeModal() {
   document.getElementById("modal").style.display = "none";
-  document.body.style.overflow = "auto"; // Re-enable scrolling
+  document.body.style.overflow = "auto";
 }
-
 
 /* ============================================================
    STATUS BADGE
@@ -202,83 +202,98 @@ function statusClass(status) {
   switch (status.toLowerCase()) {
     case "pending":
       return "status-pending";
-
     case "quotation sent":
       return "status-info";
-
     case "payment received":
       return "status-payment";
-
     case "partial delivered":
       return "status-partial";
-
     case "delivered":
       return "status-delivered";
-
     case "hold":
       return "status-hold";
-
     case "cancelled":
       return "status-cancelled";
-
     default:
       return "status-pending";
   }
 }
 
-
-
 /* ============================================================
-   FILTER LOGIC
+   FILTER LOGIC (client-side, on already-fetched data)
 ============================================================ */
 document
   .getElementById("salesmanFilter")
-  .addEventListener(
-    "change",
-    applyFilters
-  );
-searchBox.addEventListener("input", applyFilters);
+  .addEventListener("change", applyFilters);
+let searchDebounceTimer;
+searchBox.addEventListener("input", () => {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(applyFilters, 400);
+});
 statusFilter.addEventListener("change", applyFilters);
 dateFrom.addEventListener("change", applyFilters);
 dateTo.addEventListener("change", applyFilters);
 
-function applyFilters() {
-  let filtered = [
-    ...(orders || []),
-    ...(productOrders || [])
-  ];
+ function isAnyFilterActive() {
+  const searchText = searchBox.value.trim();
+  const selectedSalesman = document.getElementById("salesmanFilter")?.value || "";
+  const s = statusFilter.value;
+  const df = dateFrom.value;
+  const dt = dateTo.value;
 
-  const searchText = searchBox.value.toLowerCase();
+  return !!(searchText || selectedSalesman || s || df || dt);
+}
+
+function applyFilters() {
+  const filterActive = isAnyFilterActive();
+
+  if (filterActive) {
+    // ✅ Need full dataset to search across ALL orders
+    if (!allOrdersCache) {
+      fetchAllOrdersForSearch().then(() => {
+        runFilterOnDataset(allOrdersCache);
+      });
+      return;
+    }
+    runFilterOnDataset(allOrdersCache);
+  } else {
+    // No filters — go back to normal paginated view
+    if (isSearchMode) {
+      isSearchMode = false;
+      if (paginationControls) paginationControls.style.display = "flex";
+      orders = pageCache[currentPage] || [];
+      mergeOrdersAndRender();
+    } else {
+      mergeOrdersAndRender();
+    }
+  }
+}
+
+function runFilterOnDataset(dataset) {
+  let filtered = [...dataset];
+
+  const searchText = searchBox.value.toLowerCase().trim();
   if (searchText) {
-    filtered = filtered.filter(
-      (o) =>
-        (o.orderNo && o.orderNo.toLowerCase().includes(searchText)) ||
-        (o.party?.name && o.party.name.toLowerCase().includes(searchText))
+    filtered = filtered.filter((o) =>
+      (o.orderNo && o.orderNo.toLowerCase().includes(searchText)) ||
+      (o.party?.name && o.party.name.toLowerCase().includes(searchText)) ||
+      (o.party?.mobile && o.party.mobile.toLowerCase().includes(searchText))
     );
   }
 
-  const salesmanFilter =
-    document.getElementById("salesmanFilter");
-
-  const selectedSalesman =
-    salesmanFilter
-      ? salesmanFilter.value.toLowerCase()
-      : "";
+  const salesmanFilter = document.getElementById("salesmanFilter");
+  const selectedSalesman = salesmanFilter ? salesmanFilter.value.toLowerCase() : "";
 
   if (selectedSalesman) {
-
     filtered = filtered.filter(o =>
-      (o.salesman || "")
-        .toLowerCase()
-        .includes(selectedSalesman)
+      (o.salesman || "").toLowerCase() === selectedSalesman
     );
-
   }
 
   const s = statusFilter.value;
   if (s) {
     filtered = filtered.filter((o) =>
-      (o.status || "").toLowerCase().includes(s.toLowerCase())
+      (o.status || "").toLowerCase() === s.toLowerCase()
     );
   }
 
@@ -288,9 +303,56 @@ function applyFilters() {
   if (dateTo.value)
     filtered = filtered.filter((o) => o.orderDate <= dateTo.value);
 
+  isSearchMode = true;
+  if (paginationControls) paginationControls.style.display = "none";
+
   renderOrders(filtered);
 }
 
+/* ============================================================
+   FETCH ALL ORDERS — only when search/filter is used
+============================================================ */
+function fetchAllOrdersForSearch() {
+  // ✅ Check sessionStorage cache first (valid for 5 minutes)
+  const cached = sessionStorage.getItem('allOrdersCache');
+  const cacheTime = sessionStorage.getItem('allOrdersCacheTime');
+
+  if (cached && cacheTime && (Date.now() - Number(cacheTime) < 5 * 60 * 1000)) {
+    allOrdersCache = JSON.parse(cached);
+    return Promise.resolve();
+  }
+
+  return Promise.all([
+    db.collection("orders").orderBy("savedAt", "desc").get(),
+    loadProductOrders() // ensures productOrders is populated too
+  ]).then(([ordersSnapshot]) => {
+
+    const allOrders = ordersSnapshot.docs.map(doc => ({
+      id: doc.id,
+      source: "orders",
+      ...doc.data(),
+    }));
+
+    let merged = [...allOrders, ...productOrders];
+
+    merged = merged.filter(o =>
+      o.orderNo &&
+      o.party &&
+      o.party.name &&
+      Number(o.grandTotal || 0) >= 0
+    );
+
+    allOrdersCache = merged;
+
+    // ✅ Save to sessionStorage for next time
+    try {
+      sessionStorage.setItem('allOrdersCache', JSON.stringify(allOrdersCache));
+      sessionStorage.setItem('allOrdersCacheTime', Date.now().toString());
+    } catch (e) {
+      console.warn("sessionStorage cache failed:", e);
+    }
+  });
+}
 
 /* ============================================================
    VIEW ORDER
@@ -307,7 +369,6 @@ function viewOrder(id) {
   const statusText = o.status || "Pending";
   const cancelReason = o.cancelRemark || "";
 
-  // ---- ITEMS TABLE ----
   let itemsHTML = `
     <table class="table table-bordered" style="width:100%; margin-bottom: 15px; border-collapse: collapse;">
       <thead style="background-color: #f4f4f4; text-align: left;">
@@ -339,7 +400,6 @@ function viewOrder(id) {
     </table>
   `;
 
-  // ---- CATEGORY DISCOUNTS ----
   let categoryDiscountsHTML = `
 <div class="discounts-section" style="font-weight: bold; margin-bottom: 10px;">
 
@@ -378,7 +438,6 @@ function viewOrder(id) {
 </div>
 `;
 
-  // ---- BILLING DETAILS ----
   let billingHTML = `
     <div class="billing-section" style="margin-top: 15px;">
       <p><b>Subtotal:</b> ₹${o.subTotal || 0}</p>
@@ -389,16 +448,8 @@ function viewOrder(id) {
     </div>
   `;
 
-  // ---- CANCEL REASON BLOCK ----
-  // ---- REASON BLOCK ----
   const cancelReasonHTML =
-    (
-      statusText === "Cancelled"
-      ||
-      statusText === "Hold"
-    )
-      &&
-      cancelReason
+    (statusText === "Cancelled" || statusText === "Hold") && cancelReason
       ? `
         <div style="
           background:#fff3f3;
@@ -414,10 +465,7 @@ function viewOrder(id) {
 
           <div>
             <b>
-              ${statusText === "Hold"
-        ? "Hold Reason"
-        : "Cancel Reason"}
-              :
+              ${statusText === "Hold" ? "Hold Reason" : "Cancel Reason"}:
             </b>
 
             ${cancelReason}
@@ -427,7 +475,6 @@ function viewOrder(id) {
       `
       : "";
 
-  // ---- COMPLETE MODAL HTML ----
   div.innerHTML = `
     <div style="
      display:flex;
@@ -468,7 +515,6 @@ function viewOrder(id) {
 
     ${cancelReasonHTML}
 
-    <!-- Party Details -->
     <div class="party-details" style="margin-bottom: 20px;">
       <h4 style="font-size: 18px; font-weight: 600;">Party Details</h4>
       <p><b>Name:</b> ${o.party?.name || "-"}</p>
@@ -477,19 +523,16 @@ function viewOrder(id) {
       <p><b>GST:</b> ${o.party?.gst || "-"}</p>
     </div>
 
-    <!-- Items -->
     <div class="items-section" style="margin-bottom: 20px;">
       <h4 style="font-size: 18px; font-weight: 600;">Items</h4>
       ${itemsHTML}
     </div>
 
-    <!-- Category Discounts -->
     <div class="category-discounts" style="margin-bottom: 20px;">
       <h4 style="font-size: 18px; font-weight: 600; color: #108082;">Category Discounts</h4>
       ${categoryDiscountsHTML}
     </div>
 
-    <!-- Billing -->
     <div class="billing-section">
       <h4 style="font-size: 18px; font-weight: 600; color: #108082;">Billing</h4>
       ${billingHTML}
@@ -500,40 +543,28 @@ function viewOrder(id) {
   document.body.style.overflow = "hidden";
 }
 
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-  document.body.style.overflow = "auto";
-}
-
 /* ============================================================
    EDIT ORDER
 ============================================================ */
 window.editOrder = function (orderId, source) {
-
-  window.location.href =
-    `edit-order.html?id=${orderId}&source=${source}`;
-
+  window.location.href = `edit-order.html?id=${orderId}&source=${source}`;
 };
+
 /* ============================================================
    DELETE — CLEAN POPUP
 ============================================================ */
 window.openDeleteModal = function (orderId, source = "orders") {
-
   deleteOrderId = orderId;
   deleteOrderSource = source;
 
   document.getElementById("deletePass").value = "";
   document.getElementById("deleteModal").style.display = "flex";
-
 };
 
 function closeDeleteModal() {
   document.getElementById("deleteModal").style.display = "none";
   document.getElementById("deleteMsg").style.display = "none";
 }
-
-
 
 window.confirmDelete = async function () {
   const pass = document.getElementById("deletePass").value.trim();
@@ -549,31 +580,50 @@ window.confirmDelete = async function () {
     return;
   }
 
-  // 🔒 Disable delete button to prevent double click
   const btns = document.querySelectorAll("#deleteModal button");
   btns.forEach(b => b.disabled = true);
 
-  try {
-    // ✅ Show message FIRST
-    msg.textContent = "🗑️ Deleting order...";
-    msg.style.color = "#ff9800";
+  // Capture order number before deleting (for the toast message)
+  const deletedOrder =
+    orders.find(o => o.id === deleteOrderId) ||
+    productOrders.find(o => o.id === deleteOrderId);
+  const deletedOrderNo = deletedOrder?.orderNo || deleteOrderId;
 
-    // 🔥 Delete from Firebase
+  try {
     await db
       .collection(deleteOrderSource)
       .doc(deleteOrderId)
       .delete();
 
-    // ✅ Success message
-    msg.textContent = "✅ Order Deleted Successfully";
-    msg.style.color = "green";
+    if (deleteOrderSource === "orders") {
+      orders = orders.filter(o => o.id !== deleteOrderId);
+      pageCache[currentPage] = orders;
 
-    // ⏳ Keep popup visible for 2 seconds
-    setTimeout(() => {
-      closeDeleteModal();
-      btns.forEach(b => b.disabled = false);
-      msg.style.display = "none";
-    }, 2000);
+      // ✅ Invalidate cache of all later pages so they refetch correctly
+      Object.keys(pageCache).forEach(p => {
+        if (Number(p) > currentPage) delete pageCache[p];
+      });
+
+      // If current page becomes empty, shift back/forward
+      if (orders.length === 0 && currentPage > 1) {
+        goToPrevPage();
+      } else if (orders.length < PAGE_SIZE && hasNextPage) {
+        // Refill current page from server to keep PAGE_SIZE consistent
+        refillCurrentPage();
+      }
+    } else {
+      productOrders = productOrders.filter(o => o.id !== deleteOrderId);
+    }
+
+    mergeOrdersAndRender();
+    updatePaginationUI();
+
+    // ✅ Close modal immediately, reset state
+    closeDeleteModal();
+    btns.forEach(b => b.disabled = false);
+
+    // ✅ Show small toast message
+    showToast(`✅ Order ${deletedOrderNo} Deleted Successfully`);
 
   } catch (err) {
     console.error(err);
@@ -583,206 +633,170 @@ window.confirmDelete = async function () {
   }
 };
 
+/* ============================================================
+   REFILL CURRENT PAGE — fetch one extra doc to keep PAGE_SIZE
+============================================================ */
+function refillCurrentPage() {
+  if (!hasNextPage) return;
 
+  const needed = PAGE_SIZE - orders.length;
+  if (needed <= 0) return;
 
+  const lastDocInOrders = orders.length
+    ? null // we don't have doc snapshot for last item in `orders` array, so use lastVisibleOrder
+    : null;
+
+  db.collection("orders")
+    .orderBy("savedAt", "desc")
+    .startAfter(lastVisibleOrder)
+    .limit(needed)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        hasNextPage = false;
+        return;
+      }
+
+      lastVisibleOrder = snapshot.docs[snapshot.docs.length - 1];
+
+      const fillerOrders = snapshot.docs.map(doc => ({
+        id: doc.id,
+        source: "orders",
+        ...doc.data()
+      }));
+
+      orders.push(...fillerOrders);
+      pageCache[currentPage] = orders;
+
+      hasNextPage = snapshot.docs.length === needed;
+
+      mergeOrdersAndRender();
+      updatePaginationUI();
+    });
+}
+
+/* ============================================================
+   TOAST MESSAGE
+============================================================ */
+function showToast(message) {
+  let toast = document.getElementById("petroToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "petroToast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  // trigger reflow for animation restart
+  toast.classList.remove("show");
+  void toast.offsetWidth;
+  toast.classList.add("show");
+
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => { toast.style.display = "none"; }, 300);
+  }, 2500);
+}
 function togglePass() {
   const pass = document.getElementById("deletePass");
   const icon = document.querySelector(".toggle-eye");
 
-  if (pass.type === "password") {
-    pass.type = "text";
+  if (pass.style.webkitTextSecurity === "disc" || pass.style.webkitTextSecurity === "") {
+    pass.style.webkitTextSecurity = "none";
     icon.classList.remove("fa-eye-slash");
     icon.classList.add("fa-eye");
   } else {
-    pass.type = "password";
+    pass.style.webkitTextSecurity = "disc";
     icon.classList.remove("fa-eye");
     icon.classList.add("fa-eye-slash");
   }
 }
 
-// EXTRAAAA
+/* ============================================================
+   FETCH PRODUCTS — ✅ LAZY LOADED (only when needed)
+   This collection is no longer fetched on every page load.
+   It loads only when user interacts with filters/search,
+   or you can wire a button to call loadProductOrders().
+============================================================ */
+let productsLoaded = false;
 
+function loadProductOrders() {
+  if (productsLoaded) return Promise.resolve();
 
-/* ==============================
-   FETCH PRODUCTS ORDER DATA
-==============================*/
-let productOrders = [];
+  return db.collection("products")
+    .orderBy("createdAt", "desc")
+    .limit(PAGE_SIZE)
+    .get()
+    .then((snapshot) => {
 
-db.collection("products")
-  .orderBy("createdAt", "desc")
-  .limit(PAGE_SIZE)
-  .get()
-  .then((snapshot) => {
+      lastVisibleProduct = snapshot.docs[snapshot.docs.length - 1];
+      productsLoaded = true;
 
-    productOrders = snapshot.docs.map(doc => {
+      productOrders = snapshot.docs.map(doc => {
 
-      const data = doc.data();
-      const party = data.partyDetails || {};
+        const data = doc.data();
+        const party = data.partyDetails || {};
 
-      // 🔥 UNIVERSAL ITEMS MAPPING
-      const rawItems =
-        data.items
-        || data.orderItems
-        || data.productList
-        || data.cart
-        || data.cartItems
-        || [];
+        const rawItems =
+          data.items
+          || data.orderItems
+          || data.productList
+          || data.cart
+          || data.cartItems
+          || [];
 
-      const items = rawItems.map(item => ({
+        const items = rawItems.map(item => ({
+          code: item.code || item.name || "-",
+          unit: item.unit || "-",
+          qty: item.qty || item.quantity || 0,
+          rate: item.rate || item.price || 0,
+          amount: item.amount || ((item.qty || item.quantity || 0) * (item.rate || item.price || 0))
+        }));
 
-        code:
-          item.code
-          || item.name
-          || "-",
-
-        unit:
-          item.unit
-          || "-",
-
-        qty:
-          item.qty
-          || item.quantity
-          || 0,
-
-        rate:
-          item.rate
-          || item.price
-          || 0,
-
-        amount:
-          item.amount
-          || (
-            (item.qty || item.quantity || 0) *
-            (item.rate || item.price || 0)
-          )
-
-      }));
-
-      return {
-
-        id: doc.id,
-
-        // ORDER NUMBER
-        orderNo:
-          party.orderNo
-          || data.orderNo
-          || doc.id,
-
-        // PARTY DETAILS
-        party: {
-
-          name:
-            party.partyName
-            || data.partyName
-            || "Unknown",
-
-          type:
-            party.partyType
-            || data.partyType
-            || "Secondary",
-
-          mobile:
-            party.mobile
-            || data.mobile
-            || "-",
-
-          address:
-            party.address
-            || data.address
-            || "-",
-
-          gst:
-            party.gst
-            || data.gst
-            || "-"
-        },
-        salesman:
-          data.salesman
-          || party.salesman
-          || "Unknown",
-
-        // ITEMS (FIXED)
-        items: items,
-
-        // CATEGORY DISCOUNTS
-        categoryDiscounts:
-          data.categoryDiscounts || {
-
-            hardware: 0,
-
-            bathroom: 0,
-
-            stainlesssteel: 0
-
+        return {
+          id: doc.id,
+          orderNo: party.orderNo || data.orderNo || doc.id,
+          party: {
+            name: party.partyName || data.partyName || "Unknown",
+            type: party.partyType || data.partyType || "Secondary",
+            mobile: party.mobile || data.mobile || "-",
+            address: party.address || data.address || "-",
+            gst: party.gst || data.gst || "-"
           },
+          salesman: data.salesman || party.salesman || "Unknown",
+          items: items,
+          categoryDiscounts: data.categoryDiscounts || { hardware: 0, bathroom: 0, stainlesssteel: 0 },
+          categoryDiscountPercents: data.categoryDiscountPercents || { hardware: "0%", bathroom: "0%", stainlesssteel: "0%" },
+          subTotal: Number(data.subTotal || 0),
+          freight: Number(data.freight || 0),
+          specialDiscount: Number(data.specialDiscount || 0),
+          gstPercent: Number(data.gstPercent || 0),
+          gstAmount: Number(data.gstAmount || 0),
+          grandTotal: Number(data.grandTotal || 0),
+          status: data.status || "Pending",
+          orderDate: party.orderDate || data.orderDate || new Date().toISOString().split("T")[0],
+          source: "products"
+        };
+      });
 
-        categoryDiscountPercents:
-          data.categoryDiscountPercents || {
-
-            hardware: "0%",
-
-            bathroom: "0%",
-
-            stainlesssteel: "0%"
-
-          },
-
-        // BILLING
-        subTotal:
-          Number(data.subTotal || 0),
-
-        freight:
-          Number(data.freight || 0),
-
-        specialDiscount:
-          Number(data.specialDiscount || 0),
-
-        gstPercent:
-          Number(data.gstPercent || 0),
-
-        gstAmount:
-          Number(data.gstAmount || 0),
-
-        grandTotal:
-          Number(data.grandTotal || 0),
-
-        // STATUS
-        status:
-          data.status || "Pending",
-
-        // DATE
-        orderDate:
-          party.orderDate
-          || data.orderDate
-          || new Date().toISOString().split("T")[0],
-
-        // SOURCE IDENTIFIER 
-        source:
-          "products"
-
-      };
-
+      mergeOrdersAndRender();
     });
-
-
-    // SAFE MERGE
-    mergeOrdersAndRender();
-
-  });
+}
 
 /* ==============================
-MERGE ORDERS + PRODUCTS
+   MERGE ORDERS + PRODUCTS
 ==============================*/
 function mergeOrdersAndRender() {
-
-
 
   let allOrders = [
     ...orders,
     ...productOrders
   ];
 
-  // REMOVE invalid empty orders
   allOrders = allOrders.filter(o =>
     o.orderNo &&
     o.party &&
@@ -790,41 +804,20 @@ function mergeOrdersAndRender() {
     Number(o.grandTotal || 0) >= 0
   );
 
-  // SORT latest first
-  // SORT LATEST CREATED ORDER FIRST
   allOrders.sort((a, b) => {
-
-    const aTime =
-      a.savedAt?.seconds ||
-      a.createdAt?.seconds ||
-      0;
-
-    const bTime =
-      b.savedAt?.seconds ||
-      b.createdAt?.seconds ||
-      0;
-
+    const aTime = a.savedAt?.seconds || a.createdAt?.seconds || 0;
+    const bTime = b.savedAt?.seconds || b.createdAt?.seconds || 0;
     return bTime - aTime;
-
   });
 
   renderOrders(allOrders);
-
   populateSalesmanFilter(allOrders);
-
 }
 
 function downloadOrder() {
 
-  const content =
-    document.getElementById("modalContent")
-      .innerHTML;
-
-  const win = window.open(
-    "",
-    "",
-    "width=900,height=700"
-  );
+  const content = document.getElementById("modalContent").innerHTML;
+  const win = window.open("", "", "width=900,height=700");
 
   win.document.write(`
     <html>
@@ -832,28 +825,11 @@ function downloadOrder() {
         <title>Order Download</title>
 
         <style>
-          body {
-            font-family: Arial;
-            padding: 20px;
-          }
-
-          table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-
-          table, th, td {
-            border: 1px solid #ccc;
-          }
-
-          th, td {
-            padding: 8px;
-            text-align: left;
-          }
-
-          h3 {
-            margin-top: 20px;
-          }
+          body { font-family: Arial; padding: 20px; }
+          table { width: 100%; border-collapse: collapse; }
+          table, th, td { border: 1px solid #ccc; }
+          th, td { padding: 8px; text-align: left; }
+          h3 { margin-top: 20px; }
         </style>
 
       </head>
@@ -865,43 +841,30 @@ function downloadOrder() {
   `);
 
   win.document.close();
-
   win.print();
-
 }
 
 function populateSalesmanFilter(list) {
-
-  const filter =
-    document.getElementById("salesmanFilter");
-
+  const filter = document.getElementById("salesmanFilter");
   if (!filter) return;
 
-  // Unique names nikaalo
   const uniqueNames = [
-    ...new Set(
-      list.map(o =>
-        o.salesman || "Unknown"
-      )
-    )
+    ...new Set(list.map(o => o.salesman || "Unknown"))
   ];
 
-  filter.innerHTML =
-    '<option value="">All Salesman</option>';
+  filter.innerHTML = '<option value="">All Salesman</option>';
 
   uniqueNames.forEach(name => {
-
-    const option =
-      document.createElement("option");
-
+    const option = document.createElement("option");
     option.value = name;
     option.textContent = name;
-
     filter.appendChild(option);
-
   });
-
 }
+
+/* ============================================================
+   EXPORT (CSV)
+============================================================ */
 const exportColumns = [
   { key: "salesman", label: "Salesman", get: o => o.salesman || "-" },
   { key: "orderNo", label: "Order No", get: o => o.orderNo || "-" },
@@ -913,17 +876,12 @@ const exportColumns = [
   { key: "total", label: "Total", get: o => o.grandTotal || 0 },
   { key: "status", label: "Status", get: o => o.status || "Pending" },
   { key: "date", label: "Order Date", get: o => o.orderDate || "-" },
-
   {
     key: "billAmount",
     label: "Bill Amount",
-    get: o => o.billAmount
-      ? `₹${Number(o.billAmount).toFixed(2)}`
-      : "-"
+    get: o => o.billAmount ? `₹${Number(o.billAmount).toFixed(2)}` : "-"
   },
-
   { key: "source", label: "Source", get: o => o.source || "orders" },
-
   {
     key: "items",
     label: "Items",
@@ -936,9 +894,12 @@ const exportColumns = [
 let selectedColumnKeys = exportColumns.map(c => c.key);
 
 function openExportModal() {
-  document.getElementById("exportModal").style.display = "flex";
-  document.body.style.overflow = "hidden";
-  renderExportColumns();
+  // ✅ Load products data only when export is needed (if not already loaded)
+  loadProductOrders().then(() => {
+    document.getElementById("exportModal").style.display = "flex";
+    document.body.style.overflow = "hidden";
+    renderExportColumns();
+  });
 }
 
 function closeExportModal() {
@@ -1046,11 +1007,9 @@ function downloadCustomCSV() {
   });
 
   const blob = new Blob(
-  ["\uFEFF" + csv],
-  {
-    type: "text/csv;charset=utf-8;"
-  }
-);
+    ["\uFEFF" + csv],
+    { type: "text/csv;charset=utf-8;" }
+  );
 
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -1060,13 +1019,57 @@ function downloadCustomCSV() {
   closeExportModal();
 }
 
-document
-  .getElementById("loadMoreBtn")
-  .addEventListener("click", loadMoreOrders);
+/* ============================================================
+   PAGINATION (Next / Prev) — pages cached, no re-fetch on Prev
+============================================================ */
+let currentPage = 1;
+let pageCache = { 1: [] };       // caches orders array per page
+let pageCursors = { 1: null };   // first doc cursor (before this page) per page
+let hasNextPage = true;
 
-function loadMoreOrders() {
+// ✅ SEARCH/FILTER MODE
+let allOrdersCache = null;       // full fetched orders+products when search/filter active
+let isSearchMode = false;
+const paginationControls = document.querySelector(".d-flex.justify-content-center.align-items-center.mt-3");
 
-  if (!lastVisibleOrder) return;
+const prevPageBtn = document.getElementById("prevPageBtn");
+const nextPageBtn = document.getElementById("nextPageBtn");
+const pageIndicator = document.getElementById("pageIndicator");
+
+prevPageBtn.addEventListener("click", goToPrevPage);
+nextPageBtn.addEventListener("click", goToNextPage);
+
+function updatePaginationUI() {
+  pageIndicator.textContent = `Page ${currentPage}`;
+  prevPageBtn.disabled = currentPage === 1;
+  nextPageBtn.disabled = !hasNextPage;
+}
+
+function goToPrevPage() {
+  if (currentPage === 1) return;
+  currentPage--;
+  orders = pageCache[currentPage] || [];
+  mergeOrdersAndRender();
+  updatePaginationUI();
+}
+
+function goToNextPage() {
+  const nextPage = currentPage + 1;
+
+  // ✅ Already cached — no Firestore read
+  if (pageCache[nextPage]) {
+    currentPage = nextPage;
+    orders = pageCache[nextPage];
+    mergeOrdersAndRender();
+    updatePaginationUI();
+    return;
+  }
+
+  if (!lastVisibleOrder) {
+    hasNextPage = false;
+    updatePaginationUI();
+    return;
+  }
 
   db.collection("orders")
     .orderBy("savedAt", "desc")
@@ -1076,30 +1079,49 @@ function loadMoreOrders() {
     .then((snapshot) => {
 
       if (snapshot.empty) {
-        alert("No More Orders");
+        hasNextPage = false;
+        updatePaginationUI();
         return;
       }
 
-      lastVisibleOrder =
-        snapshot.docs[snapshot.docs.length - 1];
+      lastVisibleOrder = snapshot.docs[snapshot.docs.length - 1];
 
-      const newOrders =
-        snapshot.docs.map(doc => ({
-          id: doc.id,
-          source: "orders",
-          ...doc.data()
-        }));
+      const newOrders = snapshot.docs.map(doc => ({
+        id: doc.id,
+        source: "orders",
+        ...doc.data()
+      }));
 
-      orders.push(...newOrders);
+      pageCache[nextPage] = newOrders;
+      currentPage = nextPage;
+      orders = newOrders;
+
+      // Check if there might be more after this
+      hasNextPage = snapshot.docs.length === PAGE_SIZE;
 
       mergeOrdersAndRender();
+      updatePaginationUI();
     });
-
 }
+
 window.goNextPage = function () {
   console.log("Next Page");
 };
 
 window.goPrevPage = function () {
   console.log("Previous Page");
+};
+/* ============================================================
+   CLEAR ALL FILTERS
+============================================================ */
+window.clearAllFilters = function () {
+  searchBox.value = "";
+  statusFilter.value = "";
+  dateFrom.value = "";
+  dateTo.value = "";
+
+  const salesmanFilter = document.getElementById("salesmanFilter");
+  if (salesmanFilter) salesmanFilter.value = "";
+
+  applyFilters();
 };

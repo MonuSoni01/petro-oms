@@ -164,7 +164,7 @@
         <div class="filters-box mb-4 mt-5 p-5">
             <div class="row g-3">
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Date From</label>
                     <input type="date" id="dateFrom" class="form-control">
                 </div>
@@ -205,6 +205,11 @@
                     </select>
                 </div>
 
+                <div class="col-md-1 d-flex align-items-end">
+                    <button id="clearFiltersBtn" class="btn btn-outline-secondary w-100" onclick="clearAllFilters()">
+                        <i class="fa fa-times"></i> Clear
+                    </button>
+                </div>
 
             </div>
         </div>
@@ -242,11 +247,17 @@
 
 
             </table>
-            <div class="text-center mt-3">
-                <button id="loadMoreBtn" class="btn btn-primary">
-                    Load More Orders
-                </button>
-            </div>
+            <div class="d-flex justify-content-center align-items-center mt-3" style="gap:12px;">
+    <button id="prevPageBtn" class="btn btn-secondary">
+        <i class="fa fa-chevron-left"></i> Prev
+    </button>
+
+    <span id="pageIndicator" style="font-weight:600;">Page 1</span>
+
+    <button id="nextPageBtn" class="btn btn-primary">
+        Next <i class="fa fa-chevron-right"></i>
+    </button>
+</div>
 
             <p id="emptyState" class="text-center mt-3" style="display:none;">No orders found.</p>
         </div>
@@ -318,28 +329,22 @@
             <p style="font-size:15px;margin-bottom:10px;">
                 Enter admin password to delete this order.
             </p>
-            <p id="deleteMsg" style="
-                display:none;
-                margin-top:10px;
-                font-weight:600;
-                text-align:center;
-            ">
+            <p id="deleteMsg" style="display:none;">
             </p>
 
-            <input type="text" style="display:none">
-            <input type="password" style="display:none">
-
             <div class="password-wrapper">
-                <input type="password" id="deletePass" class="form-control" placeholder="Enter Admin Password"
-                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    <input type="text" id="deletePass" class="form-control" placeholder="Enter Admin Password"
+        autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+        data-lpignore="true" data-1p-ignore="true" style="-webkit-text-security: disc;" />
+
+    <i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
+</div>
 
 
-                <i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
+            <div class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-secondary btn-block" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger btn-block" onclick="confirmDelete()">Delete</button>
             </div>
-
-
-            <button class="btn btn-danger btn-block mt-2" onclick="confirmDelete()">Delete</button>
-            <button class="btn btn-secondary btn-block mt-2" onclick="closeDeleteModal()">Cancel</button>
 
         </div>
     </div>

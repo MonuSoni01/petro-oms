@@ -556,6 +556,7 @@
                                 <th>Party Name</th>
                                 <th>Product Code</th>
                                 <th>Product Name</th>
+                                <th>Unit</th>
                                 <th id="quantitySort" style="cursor:pointer;">
                                     Total Quantity Sold <span id="quantityArrow">↓</span>
                                 </th>
@@ -591,10 +592,10 @@
             appId: "1:562472760628:web:384f4eda2c862b6e3ce161"
         };
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
+        const db = firebase.firestore(); 
         // Fetch orders data from Firebase
         let orders = [];
+        let flatExportData = []; // ✅ Flat (non-grouped) data for CSV/PDF export
         const PAGE_SIZE = 25;
         let lastVisibleDoc = null;
 
@@ -613,13 +614,11 @@
                     id: doc.id,
                     ...doc.data()
                 }));
-
-                console.log("=== ITEM KEYS DEBUG ===");
-        orders.forEach((order, i) => {
-            if (order.items && order.items[0]) {
-                console.log(`Order ${i} first item:`, order.items[0]);
-            }
-        });
+ 
+                orders.forEach((order, i) => {
+                    if (order.items && order.items[0]) { 
+                    }
+                });
 
                 populateSalesmanFilter();
                 applyFilters();
@@ -678,26 +677,26 @@
                 if (productCodeFilter) {
 
                     const productCodes =
-    productCodeFilter
-        .split(",")
-        .map(c => c.trim().toLowerCase())
-        .filter(Boolean);
+                        productCodeFilter
+                            .split(",")
+                            .map(c => c.trim().toLowerCase())
+                            .filter(Boolean);
 
-const hasMatchingProduct =
-    order.items &&
-    order.items.some(item => {
+                    const hasMatchingProduct =
+                        order.items &&
+                        order.items.some(item => {
 
-        const code =
-            (item.code || "")
-                .toString()
-                .toLowerCase();
+                            const code =
+                                (item.code || "")
+                                    .toString()
+                                    .toLowerCase();
 
-        return productCodes.some(searchCode =>
-            exactMatch
-                ? code === searchCode
-                : code.includes(searchCode)
-        );
-    });
+                            return productCodes.some(searchCode =>
+                                exactMatch
+                                    ? code === searchCode
+                                    : code.includes(searchCode)
+                            );
+                        });
 
                     if (!hasMatchingProduct) return false;
                 }
@@ -725,6 +724,7 @@ const hasMatchingProduct =
             tableBody.innerHTML = '';
 
             const salesData = {};
+            flatExportData = []; // reset flat data
 
             const productCodeFilter = document.getElementById('productCodeFilter').value.trim().toLowerCase();
             const exactMatch = document.getElementById('exactMatchBtn').checked;
@@ -760,23 +760,23 @@ const hasMatchingProduct =
                     const currentCode = (item.code || "").toString().toLowerCase();
 
                     // Product Code filter
-                   if (productCodeFilter) {
+                    if (productCodeFilter) {
 
-    const productCodes =
-        productCodeFilter
-            .split(",")
-            .map(c => c.trim().toLowerCase())
-            .filter(Boolean);
+                        const productCodes =
+                            productCodeFilter
+                                .split(",")
+                                .map(c => c.trim().toLowerCase())
+                                .filter(Boolean);
 
-    const matched =
-        productCodes.some(searchCode =>
-            exactMatch
-                ? currentCode === searchCode
-                : currentCode.includes(searchCode)
-        );
+                        const matched =
+                            productCodes.some(searchCode =>
+                                exactMatch
+                                    ? currentCode === searchCode
+                                    : currentCode.includes(searchCode)
+                            );
 
-    if (!matched) return;
-}
+                        if (!matched) return;
+                    }
 
                     const productCode = item.code || "N/A";
                     const productName = item.name || "N/A";
@@ -790,6 +790,7 @@ const hasMatchingProduct =
                         salesData[salesman][partyName][productCode] = {
                             orderNo: orderNo,
                             productName: productName,
+                            unit: item.unit || "-",
                             totalQuantitySold: 0,
                             totalSales: 0
                         };
@@ -804,22 +805,60 @@ const hasMatchingProduct =
 
             for (let salesman in salesData) {
                 for (let partyName in salesData[salesman]) {
-                    for (let productCode in salesData[salesman][partyName]) {
+
+                    const productCodes = Object.keys(salesData[salesman][partyName]);
+                    const groupSize = productCodes.length;
+
+                   productCodes.forEach((productCode, idx) => {
                         const product = salesData[salesman][partyName][productCode];
 
+                        // ✅ Push complete row data for export (every row has all fields)
+                        flatExportData.push({
+                            sno: sno,
+                            orderNo: product.orderNo,
+                            salesman: salesman,
+                            partyName: partyName,
+                            productCode: productCode,
+                            productName: product.productName,
+                            unit: product.unit,
+                            qty: product.totalQuantitySold,
+                            sales: product.totalSales
+                        });
+
                         const row = document.createElement('tr');
-                        row.innerHTML = `
-                    <td>${sno++}</td>
-                    <td>${product.orderNo}</td>
-                    <td>${salesman}</td>
-                    <td>${partyName}</td>
-                    <td>${productCode}</td>
-                    <td>${product.productName}</td>
-                    <td>${product.totalQuantitySold}</td>
-                    <td>₹${product.totalSales.toFixed(2)}</td>
-                `;
+
+                       if (idx === 0) {
+                            // ✅ First row of the group — show merged cells with rowspan
+                            row.innerHTML = `
+                        <td>${sno++}</td>
+                        <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa; font-weight:600;">${product.orderNo}</td>
+                        <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa;">${salesman}</td>
+                        <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa;">${partyName}</td>
+                        <td>${productCode}</td>
+                        <td>${product.productName}</td>
+                        <td>${product.unit}</td>
+                        <td>${product.totalQuantitySold}</td>
+                        <td>₹${product.totalSales.toFixed(2)}</td>
+                    `;
+                        } else {
+                            // ✅ Subsequent rows — skip merged columns entirely
+                            row.innerHTML = `
+                        <td>${sno++}</td>
+                        <td>${productCode}</td>
+                        <td>${product.productName}</td>
+                        <td>${product.unit}</td>
+                        <td>${product.totalQuantitySold}</td>
+                        <td>₹${product.totalSales.toFixed(2)}</td>
+                    `;
+                        } 
+
+                        // ✅ Add a subtle border between different order groups
+                        if (idx === groupSize - 1) {
+                            row.style.borderBottom = "2px solid #108082";
+                        }
+
                         tableBody.appendChild(row);
-                    }
+                    });
                 }
             }
         }
@@ -833,8 +872,8 @@ const hasMatchingProduct =
 
         document.getElementById('exactMatchBtn')
             .addEventListener('change', applyFilters);
-            document.getElementById('categoryFilter')
-    .addEventListener('change', applyFilters);
+        document.getElementById('categoryFilter')
+            .addEventListener('change', applyFilters);
 
         let isDescending = true; // Initially, sort in descending order
 
@@ -877,33 +916,37 @@ const hasMatchingProduct =
             document.getElementById('productCodeFilter').value = "";
             document.getElementById('dateFrom').value = "";
             document.getElementById('dateTo').value = "";
-            document.getElementById('exactMatchBtn').checked = false; 
+            document.getElementById('exactMatchBtn').checked = false;
             document.getElementById('categoryFilter').value = "";
 
             applyFilters();
         });
         // EXPORT CSV
+        // EXPORT CSV
         document.getElementById('downloadCsvBtn').addEventListener('click', function () {
 
-            const table = document.querySelector('.table');
-            const rows = table.querySelectorAll('tr');
+            const headers = [
+                "S.No", "Order NO", "Salesperson", "Party Name",
+                "Product Code", "Product Name", "Unit",
+                "Total Quantity Sold", "Total Sales"
+            ];
 
-            let csv = [];
+            let csv = [headers.map(h => `"${h}"`).join(',')];
 
-            rows.forEach(row => {
-                let cols = row.querySelectorAll('th, td');
-                let rowData = [];
+            flatExportData.forEach(row => {
+                const rowData = [
+                    row.sno,
+                    row.orderNo,
+                    row.salesman,
+                    row.partyName,
+                    row.productCode,
+                    row.productName,
+                    row.unit,
+                    row.qty,
+                    row.sales.toFixed(2)
+                ];
 
-                cols.forEach(col => {
-                    let text = col.innerText
-                        .replace(/₹/g, '')
-                        .replace(/\n/g, ' ')
-                        .trim();
-
-                    rowData.push('"' + text + '"');
-                });
-
-                csv.push(rowData.join(','));
+                csv.push(rowData.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','));
             });
 
             const csvContent =
@@ -924,8 +967,7 @@ const hasMatchingProduct =
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        });
-        document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+        });document.getElementById('downloadPdfBtn').addEventListener('click', function () {
 
             const { jsPDF } = window.jspdf;
 
@@ -935,36 +977,23 @@ const hasMatchingProduct =
             doc.setTextColor(16, 128, 130);
             doc.text("Product Sales Report", 14, 15);
 
-            const headers = [];
-            const body = [];
+            const headers = [
+                "S.No", "Order NO", "Salesperson", "Party Name",
+                "Product Code", "Product Name", "Unit",
+                "Total Quantity Sold", "Total Sales (Rs.)"
+            ];
 
-            document.querySelectorAll('.table thead th').forEach(th => {
-                headers.push(
-                    th.textContent
-                        .replace('↓', '')
-                        .replace('↑', '')
-                        .replace('₹', 'Rs.')
-                        .trim()
-                );
-            });
-
-            document.querySelectorAll('.table tbody tr').forEach(row => {
-                const rowData = [];
-
-                row.querySelectorAll('td').forEach((td, index) => {
-
-                    let text = td.textContent.trim();
-
-                    // Total Sales column
-                    if (index === 7) {
-                        text = text.replace(/₹/g, 'Rs. ');
-                    }
-
-                    rowData.push(text);
-                });
-
-                body.push(rowData);
-            });
+            const body = flatExportData.map(row => [
+                row.sno,
+                row.orderNo,
+                row.salesman,
+                row.partyName,
+                row.productCode,
+                row.productName,
+                row.unit,
+                row.qty,
+                "Rs. " + row.sales.toFixed(2)
+            ]);
 
             doc.autoTable({
                 head: [headers],
@@ -1003,7 +1032,7 @@ const hasMatchingProduct =
                 .collection("orders")
                 .orderBy("savedAt", "desc")
                 .startAfter(lastVisibleDoc)
-                // .limit(PAGE_SIZE)
+                .limit(PAGE_SIZE)
                 .get();
 
             if (snapshot.empty) {
