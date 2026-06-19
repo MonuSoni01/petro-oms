@@ -164,54 +164,51 @@
         <div class="filters-box mb-4 mt-5 p-5">
             <div class="row g-3">
 
-                <div class="col-md-2">
-                    <label>Date From</label>
-                    <input type="date" id="dateFrom" class="form-control">
-                </div>
+               <div class="col-md-2">
+    <label>From Date</label>
+    <input type="date" id="dateFrom" class="form-control">
+</div>
 
-                <div class="col-md-2">
-                    <label>Date To</label>
-                    <input type="date" id="dateTo" class="form-control">
-                </div>
+<div class="col-md-2">
+    <label>To Date</label>
+    <input type="date" id="dateTo" class="form-control">
+</div>
 
-                <div class="col-md-2">
-                    <label>Status</label>
-                    <select id="filterStatus" class="form-control">
-                        <option value="">All Status</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Quotation Sent">Quotation Sent</option>
-                        <option value="Payment Received">Payment Received</option>
-                        <option value="Partial Delivered">Partial Delivered</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Hold">Hold</option>
-                        <option value="Cancelled">Cancelled</option>
-                    </select>
+<div class="col-md-2">
+    <label>Status</label>
+    <select id="filterStatus" class="form-control">
+        <option value="">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Quotation Sent">Quotation Sent</option>
+        <option value="Payment Received">Payment Received</option>
+        <option value="Partial Delivered">Partial Delivered</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Hold">Hold</option>
+        <option value="Cancelled">Cancelled</option>
+    </select>
+</div>
 
+<div class="col-md-1">
+    <label>Type</label>
+    <select id="filterType" class="form-control">
+        <option value="">All Types</option>
+        <option value="Primary">Primary</option>
+        <option value="Secondary">Secondary</option>
+    </select>
+</div>
 
-                </div>
-                <div class="col-md-1">
-                    <label>Type</label>
-                    <select id="filterType" class="form-control">
-                        <option value="">All Type</option>
-                        <option value="Primary">Primary</option>
-                        <option value="Secondary">Secondary</option>
-                    </select>
-                </div>
+<div class="col-md-2">
+    <label>Search</label>
+    <input type="text" id="searchBox" class="form-control"
+        placeholder="Search Order No / Party Name">
+</div>
 
-                <div class="col-md-2">
-                    <label>Search</label>
-                    <input type="text" id="searchBox" name="petro_search_orders_938472" class="form-control"
-                        placeholder="Search Order No / Party Name" autocomplete="new-password" autocorrect="off"
-                        autocapitalize="off" spellcheck="false">
-                </div>
-                <div class="col-md-2">
-                    <label>Salesman</label>
-                    <select id="salesmanFilter" class="form-control">
-                        <option value="">
-                            All Salesman
-                        </option>
-                    </select>
-                </div>
+<div class="col-md-2">
+    <label>Salesman</label>
+    <select id="salesmanFilter" class="form-control">
+        <option value="">All Salesmen</option>
+    </select>
+</div>
 
                 <div class="col-md-1 d-flex align-items-end">
                     <button id="clearFiltersBtn" class="btn btn-outline-secondary w-100" onclick="clearAllFilters()">
