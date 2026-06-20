@@ -1,684 +1,795 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PETRO OMS</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PETRO OMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+        :root {
+            --bg: #f7f8fc;
+            --card: #ffffff;
+            --text: #222;
+            --muted: #777;
+            --primary: #00897b;
+        }
 
-body {
-    background: #f7f8fc;
-}
+        body.dark-mode {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --primary: #00bfa6;
+        }
 
-.container {
-    max-width: 480px;
-    margin: auto;
-    min-height: 100vh;
-}
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
 
-/* ========================
+        .container {
+            max-width: 480px;
+            margin: auto;
+            min-height: 100vh;
+        }
+
+        /* ========================
    HEADER
 ======================== */
 
-.header {
-    background: #fff;
-    padding: 15px 15px 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
+        .header {
+            background: #fff;
+            padding: 15px 15px 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
 
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.logo {
-    height: 40px;
-}
+        .logo {
+            height: 40px;
+        }
 
-.right-icons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
+        .right-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
 
-.icon-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #f5f6fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    transition: .2s;
-    border: 1.5px solid transparent;
-}
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: .2s;
+            border: 1.5px solid transparent;
+        }
 
-.icon-btn:hover {
-    background: #e8f5e9;
-    border-color: #00897b;
-}
+        .icon-btn:hover {
+            background: #e8f5e9;
+            border-color: #00897b;
+        }
 
-/* ========================
+        /* ========================
    DROPDOWN
 ======================== */
 
-.dropdown-wrap {
-    position: relative;
-}
+        .dropdown-wrap {
+            position: relative;
+        }
 
-.dropdown-menu {
-    position: absolute;
-    right: 0;
-    top: 48px;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.13);
-    border: 1px solid #e8f5e9;
-    min-width: 190px;
-    overflow: hidden;
-    display: none;
-    z-index: 9999;
-    animation: dropIn .18s ease;
-}
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 48px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.13);
+            border: 1px solid #e8f5e9;
+            min-width: 190px;
+            overflow: hidden;
+            display: none;
+            z-index: 9999;
+            animation: dropIn .18s ease;
+        }
 
-.dropdown-menu.open {
-    display: block;
-}
+        .dropdown-menu.open {
+            display: block;
+        }
 
-@keyframes dropIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+        @keyframes dropIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
 
-.drop-header {
-    padding: 12px 16px 10px;
-    border-bottom: 1px solid #f0f0f0;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-.drop-header p {
-    font-size: 11px;
-    color: #aaa;
-    margin: 0;
-}
+        .drop-header {
+            padding: 12px 16px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
 
-.drop-header h4 {
-    font-size: 13px;
-    font-weight: 600;
-    color: #222;
-    margin: 2px 0 0;
-}
+        .drop-header p {
+            font-size: 11px;
+            color: #aaa;
+            margin: 0;
+        }
 
-.drop-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: .15s;
-    text-decoration: none;
-}
+        .drop-header h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #222;
+            margin: 2px 0 0;
+        }
 
-.drop-item:hover {
-    background: #f4fbf7;
-}
+        .drop-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: .15s;
+            text-decoration: none;
+        }
 
-.drop-item:active {
-    background: #e0f5ec;
-}
+        .drop-item:hover {
+            background: #f4fbf7;
+        }
 
-.drop-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-}
+        .drop-item:active {
+            background: #e0f5ec;
+        }
 
-.drop-item.admin .drop-icon {
-    background: #e3f2fd;
-    color: #1565c0;
-}
+        .drop-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
 
-.drop-item.sales .drop-icon {
-    background: #e8f5e9;
-    color: #00897b;
-}
+        .drop-item.admin .drop-icon {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
 
-.drop-info {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
+        .drop-item.sales .drop-icon {
+            background: #e8f5e9;
+            color: #00897b;
+        }
 
-.drop-info strong {
-    font-size: 13px;
-    font-weight: 600;
-    color: #222;
-}
+        .drop-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
 
-.drop-info span {
-    font-size: 10px;
-    color: #aaa;
-    margin-top: 1px;
-}
+        .drop-info strong {
+            font-size: 13px;
+            font-weight: 600;
+            color: #222;
+        }
 
-.drop-divider {
-    height: 1px;
-    background: #f5f5f5;
-    margin: 0 12px;
-}
+        .drop-info span {
+            font-size: 10px;
+            color: #aaa;
+            margin-top: 1px;
+        }
 
-.drop-check {
-    font-size: 15px;
-    color: #00897b;
-    display: none;
-}
+        .drop-divider {
+            height: 1px;
+            background: #f5f5f5;
+            margin: 0 12px;
+        }
 
-.drop-item.active-role .drop-check {
-    display: block;
-}
+        .drop-check {
+            font-size: 15px;
+            color: #00897b;
+            display: none;
+        }
 
-.drop-item.active-role .drop-info strong {
-    color: #00897b;
-}
+        .drop-item.active-role .drop-check {
+            display: block;
+        }
 
-/* ========================
+        .drop-item.active-role .drop-info strong {
+            color: #00897b;
+        }
+
+        /* ========================
    BANNER
 ======================== */
 
-.banner {
-    margin: 15px;
-    border-radius: 18px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #00796b, #00695c);
-    color: white;
-    position: relative;
-    min-height: 170px;
-    padding: 20px;
-}
+        .banner {
+            margin: 15px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary), #00695c);
+            color: white;
+            position: relative;
+            min-height: 170px;
+            padding: 20px;
+        }
 
-.banner-content {
-    width: 55%;
-}
+        .banner-content {
+            width: 55%;
+        }
 
-.banner h2 {
-    font-size: 18px;
-    line-height: 28px;
-}
+        .banner h2 {
+            font-size: 18px;
+            line-height: 28px;
+        }
 
-.banner h1 {
-    font-size: 34px;
-    font-weight: 700;
-}
+        .banner h1 {
+            font-size: 34px;
+            font-weight: 700;
+        }
 
-.banner p {
-    margin-top: 10px;
-    font-size: 13px;
-    opacity: .9;
-}
+        .banner p {
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: .9;
+        }
 
-.banner img {
-    position: absolute;
-    right: 13px;
-    bottom: -24px;
-    width: 170px;
-}
+        .banner img {
+            position: absolute;
+            right: 1px;
+            bottom: 2px;
+            width: 170px;
+        }
 
-.role-badge {
-    display: inline-block;
-    margin-top: 10px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 11px;
-    font-weight: 500;
-}
+        .role-badge {
+            display: inline-block;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 11px;
+            font-weight: 500;
+        }
 
-/* ========================
+        /* ========================
    SECTION TITLE
 ======================== */
 
-.section-title {
-    padding: 0 15px;
-    margin-top: 10px;
-}
+        .section-title {
+            padding: 0 15px;
+            margin-top: 10px;
+        }
 
-.section-title h3 {
-    font-size: 24px;
-    font-weight: 600;
-}
+        .section-title h3 {
+            font-size: 24px;
+            font-weight: 600;
+        }
 
-.section-title p {
-    color: #777;
-    font-size: 13px;
-}
+        .section-title p {
+            color: #777;
+            font-size: 13px;
+        }
 
-/* ========================
+        /* ========================
    ORDER CARDS
 ======================== */
 
-.cards {
-    display: flex;
-    gap: 15px;
-    padding: 15px;
-}
+        .cards {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+        }
 
-.card {
-    flex: 1;
-    background: #fff;
-    border-radius: 18px;
-    padding: 12px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,.05);
-    cursor: pointer;
-    transition: transform .2s, box-shadow .2s;
-}
+        .card {
+            flex: 1;
+            background: var(--card);
+            color: var(--text);
+            border-radius: 18px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
 
-.card:active {
-    transform: scale(0.97);
-}
+        .card:active {
+            transform: scale(0.97);
+        }
 
-.card.green {
-    background: #f4fbf7;
-}
+        .card.green {
+            background: #f4fbf7;
+        }
 
-.card.purple {
-    background: #faf7ff;
-}
+        .card.purple {
+            background: #faf7ff;
+        }
 
-.card-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-}
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+        }
 
-.green .card-icon {
-    background: #dff5e8;
-    color: #0a9b56;
-}
+        .green .card-icon {
+            background: #dff5e8;
+            color: #0a9b56;
+        }
 
-.purple .card-icon {
-    background: #efe6ff;
-    color: #7a3cff;
-}
+        .purple .card-icon {
+            background: #efe6ff;
+            color: #7a3cff;
+        }
 
-.card h4 {
-    margin-top: 18px;
-    font-size: 19px;
-    line-height: 30px;
-}
+        .card h4 {
+            margin-top: 18px;
+            font-size: 19px;
+            line-height: 30px;
+        }
 
-.card h4 span {
-    display: block;
-}
+        .card h4 span {
+            display: block;
+        }
 
-.green h4 span {
-    color: #0a9b56;
-}
+        .green h4 span {
+            color: #0a9b56;
+        }
 
-.purple h4 span {
-    color: #7a3cff;
-}
+        .purple h4 span {
+            color: #7a3cff;
+        }
 
-.card p {
-    margin-top: 12px;
-    color: #666;
-    font-size: 13px;
-}
+        .card p {
+            margin-top: 12px;
+            color: #666;
+            font-size: 13px;
+        }
 
-.arrow-btn {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    margin: 20px auto 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 18px;
-}
+        .arrow-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            margin: 20px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+        }
 
-.green .arrow-btn {
-    background: #00897b;
-}
+        .green .arrow-btn {
+            background: #00897b;
+        }
 
-.purple .arrow-btn {
-    background: #7a3cff;
-}
+        .purple .arrow-btn {
+            background: #7a3cff;
+        }
 
-/* ========================
+        /* ========================
    DARK MODE
 ======================== */
 
-body.dark-mode {
-    background: #0f172a;
-}
+        body.dark-mode {
+            background: #0f172a;
+        }
 
-body.dark-mode .header {
-    background: #1e293b;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-}
+        body.dark-mode .header {
+            background: #1e293b;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
 
-body.dark-mode .icon-btn {
-    background: #334155;
-    color: #e2e8f0;
-}
+        body.dark-mode .icon-btn {
+            background: #334155;
+            color: #e2e8f0;
+        }
 
-body.dark-mode .icon-btn:hover {
-    background: #475569;
-    border-color: #00897b;
-}
+        body.dark-mode .icon-btn:hover {
+            background: #475569;
+            border-color: #00897b;
+        }
 
-body.dark-mode .icon-btn i {
-    color: #e2e8f0 !important;
-}
+        body.dark-mode .icon-btn i {
+            color: #e2e8f0 !important;
+        }
 
-body.dark-mode .card {
-    background: #1e293b;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
+        body.dark-mode .card {
+            background: #1e293b;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
 
-body.dark-mode .card.green {
-    background: #0f2a1e;
-}
+        body.dark-mode .card.green {
+            background: #0f2a1e;
+        }
 
-body.dark-mode .card.purple {
-    background: #1a0f2e;
-}
+        body.dark-mode .card.purple {
+            background: #1a0f2e;
+        }
 
-body.dark-mode .card p {
-    color: #94a3b8;
-}
+        body.dark-mode .card p {
+            color: #94a3b8;
+        }
 
-body.dark-mode .section-title h3 {
-    color: #f1f5f9;
-}
+        body.dark-mode .section-title h3 {
+            color: #f1f5f9;
+        }
 
-body.dark-mode .section-title p {
-    color: #64748b;
-}
+        body.dark-mode .section-title p {
+            color: #64748b;
+        }
 
-body.dark-mode .dropdown-menu {
-    background: #1e293b;
-    border-color: #334155;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-}
+        body.dark-mode .dropdown-menu {
+            background: #1e293b;
+            border-color: #334155;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
 
-body.dark-mode .drop-header {
-    border-bottom-color: #334155;
-}
+        body.dark-mode .drop-header {
+            border-bottom-color: #334155;
+        }
 
-body.dark-mode .drop-header h4 {
-    color: #f1f5f9;
-}
+        body.dark-mode .drop-header h4 {
+            color: #f1f5f9;
+        }
 
-body.dark-mode .drop-item:hover {
-    background: #273449;
-}
+        body.dark-mode .drop-item:hover {
+            background: #273449;
+        }
 
-body.dark-mode .drop-info strong {
-    color: #f1f5f9;
-}
+        body.dark-mode .drop-info strong {
+            color: #f1f5f9;
+        }
 
-body.dark-mode .drop-divider {
-    background: #334155;
-}
+        body.dark-mode .drop-divider {
+            background: #334155;
+        }
 
-</style>
+        .visit-card {
+            margin: 15px;
+            padding: 15px;
+            background: #00897b;
+            color: #fff;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            transition: 0.2s;
+        }
+
+        .visit-card:hover {
+            transform: scale(1.02);
+        }
+
+        .visit-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .visit-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .visit-card h3 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .visit-card p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .visit-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="topbar">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="topbar">
 
-            <!-- LOGO (hamburger removed) -->
-           <a href="https://order-management-petro.netlify.app/"> <img src="/images/logo.webp" class="logo" alt="Petro ERP"></a>
+                <!-- LOGO (hamburger removed) -->
+                <a href="https://order-management-petro.netlify.app/"> <img src="/images/logo.webp" class="logo"
+                        alt="Petro ERP"></a>
 
-            <!-- RIGHT ICONS -->
-            <div class="right-icons">
+                <!-- RIGHT ICONS -->
+                <div class="right-icons">
 
-                <!-- Theme Toggle -->
-                <div class="icon-btn" id="themeBtn" title="Toggle Theme">
-                    <i class="fa-solid fa-sun" id="themeIcon"></i>
-                </div>
-
-                <!-- User Dropdown -->
-                <div class="dropdown-wrap">
-                    <div class="icon-btn" id="userBtn" title="Select Role">
-                        <i class="fa-regular fa-user" id="userIcon"></i>
+                    <!-- Theme Toggle -->
+                    <div class="icon-btn" id="themeBtn" title="Toggle Theme">
+                        <i class="fa-solid fa-sun" id="themeIcon"></i>
                     </div>
 
-                    <div class="dropdown-menu" id="dropMenu">
-
-                        <div class="drop-header">
-                            <p>Switch Role</p>
-                            <h4 id="activeRoleName">Select a role</h4>
+                    <!-- User Dropdown -->
+                    <div class="dropdown-wrap">
+                        <div class="icon-btn" id="userBtn" title="Select Role">
+                            <i class="fa-regular fa-user" id="userIcon"></i>
                         </div>
 
-                        <div class="drop-item admin" id="adminItem" onclick="selectRole('admin')">
-                            <div class="drop-icon">
-                                <i class="fa-solid fa-shield-halved"></i>
+                        <div class="dropdown-menu" id="dropMenu">
+
+                            <div class="drop-header">
+                                <p>Switch Role</p>
+                                <h4 id="activeRoleName">Select a role</h4>
                             </div>
-                            <a href="admin-dashboard.html"><div class="drop-info">
-                                <strong>Admin</strong>
-                                <span>Full access &amp; controls</span>
-                            </div></a>
-                            <i class="fa-solid fa-check drop-check"></i>
-                        </div>
 
-                        <div class="drop-divider"></div>
-
-                        <div class="drop-item sales" id="salesItem" onclick="selectRole('salesman')">
-                            <div class="drop-icon">
-                                <i class="fa-solid fa-briefcase"></i>
+                            <div class="drop-item admin" id="adminItem" onclick="selectRole('admin')">
+                                <div class="drop-icon">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <a href="admin-dashboard.html">
+                                    <div class="drop-info">
+                                        <strong>Admin</strong>
+                                    </div>
+                                </a>
+                                <i class="fa-solid fa-check drop-check"></i>
                             </div>
-                           <a href="sales-dashboard.html"> <div class="drop-info">
-                                <strong>Salesman</strong>
-                                <span>Order &amp; quotation access</span>
-                            </div></a>
-                            <i class="fa-solid fa-check drop-check"></i>
-                        </div>
 
+                            <div class="drop-divider"></div>
+
+                            <div class="drop-item sales" id="salesItem" onclick="selectRole('salesman')">
+                                <div class="drop-icon">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                </div>
+                                <a href="sales-dashboard.html">
+                                    <div class="drop-info">
+                                        <strong>Salesman</strong>
+                                    </div>
+                                </a>
+                                <i class="fa-solid fa-check drop-check"></i>
+                            </div>
+
+                        </div>
                     </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- BANNER -->
+        <div class="banner">
+            <div class="banner-content">
+                <h2 id="greetText">Good Morning,</h2>
+                <p>Let's take care of your orders today.</p>
+                <div class="role-badge" id="roleBadge">No Role Selected</div>
+            </div>
+            <img src="images/012.png" alt="Truck">
+        </div>
+
+        <!-- =======================
+     SALES VISIT FORM CARD
+======================= -->
+        <div class="visit-card" onclick="openSalesVisit()">
+
+            <div class="visit-left">
+                <div class="visit-icon">
+                    <i class="fa-solid fa-briefcase"></i>
                 </div>
 
+                <div>
+                    <h3>Sales Visit Form</h3>
+                    <p>Record customer visits & meeting details</p>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- BANNER -->
-    <div class="banner">
-        <div class="banner-content">
-            <h2 id="greetText">Good Morning,</h2> 
-            <p>Let's take care of your orders today.</p>
-            <div class="role-badge" id="roleBadge">No Role Selected</div>
-        </div>
-        <img src="images/001.png" alt="Truck">
-    </div>
-
-    <!-- TITLE -->
-    <div class="section-title">
-        <h3>CREATE NEW ORDER</h3>
-        <p>Choose how you want to create a new order</p>
-    </div>
-
-    <!-- CARDS -->
-    <div class="cards">
-
-        <div class="card green" id="withoutImageBtn">
-            <div class="card-icon">
-                <i class="fa-regular fa-file-lines"></i>
-            </div>
-            <h4>
-                Order Create
-                <span>Without Image</span>
-            </h4>
-            <p>Quick order entry without images</p>
-            <div class="arrow-btn">
+            <div class="visit-action">
                 <i class="fa-solid fa-arrow-right"></i>
             </div>
+
         </div>
 
-        <div class="card purple" id="withImageBtn">
-            <div class="card-icon">
-                <i class="fa-regular fa-image"></i>
+        <!-- TITLE -->
+        <div class="section-title">
+            <h3>CREATE NEW ORDER</h3>
+            <p>Choose how you want to create a new order</p>
+        </div>
+
+        <!-- CARDS -->
+        <div class="cards">
+
+            <div class="card green" id="withoutImageBtn">
+                <div class="card-icon">
+                    <i class="fa-regular fa-file-lines"></i>
+                </div>
+                <h4>
+                    Order Create
+                    <span>Without Image</span>
+                </h4>
+                <p>Quick order entry without images</p>
+                <div class="arrow-btn">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
             </div>
-            <h4>
-                Order Create
-                <span>With Image</span>
-            </h4>
-            <p>Add product images with your order</p>
-            <div class="arrow-btn">
-                <i class="fa-solid fa-arrow-right"></i>
+
+            <div class="card purple" id="withImageBtn">
+                <div class="card-icon">
+                    <i class="fa-regular fa-image"></i>
+                </div>
+                <h4>
+                    Order Create
+                    <span>With Image</span>
+                </h4>
+                <p>Add product images with your order</p>
+                <div class="arrow-btn">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
             </div>
+
         </div>
 
     </div>
 
-</div>
+    <script>
 
-<script>
+        // =========================
+        // ROLE SELECTION
+        // =========================
 
-// =========================
-// ROLE SELECTION
-// =========================
+        function selectRole(role) {
+            localStorage.setItem('erp_role', role);
 
-function selectRole(role) {
-    localStorage.setItem('erp_role', role);
+            document.querySelectorAll('.drop-item').forEach(i => i.classList.remove('active-role'));
 
-    document.querySelectorAll('.drop-item').forEach(i => i.classList.remove('active-role'));
+            if (role === 'admin') {
+                document.getElementById('adminItem').classList.add('active-role');
+                document.getElementById('activeRoleName').textContent = 'Admin';
+                document.getElementById('roleBadge').textContent = '🛡️ Admin Mode';
+                document.getElementById('userIcon').style.color = '#1565c0';
+            } else {
+                document.getElementById('salesItem').classList.add('active-role');
+                document.getElementById('activeRoleName').textContent = 'Salesman';
+                document.getElementById('roleBadge').textContent = '💼 Salesman Mode';
+                document.getElementById('userIcon').style.color = '#00897b';
+            }
 
-    if (role === 'admin') {
-        document.getElementById('adminItem').classList.add('active-role');
-        document.getElementById('activeRoleName').textContent = 'Admin';
-        document.getElementById('roleBadge').textContent = '🛡️ Admin Mode';
-        document.getElementById('userIcon').style.color = '#1565c0';
-    } else {
-        document.getElementById('salesItem').classList.add('active-role');
-        document.getElementById('activeRoleName').textContent = 'Salesman';
-        document.getElementById('roleBadge').textContent = '💼 Salesman Mode';
-        document.getElementById('userIcon').style.color = '#00897b';
-    }
+            document.getElementById('dropMenu').classList.remove('open');
+        }
 
-    document.getElementById('dropMenu').classList.remove('open');
-}
+        // Init role from localStorage
+        const savedRole = localStorage.getItem('erp_role');
+        if (savedRole) selectRole(savedRole);
 
-// Init role from localStorage
-const savedRole = localStorage.getItem('erp_role');
-if (savedRole) selectRole(savedRole);
+        // =========================
+        // DROPDOWN TOGGLE
+        // =========================
 
-// =========================
-// DROPDOWN TOGGLE
-// =========================
+        document.getElementById('userBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('dropMenu').classList.toggle('open');
+        });
 
-document.getElementById('userBtn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    document.getElementById('dropMenu').classList.toggle('open');
-});
+        document.addEventListener('click', () => {
+            document.getElementById('dropMenu').classList.remove('open');
+        });
 
-document.addEventListener('click', () => {
-    document.getElementById('dropMenu').classList.remove('open');
-});
+        // =========================
+        // DARK MODE TOGGLE
+        // =========================
 
-// =========================
-// DARK MODE TOGGLE
-// =========================
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
 
-const themeBtn = document.getElementById('themeBtn');
-const themeIcon = document.getElementById('themeIcon');
+        if (localStorage.getItem('erp_theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+        }
 
-if (localStorage.getItem('erp_theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeIcon.classList.replace('fa-sun', 'fa-moon');
-}
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeIcon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
+            localStorage.setItem('erp_theme', isDark ? 'dark' : 'light');
+        });
 
-themeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    themeIcon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
-    localStorage.setItem('erp_theme', isDark ? 'dark' : 'light');
-});
+        // =========================
+        // GREETING
+        // =========================
 
-// =========================
-// GREETING
-// =========================
+        const hour = new Date().getHours();
+        const greetEl = document.getElementById('greetText');
+        if (hour < 12) greetEl.textContent = 'Good Morning,';
+        else if (hour < 17) greetEl.textContent = 'Good Afternoon,';
+        else greetEl.textContent = 'Good Evening,';
 
-const hour = new Date().getHours();
-const greetEl = document.getElementById('greetText');
-if (hour < 12) greetEl.textContent = 'Good Morning,';
-else if (hour < 17) greetEl.textContent = 'Good Afternoon,';
-else greetEl.textContent = 'Good Evening,';
+        // =========================
+        // USERNAME
+        // =========================
 
-// =========================
-// USERNAME
-// =========================
+        const username = localStorage.getItem('username');
+        if (username) {
+            document.getElementById('userName').innerHTML = username + ' 👋';
+        }
 
-const username = localStorage.getItem('username');
-if (username) {
-    document.getElementById('userName').innerHTML = username + ' 👋';
-}
+        // =========================
+        // CARD NAVIGATION
+        // =========================
 
-// =========================
-// CARD NAVIGATION
-// =========================
+        document.getElementById('withoutImageBtn').addEventListener('click', () => {
+            window.location.href = 'index1.html';
+        });
 
-document.getElementById('withoutImageBtn').addEventListener('click', () => {
-    window.location.href = 'index1.html';
-});
+        document.getElementById('withImageBtn').addEventListener('click', () => {
+            window.location.href = '/E-commerce/index1.html';
+        });
 
-document.getElementById('withImageBtn').addEventListener('click', () => {
-    window.location.href = '/E-commerce/index1.html';
-});
+        // =========================
+        // CARD TOUCH EFFECT
+        // =========================
 
-// =========================
-// CARD TOUCH EFFECT
-// =========================
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('touchstart', () => card.style.transform = 'scale(0.97)');
+            card.addEventListener('touchend', () => card.style.transform = 'scale(1)');
+        });
 
-document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('touchstart', () => card.style.transform = 'scale(0.97)');
-    card.addEventListener('touchend', () => card.style.transform = 'scale(1)');
-});
+        // =========================
+        // LOAD ANIMATION
+        // =========================
 
-// =========================
-// LOAD ANIMATION
-// =========================
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0px)';
+                }, index * 150);
+            });
+        });
+        function openSalesVisit() {
+            window.location.href = "https://petro-sales-eod.netlify.app/";
+        }
 
-window.addEventListener('load', () => {
-    document.querySelectorAll('.card').forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        setTimeout(() => {
-            card.style.transition = 'all 0.4s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0px)';
-        }, index * 150);
-    });
-});
-
-</script><script src="usage-tracker.js"></script>
+    </script>
+    <script src="usage-tracker.js"></script>
 </body>
+
 </html>
