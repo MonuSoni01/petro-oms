@@ -1978,6 +1978,568 @@ window.itemMaster = {
       CTN: { rate: 1140 * 68 }
     },
     photo: "/images/products/stainlesssteel/1348.webp"
+  }, "1251": {
+    name: "SS Toilet Paper Holder",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 970 },
+      BOX: { rate: 970 * 1 },
+      CTN: { rate: 970 * 81 }
+    },
+    photo: "/images/products/stainlesssteel/1251.webp"
   },
 
+  "1252": {
+    name: "SS Single Soap Dish",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 760 },
+      BOX: { rate: 760 * 2 },
+      CTN: { rate: 760 * 320 }
+    },
+    photo: "/images/products/stainlesssteel/1252.webp"
+  },
+
+  "1259": {
+    name: "SS Double Soap Dish",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1160 },
+      BOX: { rate: 1160 * 2 },
+      CTN: { rate: 1160 * 160 }
+    },
+    photo: "/images/products/stainlesssteel/1259.webp"
+  },
+
+  "1260": {
+    name: "SS Soap Dish + Tumbler Holder",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1350 },
+      BOX: { rate: 1350 * 2 },
+      CTN: { rate: 1350 * 80 }
+    },
+    photo: "/images/products/stainlesssteel/1260.webp"
+  },
+
+  "1253": {
+    name: "SS Robe Hook",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 460 },
+      BOX: { rate: 460 * 6 },
+      CTN: { rate: 460 * 72 }
+    },
+    photo: "/images/products/stainlesssteel/1253.webp"
+  },
+
+  "1254": {
+    name: "SS Tumbler Holder",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 930 },
+      BOX: { rate: 930 * 2 },
+      CTN: { rate: 930 * 160 }
+    },
+    photo: "/images/products/stainlesssteel/1254.webp"
+  },
+
+  "1255": {
+    name: "SS Towel Ring Round",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 700 },
+      BOX: { rate: 700 * 2 },
+      CTN: { rate: 700 * 160 }
+    },
+    photo: "/images/products/stainlesssteel/1255.webp"
+  },
+
+  "1258": {
+    name: "SS Glass Soap Dispenser",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1050 },
+      BOX: { rate: 1050 * 1 },
+      CTN: { rate: 1050 * 160 }
+    },
+    photo: "/images/products/stainlesssteel/1258.webp"
+  },
+
+  "1262": {
+    name: "SS Towel Rod (24\")",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1030 },
+      BOX: { rate: 1030 * 2 },
+      CTN: { rate: 1030 * 12 }
+    },
+    photo: "/images/products/stainlesssteel/1262.webp"
+  },
+
+  "1266": {
+    name: "SS Towel Rack With Hook (24\")",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 3540 },
+      BOX: { rate: 3540 * 1 },
+      CTN: { rate: 3540 * 12 }
+    },
+    photo: "/images/products/stainlesssteel/1266.webp"
+  },
+"1276": {
+  name: "SS Toilet Paper Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1010 },
+    BOX: { rate: 1010 * 1 },
+    CTN: { rate: 1010 * 81 }
+  },
+  photo: "/images/products/stainlesssteel/1276.webp"
+},
+
+"1277": {
+  name: "SS Single Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 720 },
+    BOX: { rate: 720 * 2 },
+    CTN: { rate: 720 * 320 }
+  },
+  photo: "/images/products/stainlesssteel/1277.webp"
+},
+
+"1284": {
+  name: "SS Glass Soap Dispenser",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1050 },
+    BOX: { rate: 1050 * 2 },
+    CTN: { rate: 1050 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1284.webp"
+},
+
+"1285": {
+  name: "SS Double Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1200 },
+    BOX: { rate: 1200 * 2 },
+    CTN: { rate: 1200 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1285.webp"
+},
+
+"1278": {
+  name: "SS Robe Hook",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 510 },
+    BOX: { rate: 510 * 6 },
+    CTN: { rate: 510 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1278.webp"
+},
+
+"1279": {
+  name: "SS Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 950 },
+    BOX: { rate: 950 * 2 },
+    CTN: { rate: 950 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1279.webp"
+},
+
+"1286": {
+  name: "SS Soap Dish + Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1430 },
+    BOX: { rate: 1430 * 2 },
+    CTN: { rate: 1430 * 80 }
+  },
+  photo: "/images/products/stainlesssteel/1286.webp"
+},
+
+"1288": {
+  name: "SS Towel Rod (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1140 },
+    BOX: { rate: 1140 * 2 },
+    CTN: { rate: 1140 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1288.webp"
+},
+
+"1280": {
+  name: "SS Towel Ring Rod",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 740 },
+    BOX: { rate: 740 * 2 },
+    CTN: { rate: 740 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1280.webp"
+},
+
+"1281": {
+  name: "SS Towel Ring Rectangle",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 950 },
+    BOX: { rate: 950 * 2 },
+    CTN: { rate: 950 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1281.webp"
+},
+
+"1292": {
+  name: "SS Towel Rack With Hook (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 3290 },
+    BOX: { rate: 3290 * 1 },
+    CTN: { rate: 3290 * 12 }
+  },
+  photo: "/images/products/stainlesssteel/1292.webp"
+},"1351": {
+  name: "SS Toilet Paper Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1010 },
+    BOX: { rate: 1010 * 1 },
+    CTN: { rate: 1010 * 81 }
+  },
+  photo: "/images/products/stainlesssteel/1351.webp"
+},
+
+"1352": {
+  name: "SS Single Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 720 },
+    BOX: { rate: 720 * 2 },
+    CTN: { rate: 720 * 320 }
+  },
+  photo: "/images/products/stainlesssteel/1352.webp"
+},
+
+"1360": {
+  name: "SS Glass Soap Dispenser",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1810 },
+    BOX: { rate: 1810 * 1 },
+    CTN: { rate: 1810 * 40 }
+  },
+  photo: "/images/products/stainlesssteel/1360.webp"
+},
+
+"1361": {
+  name: "SS Double Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1200 },
+    BOX: { rate: 1200 * 2 },
+    CTN: { rate: 1200 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1361.webp"
+},
+
+"1353": {
+  name: "SS Robe Hook",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 550 },
+    BOX: { rate: 550 * 6 },
+    CTN: { rate: 550 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1353.webp"
+},
+
+"1354": {
+  name: "SS Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 950 },
+    BOX: { rate: 950 * 2 },
+    CTN: { rate: 950 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1354.webp"
+},
+
+"1363": {
+  name: "SS Soap Dish + Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1430 },
+    BOX: { rate: 1430 * 2 },
+    CTN: { rate: 1430 * 80 }
+  },
+  photo: "/images/products/stainlesssteel/1363.webp"
+},
+
+"1365": {
+  name: "SS Towel Rod (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1310 },
+    BOX: { rate: 1310 * 2 },
+    CTN: { rate: 1310 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1365.webp"
+},
+
+"1355": {
+  name: "SS Towel Ring Rod",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 800 },
+    BOX: { rate: 800 * 2 },
+    CTN: { rate: 800 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1355.webp"
+},
+
+"1356": {
+  name: "SS Towel Ring Rectangle",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1010 },
+    BOX: { rate: 1010 * 2 },
+    CTN: { rate: 1010 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1356.webp"
+},
+
+"1369": {
+  name: "SS Towel Rack With Hook (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 3880 },
+    BOX: { rate: 3880 * 1 },
+    CTN: { rate: 3880 * 12 }
+  },
+  photo: "/images/products/stainlesssteel/1369.webp"
+},"1376": {
+  name: "SS Toilet Paper Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1100 },
+    BOX: { rate: 1100 * 1 },
+    CTN: { rate: 1100 * 81 }
+  },
+  photo: "/images/products/stainlesssteel/1376.webp"
+},
+
+"1377": {
+  name: "SS Single Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 760 },
+    BOX: { rate: 760 * 2 },
+    CTN: { rate: 760 * 320 }
+  },
+  photo: "/images/products/stainlesssteel/1377.webp"
+},
+
+"1384": {
+  name: "SS Double Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1180 },
+    BOX: { rate: 1180 * 2 },
+    CTN: { rate: 1180 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1384.webp"
+},
+
+"1385": {
+  name: "SS Soap Dish + Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1480 },
+    BOX: { rate: 1480 * 2 },
+    CTN: { rate: 1480 * 80 }
+  },
+  photo: "/images/products/stainlesssteel/1385.webp"
+},
+
+"1378": {
+  name: "SS Robe Hook",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 590 },
+    BOX: { rate: 590 * 6 },
+    CTN: { rate: 590 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1378.webp"
+},
+
+"1379": {
+  name: "SS Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 950 },
+    BOX: { rate: 950 * 2 },
+    CTN: { rate: 950 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1379.webp"
+},
+
+"1387": {
+  name: "SS Towel Rod (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1430 },
+    BOX: { rate: 1430 * 2 },
+    CTN: { rate: 1430 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1387.webp"
+},
+
+"1380": {
+  name: "SS Towel Ring Rod",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 840 },
+    BOX: { rate: 840 * 2 },
+    CTN: { rate: 840 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1380.webp"
+},
+
+"1383": {
+  name: "SS Glass Soap Dispenser",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1100 },
+    BOX: { rate: 1100 * 1 },
+    CTN: { rate: 1100 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1383.webp"
+},
+
+"1391": {
+  name: "SS Towel Rack With Hook (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 3370 },
+    BOX: { rate: 3370 * 1 },
+    CTN: { rate: 3370 * 12 }
+  },
+  photo: "/images/products/stainlesssteel/1391.webp"
+},"1376": {
+  name: "SS Toilet Paper Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1100 },
+    BOX: { rate: 1100 * 1 },
+    CTN: { rate: 1100 * 81 }
+  },
+  photo: "/images/products/stainlesssteel/1376.webp"
+},
+
+"1377": {
+  name: "SS Single Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 760 },
+    BOX: { rate: 760 * 2 },
+    CTN: { rate: 760 * 320 }
+  },
+  photo: "/images/products/stainlesssteel/1377.webp"
+},
+
+"1384": {
+  name: "SS Double Soap Dish",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1180 },
+    BOX: { rate: 1180 * 2 },
+    CTN: { rate: 1180 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1384.webp"
+},
+
+"1385": {
+  name: "SS Soap Dish + Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1480 },
+    BOX: { rate: 1480 * 2 },
+    CTN: { rate: 1480 * 80 }
+  },
+  photo: "/images/products/stainlesssteel/1385.webp"
+},
+
+"1378": {
+  name: "SS Robe Hook",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 590 },
+    BOX: { rate: 590 * 6 },
+    CTN: { rate: 590 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1378.webp"
+},
+
+"1379": {
+  name: "SS Tumbler Holder",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 950 },
+    BOX: { rate: 950 * 2 },
+    CTN: { rate: 950 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1379.webp"
+},
+
+"1387": {
+  name: "SS Towel Rod (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1430 },
+    BOX: { rate: 1430 * 2 },
+    CTN: { rate: 1430 * 72 }
+  },
+  photo: "/images/products/stainlesssteel/1387.webp"
+},
+
+"1380": {
+  name: "SS Towel Ring Rod",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 840 },
+    BOX: { rate: 840 * 2 },
+    CTN: { rate: 840 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1380.webp"
+},
+
+"1383": {
+  name: "SS Glass Soap Dispenser",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 1100 },
+    BOX: { rate: 1100 * 1 },
+    CTN: { rate: 1100 * 160 }
+  },
+  photo: "/images/products/stainlesssteel/1383.webp"
+},
+
+"1391": {
+  name: "SS Towel Rack With Hook (24\")",
+  category: "stainlesssteel",
+  units: {
+    PCS: { rate: 3370 },
+    BOX: { rate: 3370 * 1 },
+    CTN: { rate: 3370 * 12 }
+  },
+  photo: "/images/products/stainlesssteel/1391.webp"
+},
 };
