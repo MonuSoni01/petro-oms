@@ -1,6 +1,18 @@
 let orders = [];
 let productOrders = [];
 
+let allOrdersCache = [];
+let currentPage = 1;
+let rowsPerPage = 10;
+let currentSearchQuery = "";
+
+let currentStatusFilter = "";
+let currentBillFilter = "";
+let currentDateFromFilter = "";
+let currentDateToFilter = "";
+let currentMinAmountFilter = "";
+let currentMaxAmountFilter = "";
+
 /* -------------------------------------
    FIREBASE INIT
 -------------------------------------- */
@@ -77,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "Amit Soni": "AS",
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
-    "Rup Ranjan Bora": "RRB", 
+    "Rup Ranjan Bora": "RRB",
     "Mahesh Kumar": "MK",
   };
 
@@ -208,28 +220,42 @@ function fetchProductOrders(prefix) {
 -------------------------------------- */
 function mergeAndRender() {
 
-  let allOrders = [
+  allOrdersCache = [
     ...orders,
     ...productOrders
   ];
 
   // Sort latest first
-  allOrders.sort((a, b) => {
-    const aTime = a.savedAt?.seconds || a.savedAt?.toDate?.().getTime() / 1000 || 0;
-    const bTime = b.savedAt?.seconds || b.savedAt?.toDate?.().getTime() / 1000 || 0;
+  allOrdersCache.sort((a, b) => {
+
+    const aTime =
+      a.savedAt?.seconds ||
+      a.savedAt?.toDate?.().getTime() / 1000 ||
+      0;
+
+    const bTime =
+      b.savedAt?.seconds ||
+      b.savedAt?.toDate?.().getTime() / 1000 ||
+      0;
+
     return bTime - aTime;
+
   });
 
-  // Dashboard counts (orders + productOrders dono ka)
-  const total = allOrders.length;
-  const pending = allOrders.filter(o => o.status !== "Delivered").length;
-  const delivered = allOrders.filter(o => o.status === "Delivered").length;
+  // Dashboard counts
+  const total = allOrdersCache.length;
+
+  const pending =
+    allOrdersCache.filter(o => o.status !== "Delivered").length;
+
+  const delivered =
+    allOrdersCache.filter(o => o.status === "Delivered").length;
 
   document.getElementById("totalOrders").innerText = total;
   document.getElementById("pendingOrders").innerText = pending;
   document.getElementById("deliveredOrders").innerText = delivered;
 
-  renderOrders(allOrders);
+  applySearchAndPagination();
 
 }
 
@@ -616,7 +642,7 @@ function uploadBillToGoogleDrive(file, orderId, orderNo) {
   });
 }
 
- function saveDeliveredOrder(orderId, source) {
+function saveDeliveredOrder(orderId, source) {
 
   source = source || "orders";
 
@@ -932,27 +958,473 @@ function closeModal() {
 }
 
 /* -------------------------------------
-   SEARCH
+   SEARCH + PAGINATION EVENTS
+-------------------------------------- */
+/* -------------------------------------
+   SEARCH + FILTER + PAGINATION EVENTS
 -------------------------------------- */
 document.addEventListener("input", function (e) {
 
-  if (e.target.id !== "orderSearch") return;
+  if (e.target.id === "orderSearch") {
 
-  const q = e.target.value.toLowerCase();
+    currentSearchQuery =
+      e.target.value.trim().toLowerCase();
 
-  const allOrders = [...orders, ...productOrders];
+    currentPage = 1;
 
-  const filtered = allOrders.filter(o => {
-    return (
-      o.orderNo?.toLowerCase().includes(q) ||
-      o.party?.name?.toLowerCase().includes(q)
-    );
-  });
+    applySearchAndPagination();
 
-  renderOrders(filtered);
+    return;
+  }
+
+  if (e.target.id === "minAmountFilter") {
+
+    currentMinAmountFilter =
+      e.target.value.trim();
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
+
+  if (e.target.id === "maxAmountFilter") {
+
+    currentMaxAmountFilter =
+      e.target.value.trim();
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
 
 });
 
+document.addEventListener("change", function (e) {
+
+  if (e.target.id === "rowsPerPage") {
+
+    rowsPerPage = Number(e.target.value) || 10;
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
+
+  if (e.target.id === "statusFilter") {
+
+    currentStatusFilter =
+      e.target.value;
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
+
+  if (e.target.id === "billFilter") {
+
+    currentBillFilter =
+      e.target.value;
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
+
+  if (e.target.id === "dateFromFilter") {
+
+    currentDateFromFilter =
+      e.target.value;
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
+
+  if (e.target.id === "dateToFilter") {
+
+    currentDateToFilter =
+      e.target.value;
+
+    currentPage = 1;
+
+    applySearchAndPagination();
+
+    return;
+  }
+
+});
+
+document.addEventListener("click", function (e) {
+
+  const prevBtn =
+    e.target.closest("#prevPageBtn");
+
+  const nextBtn =
+    e.target.closest("#nextPageBtn");
+
+  const pageBtn =
+    e.target.closest(".page-number-btn");
+
+  const resetBtn =
+    e.target.closest("#resetFiltersBtn");
+
+  if (resetBtn) {
+
+    resetAllFilters();
+
+    return;
+  }
+
+  if (prevBtn) {
+
+    if (currentPage > 1) {
+      currentPage--;
+      applySearchAndPagination();
+    }
+
+    return;
+  }
+
+  if (nextBtn) {
+
+    const totalFiltered =
+      getFilteredOrders().length;
+
+    const totalPages =
+      Math.ceil(totalFiltered / rowsPerPage) || 1;
+
+    if (currentPage < totalPages) {
+      currentPage++;
+      applySearchAndPagination();
+    }
+
+    return;
+  }
+
+  if (pageBtn) {
+
+    const page =
+      Number(pageBtn.dataset.page);
+
+    if (page) {
+      currentPage = page;
+      applySearchAndPagination();
+    }
+
+  }
+
+});
+
+/* -------------------------------------
+   RESET ALL FILTERS
+-------------------------------------- */
+function resetAllFilters() {
+
+  currentSearchQuery = "";
+  currentStatusFilter = "";
+  currentBillFilter = "";
+  currentDateFromFilter = "";
+  currentDateToFilter = "";
+  currentMinAmountFilter = "";
+  currentMaxAmountFilter = "";
+
+  currentPage = 1;
+
+  const orderSearch =
+    document.getElementById("orderSearch");
+
+  const statusFilter =
+    document.getElementById("statusFilter");
+
+  const billFilter =
+    document.getElementById("billFilter");
+
+  const dateFromFilter =
+    document.getElementById("dateFromFilter");
+
+  const dateToFilter =
+    document.getElementById("dateToFilter");
+
+  const minAmountFilter =
+    document.getElementById("minAmountFilter");
+
+  const maxAmountFilter =
+    document.getElementById("maxAmountFilter");
+
+  if (orderSearch) orderSearch.value = "";
+  if (statusFilter) statusFilter.value = "";
+  if (billFilter) billFilter.value = "";
+  if (dateFromFilter) dateFromFilter.value = "";
+  if (dateToFilter) dateToFilter.value = "";
+  if (minAmountFilter) minAmountFilter.value = "";
+  if (maxAmountFilter) maxAmountFilter.value = "";
+
+  applySearchAndPagination();
+
+}
+/* -------------------------------------
+   GET FILTERED ORDERS
+-------------------------------------- */
+/* -------------------------------------
+   GET ORDER DATE VALUE
+-------------------------------------- */
+function getOrderDateValue(o) {
+
+  if (o.savedAt?.toDate) {
+    return o.savedAt.toDate();
+  }
+
+  if (o.savedAt?.seconds) {
+    return new Date(o.savedAt.seconds * 1000);
+  }
+
+  if (o.createdAt?.toDate) {
+    return o.createdAt.toDate();
+  }
+
+  if (o.orderDate) {
+    const parsedDate = new Date(o.orderDate);
+
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate;
+    }
+  }
+
+  return null;
+
+}
+
+/* -------------------------------------
+   GET FILTERED ORDERS
+-------------------------------------- */
+function getFilteredOrders() {
+
+  const q =
+    currentSearchQuery || "";
+
+  return allOrdersCache.filter(o => {
+
+    const orderNo =
+      String(o.orderNo || "").toLowerCase();
+
+    const partyName =
+      String(o.party?.name || "").toLowerCase();
+
+    const mobile =
+      String(o.party?.mobile || "").toLowerCase();
+
+    const status =
+      String(o.status || "Pending");
+
+    const grandTotal =
+      Number(o.grandTotal || 0);
+
+    const hasBill =
+      Boolean(o.billImage || o.billUrl);
+
+    /* SEARCH FILTER */
+    const searchMatch =
+      !q ||
+      orderNo.includes(q) ||
+      partyName.includes(q) ||
+      mobile.includes(q);
+
+    if (!searchMatch) {
+      return false;
+    }
+
+    /* STATUS FILTER */
+    if (
+      currentStatusFilter &&
+      status !== currentStatusFilter
+    ) {
+      return false;
+    }
+
+    /* BILL FILTER */
+    if (currentBillFilter === "uploaded" && !hasBill) {
+      return false;
+    }
+
+    if (currentBillFilter === "pending" && hasBill) {
+      return false;
+    }
+
+    /* AMOUNT FILTER */
+    if (
+      currentMinAmountFilter &&
+      grandTotal < Number(currentMinAmountFilter)
+    ) {
+      return false;
+    }
+
+    if (
+      currentMaxAmountFilter &&
+      grandTotal > Number(currentMaxAmountFilter)
+    ) {
+      return false;
+    }
+
+    /* DATE FILTER */
+    const orderDate =
+      getOrderDateValue(o);
+
+    if (currentDateFromFilter) {
+
+      if (!orderDate) {
+        return false;
+      }
+
+      const fromDate =
+        new Date(currentDateFromFilter + "T00:00:00");
+
+      if (orderDate < fromDate) {
+        return false;
+      }
+
+    }
+
+    if (currentDateToFilter) {
+
+      if (!orderDate) {
+        return false;
+      }
+
+      const toDate =
+        new Date(currentDateToFilter + "T23:59:59");
+
+      if (orderDate > toDate) {
+        return false;
+      }
+
+    }
+
+    return true;
+
+  });
+
+}
+
+/* -------------------------------------
+   APPLY SEARCH + PAGINATION
+-------------------------------------- */
+function applySearchAndPagination() {
+
+  const filtered =
+    getFilteredOrders();
+
+  const totalRecords =
+    filtered.length;
+
+  const totalPages =
+    Math.ceil(totalRecords / rowsPerPage) || 1;
+
+  if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
+
+  if (currentPage < 1) {
+    currentPage = 1;
+  }
+
+  const startIndex =
+    (currentPage - 1) * rowsPerPage;
+
+  const endIndex =
+    startIndex + rowsPerPage;
+
+  const pageData =
+    filtered.slice(startIndex, endIndex);
+
+  renderOrders(pageData);
+
+  renderPagination(totalRecords, startIndex);
+
+}
+
+/* -------------------------------------
+   RENDER PAGINATION
+-------------------------------------- */
+function renderPagination(totalRecords, startIndex) {
+
+  const info =
+    document.getElementById("paginationInfo");
+
+  const pageNumbers =
+    document.getElementById("pageNumbers");
+
+  const prevBtn =
+    document.getElementById("prevPageBtn");
+
+  const nextBtn =
+    document.getElementById("nextPageBtn");
+
+  if (!info || !pageNumbers || !prevBtn || !nextBtn) {
+    return;
+  }
+
+  const totalPages =
+    Math.ceil(totalRecords / rowsPerPage) || 1;
+
+  const from =
+    totalRecords === 0 ? 0 : startIndex + 1;
+
+  const to =
+    Math.min(startIndex + rowsPerPage, totalRecords);
+
+  info.innerText =
+    `Showing ${from} to ${to} of ${totalRecords} orders`;
+
+  prevBtn.disabled =
+    currentPage <= 1;
+
+  nextBtn.disabled =
+    currentPage >= totalPages;
+
+  let html = "";
+
+  let startPage =
+    Math.max(1, currentPage - 2);
+
+  let endPage =
+    Math.min(totalPages, currentPage + 2);
+
+  if (currentPage <= 3) {
+    endPage = Math.min(5, totalPages);
+  }
+
+  if (currentPage >= totalPages - 2) {
+    startPage = Math.max(1, totalPages - 4);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+
+    html += `
+
+      <button class="page-number-btn ${i === currentPage ? "active" : ""}"
+              data-page="${i}">
+        ${i}
+      </button>
+
+    `;
+
+  }
+
+  pageNumbers.innerHTML = html;
+
+}
 /* -------------------------------------
    RENDER ORDERS
 -------------------------------------- */
@@ -1178,7 +1650,7 @@ function renderOrders(list) {
 
 <tr>
 
-  <td colspan="8"
+  <td colspan="7"
       style="
       text-align:center;
       padding:30px;

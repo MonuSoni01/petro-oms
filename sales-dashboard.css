@@ -4101,3 +4101,229 @@ tbody select {
         font-size:13px;
     }
 }
+
+/* ================================
+   MY ORDERS PAGINATION
+================================ */
+
+.myq-pagination-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.pagination-left {
+    font-size: 14px;
+    font-weight: 700;
+    color: #374151;
+}
+
+.pagination-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pagination-select {
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #fff;
+    color: #111827;
+    outline: none;
+}
+
+.pagination-btn,
+.page-number-btn {
+    height: 38px;
+    min-width: 38px;
+    padding: 0 12px;
+    border: none;
+    border-radius: 10px;
+    background: #f3f4f6;
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.pagination-btn:hover,
+.page-number-btn:hover {
+    background: #108082;
+    color: #fff;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+.page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.page-number-btn.active {
+    background: #108082;
+    color: #fff;
+}
+
+body.dark .myq-pagination-wrap {
+    background: #111827;
+    border-color: #374151;
+}
+
+body.dark .pagination-left {
+    color: #e5e7eb;
+}
+
+body.dark .pagination-select,
+body.dark .pagination-btn,
+body.dark .page-number-btn {
+    background: #1f2937;
+    color: #f9fafb;
+    border-color: #374151;
+}
+
+body.dark .pagination-btn:hover,
+body.dark .page-number-btn:hover,
+body.dark .page-number-btn.active {
+    background: #108082;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .myq-pagination-wrap {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pagination-right {
+        justify-content: center;
+    }
+
+    .pagination-left {
+        text-align: center;
+    }
+}
+/* ================================
+   FILTER PANEL
+================================ */
+
+.filter-panel {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
+    gap: 12px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #374151;
+}
+
+.filter-group input,
+.filter-group select {
+    height: 40px;
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+    background: #ffffff;
+    outline: none;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: #108082;
+    box-shadow: 0 0 0 3px rgba(16, 128, 130, 0.12);
+}
+
+#resetFiltersBtn {
+    height: 40px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 10px;
+    background: #108082;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#resetFiltersBtn:hover {
+    opacity: 0.9;
+}
+
+body.dark .filter-panel {
+    background: #111827;
+    border-color: #374151;
+}
+
+body.dark .filter-group label {
+    color: #e5e7eb;
+}
+
+body.dark .filter-group input,
+body.dark .filter-group select {
+    background: #1f2937;
+    color: #f9fafb;
+    border-color: #374151;
+}
+
+@media (max-width: 1200px) {
+    .filter-panel {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .search-big {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-panel {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .search-big {
+        grid-column: span 1;
+    }
+
+    #resetFiltersBtn {
+        width: 100%;
+    }
+}

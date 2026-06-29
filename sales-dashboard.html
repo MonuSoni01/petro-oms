@@ -222,13 +222,66 @@
 
         </div>
 
-        <div class="search-wrap">
+        <div class="filter-panel">
 
+    <div class="filter-group search-big">
+        <label>Search</label>
+        <input type="text" id="orderSearch" name="search_fake" autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false" placeholder="Search Order ID / Party Name / Mobile">
+    </div>
 
-            <input type="text" id="orderSearch" name="search_fake" autocomplete="off" autocorrect="off"
-                autocapitalize="off" spellcheck="false" placeholder="Search Order ID / Party Name">
+    <div class="filter-group">
+        <label>Status</label>
+        <select id="statusFilter">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Quotation Sent">Quotation Sent</option>
+            <option value="Payment Received">Payment Received</option>
+            <option value="Partial Delivered">Partial Delivered</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Hold">Hold</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
 
-        </div>
+    <div class="filter-group">
+        <label>Bill</label>
+        <select id="billFilter">
+            <option value="">All Bills</option>
+            <option value="uploaded">Bill Uploaded</option>
+            <option value="pending">Bill Pending</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>From Date</label>
+        <input type="date" id="dateFromFilter">
+    </div>
+
+    <div class="filter-group">
+        <label>To Date</label>
+        <input type="date" id="dateToFilter">
+    </div>
+
+    <div class="filter-group">
+        <label>Min Amount</label>
+        <input type="number" id="minAmountFilter" placeholder="Min ₹">
+    </div>
+
+    <div class="filter-group">
+        <label>Max Amount</label>
+        <input type="number" id="maxAmountFilter" placeholder="Max ₹">
+    </div>
+
+    <div class="filter-group reset-group">
+        <label>&nbsp;</label>
+        <button type="button" id="resetFiltersBtn">
+            <i class="fa fa-rotate-left"></i>
+            Reset
+        </button>
+    </div>
+
+</div>
 
         <div class="myq-table-wrap mt-4">
             <!-- TABLE -->
@@ -312,6 +365,38 @@
 
 
                 </table>
+
+                <!-- PAGINATION -->
+<div class="myq-pagination-wrap">
+
+    <div class="pagination-left">
+        <span id="paginationInfo">Showing 0 to 0 of 0 orders</span>
+    </div>
+
+    <div class="pagination-right">
+
+        <select id="rowsPerPage" class="pagination-select">
+            <option value="10" selected>10 / Page</option>
+            <option value="25">25 / Page</option>
+            <option value="50">50 / Page</option>
+            <option value="100">100 / Page</option>
+        </select>
+
+        <button class="pagination-btn" id="prevPageBtn">
+            <i class="fa fa-chevron-left"></i>
+            Prev
+        </button>
+
+        <div id="pageNumbers" class="page-numbers"></div>
+
+        <button class="pagination-btn" id="nextPageBtn">
+            Next
+            <i class="fa fa-chevron-right"></i>
+        </button>
+
+    </div>
+
+</div>
 
             </div>
 
