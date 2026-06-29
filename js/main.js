@@ -675,39 +675,30 @@ window.applyCategoryDiscount = function () {
 
 window.recalc = function () {
 
-    let sub = 0;
+    let inclusiveTotal = 0;
 
-    // Detect correct tbody (cart or order table)
-    const tbody = document.getElementById('cartItemsList') ||
-        document.querySelector('#orderTable tbody') ||
-        document.querySelector('tbody');
+    const tbody = document.getElementById('tbody');
 
     if (!tbody) {
         console.error("tbody not found.");
         return;
     }
 
-    // Detect correct summary elements
     const freightEl = document.getElementById('freight');
     const specialDiscountEl = document.getElementById('specialDiscount');
-    const gstPercentEl = document.getElementById('gstPercent');  // GST input element
+    const gstPercentEl = document.getElementById('gstPercent');
 
-    const subTotalEl = document.getElementById('cartSubtotal') ||
-        document.getElementById('subTotal');
-
+    const subTotalEl = document.getElementById('subTotal');
     const gstAmountEl = document.getElementById('gstAmount');
-    const grandTotalEl = document.getElementById('cartTotal') ||
-        document.getElementById('grandTotal');
+    const grandTotalEl = document.getElementById('grandTotal');
 
     if (!subTotalEl || !gstAmountEl || !grandTotalEl) {
         console.error("Summary elements missing.");
         return;
     }
 
-    // Get the GST percentage from the input field (default to 18% if not provided)
-    const gstP = +gstPercentEl.value || 18;  // Default to 18 if no value is entered
+    const gstP = +gstPercentEl.value || 18;
 
-    // LOOP EACH ROW
     [...tbody.children].forEach(tr => {
 
         const qtyInput = tr.querySelector('.qty');
@@ -715,19 +706,13 @@ window.recalc = function () {
         const amtElement = tr.querySelector('.amt');
         const codeInput = tr.querySelector('.item-code');
 
-        if (!qtyInput || !rateInput || !amtElement) {
-            return;
-        }
+        if (!qtyInput || !rateInput || !amtElement) return;
 
         const qty = +qtyInput.value || 0;
         const rate = +rateInput.value || 0;
 
-        let amt = qty * rate;
+        let amount = qty * rate;
 
-        // Calculate GST based on the GST percentage (gstP)
-        const gstA = round2(amt * (gstP / 100)); // GST amount
-
-        // 🔥 CATEGORY DISCOUNT APPLY
         let discPercent = 0;
 
         if (codeInput) {
@@ -735,30 +720,26 @@ window.recalc = function () {
             discPercent = getCategoryDiscByCode(code);
         }
 
-        const discountAmount = amt * discPercent / 100;
-        amt -= discountAmount;
+        const discountAmount = amount * discPercent / 100;
+        amount = amount - discountAmount;
 
-        // UPDATE ROW AMOUNT
-        amtElement.textContent = money(amt);
+        amtElement.textContent = money(amount);
 
-        sub += amt; // Add to subtotal
+        inclusiveTotal += amount;
     });
 
     const freight = +freightEl.value || 0;
     const spDis = +specialDiscountEl.value || 0;
 
-    const subF = Math.max(0, sub + freight - spDis); // Final subtotal after freight and discount
+    const grand = Math.max(0, inclusiveTotal + freight - spDis);
 
-    // GST
-    const gstA = subF * (gstP / 100);
+    const taxable = grand / (1 + gstP / 100);
+    const gstA = grand - taxable;
 
-    // GRAND TOTAL
-    const grand = subF + gstA;
-
-    subTotalEl.textContent = money(subF);
+    subTotalEl.textContent = money(taxable);
     gstAmountEl.textContent = money(gstA);
     grandTotalEl.textContent = money(grand);
-}
+};
 function round2(value) {
     return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
 }

@@ -1,21 +1,91 @@
 {
-  "name": "PETRO Order Management",
-  "short_name": "PETRO OMS",
-  "start_url": "./index.html",
-  "scope": "./",
+  "id": "oms.rankchahiye.com",
+  "name": "PETRO ERP",
+  "short_name": "PETRO ERP",
+  "description": "PETRO ERP is a complete business management platform for Sales, CRM, Orders, Dispatch, QC, Packing, Customer Visits, Reports and Team Operations.",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
+  "dir": "ltr",
+  "lang": "en-IN",
   "background_color": "#ffffff",
-  "theme_color": "#0a6ebd",
+  "theme_color": "#108082",
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
-      "src": "/images/app-icon.png",
+      "src": "/images/petro-erp.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/images/app-icon.png",
+      "src": "/images/petro-erp.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/petro-erp.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Open PETRO ERP dashboard",
+      "url": "/index.html",
+      "icons": [
+        {
+          "src": "/images/petro-erp.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "short_name": "Orders",
+      "description": "Manage orders", 
+      "icons": [
+        {
+          "src": "/images/petro-erp.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Dispatch",
+      "short_name": "Dispatch",
+      "description": "Open dispatch section", 
+      "icons": [
+        {
+          "src": "/images/petro-erp.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/petro-erp.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "PETRO ERP Mobile Dashboard"
+    },
+    {
+      "src": "/images/petro-erp.png",
+      "sizes": "1365x768",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "PETRO ERP Desktop Dashboard"
     }
   ]
 }

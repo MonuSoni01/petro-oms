@@ -132,7 +132,7 @@ function togglePassword() {
 }
 
 function goBack() {
-    window.location.href = "https://order-management-petro.netlify.app/";
+    window.location.href = "https://oms.rankchahiye.com/";
 }
 function closeModal() {
     document.getElementById("passwordModal").style.display = "none";

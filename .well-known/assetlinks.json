@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.rankchahiye.oms.twa",
+      "sha256_cert_fingerprints": [
+        "6A:0C:8F:9E:CF:56:AB:63:7D:85:A4:23:67:F9:16:C7:1F:4F:01:C6:E4:74:80:3F:A3:F8:C5:F2:96:6B:85:AA"
+      ]
+    }
+  }
+]

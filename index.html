@@ -4,7 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PETRO OMS</title>
+    <title>PETRO ERP | Sales, CRM & OMS</title>
+    <!-- SEO / PWA Meta -->
+    <meta name="description"
+        content="PETRO ERP is a complete business management platform for Sales, CRM, Orders, Dispatch, QC, Packing, Customer Visits, Reports and Team Operations.">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <meta name="theme-color" content="#108082">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/images/petro-erp.png">
+    <link rel="apple-touch-icon" href="/images/petro-erp.png">
+
+    <!-- iOS PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="PETRO ERP">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -537,8 +553,7 @@
             <div class="topbar">
 
                 <!-- LOGO (hamburger removed) -->
-                <a href="https://order-management-petro.netlify.app/"> <img src="/images/logo.webp" class="logo"
-                        alt="Petro ERP"></a>
+                <a href="https://oms.rankchahiye.com/"> <img src="/images/logo.webp" class="logo" alt="Petro ERP"></a>
 
                 <!-- RIGHT ICONS -->
                 <div class="right-icons">
@@ -789,7 +804,22 @@
         }
 
     </script>
-    <script src="usage-tracker.js"></script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function () {
+                navigator.serviceWorker.register("/service-worker.js")
+                    .then(function () {
+                        console.log("PETRO ERP Service Worker registered");
+                    })
+                    .catch(function (error) {
+                        console.log("Service Worker registration failed:", error);
+                    });
+            });
+        }
+    </script>
+
+
 </body>
 
 </html>
