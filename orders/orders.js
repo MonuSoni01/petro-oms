@@ -1,6 +1,13 @@
 /* ============================================================
-   FIREBASE INITIALIZATION (Firebase v8)
+   PETRO OMS - ORDERS PAGE JS
+   CLEAN + FIXED VERSION
+   Firebase v8 Compat
 ============================================================ */
+
+/* ============================================================
+   FIREBASE INITIALIZATION
+============================================================ */
+
 const firebaseConfig = {
   apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
   authDomain: "petro-oms.firebaseapp.com",
@@ -10,49 +17,72 @@ const firebaseConfig = {
   appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
 };
 
-firebase.initializeApp(firebaseConfig);
+if (typeof firebase === "undefined") {
+  alert("Firebase SDK not loaded. Please check script order.");
+  throw new Error("Firebase SDK not loaded");
+}
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 const db = firebase.firestore();
 
 /* ============================================================
    FIRESTORE CACHE
 ============================================================ */
-db.enablePersistence().catch((err) => {
-  console.warn("Firestore persistence not enabled:", err.code);
-});
+
+try {
+  db.enablePersistence().catch((err) => {
+    console.warn("Firestore persistence not enabled:", err.code);
+  });
+} catch (err) {
+  console.warn("Firestore persistence setup skipped:", err.message);
+}
 
 /* ============================================================
-   GLOBAL VARIABLES
+   GLOBAL STATE
 ============================================================ */
+
 let allOrdersMaster = [];
+let filteredOrders = [];
 let currentRenderedOrders = [];
+let currentPage = 1;
+
 let deleteOrderId = null;
 let deleteOrderSource = "orders";
 
 const PAGE_SIZE = 10;
+const ADMIN_DELETE_PASSWORD = "2003";
+
+/* Selected rows across current pagination */
+const selectedRowIds = new Set();
+
+/* ============================================================
+   DOM ELEMENTS
+============================================================ */
 
 const ordersBody = document.getElementById("ordersBody");
 const emptyState = document.getElementById("emptyState");
+
 const statusFilter = document.getElementById("filterStatus");
 const typeFilter = document.getElementById("filterType");
 const dateFrom = document.getElementById("dateFrom");
 const dateTo = document.getElementById("dateTo");
 const searchBox = document.getElementById("searchBox");
 const salesmanFilterEl = document.getElementById("salesmanFilter");
+
 const prevPageBtn = document.getElementById("prevPageBtn");
 const nextPageBtn = document.getElementById("nextPageBtn");
 const pageIndicator = document.getElementById("pageIndicator");
+const selectAllRowsEl = document.getElementById("selectAllRows");
 
-const ADMIN_DELETE_PASSWORD = "2003";
-
-/* ============================================================
-   PAGINATION STATE
-============================================================ */
-let currentPage = 1;
-let filteredOrders = [];
+const tableSubText = document.getElementById("tableSubText");
 
 /* ============================================================
    SALESMAN MASTER LIST
 ============================================================ */
+
 const ALL_SALESMEN = [
   "Sariya Murtuza",
   "Roshan Sharma",
@@ -60,54 +90,216 @@ const ALL_SALESMEN = [
   "Ankit Kalra",
   "Amit Soni",
   "Vivek Srivastava",
-  "Mahesh Kumar"
+  "Mahesh Kumar",
 ];
 
-function populateSalesmanMasterList() {
-  const filter = document.getElementById("salesmanFilter");
-  if (!filter) return;
-  const selectedValue = filter.value;
-  filter.innerHTML = `<option value="">All Salesman</option>`;
-  ALL_SALESMEN.forEach(name => {
-    const option = document.createElement("option");
-    option.value = name;
-    option.textContent = name;
-    filter.appendChild(option);
-  });
-  filter.value = selectedValue;
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function normalizeText(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
 
-populateSalesmanMasterList();
-
-/* ============================================================
-   FETCH ALL ORDERS — SIRF EK BAAR
-============================================================ */
-function fetchAllOrders() {
-  showLoadingState();
-
-  db.collection("orders")
-    .orderBy("savedAt", "desc")
-    .get({ source: "default" })
-    .then((snapshot) => {
-      allOrdersMaster = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        source: "orders",
-        ...doc.data(),
-      }));
-
-      applyFiltersAndRender();
-    })
-    .catch((err) => {
-      console.error("Orders fetch error:", err);
-      hideLoadingState();
-    });
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-fetchAllOrders();
+function escapeAttr(value) {
+  return escapeHTML(value);
+}
+
+function numberValue(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+}
+
+function formatMoney(value) {
+  return numberValue(value).toFixed(2);
+}
+
+function getOrderDateValue(value) {
+  if (!value) return "";
+
+  if (value && typeof value.toDate === "function") {
+    return value.toDate().toISOString().slice(0, 10);
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+
+  if (typeof value === "string") {
+    return value.slice(0, 10);
+  }
+
+  return "";
+}
+
+function getOrderDate(order) {
+  return getOrderDateValue(
+    order?.orderDate ||
+    order?.savedAt ||
+    order?.createdAt ||
+    order?.date
+  );
+}
+
+function getSortTime(order) {
+  const value =
+    order?.savedAt ||
+    order?.orderDate ||
+    order?.createdAt ||
+    order?.date;
+
+  if (!value) return 0;
+
+  if (value && typeof value.toDate === "function") {
+    return value.toDate().getTime();
+  }
+
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  if (typeof value === "string") {
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  return 0;
+}
+
+function getPartyType(order) {
+  return order?.party?.type || order?.type || "Secondary";
+}
+
+function getOrderStatus(order) {
+  return order?.status || "Pending";
+}
+
+function calculateOrderDisplayTotals(order) {
+  const gstPercent = numberValue(order?.gstPercent || 18) || 18;
+  const gstDivider = 1 + gstPercent / 100;
+
+  const items = Array.isArray(order?.items) ? order.items : [];
+
+  /*
+    IMPORTANT:
+    item.amount ko GST inclusive maana gaya hai,
+    kyunki order create page me rate GST inclusive hai.
+  */
+  const itemsGrandInclGst = items.reduce((sum, item) => {
+    const itemAmount = parseAmountLikeDashboard(item?.amount ?? item?.total ?? 0);
+
+    if (itemAmount > 0) {
+      return sum + itemAmount;
+    }
+
+    const qty = numberValue(item?.qty || 0);
+    const rateInclGst = numberValue(item?.rate || 0);
+
+    return sum + qty * rateInclGst;
+  }, 0);
+
+  const freight = parseAmountLikeDashboard(order?.freight || 0);
+  const specialDiscount = parseAmountLikeDashboard(order?.specialDiscount || 0);
+
+  const grandTotalInclGst = Math.max(
+    0,
+    itemsGrandInclGst + freight - specialDiscount
+  );
+
+  const taxableAmount = grandTotalInclGst / gstDivider;
+  const gstAmount = grandTotalInclGst - taxableAmount;
+
+  return {
+    gstPercent,
+    gstDivider,
+    freight,
+    specialDiscount,
+    grandTotalInclGst,
+    taxableAmount,
+    gstAmount,
+  };
+}
+
+function getOrderTotal(order) {
+  return calculateOrderDisplayTotals(order).grandTotalInclGst;
+}
+
+function parseAmountLikeDashboard(value) {
+  if (typeof value === "number") return value;
+
+  const cleaned = String(value || "0")
+    .replace(/[₹,\s/-]/g, "")
+    .trim();
+
+  const num = Number(cleaned);
+
+  return Number.isFinite(num) ? num : 0;
+}
+
+function getBillImage(order) {
+  return order?.billImage || order?.billImageUrl || order?.imageUrl || "";
+}
+
+function showElement(el) {
+  if (el) el.style.display = "block";
+}
+
+function hideElement(el) {
+  if (el) el.style.display = "none";
+}
 
 /* ============================================================
-   LOADING STATE
+   STATUS BADGE CLASS
 ============================================================ */
+
+function statusClass(status) {
+  const cleanStatus = normalizeText(status);
+
+  switch (cleanStatus) {
+    case "pending":
+      return "status-pending";
+
+    case "quotation sent":
+      return "status-info";
+
+    case "payment received":
+      return "status-payment";
+
+    case "partial delivered":
+    case "partial delivery":
+      return "status-partial";
+
+    case "delivered":
+      return "status-delivered";
+
+    case "hold":
+      return "status-hold";
+
+    case "cancelled":
+    case "canceled":
+      return "status-cancelled";
+
+    default:
+      return "status-pending";
+  }
+}
+
+/* ============================================================
+   LOADING + ERROR STATES
+============================================================ */
+
 function showLoadingState() {
   if (ordersBody) {
     ordersBody.innerHTML = `
@@ -118,88 +310,152 @@ function showLoadingState() {
       </tr>
     `;
   }
-  if (emptyState) emptyState.style.display = "none";
+
+  hideElement(emptyState);
 }
 
-function hideLoadingState() {
+function showErrorState(message) {
+  if (ordersBody) {
+    ordersBody.innerHTML = `
+      <tr>
+        <td colspan="10" style="text-align:center; padding:30px; color:#d93025;">
+          <i class="fa fa-triangle-exclamation"></i> ${escapeHTML(message)}
+        </td>
+      </tr>
+    `;
+  }
+
+  hideElement(emptyState);
+}
+
+function clearTableBody() {
   if (ordersBody) ordersBody.innerHTML = "";
 }
 
 /* ============================================================
-   NORMALIZE — case insensitive comparison ke liye
+   FETCH ALL ORDERS
+   NOTE:
+   orderBy("savedAt") remove kiya hai taaki savedAt missing orders gayab na hon.
 ============================================================ */
-function normalize(val) {
-  return String(val || "").trim().toLowerCase();
+
+async function fetchAllOrders() {
+  showLoadingState();
+
+  try {
+    const snapshot = await db.collection("orders").get({ source: "default" });
+
+    allOrdersMaster = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      source: "orders",
+      ...doc.data(),
+    }));
+
+    allOrdersMaster.sort((a, b) => getSortTime(b) - getSortTime(a));
+
+    populateSalesmanMasterList();
+    applyFiltersAndRender();
+
+  } catch (err) {
+    console.error("Orders fetch error:", err);
+    showErrorState("Orders load failed. Please refresh and try again.");
+  }
 }
 
 /* ============================================================
-   APPLY ALL FILTERS — PURE CLIENT SIDE
-   FIX: Saare comparisons case-insensitive hain ab
+   SALESMAN DROPDOWN
+   Hardcoded + Database unique names
 ============================================================ */
-function applyFiltersAndRender() {
 
-  const searchText = normalize(searchBox?.value);
-  const selectedSalesman = normalize(salesmanFilterEl?.value);
-  const selectedType = normalize(typeFilter?.value);
-  const selectedStatus = normalize(statusFilter?.value);
+function populateSalesmanMasterList() {
+  if (!salesmanFilterEl) return;
+
+  const selectedValue = salesmanFilterEl.value;
+
+  const salesmanSet = new Set();
+
+  ALL_SALESMEN.forEach((name) => {
+    if (name) salesmanSet.add(name.trim());
+  });
+
+  allOrdersMaster.forEach((order) => {
+    if (order?.salesman) salesmanSet.add(String(order.salesman).trim());
+  });
+
+  const salesmanList = Array.from(salesmanSet).sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  salesmanFilterEl.innerHTML = `<option value="">All Salesmen</option>`;
+
+  salesmanList.forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    salesmanFilterEl.appendChild(option);
+  });
+
+  salesmanFilterEl.value = selectedValue;
+}
+
+/* ============================================================
+   APPLY FILTERS
+============================================================ */
+
+window.applyFiltersAndRender = function () {
+  const searchText = normalizeText(searchBox?.value);
+  const selectedSalesman = normalizeText(salesmanFilterEl?.value);
+  const selectedType = normalizeText(typeFilter?.value);
+  const selectedStatus = normalizeText(statusFilter?.value);
+
   const fromDate = dateFrom?.value || "";
   const toDate = dateTo?.value || "";
 
-  filteredOrders = allOrdersMaster.filter(o => {
+  selectedRowIds.clear();
 
-    // ================= SEARCH =================
+  filteredOrders = allOrdersMaster.filter((order) => {
+    const orderNo = normalizeText(order?.orderNo);
+    const partyName = normalizeText(order?.party?.name);
+    const partyMobile = normalizeText(order?.party?.mobile);
+    const partyGST = normalizeText(order?.party?.gst);
+    const salesman = normalizeText(order?.salesman);
+    const partyType = normalizeText(getPartyType(order));
+    const status = normalizeText(getOrderStatus(order));
+    const orderDate = getOrderDate(order);
+
     if (searchText) {
-      const orderNo = normalize(o.orderNo);
-      const partyName = normalize(o.party?.name);
+      const searchableText = [
+        orderNo,
+        partyName,
+        partyMobile,
+        partyGST,
+        salesman,
+        partyType,
+        status,
+      ].join(" ");
 
-      if (!orderNo.includes(searchText) && !partyName.includes(searchText)) {
+      if (!searchableText.includes(searchText)) {
         return false;
       }
     }
 
-    // ================= SALESMAN =================
-    if (selectedSalesman) {
-      const dbSalesman = normalize(o.salesman);
-
-      if (dbSalesman !== selectedSalesman) {
-        return false;
-      }
+    if (selectedSalesman && salesman !== selectedSalesman) {
+      return false;
     }
 
-    // ================= TYPE =================
-    if (selectedType) {
-      const dbType = normalize(o.party?.type);
-
-      if (dbType !== selectedType) {
-        return false;
-      }
+    if (selectedType && partyType !== selectedType) {
+      return false;
     }
 
-    // ================= STATUS =================
-    if (selectedStatus) {
-      const dbStatus = normalize(o.status);
-
-      if (dbStatus !== selectedStatus) {
-        return false;
-      }
+    if (selectedStatus && status !== selectedStatus) {
+      return false;
     }
 
-    // ================= DATE FROM =================
-    if (fromDate) {
-      const orderDate = o.orderDate ? o.orderDate.substring(0, 10) : "";
-
-      if (!orderDate || orderDate < fromDate) {
-        return false;
-      }
+    if (fromDate && (!orderDate || orderDate < fromDate)) {
+      return false;
     }
 
-    // ================= DATE TO =================
-    if (toDate) {
-      const orderDate = o.orderDate ? o.orderDate.substring(0, 10) : "";
-
-      if (!orderDate || orderDate > toDate) {
-        return false;
-      }
+    if (toDate && (!orderDate || orderDate > toDate)) {
+      return false;
     }
 
     return true;
@@ -208,157 +464,300 @@ function applyFiltersAndRender() {
   currentPage = 1;
   renderCurrentPage();
   updatePaginationUI();
+  updateTableSubText();
+};
+
+/* ============================================================
+   TABLE SUBTEXT
+============================================================ */
+
+function updateTableSubText() {
+  if (!tableSubText) return;
+
+  const total = filteredOrders.length;
+  const allTotal = allOrdersMaster.length;
+
+  tableSubText.textContent = `Showing ${total} of ${allTotal} orders`;
+}
+function ensureTotalsBar() {
+  let bar = document.getElementById("ordersTotalsBar");
+
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "ordersTotalsBar";
+    bar.className = "orders-totals-bar";
+
+    bar.innerHTML = `
+      <div class="total-pill">
+        <span>Page Orders</span>
+        <b id="pageOrdersCount">0</b>
+      </div>
+
+      <div class="total-pill">
+        <span>Page Total</span>
+        <b id="pageOrdersTotal">₹0.00</b>
+      </div>
+
+      
+    `;
+
+    const footer = document.querySelector(".orders-footer");
+    const tableCard = document.querySelector(".orders-table-card");
+
+    if (footer && footer.parentNode) {
+      footer.parentNode.insertBefore(bar, footer);
+    } else if (tableCard) {
+      tableCard.appendChild(bar);
+    }
+  }
+
+  return bar;
+}
+
+function updateOrdersTotalsUI() {
+  ensureTotalsBar();
+
+  const pageTotal = currentRenderedOrders.reduce((sum, order) => {
+    return sum + getOrderTotal(order);
+  }, 0);
+
+  const filteredTotal = filteredOrders.reduce((sum, order) => {
+    return sum + getOrderTotal(order);
+  }, 0);
+
+  const pageOrdersCount = document.getElementById("pageOrdersCount");
+  const pageOrdersTotal = document.getElementById("pageOrdersTotal");
+
+  if (pageOrdersCount) {
+    pageOrdersCount.textContent = currentRenderedOrders.length;
+  }
+
+  if (pageOrdersTotal) {
+    pageOrdersTotal.textContent = `₹${formatMoney(pageTotal)}`;
+  }
+
+
 }
 
 /* ============================================================
    RENDER CURRENT PAGE
 ============================================================ */
+
 function renderCurrentPage() {
+  if (!ordersBody) return;
+
+  if (selectAllRowsEl) selectAllRowsEl.checked = false;
 
   const start = (currentPage - 1) * PAGE_SIZE;
   const end = start + PAGE_SIZE;
-  const pageData = filteredOrders.slice(start, end);
 
+  const pageData = filteredOrders.slice(start, end);
   currentRenderedOrders = pageData;
 
   if (!filteredOrders.length) {
-    if (emptyState) emptyState.style.display = "block";
-    if (ordersBody) ordersBody.innerHTML = "";
+    clearTableBody();
+    showElement(emptyState);
+    currentRenderedOrders = [];
+    updateOrdersTotalsUI();
     return;
   }
 
-  if (emptyState) emptyState.style.display = "none";
+  hideElement(emptyState);
 
-  ordersBody.innerHTML = pageData.map((o, index) => {
+  ordersBody.innerHTML = pageData
+    .map((order, index) => {
+      const orderId = String(order.id || "");
+      const source = String(order.source || "orders");
 
-    const partyType = o.party?.type || "Secondary";
-    const statusText = o.status || "Pending"; 
-    const total = parseFloat(o.grandTotal);
-    const safeTotal = isNaN(total) ? 0 : total;
-    const billImage = o.billImage || null;
+      const partyType = getPartyType(order);
+      const partyTypeClean = normalizeText(partyType);
+      const statusText = getOrderStatus(order);
+      const total = getOrderTotal(order);
+      const billImage = getBillImage(order);
 
-    const viewImageButton = billImage
-      ? `<a href="${billImage}" target="_blank" class="btn btn-info btn-sm">View Image</a>`
-      : "Not Uploaded";
+      const typeBadgeClass =
+        partyTypeClean === "primary" ? "badge-success" : "badge-warning";
 
-    return `
-      <tr>
-        <td><input type="checkbox" class="rowCheck" value="${o.id}"></td>
-        <td>${start + index + 1}</td>
-        <td>${o.salesman || "-"}</td>
-        <td>${o.orderNo || "-"}</td>
-        <td>${o.party?.name || "-"}</td>
-        <td>
-          <span class="badge ${partyType === "Primary" ? "badge-success" : "badge-warning"}">
-            ${partyType}
-          </span>
-        </td>
-        <td>₹${safeTotal.toFixed(2)}</td>
-        <td>
-          <span class="badge-status ${statusClass(statusText)}">
-            ${statusText}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-warning btn-sm" onclick="editOrder('${o.id}', '${o.source || "orders"}')">
-            ✏ Edit
+      const checked = selectedRowIds.has(orderId) ? "checked" : "";
+
+      const billImageButton = billImage
+        ? `
+          <button
+            type="button"
+            class="btn btn-info btn-sm js-bill-image"
+            data-image="${escapeAttr(billImage)}">
+            <i class="fa fa-image"></i> View Image
           </button>
-          <button class="btn btn-primary btn-sm" onclick="viewOrder('${o.id}')">
-            <i class="fa fa-eye"></i> View Order
-          </button>
-          <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${o.id}', '${o.source || "orders"}')">
-            <i class="fa fa-trash"></i> Delete
-          </button>
-        </td>
-        <td>${viewImageButton}</td>
-      </tr>
-    `;
-  }).join("");
+        `
+        : `<span style="color:#888;">Not Uploaded</span>`;
+
+      return `
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              class="rowCheck"
+              value="${escapeAttr(orderId)}"
+              ${checked}>
+          </td>
+
+          <td>${start + index + 1}</td>
+
+          <td>${escapeHTML(order?.salesman || "-")}</td>
+
+          <td>${escapeHTML(order?.orderNo || "-")}</td>
+
+          <td>${escapeHTML(order?.party?.name || "-")}</td>
+
+          <td>
+            <span class="badge ${typeBadgeClass}">
+              ${escapeHTML(partyType)}
+            </span>
+          </td>
+
+          <td>₹${formatMoney(total)}</td>
+
+          <td>
+            <span class="badge-status ${statusClass(statusText)}">
+              ${escapeHTML(statusText)}
+            </span>
+          </td>
+
+          <td>
+            <button
+              type="button"
+              class="btn btn-warning btn-sm js-edit-order"
+              data-id="${escapeAttr(orderId)}"
+              data-source="${escapeAttr(source)}">
+              ✏ 
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-primary btn-sm js-view-order"
+              data-id="${escapeAttr(orderId)}">
+              <i class="fa fa-eye"></i>
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-danger btn-sm js-delete-order"
+              data-id="${escapeAttr(orderId)}"
+              data-source="${escapeAttr(source)}">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+
+          <td>${billImageButton}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  updateSelectAllState();
+  updateOrdersTotalsUI();
 }
 
 /* ============================================================
-   STATUS BADGE
+   PAGINATION
 ============================================================ */
-function statusClass(status) {
-  if (!status) return "status-pending";
 
-  switch (status.toLowerCase()) {
-    case "pending":
-      return "status-pending";
-    case "quotation sent":
-      return "status-info";
-    case "payment received":
-      return "status-payment";
-    case "partial delivered":
-      return "status-partial";
-    case "delivered":
-      return "status-delivered";
-    case "hold":
-      return "status-hold";
-    case "cancelled":
-      return "status-cancelled";
-    default:
-      return "status-pending";
-  }
+function getTotalPages() {
+  return Math.ceil(filteredOrders.length / PAGE_SIZE) || 1;
 }
 
-/* ============================================================
-   PAGINATION UI
-============================================================ */
 function updatePaginationUI() {
-  const totalPages = Math.ceil(filteredOrders.length / PAGE_SIZE) || 1;
+  const totalPages = getTotalPages();
 
   if (pageIndicator) {
     pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
   }
 
-  if (prevPageBtn) prevPageBtn.disabled = currentPage === 1;
-  if (nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages;
+  if (prevPageBtn) {
+    prevPageBtn.disabled = currentPage <= 1;
+  }
+
+  if (nextPageBtn) {
+    nextPageBtn.disabled = currentPage >= totalPages;
+  }
 }
 
-/* ============================================================
-   PAGINATION BUTTONS
-============================================================ */
 function goToPrevPage() {
   if (currentPage <= 1) return;
+
   currentPage--;
   renderCurrentPage();
   updatePaginationUI();
-  window.scrollTo(0, 0);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 }
 
 function goToNextPage() {
-  const totalPages = Math.ceil(filteredOrders.length / PAGE_SIZE) || 1;
+  const totalPages = getTotalPages();
+
   if (currentPage >= totalPages) return;
+
   currentPage++;
   renderCurrentPage();
   updatePaginationUI();
-  window.scrollTo(0, 0);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 }
 
-if (prevPageBtn) prevPageBtn.addEventListener("click", goToPrevPage);
-if (nextPageBtn) nextPageBtn.addEventListener("click", goToNextPage);
+if (prevPageBtn) {
+  prevPageBtn.addEventListener("click", goToPrevPage);
+}
+
+if (nextPageBtn) {
+  nextPageBtn.addEventListener("click", goToNextPage);
+}
+
+window.goPrevPage = goToPrevPage;
+window.goNextPage = goToNextPage;
 
 /* ============================================================
    FILTER EVENTS
 ============================================================ */
-if (salesmanFilterEl) salesmanFilterEl.addEventListener("change", applyFiltersAndRender);
-if (typeFilter) typeFilter.addEventListener("change", applyFiltersAndRender);
-if (statusFilter) statusFilter.addEventListener("change", applyFiltersAndRender);
-if (dateFrom) dateFrom.addEventListener("change", applyFiltersAndRender);
-if (dateTo) dateTo.addEventListener("change", applyFiltersAndRender);
+
+if (salesmanFilterEl) {
+  salesmanFilterEl.addEventListener("change", window.applyFiltersAndRender);
+}
+
+if (typeFilter) {
+  typeFilter.addEventListener("change", window.applyFiltersAndRender);
+}
+
+if (statusFilter) {
+  statusFilter.addEventListener("change", window.applyFiltersAndRender);
+}
+
+if (dateFrom) {
+  dateFrom.addEventListener("change", window.applyFiltersAndRender);
+}
+
+if (dateTo) {
+  dateTo.addEventListener("change", window.applyFiltersAndRender);
+}
 
 let searchDebounceTimer;
+
 if (searchBox) {
   searchBox.addEventListener("input", () => {
     clearTimeout(searchDebounceTimer);
-    searchDebounceTimer = setTimeout(applyFiltersAndRender, 400);
+    searchDebounceTimer = setTimeout(window.applyFiltersAndRender, 350);
   });
 }
 
 /* ============================================================
-   CLEAR ALL FILTERS
+   CLEAR FILTERS
 ============================================================ */
+
 window.clearAllFilters = function () {
   if (searchBox) searchBox.value = "";
   if (statusFilter) statusFilter.value = "";
@@ -367,105 +766,260 @@ window.clearAllFilters = function () {
   if (salesmanFilterEl) salesmanFilterEl.value = "";
   if (typeFilter) typeFilter.value = "";
 
+  selectedRowIds.clear();
   currentPage = 1;
-  applyFiltersAndRender();
+
+  window.applyFiltersAndRender();
 };
 
 /* ============================================================
-   VIEW ORDER
+   TABLE EVENT DELEGATION
 ============================================================ */
-function viewOrder(id) {
 
-  const o =
-    allOrdersMaster.find(x => x.id === id) ||
-    currentRenderedOrders.find(x => x.id === id);
+if (ordersBody) {
+  ordersBody.addEventListener("click", (event) => {
+    const target = event.target.closest("button");
 
-  if (!o) return;
+    if (!target) return;
+
+    if (target.classList.contains("js-edit-order")) {
+      window.editOrder(target.dataset.id, target.dataset.source);
+      return;
+    }
+
+    if (target.classList.contains("js-view-order")) {
+      window.viewOrder(target.dataset.id);
+      return;
+    }
+
+    if (target.classList.contains("js-delete-order")) {
+      window.openDeleteModal(target.dataset.id, target.dataset.source);
+      return;
+    }
+
+    if (target.classList.contains("js-bill-image")) {
+      window.openImageModal(target.dataset.image);
+    }
+  });
+
+  ordersBody.addEventListener("change", (event) => {
+    const checkbox = event.target.closest(".rowCheck");
+
+    if (!checkbox) return;
+
+    if (checkbox.checked) {
+      selectedRowIds.add(checkbox.value);
+    } else {
+      selectedRowIds.delete(checkbox.value);
+    }
+
+    updateSelectAllState();
+  });
+}
+
+/* ============================================================
+   SELECT ALL ROWS
+============================================================ */
+
+window.toggleAllRows = function (source) {
+  const shouldCheck = !!source.checked;
+
+  currentRenderedOrders.forEach((order) => {
+    const id = String(order.id || "");
+
+    if (shouldCheck) {
+      selectedRowIds.add(id);
+    } else {
+      selectedRowIds.delete(id);
+    }
+  });
+
+  document.querySelectorAll(".rowCheck").forEach((checkbox) => {
+    checkbox.checked = shouldCheck;
+  });
+
+  updateSelectAllState();
+};
+
+function updateSelectAllState() {
+  if (!selectAllRowsEl) return;
+
+  if (!currentRenderedOrders.length) {
+    selectAllRowsEl.checked = false;
+    selectAllRowsEl.indeterminate = false;
+    return;
+  }
+
+  const selectedOnPage = currentRenderedOrders.filter((order) =>
+    selectedRowIds.has(String(order.id || ""))
+  ).length;
+
+  selectAllRowsEl.checked = selectedOnPage === currentRenderedOrders.length;
+  selectAllRowsEl.indeterminate =
+    selectedOnPage > 0 && selectedOnPage < currentRenderedOrders.length;
+}
+
+/* ============================================================
+   VIEW ORDER MODAL
+============================================================ */
+
+window.viewOrder = function (id) {
+  const order =
+    allOrdersMaster.find((item) => String(item.id) === String(id)) ||
+    currentRenderedOrders.find((item) => String(item.id) === String(id));
+
+  if (!order) {
+    showToast("❌ Order not found");
+    return;
+  }
 
   const div = document.getElementById("modalContent");
-  const statusText = o.status || "Pending";
-  const cancelReason = o.cancelRemark || "";
+
+  if (!div) return;
+
+  const statusText = getOrderStatus(order);
+  const cancelReason = order?.cancelRemark || order?.holdReason || "";
+
+  const items = Array.isArray(order?.items) ? order.items : [];
+
+  const gstPercentForItems = numberValue(order?.gstPercent || 18);
+  const gstDividerForItems = 1 + gstPercentForItems / 100;
 
   let itemsHTML = `
-    <table class="table table-bordered" style="width:100%;margin-bottom:15px;border-collapse:collapse;">
-      <thead style="background-color:#f4f4f4;text-align:left;">
-        <tr>
-          <th>Item Code</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  (o.items || []).forEach(i => {
-    itemsHTML += `
+  <table class="table table-bordered" style="width:100%;margin-bottom:15px;border-collapse:collapse;">
+    <thead style="background-color:#f4f4f4;text-align:left;">
       <tr>
-        <td>${i.code || "-"}</td>
-        <td>${i.unit || "-"}</td>
-        <td>${i.qty || 0}</td>
-        <td>₹${i.rate || 0}</td>
-        <td>₹${i.amount || 0}</td>
+        <th>Item Code</th>
+        <th>Unit</th>
+        <th>Qty</th>
+        <th>Rate Without GST</th>
+        <th>Total Without GST</th>
+      </tr>
+    </thead>
+    <tbody>
+`;
+
+  if (items.length) {
+    items.forEach((item) => {
+      const rateWithGst = numberValue(item?.rate ?? 0);
+      const totalWithGst = numberValue(item?.amount ?? item?.total ?? 0);
+
+      const rateWithoutGst = rateWithGst / gstDividerForItems;
+      const totalWithoutGst = totalWithGst / gstDividerForItems;
+
+      itemsHTML += `
+      <tr>
+        <td>${escapeHTML(item?.code || "-")}</td>
+        <td>${escapeHTML(item?.unit || "-")}</td>
+        <td>${escapeHTML(item?.qty ?? 0)}</td>
+        <td>₹${formatMoney(rateWithoutGst)}</td>
+        <td>₹${formatMoney(totalWithoutGst)}</td>
       </tr>
     `;
-  });
+    });
+  } else {
+    itemsHTML += `
+    <tr>
+      <td colspan="5" style="text-align:center;color:#888;">
+        No items found.
+      </td>
+    </tr>
+  `;
+  }
 
   itemsHTML += `</tbody></table>`;
 
   const categoryDiscountsHTML = `
     <div style="font-weight:bold;margin-bottom:10px;">
       <div style="margin-bottom:8px;">
-        <b>Hardware Discount:</b> ${o.categoryDiscounts?.hardware || 0}%
-        ${o.categoryDiscountPercents?.hardware ? `(${o.categoryDiscountPercents.hardware})` : ""}
+        <b>Hardware Discount:</b>
+        ${escapeHTML(order?.categoryDiscounts?.hardware || 0)}%
+        ${order?.categoryDiscountPercents?.hardware
+      ? `(${escapeHTML(order.categoryDiscountPercents.hardware)})`
+      : ""
+    }
       </div>
+
       <div>
-        <b>Bathroom Discount:</b> ${o.categoryDiscounts?.bathroom || 0}%
-        ${o.categoryDiscountPercents?.bathroom ? `(${o.categoryDiscountPercents.bathroom})` : ""}
+        <b>Bathroom Discount:</b>
+        ${escapeHTML(order?.categoryDiscounts?.bathroom || 0)}%
+        ${order?.categoryDiscountPercents?.bathroom
+      ? `(${escapeHTML(order.categoryDiscountPercents.bathroom)})`
+      : ""
+    }
       </div>
+
       <div style="margin-top:8px;">
-        <b>SS Discount:</b> ${o.categoryDiscounts?.stainlesssteel || 0}%
-        ${o.categoryDiscountPercents?.stainlesssteel ? `(${o.categoryDiscountPercents.stainlesssteel})` : ""}
+        <b>SS Discount:</b>
+        ${escapeHTML(order?.categoryDiscounts?.stainlesssteel || 0)}%
+        ${order?.categoryDiscountPercents?.stainlesssteel
+      ? `(${escapeHTML(order.categoryDiscountPercents.stainlesssteel)})`
+      : ""
+    }
       </div>
     </div>
   `;
 
-  const billingHTML = `
-    <div style="margin-top:15px;">
-      <p><b>Subtotal:</b> ₹${o.subTotal || 0}</p>
-      <p><b>Freight:</b> ₹${o.freight || 0}</p>
-      <p><b>Special Discount:</b> ₹${o.specialDiscount || 0}</p>
-      <p><b>GST (${o.gstPercent || 0}%):</b> ₹${o.gstAmount || 0}</p>
-      <h3><b>Grand Total:</b> ₹${o.grandTotal || 0}</h3>
-    </div>
-  `;
+  const displayTotals = calculateOrderDisplayTotals(order);
 
-  const cancelReasonHTML = (statusText === "Cancelled" || statusText === "Hold") && cancelReason
+const billingHTML = `
+  <div style="margin-top:15px;">
+    <p><b>Taxable Amount:</b> ₹${formatMoney(displayTotals.taxableAmount)}</p>
+    <p><b>Freight:</b> ₹${formatMoney(displayTotals.freight)}</p>
+    <p><b>Special Discount:</b> ₹${formatMoney(displayTotals.specialDiscount)}</p>
+    <p><b>GST (${escapeHTML(displayTotals.gstPercent)}%):</b> ₹${formatMoney(displayTotals.gstAmount)}</p>
+    <h3><b>Grand Total Incl. GST:</b> ₹${formatMoney(displayTotals.grandTotalInclGst)}</h3>
+  </div>
+`;
+
+  const showReason =
+    (normalizeText(statusText) === "cancelled" ||
+      normalizeText(statusText) === "hold") &&
+    cancelReason;
+
+  const cancelReasonHTML = showReason
     ? `
       <div style="background:#fff3f3;border:1px solid #f5c2c7;color:#842029;padding:12px 14px;border-radius:8px;margin-bottom:20px;">
-        <div style="font-weight:700;margin-bottom:6px;">Status: ${statusText}</div>
-        <div><b>${statusText === "Hold" ? "Hold Reason" : "Cancel Reason"}:</b> ${cancelReason}</div>
+        <div style="font-weight:700;margin-bottom:6px;">
+          Status: ${escapeHTML(statusText)}
+        </div>
+        <div>
+          <b>${normalizeText(statusText) === "hold" ? "Hold Reason" : "Cancel Reason"}:</b>
+          ${escapeHTML(cancelReason)}
+        </div>
       </div>
     `
     : "";
 
   div.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;position:sticky;top:0;background:#fff;z-index:100;padding:10px 0;">
-      <div style="font-size:24px;font-weight:600;">Order Details #${o.orderNo || "-"}</div>
+      <div style="font-size:24px;font-weight:600;">
+        Order Details #${escapeHTML(order?.orderNo || "-")}
+      </div>
+
       <div>
         <button class="btn btn-success btn-sm" onclick="downloadOrder()" style="margin-right:10px;">
           <i class="fa fa-download"></i> Download
         </button>
+
         <button class="btn btn-light btn-sm" onclick="closeModal()">✖</button>
       </div>
     </div>
 
     <hr style="border:1px solid #ccc;">
+
     ${cancelReasonHTML}
 
     <div style="margin-bottom:20px;">
       <h4 style="font-size:18px;font-weight:600;">Party Details</h4>
-      <p><b>Name:</b> ${o.party?.name || "-"}</p>
-      <p><b>Mobile:</b> ${o.party?.mobile || "-"}</p>
-      <p><b>Address:</b> ${o.party?.address || "-"}</p>
-      <p><b>GST:</b> ${o.party?.gst || "-"}</p>
+      <p><b>Name:</b> ${escapeHTML(order?.party?.name || "-")}</p>
+      <p><b>Mobile:</b> ${escapeHTML(order?.party?.mobile || "-")}</p>
+      <p><b>Address:</b> ${escapeHTML(order?.party?.address || "-")}</p>
+      <p><b>GST:</b> ${escapeHTML(order?.party?.gst || "-")}</p>
+      <p><b>Type:</b> ${escapeHTML(getPartyType(order))}</p>
+      <p><b>Salesman:</b> ${escapeHTML(order?.salesman || "-")}</p>
+      <p><b>Order Date:</b> ${escapeHTML(getOrderDate(order) || "-")}</p>
+      <p><b>Status:</b> ${escapeHTML(statusText)}</p>
     </div>
 
     <div style="margin-bottom:20px;">
@@ -484,43 +1038,89 @@ function viewOrder(id) {
     </div>
   `;
 
-  document.getElementById("modal").style.display = "flex";
-  document.body.style.overflow = "hidden";
-}
+  const modal = document.getElementById("modal");
+
+  if (modal) {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+};
 
 /* ============================================================
    EDIT ORDER
 ============================================================ */
-window.editOrder = function (orderId, source) {
-  window.location.href = `edit-order.html?id=${orderId}&source=${source}`;
+
+window.editOrder = function (orderId, source = "orders") {
+  if (!orderId) {
+    showToast("❌ Order ID missing");
+    return;
+  }
+
+  window.location.href = `edit-order.html?id=${encodeURIComponent(orderId)}&source=${encodeURIComponent(source)}`;
 };
 
 /* ============================================================
-   DELETE ORDER MODAL
+   DELETE MODAL
 ============================================================ */
+
 window.openDeleteModal = function (orderId, source = "orders") {
   deleteOrderId = orderId;
-  deleteOrderSource = source;
-  document.getElementById("deletePass").value = "";
-  document.getElementById("deleteModal").style.display = "flex";
+  deleteOrderSource = source || "orders";
+
+  const deletePass = document.getElementById("deletePass");
+  const deleteMsg = document.getElementById("deleteMsg");
+  const deleteModal = document.getElementById("deleteModal");
+
+  if (deletePass) deletePass.value = "";
+
+  if (deleteMsg) {
+    deleteMsg.style.display = "none";
+    deleteMsg.textContent = "";
+    deleteMsg.style.color = "";
+  }
+
+  if (deleteModal) {
+    deleteModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
 };
 
-function closeDeleteModal() {
-  document.getElementById("deleteModal").style.display = "none";
-  document.getElementById("deleteMsg").style.display = "none";
-}
+window.closeDeleteModal = function () {
+  const deleteModal = document.getElementById("deleteModal");
+  const deleteMsg = document.getElementById("deleteMsg");
+
+  if (deleteModal) deleteModal.style.display = "none";
+
+  if (deleteMsg) {
+    deleteMsg.style.display = "none";
+    deleteMsg.textContent = "";
+    deleteMsg.style.color = "";
+  }
+
+  document.body.style.overflow = "auto";
+};
 
 /* ============================================================
    CONFIRM DELETE
 ============================================================ */
-window.confirmDelete = async function () {
 
-  const pass = document.getElementById("deletePass").value.trim();
+window.confirmDelete = async function () {
+  const passInput = document.getElementById("deletePass");
   const msg = document.getElementById("deleteMsg");
+
+  if (!passInput || !msg) return;
+
+  const pass = passInput.value.trim();
 
   msg.style.display = "block";
   msg.textContent = "";
   msg.style.color = "";
+
+  if (!deleteOrderId) {
+    msg.textContent = "❌ Order ID missing.";
+    msg.style.color = "red";
+    return;
+  }
 
   if (pass !== ADMIN_DELETE_PASSWORD) {
     msg.textContent = "❌ Incorrect Password";
@@ -528,59 +1128,69 @@ window.confirmDelete = async function () {
     return;
   }
 
-  const btns = document.querySelectorAll("#deleteModal button");
-  btns.forEach(b => b.disabled = true);
+  const buttons = document.querySelectorAll("#deleteModal button");
+  buttons.forEach((button) => {
+    button.disabled = true;
+  });
 
-  const deletedOrder = allOrdersMaster.find(o => o.id === deleteOrderId);
+  const deletedOrder = allOrdersMaster.find(
+    (order) => String(order.id) === String(deleteOrderId)
+  );
+
   const deletedOrderNo = deletedOrder?.orderNo || deleteOrderId;
 
   try {
     await db.collection(deleteOrderSource).doc(deleteOrderId).delete();
 
-    allOrdersMaster = allOrdersMaster.filter(o => o.id !== deleteOrderId);
+    allOrdersMaster = allOrdersMaster.filter(
+      (order) => String(order.id) !== String(deleteOrderId)
+    );
 
-    applyFiltersAndRender();
-    closeDeleteModal();
-    btns.forEach(b => b.disabled = false);
+    filteredOrders = filteredOrders.filter(
+      (order) => String(order.id) !== String(deleteOrderId)
+    );
+
+    selectedRowIds.delete(String(deleteOrderId));
+
+    if (currentPage > getTotalPages()) {
+      currentPage = getTotalPages();
+    }
+
+    renderCurrentPage();
+    updatePaginationUI();
+    updateTableSubText();
+
+    window.closeDeleteModal();
+
     showToast(`✅ Order ${deletedOrderNo} Deleted Successfully`);
 
   } catch (err) {
-    console.error(err);
+    console.error("Delete error:", err);
+
     msg.textContent = "❌ Delete Failed. Try again.";
     msg.style.color = "red";
-    btns.forEach(b => b.disabled = false);
+
+  } finally {
+    buttons.forEach((button) => {
+      button.disabled = false;
+    });
   }
 };
 
 /* ============================================================
-   TOAST MESSAGE
-============================================================ */
-function showToast(message) {
-  let toast = document.getElementById("petroToast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "petroToast";
-    document.body.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.style.display = "block";
-  toast.classList.remove("show");
-  void toast.offsetWidth;
-  toast.classList.add("show");
-  clearTimeout(toast._hideTimer);
-  toast._hideTimer = setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => { toast.style.display = "none"; }, 300);
-  }, 2500);
-}
-
-/* ============================================================
    PASSWORD TOGGLE
 ============================================================ */
-function togglePass() {
+
+window.togglePass = function () {
   const pass = document.getElementById("deletePass");
   const icon = document.querySelector(".toggle-eye");
-  if (pass.style.webkitTextSecurity === "disc" || pass.style.webkitTextSecurity === "") {
+
+  if (!pass || !icon) return;
+
+  if (
+    pass.style.webkitTextSecurity === "disc" ||
+    pass.style.webkitTextSecurity === ""
+  ) {
     pass.style.webkitTextSecurity = "none";
     icon.classList.remove("fa-eye-slash");
     icon.classList.add("fa-eye");
@@ -589,178 +1199,353 @@ function togglePass() {
     icon.classList.remove("fa-eye");
     icon.classList.add("fa-eye-slash");
   }
-}
+};
 
 /* ============================================================
-   CLOSE MODAL
+   VIEW MODAL CLOSE
 ============================================================ */
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
+
+window.closeModal = function () {
+  const modal = document.getElementById("modal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+
   document.body.style.overflow = "auto";
-}
+};
 
 /* ============================================================
    DOWNLOAD ORDER PRINT
 ============================================================ */
-function downloadOrder() {
-  const content = document.getElementById("modalContent").innerHTML;
-  const win = window.open("", "", "width=900,height=700");
+
+window.downloadOrder = function () {
+  const modalContent = document.getElementById("modalContent");
+
+  if (!modalContent) return;
+
+  const content = modalContent.innerHTML;
+
+  const win = window.open("", "", "width=950,height=750");
+
+  if (!win) {
+    alert("Popup blocked. Please allow popups to download/print order.");
+    return;
+  }
+
   win.document.write(`
     <html>
       <head>
         <title>Order Download</title>
         <style>
-          body { font-family:Arial; padding:20px; }
-          table { width:100%; border-collapse:collapse; }
-          table, th, td { border:1px solid #ccc; }
-          th, td { padding:8px; text-align:left; }
-          h3 { margin-top:20px; }
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            color: #111;
+          }
+
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          table,
+          th,
+          td {
+            border: 1px solid #ccc;
+          }
+
+          th,
+          td {
+            padding: 8px;
+            text-align: left;
+          }
+
+          h3 {
+            margin-top: 20px;
+          }
+
+          button {
+            display: none !important;
+          }
         </style>
       </head>
-      <body>${content}</body>
+
+      <body>
+        ${content}
+      </body>
     </html>
   `);
+
   win.document.close();
+  win.focus();
   win.print();
-}
+};
 
 /* ============================================================
    IMAGE MODAL
 ============================================================ */
-function openImageModal(imageUrl) {
+
+window.openImageModal = function (imageUrl) {
+  if (!imageUrl) {
+    showToast("❌ Image not found");
+    return;
+  }
+
   const modal = document.getElementById("imageModal");
   const modalImage = document.getElementById("modalImage");
   const imageSkeleton = document.getElementById("imageSkeleton");
 
+  if (!modal || !modalImage || !imageSkeleton) return;
+
   imageSkeleton.style.display = "block";
   modalImage.style.display = "none";
+  modalImage.src = "";
 
   const img = new Image();
+
   img.onload = function () {
     modalImage.src = imageUrl;
     imageSkeleton.style.display = "none";
     modalImage.style.display = "block";
   };
+
+  img.onerror = function () {
+    imageSkeleton.style.display = "none";
+    modalImage.style.display = "none";
+    showToast("❌ Image failed to load");
+  };
+
   img.src = imageUrl;
 
   modal.style.display = "flex";
   document.body.style.overflow = "hidden";
-}
+};
 
-function closeImageModal() {
-  document.getElementById("imageModal").style.display = "none";
-}
+window.closeImageModal = function () {
+  const modal = document.getElementById("imageModal");
 
-/* ============================================================
-   VIEW BILL IMAGE
-============================================================ */
-function viewImage(id) {
-  const o = allOrdersMaster.find(x => x.id === id);
-  if (!o || !o.billImage) return;
+  if (modal) {
+    modal.style.display = "none";
+  }
 
-  const div = document.getElementById("modalContent");
-  div.innerHTML = `
-    <div style="font-size:24px;font-weight:600;margin-bottom:15px;">
-      Bill Image for Order #${o.orderNo}
-    </div>
-    <img src="${o.billImage}" alt="Bill Image" style="max-width:100%;height:auto;border-radius:12px;">
-    <button class="btn btn-secondary mt-3" onclick="closeModal()">Close</button>
-  `;
-  document.getElementById("modal").style.display = "flex";
-  document.body.style.overflow = "hidden";
-}
+  document.body.style.overflow = "auto";
+};
+
+/* Old compatibility */
+window.viewImage = function (id) {
+  const order = allOrdersMaster.find((item) => String(item.id) === String(id));
+
+  if (!order || !getBillImage(order)) {
+    showToast("❌ Bill image not uploaded");
+    return;
+  }
+
+  window.openImageModal(getBillImage(order));
+};
 
 /* ============================================================
    EXPORT CSV
 ============================================================ */
+
 const exportColumns = [
-  { key: "salesman", label: "Salesman", get: o => o.salesman || "-" },
-  { key: "orderNo", label: "Order No", get: o => o.orderNo || "-" },
-  { key: "partyName", label: "Party Name", get: o => o.party?.name || "-" },
-  { key: "partyType", label: "Party Type", get: o => o.party?.type || "-" },
-  { key: "mobile", label: "Mobile", get: o => o.party?.mobile || "-" },
-  { key: "gst", label: "GST", get: o => o.party?.gst || "-" },
-  { key: "address", label: "Address", get: o => o.party?.address || "-" },
-  { key: "total", label: "Total", get: o => o.grandTotal || 0 },
-  { key: "status", label: "Status", get: o => o.status || "Pending" },
-  { key: "date", label: "Order Date", get: o => o.orderDate || "-" },
-  { key: "billAmount", label: "Bill Amount", get: o => o.billAmount ? `₹${Number(o.billAmount).toFixed(2)}` : "-" },
-  { key: "source", label: "Source", get: o => o.source || "orders" },
-  { key: "items", label: "Items", get: o => (o.items || []).map(i => `${i.code || "-"} (${i.qty || 0} ${i.unit || "-"})`).join(" | ") }
+  {
+    key: "salesman",
+    label: "Salesman",
+    get: (order) => order?.salesman || "-",
+  },
+  {
+    key: "orderNo",
+    label: "Order No",
+    get: (order) => order?.orderNo || "-",
+  },
+  {
+    key: "partyName",
+    label: "Party Name",
+    get: (order) => order?.party?.name || "-",
+  },
+  {
+    key: "partyType",
+    label: "Party Type",
+    get: (order) => getPartyType(order),
+  },
+  {
+    key: "mobile",
+    label: "Mobile",
+    get: (order) => order?.party?.mobile || "-",
+  },
+  {
+    key: "gst",
+    label: "GST",
+    get: (order) => order?.party?.gst || "-",
+  },
+  {
+    key: "address",
+    label: "Address",
+    get: (order) => order?.party?.address || "-",
+  },
+  {
+    key: "total",
+    label: "Total",
+    get: (order) => formatMoney(getOrderTotal(order)),
+  },
+  {
+    key: "status",
+    label: "Status",
+    get: (order) => getOrderStatus(order),
+  },
+  {
+    key: "date",
+    label: "Order Date",
+    get: (order) => getOrderDate(order) || "-",
+  },
+  {
+    key: "billAmount",
+    label: "Bill Amount",
+    get: (order) =>
+      order?.billAmount ? `₹${formatMoney(order.billAmount)}` : "-",
+  },
+  {
+    key: "source",
+    label: "Source",
+    get: (order) => order?.source || "orders",
+  },
+  {
+    key: "items",
+    label: "Items",
+    get: (order) =>
+      Array.isArray(order?.items)
+        ? order.items
+          .map((item) => {
+            const code = item?.code || "-";
+            const qty = item?.qty || 0;
+            const unit = item?.unit || "-";
+            return `${code} (${qty} ${unit})`;
+          })
+          .join(" | ")
+        : "-",
+  },
 ];
 
-let selectedColumnKeys = exportColumns.map(c => c.key);
+let selectedColumnKeys = exportColumns.map((column) => column.key);
 
-function openExportModal() {
-  document.getElementById("exportModal").style.display = "flex";
-  document.body.style.overflow = "hidden";
-  renderExportColumns();
-}
+window.openExportModal = function () {
+  const exportModal = document.getElementById("exportModal");
 
-function closeExportModal() {
-  document.getElementById("exportModal").style.display = "none";
+  if (exportModal) {
+    exportModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+
+  window.renderExportColumns();
+};
+
+window.closeExportModal = function () {
+  const exportModal = document.getElementById("exportModal");
+
+  if (exportModal) {
+    exportModal.style.display = "none";
+  }
+
   document.body.style.overflow = "auto";
-}
+};
 
-function renderExportColumns() {
+window.renderExportColumns = function () {
   const box = document.getElementById("exportColumnsList");
-  const search = String(document.getElementById("columnSearch")?.value || "").toLowerCase();
-  const filteredColumns = exportColumns.filter(c => c.label.toLowerCase().includes(search));
+  const columnSearch = document.getElementById("columnSearch");
 
-  box.innerHTML = filteredColumns.map(col => `
-    <label style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #eee;cursor:pointer;">
-      <input type="checkbox" class="exportColumnCheck" value="${col.key}"
-        ${selectedColumnKeys.includes(col.key) ? "checked" : ""}
-        onchange="updateSelectedColumns()">
-      <span>${col.label}</span>
-    </label>
-  `).join("");
+  if (!box) return;
+
+  const search = normalizeText(columnSearch?.value);
+
+  const filteredColumns = exportColumns.filter((column) =>
+    normalizeText(column.label).includes(search)
+  );
+
+  box.innerHTML = filteredColumns
+    .map((column) => {
+      const checked = selectedColumnKeys.includes(column.key) ? "checked" : "";
+
+      return `
+        <label>
+          <input
+            type="checkbox"
+            class="exportColumnCheck"
+            value="${escapeAttr(column.key)}"
+            ${checked}
+            onchange="updateSelectedColumns()">
+          <span>${escapeHTML(column.label)}</span>
+        </label>
+      `;
+    })
+    .join("");
 
   updateColumnCount();
-}
+};
 
-function updateSelectedColumns() {
+window.updateSelectedColumns = function () {
   selectedColumnKeys = Array.from(
     document.querySelectorAll(".exportColumnCheck:checked")
-  ).map(cb => cb.value);
+  ).map((checkbox) => checkbox.value);
+
   updateColumnCount();
-}
+};
 
 function updateColumnCount() {
   const countBox = document.getElementById("selectedColumnCount");
-  if (countBox) countBox.textContent = `${selectedColumnKeys.length} Selected`;
-  const selectAll = document.getElementById("selectAllColumns");
-  if (selectAll) selectAll.checked = selectedColumnKeys.length === exportColumns.length;
+  const selectAllColumns = document.getElementById("selectAllColumns");
+
+  if (countBox) {
+    countBox.textContent = `${selectedColumnKeys.length} Selected`;
+  }
+
+  if (selectAllColumns) {
+    selectAllColumns.checked =
+      selectedColumnKeys.length === exportColumns.length;
+    selectAllColumns.indeterminate =
+      selectedColumnKeys.length > 0 &&
+      selectedColumnKeys.length < exportColumns.length;
+  }
 }
 
-function toggleAllColumns(source) {
-  selectedColumnKeys = source.checked ? exportColumns.map(c => c.key) : [];
-  renderExportColumns();
-}
+window.toggleAllColumns = function (source) {
+  selectedColumnKeys = source.checked
+    ? exportColumns.map((column) => column.key)
+    : [];
 
-function toggleAllRows(source) {
-  document.querySelectorAll(".rowCheck").forEach(cb => { cb.checked = source.checked; });
-}
+  window.renderExportColumns();
+};
 
 function csvSafe(value) {
-  return `"${String(value ?? "").replace(/"/g, '""')}"`;
+  let text = String(value ?? "");
+
+  /*
+    Excel formula injection protection
+    Agar value = + - @ se start hoti hai to apostrophe add karega.
+  */
+  if (/^[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return `"${text.replace(/"/g, '""')}"`;
 }
 
-function downloadCustomCSV() {
-  updateSelectedColumns();
+window.downloadCustomCSV = function () {
+  window.updateSelectedColumns();
 
   if (!selectedColumnKeys.length) {
     alert("Please select at least one column.");
     return;
   }
 
-  const selectedRowIds = Array.from(
-    document.querySelectorAll(".rowCheck:checked")
-  ).map(cb => cb.value);
-
   let exportRows = filteredOrders;
-  if (selectedRowIds.length) {
-    exportRows = filteredOrders.filter(o => selectedRowIds.includes(o.id));
+
+  const selectedMatchingRows = filteredOrders.filter((order) =>
+    selectedRowIds.has(String(order.id || ""))
+  );
+
+  if (selectedMatchingRows.length > 0) {
+    exportRows = selectedMatchingRows;
   }
 
   if (!exportRows.length) {
@@ -768,24 +1553,119 @@ function downloadCustomCSV() {
     return;
   }
 
-  const selectedColumns = exportColumns.filter(c => selectedColumnKeys.includes(c.key));
+  const selectedColumns = exportColumns.filter((column) =>
+    selectedColumnKeys.includes(column.key)
+  );
 
-  let csv = selectedColumns.map(c => csvSafe(c.label)).join(",") + "\n";
-  exportRows.forEach(order => {
-    csv += selectedColumns.map(col => csvSafe(col.get(order))).join(",") + "\n";
+  let csv = selectedColumns.map((column) => csvSafe(column.label)).join(",");
+  csv += "\n";
+
+  exportRows.forEach((order) => {
+    csv += selectedColumns
+      .map((column) => csvSafe(column.get(order)))
+      .join(",");
+    csv += "\n";
   });
 
-  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `PETRO_Orders_Report_${new Date().toISOString().split("T")[0]}.csv`;
-  link.click();
+  const blob = new Blob(["\uFEFF" + csv], {
+    type: "text/csv;charset=utf-8;",
+  });
 
-  closeExportModal();
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+
+  link.href = url;
+  link.download = `PETRO_Orders_Report_${new Date()
+    .toISOString()
+    .slice(0, 10)}.csv`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+
+  window.closeExportModal();
+};
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+function showToast(message) {
+  let toast = document.getElementById("petroToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "petroToast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  toast.classList.remove("show");
+
+  void toast.offsetWidth;
+
+  toast.classList.add("show");
+
+  clearTimeout(toast._hideTimer);
+
+  toast._hideTimer = setTimeout(() => {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 300);
+  }, 2500);
 }
 
 /* ============================================================
-   DEBUG COMPATIBILITY
+   MODAL BACKDROP CLOSE
 ============================================================ */
-window.goNextPage = function () { goToNextPage(); };
-window.goPrevPage = function () { goToPrevPage(); };
+
+document.addEventListener("click", (event) => {
+  const imageModal = document.getElementById("imageModal");
+  const exportModal = document.getElementById("exportModal");
+  const deleteModal = document.getElementById("deleteModal");
+  const viewModal = document.getElementById("modal");
+
+  if (event.target === imageModal) {
+    window.closeImageModal();
+  }
+
+  if (event.target === exportModal) {
+    window.closeExportModal();
+  }
+
+  if (event.target === deleteModal) {
+    window.closeDeleteModal();
+  }
+
+  if (event.target === viewModal) {
+    window.closeModal();
+  }
+});
+
+/* ============================================================
+   ESC KEY CLOSE MODALS
+============================================================ */
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+
+  window.closeImageModal();
+  window.closeExportModal();
+  window.closeDeleteModal();
+  window.closeModal();
+});
+
+/* ============================================================
+   INIT
+============================================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  populateSalesmanMasterList();
+  fetchAllOrders();
+});

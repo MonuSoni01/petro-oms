@@ -3,155 +3,103 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>PETRO OMS | Orders</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+
     <link rel="icon" href="/images/app-icon.png" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Page CSS -->
     <link rel="stylesheet" href="orders.css">
 </head>
 
 <body>
 
-    <!-- Whatsapp Section -->
-    <div class="whats_link">
-        <a target="_blank" href="https://wa.me/918000007336?text=">
-            <img src="/images/whatsapp_logo.png" alt="" id="whatsapp-icon" /></a>
-    </div>
-
-    <!-- Phone Section -->
-    <div class="phone_link">
-        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
-            <img src="/images/app.webp" alt="" id="whatsapp-icon" /></a>
-    </div>
-
     <!-- SIDEBAR -->
     <aside id="sidebar">
-
         <div class="sidebar-logo">
             <img src="/images/petro-circle-logo.webp" alt="PETRO" />
         </div>
-        <ul class="sidebar-menu">
 
+        <ul class="sidebar-menu">
             <li onclick="location.href='/admin-dashboard.html'">
-                <i class="fa-solid fa-chart-line"></i> Dashboard
+                <i class="fa-solid fa-chart-line"></i>
+                Dashboard
             </li>
 
             <li class="active" onclick="location.href='/orders/orders.html'">
-                <i class="fa-solid fa-list"></i> Orders
+                <i class="fa-solid fa-list"></i>
+                Orders
             </li>
 
             <li onclick="location.href='/users/users.html'">
-                <i class="fa-solid fa-user"></i> Customers
+                <i class="fa-solid fa-user"></i>
+                Customers
             </li>
 
             <li onclick="location.href='/dashboard/sales.html'">
-                <i class="fa-solid fa-box"></i> Products Sales Report
+                <i class="fa-solid fa-box"></i>
+                Products Sales Report
             </li>
+
             <li onclick="location.href='/activity.html'">
-
                 <i class="fa-solid fa-clock-rotate-left"></i>
-
-                <span>
-                    Activity Logs
-                </span>
-
+                <span>Activity Logs</span>
             </li>
-
 
             <li onclick="location.href='/login.html'">
-                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Log Out
             </li>
-
         </ul>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main id="main">
+    <main id="main" class="orders-page">
 
-        <!-- Top Navbar -->
-        <div class="top-bar" style="background: #108082;">
-            <div class="container-fluid">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
-                        <div class="contact-details">
-                            <ul class="d-flex">
-                                <li>
-                                    <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
-                                </li>
-                                <li>
-                                    <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
-                                        contact@petroindustech.com</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+       
+        
 
-                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
-                        <div class="news-box">
-                            <ul class="footer-social topnav-social-icon">
-                                <li>
-                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
-                                            class="fa-brands fa-facebook"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
-                                            class="fa-brands fa-instagram"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
-                                            class="fa-brands fa-youtube"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://x.com/Petroindustech" target="_blank"><i
-                                            class="fa-brands fa-x-twitter"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
-                                            class="fa-brands fa-pinterest"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white top-nav petro-navbar">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
 
-        <!-- Navbar Section -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
-            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
-
-                <!-- LEFT : LOGO -->
                 <a class="navbar-brand" href="https://oms.rankchahiye.com/">
-                    <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+                    <img src="/images/logo.webp" alt="PETRO Logo" class="img-fluid petro-logo">
                 </a>
 
-                <!-- RIGHT : ADMIN -->
                 <div class="d-flex align-items-center">
 
-                    <!-- DARK MODE -->
                     <label class="toggle-switch mb-0 mr-3">
                         <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
                         <span class="slider"></span>
                     </label>
 
-                    <!-- ADMIN DROPDOWN -->
                     <div class="dropdown">
-                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
-                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                            style="border-radius:20px;">
-
-                            <i class="fa fa-user-circle text-success mr-2"></i>
+                        <a class="btn admin-btn dropdown-toggle d-flex align-items-center" href="#" role="button"
+                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-circle mr-2"></i>
                             <span id="adminName">Admin</span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
                             <a class="dropdown-item" href="/admin-profile.html">
-                                <i class="fa fa-user mr-2"></i> Profile
+                                <i class="fa fa-user mr-2"></i>
+                                Profile
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="/login.html">
-                                <i class="fa fa-sign-out mr-2"></i> Logout
+                                <i class="fa fa-sign-out mr-2"></i>
+                                Logout
                             </a>
                         </div>
                     </div>
@@ -160,182 +108,250 @@
             </div>
         </nav>
 
+        <!-- PAGE HEADER -->
+        <section class="orders-hero">
+            <div>
+                <span class="page-kicker">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    Order Management
+                </span>
+                <h1>Orders Dashboard</h1>
+                <p>Search, filter, view, edit, delete and export PETRO OMS orders from one clean panel.</p>
+            </div>
+
+            <div class="hero-actions">
+                <button class="btn btn-outline-petro" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Reset Filters
+                </button>
+                <button class="btn btn-petro" onclick="openExportModal()">
+                    <i class="fa-solid fa-download"></i>
+                    Export Report
+                </button>
+            </div>
+        </section>
+
         <!-- FILTER SECTION -->
-        <div class="filters-box mb-4 mt-5 p-5">
-            <div class="row g-3">
+        <section class="filters-box">
+            <div class="filter-card-head">
+                <div>
+                    <h3>
+                        <i class="fa-solid fa-filter"></i>
+                        Search & Filter Orders
+                    </h3>
+                    <p>Use filters to find specific orders quickly.</p>
+                </div>
 
-               <div class="col-md-2">
-    <label>From Date</label>
-    <input type="date" id="dateFrom" class="form-control">
-</div>
+                <button id="clearFiltersBtn" class="btn btn-clear" onclick="clearAllFilters()">
+                    <i class="fa-solid fa-xmark"></i>
+                    Clear All
+                </button>
+            </div>
 
-<div class="col-md-2">
-    <label>To Date</label>
-    <input type="date" id="dateTo" class="form-control">
-</div>
+            <div class="filter-divider"></div>
 
-<div class="col-md-2">
-    <label>Status</label>
-    <select id="filterStatus" class="form-control">
-        <option value="">All Statuses</option>
-        <option value="Pending">Pending</option>
-        <option value="Quotation Sent">Quotation Sent</option>
-        <option value="Payment Received">Payment Received</option>
-        <option value="Partial Delivered">Partial Delivered</option>
-        <option value="Delivered">Delivered</option>
-        <option value="Hold">Hold</option>
-        <option value="Cancelled">Cancelled</option>
-    </select>
-</div>
+            <div class="filter-grid">
 
-<div class="col-md-1">
-    <label>Type</label>
-    <select id="filterType" class="form-control">
-        <option value="">All Types</option>
-        <option value="Primary">Primary</option>
-        <option value="Secondary">Secondary</option>
-    </select>
-</div>
+                <div class="filter-field">
+                    <label for="dateFrom">From Date</label>
+                    <div class="input-icon-wrap">
+                        <input type="date" id="dateFrom" class="form-control">
+                    </div>
+                </div>
 
-<div class="col-md-2">
-    <label>Search</label>
-    <input type="text" id="searchBox" class="form-control"
-        placeholder="Search Order No / Party Name">
-</div>
+                <div class="filter-field">
+                    <label for="dateTo">To Date</label>
+                    <div class="input-icon-wrap">
+                        <input type="date" id="dateTo" class="form-control">
+                    </div>
+                </div>
 
-<div class="col-md-2">
-    <label>Salesman</label>
-    <select id="salesmanFilter" class="form-control">
-        <option value="">All Salesmen</option>
-    </select>
-</div>
+                <div class="filter-field">
+                    <label for="filterStatus">Status</label>
+                    <select id="filterStatus" class="form-control">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Quotation Sent">Quotation Sent</option>
+                        <option value="Payment Received">Payment Received</option>
+                        <option value="Partial Delivered">Partial Delivered</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Hold">Hold</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
 
-                <div class="col-md-1 d-flex align-items-end">
-                    <button id="clearFiltersBtn" class="btn btn-outline-secondary w-100" onclick="clearAllFilters()">
-                        <i class="fa fa-times"></i> Clear
+                <div class="filter-field">
+                    <label for="filterType">Type</label>
+                    <select id="filterType" class="form-control">
+                        <option value="">All Types</option>
+                        <option value="Primary">Primary</option>
+                        <option value="Secondary">Secondary</option>
+                    </select>
+                </div>
+
+                <div class="filter-field filter-search">
+                    <label for="searchBox">Search</label>
+                    <div class="search-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchBox" class="form-control"
+                            placeholder="Search Order No / Party Name">
+                    </div>
+                </div>
+
+                <div class="filter-field">
+                    <label for="salesmanFilter">Salesman</label>
+                    <select id="salesmanFilter" class="form-control">
+                        <option value="">All Salesmen</option>
+                    </select>
+                </div>
+
+                <div class="filter-field filter-action">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-petro w-100" onclick="applyFiltersAndRender()">
+                        <i class="fa-solid fa-filter"></i>
+                        Apply
                     </button>
                 </div>
 
             </div>
-        </div>
-
+        </section>
 
         <!-- ORDERS TABLE -->
-        <div class="orders-table-card mt-5 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">All Orders</h4>
+        <section class="orders-table-card">
 
-                <button class="btn btn-success" onclick="openExportModal()">
-                    <i class="fa fa-download"></i> Download Data
+            <div class="table-card-head">
+                <div>
+                    <h3>
+                        <i class="fa-solid fa-table-list"></i>
+                        All Orders
+                    </h3>
+                    <p id="tableSubText">Showing filtered order results</p>
+                </div>
+
+                <button class="btn btn-petro" onclick="openExportModal()">
+                    <i class="fa fa-download"></i>
+                    Download Data
                 </button>
             </div>
 
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" id="selectAllRows" onchange="toggleAllRows(this)">
-                        </th>
-                        <th>Sr No</th>
-                        <th>Salesman</th>
-                        <th>Order No</th>
-                        <th>Party Name</th>
-                        <th>Type</th>
-                        <th>Total (₹)</th>
-                        <th>Status</th>
-                        <th class="text-center">Action</th>
-                        <th>Bill Image</th>
-                    </tr>
-                </thead>
+            <div class="table-responsive orders-table-wrap">
+                <table class="table table-hover orders-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAllRows" onchange="toggleAllRows(this)">
+                            </th>
+                            <th>Sr No</th>
+                            <th>Salesman</th>
+                            <th>Order No</th>
+                            <th>Party Name</th>
+                            <th>Type</th>
+                            <th>Total (₹)</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
+                            <th>Bill Image</th>
+                        </tr>
+                    </thead>
 
-                <tbody id="ordersBody"></tbody>
-
-
-            </table>
-            <div class="d-flex justify-content-center align-items-center mt-3" style="gap:12px;">
-                <button id="prevPageBtn" class="btn btn-secondary">
-                    <i class="fa fa-chevron-left"></i> Prev
-                </button>
-
-                <span id="pageIndicator" style="font-weight:600;">Page 1</span>
-
-                <button id="nextPageBtn" class="btn btn-primary">
-                    Next <i class="fa fa-chevron-right"></i>
-                </button>
+                    <tbody id="ordersBody"></tbody>
+                </table>
             </div>
 
-            <p id="emptyState" class="text-center mt-3" style="display:none;">No orders found.</p>
-        </div>
+            <div class="orders-footer">
+                <p id="emptyState" class="empty-state" style="display:none;">
+                    <i class="fa-regular fa-folder-open"></i>
+                    No orders found.
+                </p>
 
+                <div class="pagination-wrap">
+                    <button id="prevPageBtn" class="btn btn-page">
+                        <i class="fa fa-chevron-left"></i>
+                        Prev
+                    </button>
 
-        <div id="exportModal" class="modal-overlay" style="display:none;">
-            <div class="modal-box" style="max-width:650px; padding:22px;">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0">Download Custom Report</h4>
-                    <button class="btn btn-light btn-sm" onclick="closeExportModal()">✖</button>
-                </div>
+                    <span id="pageIndicator">Page 1</span>
 
-                <input type="text" id="columnSearch" class="form-control mb-3" placeholder="Search columns..."
-                    oninput="renderExportColumns()">
-
-                <div class="export-top-bar">
-                    <label class="export-select-all">
-                        <input type="checkbox" id="selectAllColumns" onchange="toggleAllColumns(this)">
-                        Select All Columns
-                    </label>
-
-                    <b id="selectedColumnCount" style="color:#108082;">0 Selected</b>
-                </div>
-
-                <div id="exportColumnsList"
-                    style="max-height:350px; overflow-y:auto; border:1px solid #ddd; border-radius:10px; padding:10px;">
-                </div>
-
-                <div class="export-btn-wrap">
-                    <button class="btn btn-secondary w-50" onclick="closeExportModal()">Cancel</button>
-                    <button class="btn btn-success w-50" onclick="downloadCustomCSV()">Download CSV</button>
+                    <button id="nextPageBtn" class="btn btn-page active">
+                        Next
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
-        </div>
+
+        </section>
+
     </main>
 
-    <!-- Modal for viewing image -->
-    <div id="imageModal" class="modal-overlay" style="display:none;">
-        <div class="modal-box">
-            <!-- Close Button -->
-            <span class="testingclose" onclick="closeImageModal()">✖</span>
+    <!-- EXPORT MODAL -->
+    <div id="exportModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box export-modal-box">
 
-            <!-- Skeleton Loader -->
-            <div id="imageSkeleton" class="skeleton-loader"></div>
+            <div class="modal-head">
+                <div>
+                    <h4>Download Custom Report</h4>
+                    <p>Select columns and download filtered data in CSV format.</p>
+                </div>
 
-            <!-- Modal Image -->
-            <img id="modalImage" src="" alt="Order Image"
-                style="width:100%; height:auto; border-radius: 12px; display: none;">
-        </div>
-    </div>
-    <!-- Modal for viewing image -->
+                <button class="btn modal-close-btn" onclick="closeExportModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-    <div id="modal">
-        <div id="modalBox">
-            <!-- 
-            <span class="closeBtn" onclick="closeModal()">✖</span> -->
+            <input type="text" id="columnSearch" class="form-control mb-3" placeholder="Search columns..."
+                oninput="renderExportColumns()">
 
-            <div id="modalContent">
-                <!-- Dynamic content from JS will come here -->
+            <div class="export-top-bar">
+                <label class="export-select-all">
+                    <input type="checkbox" id="selectAllColumns" onchange="toggleAllColumns(this)">
+                    Select All Columns
+                </label>
+
+                <b id="selectedColumnCount">0 Selected</b>
+            </div>
+
+            <div id="exportColumnsList"></div>
+
+            <div class="export-btn-wrap">
+                <button class="btn btn-light w-50" onclick="closeExportModal()">Cancel</button>
+                <button class="btn btn-petro w-50" onclick="downloadCustomCSV()">
+                    <i class="fa-solid fa-download"></i>
+                    Download CSV
+                </button>
             </div>
 
         </div>
     </div>
 
-    <!-- DELETE POPUP -->
+    <!-- IMAGE MODAL -->
+    <div id="imageModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box image-modal-box">
+            <span class="testingclose" onclick="closeImageModal()">✖</span>
+
+            <div id="imageSkeleton" class="skeleton-loader"></div>
+
+            <img id="modalImage" src="" alt="Order Image">
+        </div>
+    </div>
+
+    <!-- VIEW ORDER MODAL -->
+    <div id="modal">
+        <div id="modalBox">
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
     <div id="deleteModal" class="modal-overlay" style="display:none;">
-        <div class="modal-box">
-            <h3 style="color:#d93025;margin-bottom:10px;">Delete Order</h3>
-            <p style="font-size:15px;margin-bottom:10px;">
-                Enter admin password to delete this order.
-            </p>
-            <p id="deleteMsg" style="display:none;">
-            </p>
+        <div class="modal-box delete-modal-box">
+
+            <div class="delete-icon">
+                <i class="fa-solid fa-trash"></i>
+            </div>
+
+            <h3>Delete Order</h3>
+            <p>Enter admin password to delete this order.</p>
+
+            <p id="deleteMsg" style="display:none;"></p>
 
             <div class="password-wrapper">
                 <input type="text" id="deletePass" class="form-control" placeholder="Enter Admin Password"
@@ -345,26 +361,23 @@
                 <i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
             </div>
 
-
-            <div class="d-flex justify-content-center align-items-center">
-                <button class="btn btn-secondary btn-block" onclick="closeDeleteModal()">Cancel</button>
-                <button class="btn btn-danger btn-block" onclick="confirmDelete()">Delete</button>
+            <div class="delete-actions">
+                <button class="btn btn-light" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
             </div>
 
         </div>
     </div>
 
-
     <!-- FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-    <!-- jQuery FIRST -->
+    <!-- jQuery -->
     <script src="/vendor/jquery/jquery.min.js"></script>
 
-    <!-- Bootstrap 4.1.1 -->
+    <!-- Bootstrap -->
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 
     <!-- Common JS -->
     <script src="../js/script.js"></script>
@@ -372,8 +385,6 @@
     <!-- Page JS -->
     <script src="orders.js"></script>
 
-    <!-- <script src="/js/dev.js"></script> -->
 </body>
- 
 
 </html>

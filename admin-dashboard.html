@@ -3,73 +3,79 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>PETRO OMS - Admin Panel</title>
+
     <link rel="icon" href="/images/app-icon.png" />
-    <!-- Font Awesome Icons -->
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Existing CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" />
 
     <!-- Firebase v9 Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font CSS & CDN -->
-    <link href="css/all.css" rel="stylesheet" />
     <style>
-        .renewal-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            background: #fff1f2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #dc3545;
-            font-size: 38px;
-        }
-
-        .api-renew-box {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .api-renew-box input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 15px;
-        }
-
-        .api-renew-box input:focus {
-            outline: none;
-            border-color: #108082;
-        }
-
-        .btn-api {
-            background: #0f172a;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        #apiErrorMsg {
-            color: #dc3545;
-            font-size: 13px;
-            font-weight: 600;
+        :root {
+            --petro-primary: #108082;
+            --petro-primary-dark: #0c5f63;
+            --petro-danger: #dc3545;
+            --petro-warning: #ffc107;
+            --petro-bg: #f4f7fb;
+            --petro-card: #ffffff;
+            --petro-text: #1f2937;
+            --petro-muted: #6b7280;
+            --petro-border: #e5e7eb;
         }
 
         body {
             display: none;
+            background: var(--petro-bg);
+            color: var(--petro-text);
+        }
+
+        body.dashboard-ready {
+            display: block;
+        }
+
+        body.dark-mode {
+            background: #101827;
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .table-card,
+        body.dark-mode .stat-card,
+        body.dark-mode .navbar,
+        body.dark-mode .dropdown-menu {
+            background: #172033 !important;
+            color: #e5e7eb !important;
+            border-color: #263449 !important;
+        }
+
+        body.dark-mode table {
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .table thead th {
+            color: #ffffff;
+            border-color: #263449;
+        }
+
+        body.dark-mode .table td {
+            border-color: #263449;
+        }
+
+        body.dark-mode .btn-light {
+            background: #1f2937;
+            color: #ffffff;
+            border-color: #374151;
         }
 
         #renewalAlert {
@@ -159,6 +165,56 @@
             margin-bottom: 30px;
         }
 
+        .renewal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #fff1f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc3545;
+            font-size: 38px;
+        }
+
+        .api-renew-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .api-renew-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .api-renew-box input:focus {
+            outline: none;
+            border-color: #108082;
+        }
+
+        .btn-api {
+            background: #0f172a;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #apiErrorMsg {
+            color: #dc3545;
+            font-size: 13px;
+            font-weight: 600;
+            min-height: 18px;
+        }
+
         .renewal-actions {
             display: flex;
             justify-content: center;
@@ -202,17 +258,169 @@
             box-shadow: 0 10px 25px rgba(16, 128, 130, .35);
         }
 
-        .renewal-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            background: #fff1f2;
-            display: flex;
+        .table-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            border: 1px solid #eef2f7;
+            overflow-x: auto;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111827;
+            margin: 0;
+        }
+
+        .stat-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 24px 20px;
+            min-height: 135px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            border: 1px solid #eef2f7;
+            overflow: hidden;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: 900;
+            color: #111827;
+        }
+
+        .stat-icon {
+            position: absolute;
+            right: 18px;
+            bottom: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: rgba(16, 128, 130, 0.1);
+            color: #108082;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+        }
+
+        body.dark-mode .stat-title {
+            color: #9ca3af;
+        }
+
+        body.dark-mode .stat-value,
+        body.dark-mode .table-title {
+            color: #ffffff;
+        }
+
+        .status-badge {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .status-badge.pending {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .status-badge.success {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .status-badge.partial {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .status-badge.hold {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .status-badge.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-badge.payment {
+            background: #f5f3ff;
+            color: #6d28d9;
+        }
+
+        .status-badge.quotation {
+            background: #f0fdfa;
+            color: #0f766e;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #6b7280;
+            padding: 18px !important;
+            font-weight: 600;
+        }
+
+        .error-row {
+            text-align: center;
             color: #dc3545;
-            font-size: 38px;
+            padding: 18px !important;
+            font-weight: 700;
+        }
+
+        #whatsapp-icon,
+        #app-icon {
+            max-width: 50px;
+            height: auto;
+        }
+
+        .sidebar-menu li {
+            cursor: pointer;
+        }
+
+        .sidebar-menu li.active {
+            background: rgba(16, 128, 130, 0.14);
+            color: #108082;
+        }
+
+        .admin-meta {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        body.dark-mode .admin-meta {
+            color: #cbd5e1;
+        }
+
+        .session-alert {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 999999;
+            background: #111827;
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+            display: none;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         @keyframes fadeIn {
@@ -224,8 +432,25 @@
                 opacity: 1;
             }
         }
-    </style>
 
+        @media (max-width: 768px) {
+            .container-fluid.mt-5.p-5 {
+                padding: 22px !important;
+            }
+
+            .stat-card {
+                margin-bottom: 14px;
+            }
+
+            .renewal-modal-box {
+                padding: 28px 20px;
+            }
+
+            .renewal-modal-box h3 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -233,62 +458,53 @@
     <!-- Whatsapp Section -->
     <div class="whats_link">
         <a target="_blank" href="https://wa.me/918000007336?text=">
-            <img src="images/whatsapp_logo.png" alt="" id="whatsapp-icon" /></a>
+            <img src="images/whatsapp_logo.png" alt="WhatsApp" id="whatsapp-icon" />
+        </a>
     </div>
 
-    <!-- Phone Section -->
+    <!-- App Section -->
     <div class="phone_link">
         <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
-            <img src="https://www.petroindustech.com/images/app.webp" alt="" id="whatsapp-icon" /></a>
+            <img src="https://www.petroindustech.com/images/app.webp" alt="Petro App" id="app-icon" />
+        </a>
     </div>
-
-
 
     <!-- SIDEBAR -->
     <aside id="sidebar">
-
         <div class="sidebar-logo">
             <img src="/images/petro-circle-logo.webp" alt="PETRO" />
         </div>
-        <ul class="sidebar-menu">
 
-            <li class="active" onclick="location.href='admin-dashboard.html'">
+        <ul class="sidebar-menu">
+            <li data-page="admin-dashboard.html" onclick="goPage('admin-dashboard.html')">
                 <i class="fa-solid fa-chart-line"></i> Dashboard
             </li>
 
-            <li onclick="location.href='orders/orders.html'">
+            <li data-page="orders/orders.html" onclick="goPage('orders/orders.html')">
                 <i class="fa-solid fa-list"></i> Orders
             </li>
 
-            <li onclick="location.href='users/users.html'">
+            <li data-page="users/users.html" onclick="goPage('users/users.html')">
                 <i class="fa-solid fa-user"></i> Customers
             </li>
-            <li onclick="location.href='dashboard/sales.html'">
+
+            <li data-page="dashboard/sales.html" onclick="goPage('dashboard/sales.html')">
                 <i class="fa-solid fa-box"></i> Products Sales Report
             </li>
 
-            <li onclick="location.href='activity.html'">
-
+            <li data-page="activity.html" onclick="goPage('activity.html')">
                 <i class="fa-solid fa-clock-rotate-left"></i>
-
-                <span>
-                    Activity Logs
-                </span>
-
+                <span>Activity Logs</span>
             </li>
 
-
-            <li onclick="location.href='login.html'">
+            <li onclick="logout()">
                 <i class="fa-solid fa-right-from-bracket"></i> Log Out
             </li>
-
         </ul>
     </aside>
 
-
     <!-- MAIN CONTENT -->
     <main id="main">
-
 
         <!-- Top Navbar -->
         <div class="top-bar" style="background: #108082;">
@@ -298,11 +514,15 @@
                         <div class="contact-details">
                             <ul class="d-flex">
                                 <li>
-                                    <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                                    <a href="tel:+91-8000007336">
+                                        <i class="fa-solid fa-phone"></i> +91-8000007336
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
-                                        contact@petroindustech.com</a>
+                                    <a href="mailto:contact@petroindustech.com">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        contact@petroindustech.com
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -312,28 +532,34 @@
                         <div class="news-box">
                             <ul class="footer-social topnav-social-icon">
                                 <li>
-                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
-                                            class="fa-brands fa-facebook"></i></a>
+                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank">
+                                        <i class="fa-brands fa-facebook"></i>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
-                                            class="fa-brands fa-instagram"></i></a>
+                                    <a href="https://www.instagram.com/petroindustries/" target="_blank">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
-                                            class="fa-brands fa-youtube"></i></a>
+                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank">
+                                        <i class="fa-brands fa-youtube"></i>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="https://x.com/Petroindustech" target="_blank"><i
-                                            class="fa-brands fa-x-twitter"></i></a>
+                                    <a href="https://x.com/Petroindustech" target="_blank">
+                                        <i class="fa-brands fa-x-twitter"></i>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
-                                            class="fa-brands fa-pinterest"></i></a>
+                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank">
+                                        <i class="fa-brands fa-pinterest"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -363,15 +589,22 @@
                             style="border-radius:20px;">
 
                             <i class="fa fa-user-circle text-success mr-2"></i>
-                            <span id="adminName">Admin</span>
+
+                            <span>
+                                <span id="adminName">Admin</span>
+                                <br>
+                                <small class="admin-meta" id="adminRoleText">ADMIN</small>
+                            </span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
                             <a class="dropdown-item" href="admin-profile.html">
                                 <i class="fa fa-user mr-2"></i> Profile
                             </a>
+
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="login.html" onclick="logout()">
+
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
                                 <i class="fa fa-sign-out mr-2"></i> Logout
                             </a>
                         </div>
@@ -381,8 +614,8 @@
             </div>
         </nav>
 
-
         <div id="renewalAlert"></div>
+
         <!-- TOP CARDS -->
         <div class="container-fluid mt-5 p-5">
             <div class="row g-3">
@@ -391,15 +624,19 @@
                     <div class="stat-card">
                         <div class="stat-title">Total Orders</div>
                         <div class="stat-value" id="totalOrders">0</div>
-                        <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="stat-card">
                         <div class="stat-title">Total Sales (₹)</div>
-                        <div class="stat-value" id="totalSales">0</div>
-                        <div class="stat-icon"><i class="fa-solid fa-money-bill"></i></div>
+                        <div class="stat-value" id="totalSales">₹0</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-money-bill"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -407,7 +644,9 @@
                     <div class="stat-card">
                         <div class="stat-title">Today Orders</div>
                         <div class="stat-value" id="todayOrders">0</div>
-                        <div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -415,13 +654,16 @@
                     <div class="stat-card">
                         <div class="stat-title">Total Users</div>
                         <div class="stat-value" id="totalUsers">0</div>
-                        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </div>
 
+        <!-- PRODUCTS TABLE -->
         <div class="container-fluid mt-4">
             <div class="table-card">
                 <h4 class="table-title">Display Recent Orders</h4>
@@ -435,16 +677,20 @@
                             <th>Grand Total</th>
                             <th>Status</th>
                             <th>Date</th>
-
                         </tr>
                     </thead>
 
-                    <tbody id="recentProductsBody"></tbody>
+                    <tbody id="recentProductsBody">
+                        <tr>
+                            <td colspan="6" class="empty-row">Loading product orders...</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
+
         <!-- RECENT ORDERS TABLE -->
-        <div class="container-fluid mt-4">
+        <div class="container-fluid mt-4 mb-5">
             <div class="table-card">
                 <h4 class="table-title">Recent Orders</h4>
 
@@ -457,155 +703,319 @@
                             <th>Grand Total</th>
                             <th>Status</th>
                             <th>Date</th>
-
                         </tr>
                     </thead>
 
-                    <tbody id="recentOrdersBody"></tbody>
-                    <!-- <tbody id="recentProductsBody"></tbody> -->
+                    <tbody id="recentOrdersBody">
+                        <tr>
+                            <td colspan="6" class="empty-row">Loading recent orders...</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-        <div id="renewalModal" class="renewal-modal">
 
+        <!-- RENEWAL MODAL -->
+        <div id="renewalModal" class="renewal-modal">
             <div class="renewal-modal-box">
 
                 <div class="renewal-icon">
                     <i class="fa-solid fa-circle-xmark"></i>
                 </div>
 
-                <h3 id="renewalModalTitle">
-                    Plan Expired
-                </h3>
+                <h3 id="renewalModalTitle">Plan Expired</h3>
 
-                <p id="renewalModalMessage">
-                    Your subscription has expired.
-                </p>
+                <p id="renewalModalMessage">Your subscription has expired.</p>
 
                 <div class="api-renew-box">
-
                     <input type="text" id="renewalApiInput" placeholder="Enter Renewal API Key">
 
                     <button class="btn-api" onclick="verifyRenewalApi()">
-
                         Submit API Key
-
                     </button>
 
                     <small id="apiErrorMsg"></small>
-
                 </div>
 
                 <div class="renewal-actions">
-
                     <button class="btn-renew" onclick="contactSupport()">
-
                         Renew Subscription
-
                     </button>
 
                     <button class="btn-ok" onclick="closeRenewalModal()">
-
                         Close
-
                     </button>
-
                 </div>
 
             </div>
-
         </div>
 
     </main>
 
-
-
-    <script>
-        function showPopup(type, title, message) {
-            const modal = document.getElementById("popupModal");
-            const icon = document.getElementById("modalIcon");
-            const modalTitle = document.getElementById("modalTitle");
-            const modalMessage = document.getElementById("modalMessage");
-
-            if (type === "success") {
-                icon.innerHTML = "✅";
-                modalTitle.style.color = "#108082";
-            } else {
-                icon.innerHTML = "❌";
-                modalTitle.style.color = "#d93025";
-            }
-
-            modalTitle.innerText = title;
-            modalMessage.innerText = message;
-            modal.style.display = "flex";
-        }
-
-        function closePopup() {
-            document.getElementById("popupModal").style.display = "none";
-        }
-    </script>
-
-
-    <button onclick="logout()">Logout</button>
+    <div class="session-alert" id="sessionAlert"></div>
 
     <script>
-        function logout() {
-            firebase.auth().signOut().then(() => {
-                localStorage.clear();
-                window.location.href = "index.html";
-            });
-        }
-    </script>
+        "use strict";
 
-
-
-
-    <script>
         /* ==============================
-           FIREBASE CONFIG (ONLY ONCE)
-        ==============================*/
+           FIREBASE CONFIG
+        ============================== */
+
         const firebaseConfig = {
             apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
             authDomain: "petro-oms.firebaseapp.com",
             projectId: "petro-oms",
             storageBucket: "petro-oms.firebasestorage.app",
             messagingSenderId: "562472760628",
-            appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
+            appId: "1:562472760628:web:384f4eda2c862b6e3ce161"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (typeof firebase === "undefined") {
+            alert("Firebase SDK not loaded. Please check script order.");
+            throw new Error("Firebase SDK not loaded");
+        }
+
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
         const db = firebase.firestore();
 
         /* ==============================
-           RENEWAL CHECK (FIXED)
-        ==============================*/
-        let renewalChecked = false; // run only once per page load
+           GLOBAL STATE
+        ============================== */
+
+        const CONFIG = {
+            LOGIN_PAGE: "login.html",
+            SESSION_HOURS: 12,
+            ALLOWED_ROLES: ["admin", "super_admin", "manager"],
+            SUBSCRIPTION_COLLECTION: "subscription",
+            SUBSCRIPTION_DOC_ID: "TZxEjESFJ6xuT9V3ZGfM"
+        };
+
+        let orders = [];
+        let productOrders = [];
+        let subscriptionData = {};
+        let renewalChecked = false;
+        let ordersUnsubscribe = null;
+        let productsUnsubscribe = null;
+
+        /* ==============================
+           START
+        ============================== */
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const sessionOk = checkAdminSession();
+
+            if (!sessionOk) {
+                return;
+            }
+
+            applySavedDarkMode();
+            highlightActiveSidebar();
+            initDashboard();
+        });
+
+        /* ==============================
+           SESSION CHECK
+        ============================== */
+
+        function checkAdminSession() {
+            const adminEmail = localStorage.getItem("adminEmail");
+            const adminRole = localStorage.getItem("adminRole");
+            const adminStatus = localStorage.getItem("adminStatus");
+            const adminName = localStorage.getItem("adminName") || "Admin";
+
+            let expiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
+
+            if (!expiresAt && adminEmail && adminRole && adminStatus === "active") {
+                expiresAt = Date.now() + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+                localStorage.setItem("sessionExpiresAt", String(expiresAt));
+            }
+
+            if (
+                !adminEmail ||
+                !adminRole ||
+                adminStatus !== "active" ||
+                !CONFIG.ALLOWED_ROLES.includes(adminRole) ||
+                Date.now() > expiresAt
+            ) {
+                clearSessionAndRedirect();
+                return false;
+            }
+
+            const adminNameEl = document.getElementById("adminName");
+            const adminRoleTextEl = document.getElementById("adminRoleText");
+
+            if (adminNameEl) {
+                adminNameEl.innerText = adminName;
+            }
+
+            if (adminRoleTextEl) {
+                adminRoleTextEl.innerText = adminRole.replace(/_/g, " ").toUpperCase();
+            }
+
+            document.body.classList.add("dashboard-ready");
+            return true;
+        }
+
+        function clearSessionAndRedirect() {
+            localStorage.removeItem("adminUid");
+            localStorage.removeItem("adminEmail");
+            localStorage.removeItem("adminName");
+            localStorage.removeItem("adminRole");
+            localStorage.removeItem("adminRawRole");
+            localStorage.removeItem("adminStatus");
+            localStorage.removeItem("adminDocId");
+            localStorage.removeItem("loggedAdmin");
+            localStorage.removeItem("user_name");
+            localStorage.removeItem("user_email");
+            localStorage.removeItem("user_role");
+            localStorage.removeItem("loginTime");
+            localStorage.removeItem("sessionExpiresAt");
+            localStorage.removeItem("firebaseAuthLogin");
+
+            window.location.replace(CONFIG.LOGIN_PAGE);
+        }
+
+        function refreshSessionTime() {
+            const expiresAt = Date.now() + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+            localStorage.setItem("sessionExpiresAt", String(expiresAt));
+        }
+
+        /* ==============================
+           INIT DASHBOARD
+        ============================== */
+
+        function initDashboard() {
+            refreshSessionTime();
+
+            loadRenewalData();
+            listenOrders();
+            listenProductOrders();
+
+            setInterval(function () {
+                const expiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
+
+                if (!expiresAt || Date.now() > expiresAt) {
+                    showSessionAlert("Session expired. Redirecting...");
+                    setTimeout(clearSessionAndRedirect, 800);
+                }
+            }, 30000);
+        }
+
+        /* ==============================
+           NAVIGATION
+        ============================== */
+
+        function goPage(url) {
+            window.location.href = url;
+        }
+
+        window.goPage = goPage;
+
+        function highlightActiveSidebar() {
+            const current = location.pathname.split("/").pop() || "admin-dashboard.html";
+
+            document.querySelectorAll(".sidebar-menu li").forEach(function (li) {
+                const page = li.getAttribute("data-page");
+
+                li.classList.remove("active");
+
+                if (page && page.includes(current)) {
+                    li.classList.add("active");
+                }
+            });
+        }
+
+        /* ==============================
+           LOGOUT
+        ============================== */
+
+        function logout() {
+            if (ordersUnsubscribe) {
+                ordersUnsubscribe();
+            }
+
+            if (productsUnsubscribe) {
+                productsUnsubscribe();
+            }
+
+            auth.signOut()
+                .catch(function () {
+                    console.warn("Firebase signout skipped or already signed out.");
+                })
+                .finally(function () {
+                    localStorage.clear();
+                    window.location.href = CONFIG.LOGIN_PAGE;
+                });
+        }
+
+        window.logout = logout;
+
+        /* ==============================
+           DARK MODE
+        ============================== */
+
+        function toggleDarkMode() {
+            const enabled = document.getElementById("darkToggle")?.checked || false;
+
+            document.body.classList.toggle("dark-mode", enabled);
+            localStorage.setItem("petro_admin_dark_mode", enabled ? "true" : "false");
+        }
+
+        window.toggleDarkMode = toggleDarkMode;
+
+        function applySavedDarkMode() {
+            const enabled = localStorage.getItem("petro_admin_dark_mode") === "true";
+            const toggle = document.getElementById("darkToggle");
+
+            document.body.classList.toggle("dark-mode", enabled);
+
+            if (toggle) {
+                toggle.checked = enabled;
+            }
+        }
+
+        /* ==============================
+           RENEWAL CHECK
+        ============================== */
 
         async function loadRenewalData() {
+            if (renewalChecked) return;
+
+            renewalChecked = true;
 
             try {
                 let data = null;
 
-                // Try the known doc ID first
                 const knownDoc = await db
-                    .collection("subscription")
-                    .doc("TZxEjESFJ6xuT9V3ZGfM")
+                    .collection(CONFIG.SUBSCRIPTION_COLLECTION)
+                    .doc(CONFIG.SUBSCRIPTION_DOC_ID)
                     .get();
 
                 if (knownDoc.exists) {
                     data = knownDoc.data();
-                    subscriptionData = data;
+                    subscriptionData = data || {};
                 } else {
-                    console.warn("Subscription doc ID not found, fetching first doc in collection...");
-                    const snap = await db.collection("subscription").limit(1).get();
+                    console.warn("Subscription doc ID not found. Fetching first doc...");
+
+                    const snap = await db
+                        .collection(CONFIG.SUBSCRIPTION_COLLECTION)
+                        .limit(1)
+                        .get();
+
                     if (snap.empty) {
-                        console.error("No documents found in 'subscription' collection at all.");
+                        console.warn("No subscription document found.");
                         return;
                     }
+
                     data = snap.docs[0].data();
+                    subscriptionData = data || {};
                 }
 
-                checkRenewalStatus(data.renewalDate);
+                checkRenewalStatus(data?.renewalDate);
 
             } catch (err) {
                 console.error("Renewal fetch error:", err);
@@ -613,34 +1023,53 @@
         }
 
         function showRenewalModal(title, message) {
-            document.getElementById("renewalModalTitle").innerText = title;
-            document.getElementById("renewalModalMessage").innerText = message;
-            document.getElementById("renewalModal").style.display = "flex";
+            const titleEl = document.getElementById("renewalModalTitle");
+            const messageEl = document.getElementById("renewalModalMessage");
+            const modalEl = document.getElementById("renewalModal");
+
+            if (titleEl) titleEl.innerText = title || "Subscription Alert";
+            if (messageEl) messageEl.innerText = message || "";
+            if (modalEl) modalEl.style.display = "flex";
         }
 
         function closeRenewalModal() {
-            document.getElementById("renewalModal").style.display = "none";
+            const modalEl = document.getElementById("renewalModal");
+
+            if (modalEl) {
+                modalEl.style.display = "none";
+            }
         }
 
+        window.closeRenewalModal = closeRenewalModal;
+
         function checkRenewalStatus(renewalDate) {
+            const alertEl = document.getElementById("renewalAlert");
+
+            if (!alertEl) return;
+
+            alertEl.innerHTML = "";
 
             if (!renewalDate) {
                 console.warn("renewalDate is empty/undefined");
                 return;
             }
 
-            // Handle Firestore Timestamp objects as well as strings
             let expireDate;
+
             if (renewalDate && typeof renewalDate.toDate === "function") {
                 expireDate = renewalDate.toDate();
             } else {
-                // Trim whitespace from string values (fixes "2026-06-11 " issue)
                 const cleanStr = String(renewalDate).trim();
-                expireDate = new Date(cleanStr + "T00:00:00");
+
+                if (/^\d{4}-\d{2}-\d{2}$/.test(cleanStr)) {
+                    expireDate = new Date(cleanStr + "T00:00:00");
+                } else {
+                    expireDate = new Date(cleanStr);
+                }
             }
 
             if (isNaN(expireDate.getTime())) {
-                console.error("Invalid renewalDate value:", JSON.stringify(renewalDate));
+                console.error("Invalid renewalDate value:", renewalDate);
                 return;
             }
 
@@ -653,16 +1082,13 @@
                 (expireDate - today) / (1000 * 60 * 60 * 24)
             );
 
-
-            // Reset alert bar each time
-            document.getElementById("renewalAlert").innerHTML = "";
-
             if (diffDays === 0) {
                 showRenewalModal(
                     "⚠️ Plan Expiring Today",
                     "Your subscription will expire today. Please renew immediately."
                 );
-                document.getElementById("renewalAlert").innerHTML = `
+
+                alertEl.innerHTML = `
                     <div class="renewal-expired">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         Your plan expires TODAY. Please renew immediately.
@@ -676,7 +1102,8 @@
                     "❌ Plan Expired",
                     "Your subscription has expired. Please renew your plan."
                 );
-                document.getElementById("renewalAlert").innerHTML = `
+
+                alertEl.innerHTML = `
                     <div class="renewal-expired">
                         <i class="fa-solid fa-circle-xmark"></i>
                         Your plan has expired. Please renew your plan.
@@ -686,7 +1113,7 @@
             }
 
             if (diffDays > 0 && diffDays <= 7) {
-                document.getElementById("renewalAlert").innerHTML = `
+                alertEl.innerHTML = `
                     <div class="renewal-warning">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         Plan Expiring in ${diffDays} Day(s)
@@ -695,295 +1122,385 @@
             }
         }
 
-        let orders = [];
-        let subscriptionData = {};
-
         function contactSupport() {
-
             window.open(
                 "https://rankchahiye.com/services/dashboard.html",
                 "_blank"
             );
-
         }
+
+        window.contactSupport = contactSupport;
 
         async function verifyRenewalApi() {
+            const input = document.getElementById("renewalApiInput");
+            const error = document.getElementById("apiErrorMsg");
 
-            const enteredKey =
-                document.getElementById(
-                    "renewalApiInput"
-                ).value.trim();
-
-            const error =
-                document.getElementById(
-                    "apiErrorMsg"
-                );
+            const enteredKey = String(input?.value || "").trim();
+            const firestoreKey = String(subscriptionData?.apiKey || "").trim();
 
             if (!enteredKey) {
-
-                error.innerText =
-                    "Please enter API Key";
-
+                if (error) error.innerText = "Please enter API Key";
                 return;
             }
 
-            const firestoreKey =
-                subscriptionData.apiKey;
-
-            if (
-                enteredKey !== firestoreKey
-            ) {
-
-                error.innerText =
-                    "Invalid API Key";
-
+            if (!firestoreKey) {
+                if (error) error.innerText = "API key not found in subscription data.";
                 return;
             }
 
-            error.innerText = "";
+            if (enteredKey !== firestoreKey) {
+                if (error) error.innerText = "Invalid API Key";
+                return;
+            }
 
-            alert(
-                "Subscription Activated Successfully"
-            );
+            if (error) error.innerText = "";
 
+            showSessionAlert("Subscription Activated Successfully");
             closeRenewalModal();
-
         }
+
+        window.verifyRenewalApi = verifyRenewalApi;
 
         /* ==============================
            REALTIME FETCH ORDERS
-        ==============================*/
-        db.collection("orders")
-            .orderBy("savedAt", "desc")
-            .onSnapshot((snap) => {
-                // Get all orders and update the dashboard and orders table
-                orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                loadDashboard();
-                loadRecentOrders();
-            });
-        /* ==============================
-     DASHBOARD STATS
-  ==============================*/
-        function loadDashboard() {
-            // Display total orders
-            document.getElementById("totalOrders").innerText = orders.length;
+        ============================== */
 
-            // Calculate total sales by summing up the grandTotal of each order
-            const totalSales = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
-            document.getElementById("totalSales").innerText = "₹" + totalSales.toLocaleString();
+        function listenOrders() {
+            const tbody = document.getElementById("recentOrdersBody");
 
-            // Get today's date and filter orders placed today
-            const today = new Date().toISOString().split("T")[0];
-            const todayOrders = orders.filter(o => o.orderDate === today).length;
-            document.getElementById("todayOrders").innerText = todayOrders;
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-row">Loading recent orders...</td>
+                    </tr>
+                `;
+            }
 
-            // Count unique users by counting unique Party Names
-            const uniqueUsers = new Set(orders.map(o => o.party?.name)); // Assuming 'party.name' is the identifier
-            document.getElementById("totalUsers").innerText = uniqueUsers.size;
+            ordersUnsubscribe = db
+                .collection("orders")
+                .orderBy("savedAt", "desc")
+                .onSnapshot(
+                    function (snap) {
+                        orders = snap.docs.map(function (doc) {
+                            return {
+                                id: doc.id,
+                                ...doc.data()
+                            };
+                        });
+
+                        loadDashboard();
+                        loadRecentOrders();
+                    },
+                    function (error) {
+                        console.error("Orders snapshot error:", error);
+
+                        if (tbody) {
+                            tbody.innerHTML = `
+                                <tr>
+                                    <td colspan="6" class="error-row">
+                                        Unable to load orders. Check Firestore rules or index.
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }
+                );
         }
 
-        /* ==============================
-   RECENT ORDERS TABLE
-==============================*/
+        function loadDashboard() {
+            const totalOrdersEl = document.getElementById("totalOrders");
+            const totalSalesEl = document.getElementById("totalSales");
+            const todayOrdersEl = document.getElementById("todayOrders");
+            const totalUsersEl = document.getElementById("totalUsers");
+
+            const validOrders = orders.filter(function (order) {
+                return order && order.orderNo;
+            });
+
+            const totalSales = validOrders.reduce(function (sum, order) {
+                return sum + parseAmount(order.grandTotal);
+            }, 0);
+
+            const today = getTodayDateString();
+
+            const todayOrders = validOrders.filter(function (order) {
+                return getOrderDateString(order) === today;
+            }).length;
+
+            const uniqueUsers = new Set(
+                validOrders
+                    .map(function (order) {
+                        return normalizeValue(
+                            order.party?.name ||
+                            order.partyName ||
+                            order.customerName ||
+                            order.userId ||
+                            ""
+                        );
+                    })
+                    .filter(Boolean)
+            );
+
+            if (totalOrdersEl) totalOrdersEl.innerText = validOrders.length;
+            if (totalSalesEl) totalSalesEl.innerText = "₹" + totalSales.toLocaleString("en-IN");
+            if (todayOrdersEl) todayOrdersEl.innerText = todayOrders;
+            if (totalUsersEl) totalUsersEl.innerText = uniqueUsers.size;
+        }
+
         function loadRecentOrders() {
             const tbody = document.getElementById("recentOrdersBody");
 
-            // If no orders, display message
-            if (orders.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='6' class='text-center'>No recent orders</td></tr>";
+            if (!tbody) return;
+
+            const filteredOrders = orders
+                .filter(function (order) {
+                    return (
+                        order &&
+                        order.orderNo &&
+                        Number(parseAmount(order.grandTotal)) >= 0
+                    );
+                })
+                .slice(0, 10);
+
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-row">No recent orders found</td>
+                    </tr>
+                `;
                 return;
             }
 
-            // Show all orders in the table
-            tbody.innerHTML = orders
-                .filter(o =>
-                    o.orderNo &&
-                    o.party &&
-                    o.party.name &&
-                    Number(o.grandTotal || 0) > 0
-                )
-                .slice(0, 10)
-                .map(o => `
-        <tr>
-            <td>${o.orderNo}</td>
-            <td>${o.party?.name || "-"}</td>
-            <td>${o.party?.type || "-"}</td> <!-- Show Party Type -->
-            <td>₹${o.grandTotal}/-</td>
-            <td>
-                <span class="status-badge ${getStatusClass(o.status)}">
-                    ${o.status || "PENDING"}
-                </span>
-            </td>
-            <td>${o.orderDate}</td>
-        </tr>
-    `).join("");
+            tbody.innerHTML = filteredOrders
+                .map(function (order) {
+                    const orderNo = escapeHtml(order.orderNo || "-");
+                    const partyName = escapeHtml(order.party?.name || order.partyName || "-");
+                    const partyType = escapeHtml(order.party?.type || order.partyType || "-");
+                    const grandTotal = parseAmount(order.grandTotal);
+                    const status = escapeHtml(order.status || "PENDING");
+                    const date = escapeHtml(getOrderDateString(order) || "-");
+
+                    return `
+                        <tr>
+                            <td>${orderNo}</td>
+                            <td>${partyName}</td>
+                            <td>${partyType}</td>
+                            <td>₹${grandTotal.toLocaleString("en-IN")}/-</td>
+                            <td>
+                                <span class="status-badge ${getStatusClass(order.status)}">
+                                    ${status}
+                                </span>
+                            </td>
+                            <td>${date}</td>
+                        </tr>
+                    `;
+                })
+                .join("");
         }
 
         /* ==============================
-           FETCH PRODUCTS ORDER DATA
-        ==============================*/
+           PRODUCT ORDERS
+        ============================== */
 
-        let productOrders = [];
+        function listenProductOrders() {
+            const tbody = document.getElementById("recentProductsBody");
 
-        db.collection("products")
-            .orderBy("createdAt", "desc")
-            .limit(2)
-            .onSnapshot((snapshot) => {
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-row">Loading product orders...</td>
+                    </tr>
+                `;
+            }
 
-                productOrders = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+            productsUnsubscribe = db
+                .collection("products")
+                .orderBy("createdAt", "desc")
+                .limit(10)
+                .onSnapshot(
+                    function (snapshot) {
+                        productOrders = snapshot.docs.map(function (doc) {
+                            return {
+                                id: doc.id,
+                                ...doc.data()
+                            };
+                        });
 
-                loadRecentProductOrders();
+                        loadRecentProductOrders();
+                    },
+                    function (error) {
+                        console.error("Products snapshot error:", error);
 
-            });
-
-
-
-        /* ==============================
-           LOAD PRODUCTS INTO TABLE
-        ==============================*/
+                        if (tbody) {
+                            tbody.innerHTML = `
+                                <tr>
+                                    <td colspan="6" class="error-row">
+                                        Unable to load product orders. Check Firestore rules or index.
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }
+                );
+        }
 
         function loadRecentProductOrders() {
-
-            const tbody =
-                document.getElementById("recentProductsBody");
+            const tbody = document.getElementById("recentProductsBody");
 
             if (!tbody) return;
 
-            if (productOrders.length === 0) {
-
-                tbody.innerHTML =
-                    "<tr><td colspan='6' class='text-center'>No product orders found</td></tr>";
-
+            if (!productOrders.length) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-row">No product orders found</td>
+                    </tr>
+                `;
                 return;
             }
 
-            tbody.innerHTML =
-                productOrders.map(order => `
+            tbody.innerHTML = productOrders
+                .map(function (order) {
+                    const orderNo = escapeHtml(order.partyDetails?.orderNo || order.orderNo || "-");
+                    const partyName = escapeHtml(order.partyDetails?.partyName || order.partyName || "-");
+                    const partyType = escapeHtml(order.partyDetails?.partyType || order.partyType || "-");
+                    const grandTotal = parseAmount(order.grandTotal);
+                    const orderDate = escapeHtml(order.partyDetails?.orderDate || getProductDateString(order) || "-");
 
-        <tr>
-
-            <td>
-                ${order.partyDetails?.orderNo || "-"}
-            </td>
-
-            <td>
-                ${order.partyDetails?.partyName || "-"}
-            </td>
-
-            <td>
-                ${order.partyDetails?.partyType || "-"}
-            </td>
-
-            <td>
-                ₹${order.grandTotal || 0}/-
-            </td>
-
-            <td>
-                <span class="status-badge pending">
-                    PENDING
-                </span>
-            </td>
-
-            <td>
-                ${order.partyDetails?.orderDate || "-"}
-            </td>
-
-        </tr>
-
-    `).join("");
-
+                    return `
+                        <tr>
+                            <td>${orderNo}</td>
+                            <td>${partyName}</td>
+                            <td>${partyType}</td>
+                            <td>₹${grandTotal.toLocaleString("en-IN")}/-</td>
+                            <td>
+                                <span class="status-badge pending">PENDING</span>
+                            </td>
+                            <td>${orderDate}</td>
+                        </tr>
+                    `;
+                })
+                .join("");
         }
 
-
         /* ==============================
-           STATUS BADGE COLOR
-        ==============================*/
+           HELPERS
+        ============================== */
+
         function getStatusClass(status) {
+            const value = String(status || "").toLowerCase();
 
-            if (!status)
-                return "pending";
-
-            status =
-                status.toLowerCase();
-
-            if (
-                status.includes("delivered")
-            )
-                return "success";
-
-            if (
-                status.includes("partial")
-            )
-                return "partial";
-
-            if (
-                status.includes("hold")
-            )
-                return "hold";
-
-            if (
-                status.includes("cancel")
-            )
-                return "cancelled";
-
-            if (
-                status.includes("payment")
-            )
-                return "payment";
-
-            if (
-                status.includes("quotation")
-            )
-                return "quotation";
+            if (!value) return "pending";
+            if (value.includes("delivered")) return "success";
+            if (value.includes("partial")) return "partial";
+            if (value.includes("hold")) return "hold";
+            if (value.includes("cancel")) return "cancelled";
+            if (value.includes("payment")) return "payment";
+            if (value.includes("quotation")) return "quotation";
 
             return "pending";
-
         }
 
+        function parseAmount(value) {
+            if (typeof value === "number") return value;
 
-        /* ==============================
-           SIDEBAR ACTIVE HIGHLIGHT
-        ==============================*/
-        let current = location.pathname.split("/").pop();
+            const cleaned = String(value || "0")
+                .replace(/[₹,\s/-]/g, "")
+                .trim();
 
-        document.querySelectorAll(".sidebar-menu li a").forEach(a => {
-            if (a.href.includes(current)) {
-                a.parentElement.classList.add("active");
+            const num = Number(cleaned);
+
+            return Number.isFinite(num) ? num : 0;
+        }
+
+        function getTodayDateString() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, "0");
+            const dd = String(now.getDate()).padStart(2, "0");
+
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function getOrderDateString(order) {
+            if (!order) return "";
+
+            if (order.orderDate) {
+                return String(order.orderDate).split("T")[0];
             }
-        });
 
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // ✅ Login hai → page dikhao
-                document.body.style.display = "block";
-
-                if (!renewalChecked) {
-                    renewalChecked = true;
-                    loadRenewalData();
-                }
-            } else {
-                // ❌ Login nahi → LOGIN PAGE
-                window.location.replace("login.html");
+            if (order.savedAt && typeof order.savedAt.toDate === "function") {
+                return formatDate(order.savedAt.toDate());
             }
-        });
 
-        // NOTE: removed duplicate window.addEventListener("load", loadRenewalData)
-        // It was firing before auth/Firestore was ready and could silently fail.
-        // onAuthStateChanged above is the single source of truth now.
+            if (order.createdAt && typeof order.createdAt.toDate === "function") {
+                return formatDate(order.createdAt.toDate());
+            }
+
+            return "";
+        }
+
+        function getProductDateString(order) {
+            if (!order) return "";
+
+            if (order.createdAt && typeof order.createdAt.toDate === "function") {
+                return formatDate(order.createdAt.toDate());
+            }
+
+            if (order.createdAt) {
+                return String(order.createdAt).split("T")[0];
+            }
+
+            return "";
+        }
+
+        function formatDate(date) {
+            if (!(date instanceof Date) || isNaN(date.getTime())) return "";
+
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function normalizeValue(value) {
+            return String(value || "")
+                .trim()
+                .toLowerCase();
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function showSessionAlert(message) {
+            const alertEl = document.getElementById("sessionAlert");
+
+            if (!alertEl) {
+                alert(message);
+                return;
+            }
+
+            alertEl.innerText = message;
+            alertEl.style.display = "block";
+
+            setTimeout(function () {
+                alertEl.style.display = "none";
+            }, 2500);
+        }
     </script>
 
-
-
-
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/jquery.appear.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.appear.js"></script>
     <script src="product.js"></script>
-    <script src="js/script.js"></script> 
-    <!-- <script src="js/dev.js"></script> -->
+    <script src="js/script.js"></script>
+
 </body>
 
 </html>

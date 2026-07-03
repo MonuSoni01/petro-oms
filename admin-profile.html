@@ -8,137 +8,1003 @@
 
     <!-- Bootstrap -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        :root {
+            --primary: #108082;
+            --primary-dark: #0b5f62;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --white: #ffffff;
+            --bg: #eef3f4;
+        }
+
         body {
-            background: #f4f6f9;
-        }
-
-        .profile-card {
-            max-width: 500px;
-            margin: 60px auto;
-            border-radius: 10px;
-        }
-
-        .profile-header {
-            background: #108082;
-            color: #fff;
-            padding: 20px;
-            border-radius: 10px 10px 0 0;
-            text-align: center;
-        }
-
-        .profile-body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, rgba(16, 128, 130, 0.14), transparent 35%),
+                linear-gradient(135deg, #f5fbfb, #eef3f4);
             padding: 25px;
+            display: none;
         }
 
-        .profile-body p {
-            font-size: 16px;
-            margin-bottom: 10px;
+        body.page-ready {
+            display: block;
         }
 
-        .btn-block {
+        .profile-wrapper {
+            max-width: 980px;
+            margin: 45px auto;
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.13);
+            border: 1px solid rgba(16, 128, 130, 0.12);
+        }
+
+        .profile-left {
+            background: linear-gradient(135deg, #108082, #0b5f62);
+            color: #ffffff;
+            padding: 42px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-left::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 0, 0.13);
+            border-radius: 50%;
+            top: -80px;
+            right: -80px;
+        }
+
+        .profile-left::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.09);
+            border-radius: 50%;
+            bottom: -60px;
+            left: -60px;
+        }
+
+        .profile-left-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-avatar {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: #108082;
+            display: grid;
+            place-items: center;
+            font-size: 46px;
+            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-left h3 {
+            margin: 0 0 7px;
+            font-weight: 800;
+            word-break: break-word;
+        }
+
+        .profile-left p {
+            margin: 0;
+            opacity: 0.88;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 18px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .profile-right {
+            padding: 38px;
+        }
+
+        .section-title {
+            margin-bottom: 24px;
+        }
+
+        .section-title h4 {
+            margin: 0 0 6px;
+            font-size: 25px;
+            font-weight: 900;
+            color: #111827;
+        }
+
+        .section-title p {
+            margin: 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .info-card label {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            color: #6b7280;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info-card span {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+            color: #111827;
+            word-break: break-word;
+        }
+
+        .status-active {
+            color: #16a34a !important;
+        }
+
+        .status-inactive {
+            color: #dc2626 !important;
+        }
+
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            height: 44px;
+            border-radius: 12px;
+            font-weight: 800;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .btn-password {
+            background: #f59e0b;
+            color: #ffffff;
+        }
+
+        .btn-password:hover {
+            background: #d97706;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .btn-logout {
+            background: #dc2626;
+            color: #ffffff;
+        }
+
+        .btn-logout:hover {
+            background: #b91c1c;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .btn-back {
+            margin-top: 12px;
             width: 100%;
+            height: 44px;
+            border-radius: 12px;
+            background: #108082;
+            color: #ffffff;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: 0.25s ease;
+        }
+
+        .btn-back:hover {
+            background: #0b5f62;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .loading-box {
+            padding: 18px;
+            background: #eefafa;
+            border: 1px dashed #108082;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #108082;
+            font-weight: 800;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .alert-box {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #bbf7d0;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .session-note {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px dashed #d1d5db;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .session-note b {
+            color: #108082;
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 14px;
+            }
+
+            .profile-wrapper {
+                grid-template-columns: 1fr;
+                margin: 20px auto;
+            }
+
+            .profile-right {
+                padding: 26px 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="card profile-card shadow">
-        <div class="profile-header">
-            <i class="fa fa-user-circle fa-3x mb-2"></i>
-            <h4>Admin Profile</h4>
+    <div class="profile-wrapper">
+
+        <!-- LEFT PROFILE -->
+        <div class="profile-left">
+            <div class="profile-left-content">
+
+                <div class="profile-avatar">
+                    <i class="fa fa-user-circle"></i>
+                </div>
+
+                <h3 id="profileName">Loading...</h3>
+                <p id="profileEmail">Loading...</p>
+
+                <div class="role-badge">
+                    <i class="fa fa-shield-halved"></i>
+                    <span id="profileRoleBadge">Admin</span>
+                </div>
+
+            </div>
         </div>
 
-        <div class="profile-body">
-            <p><b>Name:</b> <span id="adminName">Loading...</span></p>
-            <p><b>Email:</b> <span id="adminEmail">Loading...</span></p>
-            <p><b>Role:</b> <span id="adminRole">Admin</span></p>
-            <p><b>Last Login:</b> <span id="lastLogin">-</span></p>
+        <!-- RIGHT DETAILS -->
+        <div class="profile-right">
 
-            <hr>
+            <div class="section-title">
+                <h4>Admin Profile</h4>
+                <p>Your PETRO OMS account details and access information.</p>
+            </div>
 
-            <button class="btn btn-warning btn-block mb-2" onclick="changePassword()">
-                <i class="fa fa-key"></i> Change Password
-            </button>
+            <div class="loading-box" id="loadingBox">
+                <i class="fa fa-spinner fa-spin"></i>
+                Loading admin profile...
+            </div>
 
-            <button class="btn btn-danger btn-block" onclick="logout()">
-                <i class="fa fa-sign-out-alt"></i> Logout
-            </button>
+            <div class="alert-box" id="alertBox"></div>
 
-            <a href="admin-dashboard.html" class="btn btn-secondary btn-block mt-2">
-                <i class="fa fa-arrow-left"></i> Back to Dashboard
+            <div class="info-grid">
+
+                <div class="info-card">
+                    <label>Name</label>
+                    <span id="adminName">Loading...</span>
+                </div>
+
+                <div class="info-card">
+                    <label>Email</label>
+                    <span id="adminEmail">Loading...</span>
+                </div>
+
+                <div class="info-card">
+                    <label>Role</label>
+                    <span id="adminRole">Loading...</span>
+                </div>
+
+                <div class="info-card">
+                    <label>Status</label>
+                    <span id="adminStatus">Loading...</span>
+                </div>
+
+                <div class="info-card">
+                    <label>Last Login</label>
+                    <span id="lastLogin">-</span>
+                </div>
+
+                <div class="info-card">
+                    <label>Account UID / Doc ID</label>
+                    <span id="adminUid">-</span>
+                </div>
+
+            </div>
+
+            <div class="action-row">
+
+                <button class="btn-custom btn-password" onclick="changePassword()">
+                    <i class="fa fa-key"></i>
+                    Change Password
+                </button>
+
+                <button class="btn-custom btn-logout" onclick="logout()">
+                    <i class="fa fa-sign-out-alt"></i>
+                    Logout
+                </button>
+
+            </div>
+
+            <a href="admin-dashboard.html" class="btn-back">
+                <i class="fa fa-arrow-left"></i>
+                Back to Dashboard
             </a>
+
+            <div class="session-note">
+                <b>Note:</b> Profile details are loaded from your PETRO OMS admin session and Rank Chahiye admin record.
+            </div>
+
         </div>
+
     </div>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
     <script>
+        "use strict";
+
         /* ===============================
            FIREBASE INIT
         ================================ */
-        firebase.initializeApp({
+
+        const firebaseConfig = {
             apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
             authDomain: "petro-oms.firebaseapp.com",
-            projectId: "petro-oms"
-        });
+            projectId: "petro-oms",
+            storageBucket: "petro-oms.firebasestorage.app",
+            messagingSenderId: "562472760628",
+            appId: "1:562472760628:web:384f4eda2c862b6e3ce161"
+        };
+
+        if (typeof firebase === "undefined") {
+            alert("Firebase SDK not loaded. Please check script order.");
+            throw new Error("Firebase SDK not loaded");
+        }
+
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
         /* ===============================
-           AUTH CHECK + LOAD PROFILE
+           CONFIG
         ================================ */
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                window.location.href = "login.html";
+
+        const CONFIG = {
+            LOGIN_PAGE: "login.html",
+            DASHBOARD_PAGE: "admin-dashboard.html",
+            LOGIN_COLLECTION: "sales-login",
+            SESSION_HOURS: 12,
+            ALLOWED_ROLES: ["admin", "super_admin", "manager"]
+        };
+
+        /* ===============================
+           PAGE START
+        ================================ */
+
+        document.addEventListener("DOMContentLoaded", function () {
+            startProfilePage();
+        });
+
+        async function startProfilePage() {
+            const session = getLocalAdminSession();
+
+            if (!session.valid) {
+                redirectToLogin();
                 return;
             }
 
-            document.getElementById("adminName").innerText =
-                user.displayName || "Admin";
+            document.body.classList.add("page-ready");
+            showLoading(true);
 
-            document.getElementById("adminEmail").innerText =
-                user.email;
+            try {
+                const authUser = auth.currentUser || await getCurrentAuthUserOnce();
 
-            document.getElementById("adminRole").innerText =
-                "Super Admin"; // future me Firestore se aayega
+                const profileData = await loadAdminProfile(session, authUser);
 
-            if (user.metadata?.lastSignInTime) {
-                document.getElementById("lastLogin").innerText =
-                    new Date(user.metadata.lastSignInTime).toLocaleString();
+                if (!profileData) {
+                    showAlert("error", "Admin profile not found. Please login again.");
+                    setTimeout(redirectToLogin, 1000);
+                    return;
+                }
+
+                const normalizedStatus = normalizeText(profileData.status || "active");
+                const normalizedRole = normalizeRole(profileData.role || session.role || "admin");
+
+                if (normalizedStatus !== "active") {
+                    showAlert("error", "Your admin account is inactive. Please contact super admin.");
+                    setTimeout(logout, 1000);
+                    return;
+                }
+
+                if (!CONFIG.ALLOWED_ROLES.includes(normalizedRole)) {
+                    showAlert("error", "Your role does not have profile access.");
+                    setTimeout(logout, 1000);
+                    return;
+                }
+
+                renderProfile(profileData, authUser);
+                syncLocalSession(profileData, authUser);
+
+            } catch (error) {
+                console.error("Profile Load Error:", error);
+                showAlert("error", "Profile load failed: " + getErrorMessage(error));
+                renderProfileFromLocal(session);
+            } finally {
+                showLoading(false);
             }
-        });
+        }
+
+        /* ===============================
+           SESSION CHECK
+        ================================ */
+
+        function getLocalAdminSession() {
+            const email = localStorage.getItem("adminEmail") || localStorage.getItem("user_email") || "";
+            const name = localStorage.getItem("adminName") || localStorage.getItem("user_name") || "Admin";
+            const role = normalizeRole(localStorage.getItem("adminRole") || localStorage.getItem("user_role") || "");
+            const status = normalizeText(localStorage.getItem("adminStatus") || "active");
+            const uid = localStorage.getItem("adminUid") || "";
+            const docId = localStorage.getItem("adminDocId") || "";
+            let expiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
+
+            if (!expiresAt && email && role && status === "active") {
+                expiresAt = Date.now() + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+                localStorage.setItem("sessionExpiresAt", String(expiresAt));
+            }
+
+            const valid =
+                Boolean(email) &&
+                Boolean(role) &&
+                status === "active" &&
+                CONFIG.ALLOWED_ROLES.includes(role) &&
+                Date.now() <= expiresAt;
+
+            return {
+                valid,
+                email,
+                name,
+                role,
+                status,
+                uid,
+                docId,
+                expiresAt
+            };
+        }
+
+        function redirectToLogin() {
+            clearAdminSession();
+            window.location.replace(CONFIG.LOGIN_PAGE);
+        }
+
+        /* ===============================
+           FIREBASE AUTH OPTIONAL CHECK
+        ================================ */
+
+        function getCurrentAuthUserOnce() {
+            return new Promise(function (resolve) {
+                let completed = false;
+
+                const timer = setTimeout(function () {
+                    if (!completed) {
+                        completed = true;
+                        resolve(null);
+                    }
+                }, 700);
+
+                const unsubscribe = auth.onAuthStateChanged(function (user) {
+                    if (!completed) {
+                        completed = true;
+                        clearTimeout(timer);
+                        unsubscribe();
+                        resolve(user || null);
+                    }
+                });
+            });
+        }
+
+        /* ===============================
+           LOAD PROFILE
+        ================================ */
+
+        async function loadAdminProfile(session, authUser) {
+            const email = String(
+                session.email ||
+                authUser?.email ||
+                ""
+            ).trim().toLowerCase();
+
+            let adminDocId = session.docId || "";
+            let adminData = null;
+
+            if (adminDocId) {
+                try {
+                    const docSnap = await db
+                        .collection(CONFIG.LOGIN_COLLECTION)
+                        .doc(adminDocId)
+                        .get();
+
+                    if (docSnap.exists) {
+                        adminData = docSnap.data();
+                        adminDocId = docSnap.id;
+                    }
+                } catch (error) {
+                    console.warn("Admin doc by ID not loaded:", error);
+                }
+            }
+
+            if (!adminData && email) {
+                const snap = await db
+                    .collection(CONFIG.LOGIN_COLLECTION)
+                    .where("email", "==", email)
+                    .limit(1)
+                    .get();
+
+                if (!snap.empty) {
+                    adminData = snap.docs[0].data();
+                    adminDocId = snap.docs[0].id;
+                }
+            }
+
+            if (!adminData) {
+                adminData = {
+                    name: session.name,
+                    email: session.email,
+                    role: session.role,
+                    status: session.status,
+                    uid: session.uid,
+                    docId: session.docId
+                };
+            }
+
+            const finalData = {
+                uid: authUser?.uid || session.uid || adminData.uid || adminDocId || "-",
+                docId: adminDocId || session.docId || adminData.docId || "",
+                name:
+                    adminData.name ||
+                    adminData.fullName ||
+                    adminData.displayName ||
+                    session.name ||
+                    authUser?.displayName ||
+                    getNameFromEmail(email),
+                email:
+                    adminData.email ||
+                    email ||
+                    session.email ||
+                    authUser?.email ||
+                    "-",
+                role:
+                    adminData.role ||
+                    session.role ||
+                    "admin",
+                status:
+                    adminData.status ||
+                    session.status ||
+                    "active",
+                lastLogin:
+                    adminData.lastLogin ||
+                    adminData.loginAt ||
+                    session.loginTime ||
+                    localStorage.getItem("loginTime") ||
+                    authUser?.metadata?.lastSignInTime ||
+                    ""
+            };
+
+            return finalData;
+        }
+
+        /* ===============================
+           RENDER PROFILE
+        ================================ */
+
+        function renderProfile(data, authUser) {
+            const role = normalizeRole(data.role);
+            const status = normalizeText(data.status);
+
+            const name = formatName(data.name);
+            const email = String(data.email || "-").trim();
+            const uid = data.uid || data.docId || "-";
+
+            setText("profileName", name);
+            setText("profileEmail", email);
+            setText("profileRoleBadge", formatRole(role));
+
+            setText("adminName", name);
+            setText("adminEmail", email);
+            setText("adminRole", formatRole(role));
+            setText("adminStatus", formatStatus(status));
+            setText("adminUid", uid);
+
+            const statusEl = document.getElementById("adminStatus");
+
+            if (statusEl) {
+                statusEl.classList.remove("status-active", "status-inactive");
+
+                if (status === "active") {
+                    statusEl.classList.add("status-active");
+                } else {
+                    statusEl.classList.add("status-inactive");
+                }
+            }
+
+            setText("lastLogin", getLastLoginText(data, authUser));
+        }
+
+        function renderProfileFromLocal(session) {
+            setText("profileName", formatName(session.name));
+            setText("profileEmail", session.email || "-");
+            setText("profileRoleBadge", formatRole(session.role));
+
+            setText("adminName", formatName(session.name));
+            setText("adminEmail", session.email || "-");
+            setText("adminRole", formatRole(session.role));
+            setText("adminStatus", formatStatus(session.status));
+            setText("adminUid", session.uid || session.docId || "-");
+
+            const loginTime = localStorage.getItem("loginTime");
+
+            setText(
+                "lastLogin",
+                loginTime ? new Date(Number(loginTime)).toLocaleString() : "-"
+            );
+
+            const statusEl = document.getElementById("adminStatus");
+
+            if (statusEl) {
+                statusEl.classList.remove("status-active", "status-inactive");
+                statusEl.classList.add(session.status === "active" ? "status-active" : "status-inactive");
+            }
+        }
+
+        function syncLocalSession(data, authUser) {
+            const role = normalizeRole(data.role);
+            const status = normalizeText(data.status);
+            const now = Date.now();
+            const expiresAt = now + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+
+            localStorage.setItem("adminUid", authUser?.uid || data.uid || "");
+            localStorage.setItem("adminEmail", data.email || "");
+            localStorage.setItem("adminName", data.name || "Admin");
+            localStorage.setItem("adminRole", role || "admin");
+            localStorage.setItem("adminStatus", status || "active");
+            localStorage.setItem("adminDocId", data.docId || "");
+            localStorage.setItem("loggedAdmin", data.name || "Admin");
+
+            localStorage.setItem("user_name", data.name || "Admin");
+            localStorage.setItem("user_email", data.email || "");
+            localStorage.setItem("user_role", role || "admin");
+
+            if (!localStorage.getItem("loginTime")) {
+                localStorage.setItem("loginTime", String(now));
+            }
+
+            localStorage.setItem("sessionExpiresAt", String(expiresAt));
+        }
 
         /* ===============================
            CHANGE PASSWORD
         ================================ */
-        function changePassword() {
-            const user = auth.currentUser;
-            if (!user) return;
 
-            auth.sendPasswordResetEmail(user.email)
-                .then(() => {
-                    alert("Password reset link sent to your email.");
+        function changePassword() {
+            const email =
+                auth.currentUser?.email ||
+                localStorage.getItem("adminEmail") ||
+                localStorage.getItem("user_email") ||
+                "";
+
+            if (!email) {
+                showAlert("error", "Admin email not found.");
+                return;
+            }
+
+            const confirmReset =
+                confirm("Password reset link will be sent to your registered email. Continue?");
+
+            if (!confirmReset) {
+                return;
+            }
+
+            auth.sendPasswordResetEmail(email)
+                .then(function () {
+                    showAlert("success", "Password reset link sent to your email.");
                 })
-                .catch(err => {
-                    alert(err.message);
+                .catch(function (err) {
+                    showAlert("error", getErrorMessage(err));
                 });
         }
+
+        window.changePassword = changePassword;
 
         /* ===============================
            LOGOUT
         ================================ */
-        function logout() {
-            auth.signOut().then(() => {
-                window.location.href = "login.html";
-            });
+
+        async function logout() {
+            try {
+                await auth.signOut();
+            } catch (error) {
+                console.warn("Logout Error:", error);
+            }
+
+            clearAdminSession();
+
+            window.location.href = CONFIG.LOGIN_PAGE;
+        }
+
+        window.logout = logout;
+
+        function clearAdminSession() {
+            localStorage.removeItem("adminUid");
+            localStorage.removeItem("adminEmail");
+            localStorage.removeItem("adminName");
+            localStorage.removeItem("adminRole");
+            localStorage.removeItem("adminRawRole");
+            localStorage.removeItem("adminStatus");
+            localStorage.removeItem("adminDocId");
+            localStorage.removeItem("loggedAdmin");
+
+            localStorage.removeItem("user_name");
+            localStorage.removeItem("user_email");
+            localStorage.removeItem("user_role");
+
+            localStorage.removeItem("loginTime");
+            localStorage.removeItem("sessionExpiresAt");
+            localStorage.removeItem("firebaseAuthLogin");
+
+            localStorage.removeItem("salesman");
+            localStorage.removeItem("loggedSalesman");
+            localStorage.removeItem("prefix");
+        }
+
+        /* ===============================
+           HELPERS
+        ================================ */
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+
+            if (el) {
+                el.innerText = value || "-";
+            }
+        }
+
+        function showLoading(show) {
+            const box = document.getElementById("loadingBox");
+
+            if (box) {
+                box.style.display = show ? "block" : "none";
+            }
+        }
+
+        function showAlert(type, message) {
+            const box = document.getElementById("alertBox");
+
+            if (!box) {
+                alert(message);
+                return;
+            }
+
+            box.className = "alert-box";
+
+            if (type === "success") {
+                box.classList.add("alert-success");
+            } else {
+                box.classList.add("alert-error");
+            }
+
+            box.innerHTML = message;
+            box.style.display = "block";
+
+            setTimeout(function () {
+                box.style.display = "none";
+            }, 3500);
+        }
+
+        function normalizeText(value) {
+            return String(value || "")
+                .trim()
+                .toLowerCase();
+        }
+
+        function normalizeRole(role) {
+            const value = String(role || "")
+                .trim()
+                .toLowerCase()
+                .replace(/[-\s]+/g, "_");
+
+            if (value === "superadmin") return "super_admin";
+            if (value === "super_admin") return "super_admin";
+            if (value === "admin") return "admin";
+            if (value === "manager") return "manager";
+
+            return value;
+        }
+
+        function formatRole(role) {
+            const value = normalizeRole(role)
+                .replace(/_/g, " ")
+                .trim();
+
+            return value
+                .split(" ")
+                .filter(Boolean)
+                .map(function (word) {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                })
+                .join(" ") || "Admin";
+        }
+
+        function formatStatus(status) {
+            const value = normalizeText(status || "active");
+
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+
+        function formatName(name) {
+            return String(name || "Admin").trim();
+        }
+
+        function getNameFromEmail(email) {
+            if (!email) return "Admin";
+
+            const namePart = String(email).split("@")[0] || "Admin";
+
+            return namePart
+                .replace(/[._-]/g, " ")
+                .split(" ")
+                .filter(Boolean)
+                .map(function (word) {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                })
+                .join(" ");
+        }
+
+        function getLastLoginText(data, authUser) {
+            const localLoginTime = localStorage.getItem("loginTime");
+
+            if (localLoginTime && !isNaN(Number(localLoginTime))) {
+                return new Date(Number(localLoginTime)).toLocaleString();
+            }
+
+            if (data?.lastLogin && typeof data.lastLogin.toDate === "function") {
+                return data.lastLogin.toDate().toLocaleString();
+            }
+
+            if (data?.lastLogin) {
+                const date = new Date(data.lastLogin);
+
+                if (!isNaN(date.getTime())) {
+                    return date.toLocaleString();
+                }
+            }
+
+            if (authUser?.metadata?.lastSignInTime) {
+                return new Date(authUser.metadata.lastSignInTime).toLocaleString();
+            }
+
+            return "-";
+        }
+
+        function getErrorMessage(error) {
+            const code = error?.code || "";
+
+            if (code === "auth/invalid-email") {
+                return "Invalid email address.";
+            }
+
+            if (code === "auth/user-not-found") {
+                return "No Firebase Auth account found with this email.";
+            }
+
+            if (code === "auth/too-many-requests") {
+                return "Too many requests. Please try again later.";
+            }
+
+            if (code === "permission-denied") {
+                return "Firestore permission denied. Please check Firebase rules.";
+            }
+
+            return error?.message || "Something went wrong.";
         }
     </script>
-    <script src="js/dev.js"></script> 
+
 </body>
+
 </html>

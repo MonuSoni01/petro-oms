@@ -306,6 +306,137 @@
             background: #0d6e6d;
             transform: translateY(-2px);
         }
+        body {
+    background: #f5f8fa;
+}
+
+.dashboard-header {
+    text-align: left;
+    background: linear-gradient(135deg, #108082, #0b5f61);
+    padding: 28px 30px;
+    border-radius: 18px;
+    color: #fff;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 24px rgba(16, 128, 130, 0.20);
+}
+
+.dashboard-header h1 {
+    color: #fff;
+    font-size: 34px;
+    margin: 10px 0 6px;
+}
+
+.dashboard-header p {
+    color: rgba(255,255,255,0.85);
+    font-size: 15px;
+    margin: 0;
+}
+
+.page-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.16);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.filters-box {
+    border: 0;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.filters-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e8eef2;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+
+.filters-head h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #108082;
+    margin: 0;
+}
+
+.filters-head p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0;
+}
+
+.filters-box label {
+    color: #374151;
+    font-size: 13px;
+}
+
+.filters-box select,
+.filters-box input {
+    height: 43px;
+    border-radius: 10px;
+    background: #fbfdfe;
+}
+
+.action-btn {
+    border-radius: 12px;
+}
+
+.table-container {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.report-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #108082;
+}
+
+.report-card-head h4 {
+    color: #fff;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.report-card-head p {
+    color: rgba(255,255,255,0.85);
+    margin: 5px 0 0;
+    font-size: 13px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+table th {
+    background: #eefafa;
+    color: #108082;
+    font-size: 13px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+table td {
+    vertical-align: middle !important;
+}
+
+#loadMoreBtn {
+    background: #108082;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-weight: 700;
+}
     </style>
 </head>
 
@@ -329,7 +460,7 @@
             <li onclick="location.href='/users/users.html'">
                 <i class="fa-solid fa-user"></i> Customers
             </li>
-            <li class="active" onclick="location.href='dashboard/sales.html'">
+            <li class="active" onclick="location.href=''">
                 <i class="fa-solid fa-box"></i> Products Sales Report
             </li>
             <li onclick="location.href='/activity.html'">
@@ -444,11 +575,16 @@
             </div>
         </nav>
 
-        <div class="container" style="max-width: 1400px;">
+        <div class="container" style="max-width: 100%;">
             <!-- Dashboard Header -->
-            <div class="dashboard-header mt-4 text-center">
-                <h1>Sales Dashboard</h1>
-            </div>
+            <div class="dashboard-header mt-4">
+    <span class="page-badge">
+        <i class="fa-solid fa-chart-simple"></i>
+        Product Wise Sales Report
+    </span>
+    <h1>Product Sales Analysis</h1>
+    <p>Track product quantity, party type, salesperson performance and order-wise sales in one report.</p>
+</div>
 
             <!-- Filters -->
             <div class="filters-box mb-4">
@@ -470,6 +606,14 @@
                             <option value="Pending">Pending</option>
                             <option value="Delivered">Delivered</option>
                             <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="partyTypeFilter">Filter by Type</label>
+                        <select id="partyTypeFilter" class="form-control">
+                            <option value="">All Type</option>
+                            <option value="Primary">Primary</option>
+                            <option value="Secondary">Secondary</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -552,6 +696,7 @@
                             <tr>
                                 <th>S.No</th>
                                 <th>Order NO</th>
+                                <th>Type</th>
                                 <th>Salesperson</th>
                                 <th>Party Name</th>
                                 <th>Product Code</th>
@@ -592,7 +737,7 @@
             appId: "1:562472760628:web:384f4eda2c862b6e3ce161"
         };
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); 
+        const db = firebase.firestore();
         // Fetch orders data from Firebase
         let orders = [];
         let flatExportData = []; // ✅ Flat (non-grouped) data for CSV/PDF export
@@ -614,9 +759,9 @@
                     id: doc.id,
                     ...doc.data()
                 }));
- 
+
                 orders.forEach((order, i) => {
-                    if (order.items && order.items[0]) { 
+                    if (order.items && order.items[0]) {
                     }
                 });
 
@@ -645,10 +790,21 @@
             const filteredOrders = orders.filter(order => {
                 // Salesman Filter
                 const salesmanFilter = document.getElementById('salesmanFilter').value.toLowerCase();
+
                 if (
                     salesmanFilter &&
                     (order.salesman || "").toLowerCase() !== salesmanFilter
                 ) return false;
+
+                const partyTypeFilter =
+                    document.getElementById('partyTypeFilter').value.toLowerCase();
+
+                if (
+                    partyTypeFilter &&
+                    getPartyType(order).toLowerCase() !== partyTypeFilter
+                ) {
+                    return false;
+                }
                 const productCodeFilter =
                     document.getElementById('productCodeFilter')
                         .value
@@ -717,21 +873,32 @@
             renderSalesData(filteredOrders);
         }
 
+        function getPartyType(order) {
+            return (
+                order?.party?.type ||
+                order?.partyType ||
+                order?.type ||
+                "Secondary"
+            );
+        }
         // Render the table with filtered sales data
+
 
         function renderSalesData(filteredOrders) {
             const tableBody = document.getElementById('salesTableBody');
             tableBody.innerHTML = '';
 
             const salesData = {};
-            flatExportData = []; // reset flat data
+            flatExportData = [];
 
             const productCodeFilter = document.getElementById('productCodeFilter').value.trim().toLowerCase();
             const exactMatch = document.getElementById('exactMatchBtn').checked;
             const categoryFilter = document.getElementById('categoryFilter').value;
 
             filteredOrders.forEach(order => {
+                const partyType = getPartyType(order);
                 const salesman = order.salesman || "N/A";
+
                 const orderNo =
                     order.orderNo ||
                     order.salesOrderNo ||
@@ -754,14 +921,14 @@
 
                 order.items.forEach(item => {
 
-                    // ✅ Category filter - INSIDE loop
-                    if (categoryFilter && (item.category || "").toLowerCase() !== categoryFilter.toLowerCase()) return;
+                    if (
+                        categoryFilter &&
+                        (item.category || "").toLowerCase() !== categoryFilter.toLowerCase()
+                    ) return;
 
                     const currentCode = (item.code || "").toString().toLowerCase();
 
-                    // Product Code filter
                     if (productCodeFilter) {
-
                         const productCodes =
                             productCodeFilter
                                 .split(",")
@@ -783,12 +950,14 @@
                     const quantitySold = Number(item.qty || 0);
                     const totalSale = Number(item.amount || 0);
 
-                    if (!salesData[salesman]) salesData[salesman] = {};
-                    if (!salesData[salesman][partyName]) salesData[salesman][partyName] = {};
+                    if (!salesData[partyType]) salesData[partyType] = {};
+                    if (!salesData[partyType][salesman]) salesData[partyType][salesman] = {};
+                    if (!salesData[partyType][salesman][partyName]) salesData[partyType][salesman][partyName] = {};
 
-                    if (!salesData[salesman][partyName][productCode]) {
-                        salesData[salesman][partyName][productCode] = {
+                    if (!salesData[partyType][salesman][partyName][productCode]) {
+                        salesData[partyType][salesman][partyName][productCode] = {
                             orderNo: orderNo,
+                            partyType: partyType,
                             productName: productName,
                             unit: item.unit || "-",
                             totalQuantitySold: 0,
@@ -796,73 +965,105 @@
                         };
                     }
 
-                    salesData[salesman][partyName][productCode].totalQuantitySold += quantitySold;
-                    salesData[salesman][partyName][productCode].totalSales += totalSale;
+                    salesData[partyType][salesman][partyName][productCode].totalQuantitySold += quantitySold;
+                    salesData[partyType][salesman][partyName][productCode].totalSales += totalSale;
                 });
             });
 
             let sno = 1;
 
-            for (let salesman in salesData) {
-                for (let partyName in salesData[salesman]) {
+            const typeOrder = ["Primary", "Secondary"];
 
-                    const productCodes = Object.keys(salesData[salesman][partyName]);
-                    const groupSize = productCodes.length;
+            typeOrder.forEach(typeName => {
+                if (!salesData[typeName]) return;
 
-                   productCodes.forEach((productCode, idx) => {
-                        const product = salesData[salesman][partyName][productCode];
+                const sectionRow = document.createElement('tr');
 
-                        // ✅ Push complete row data for export (every row has all fields)
-                        flatExportData.push({
-                            sno: sno,
-                            orderNo: product.orderNo,
-                            salesman: salesman,
-                            partyName: partyName,
-                            productCode: productCode,
-                            productName: product.productName,
-                            unit: product.unit,
-                            qty: product.totalQuantitySold,
-                            sales: product.totalSales
+                sectionRow.innerHTML = `
+            <td colspan="10" style="
+                background:#108082;
+                color:#fff;
+                font-weight:700;
+                text-align:left;
+                font-size:16px;
+                padding:12px 15px;
+            ">
+                ${typeName} Orders
+            </td>
+        `;
+
+                tableBody.appendChild(sectionRow);
+
+                for (let salesman in salesData[typeName]) {
+                    for (let partyName in salesData[typeName][salesman]) {
+
+                        const productCodes = Object.keys(salesData[typeName][salesman][partyName]);
+                        const groupSize = productCodes.length;
+
+                        productCodes.forEach((productCode, idx) => {
+                            const product = salesData[typeName][salesman][partyName][productCode];
+
+                            flatExportData.push({
+                                sno: sno,
+                                orderNo: product.orderNo,
+                                partyType: product.partyType,
+                                salesman: salesman,
+                                partyName: partyName,
+                                productCode: productCode,
+                                productName: product.productName,
+                                unit: product.unit,
+                                qty: product.totalQuantitySold,
+                                sales: product.totalSales
+                            });
+
+                            const row = document.createElement('tr');
+
+                            if (idx === 0) {
+                                row.innerHTML = `
+                            <td>${sno++}</td>
+                            <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa; font-weight:600;">${product.orderNo}</td>
+                            <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa; font-weight:700; color:${typeName === "Primary" ? "#198754" : "#b7791f"};">
+                                ${product.partyType}
+                            </td>
+                            <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa;">${salesman}</td>
+                            <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa;">${partyName}</td>
+                            <td>${productCode}</td>
+                            <td>${product.productName}</td>
+                            <td>${product.unit}</td>
+                            <td>${product.totalQuantitySold}</td>
+                            <td>₹${product.totalSales.toFixed(2)}</td>
+                        `;
+                            } else {
+                                row.innerHTML = `
+                            <td>${sno++}</td>
+                            <td>${productCode}</td>
+                            <td>${product.productName}</td>
+                            <td>${product.unit}</td>
+                            <td>${product.totalQuantitySold}</td>
+                            <td>₹${product.totalSales.toFixed(2)}</td>
+                        `;
+                            }
+
+                            if (idx === groupSize - 1) {
+                                row.style.borderBottom = "2px solid #108082";
+                            }
+
+                            tableBody.appendChild(row);
                         });
-
-                        const row = document.createElement('tr');
-
-                       if (idx === 0) {
-                            // ✅ First row of the group — show merged cells with rowspan
-                            row.innerHTML = `
-                        <td>${sno++}</td>
-                        <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa; font-weight:600;">${product.orderNo}</td>
-                        <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa;">${salesman}</td>
-                        <td rowspan="${groupSize}" style="vertical-align:middle; background:#fafafa;">${partyName}</td>
-                        <td>${productCode}</td>
-                        <td>${product.productName}</td>
-                        <td>${product.unit}</td>
-                        <td>${product.totalQuantitySold}</td>
-                        <td>₹${product.totalSales.toFixed(2)}</td>
-                    `;
-                        } else {
-                            // ✅ Subsequent rows — skip merged columns entirely
-                            row.innerHTML = `
-                        <td>${sno++}</td>
-                        <td>${productCode}</td>
-                        <td>${product.productName}</td>
-                        <td>${product.unit}</td>
-                        <td>${product.totalQuantitySold}</td>
-                        <td>₹${product.totalSales.toFixed(2)}</td>
-                    `;
-                        } 
-
-                        // ✅ Add a subtle border between different order groups
-                        if (idx === groupSize - 1) {
-                            row.style.borderBottom = "2px solid #108082";
-                        }
-
-                        tableBody.appendChild(row);
-                    });
+                    }
                 }
+            });
+
+            if (!flatExportData.length) {
+                tableBody.innerHTML = `
+            <tr>
+                <td colspan="10" style="text-align:center; color:#888; padding:25px;">
+                    No sales data found.
+                </td>
+            </tr>
+        `;
             }
-        }
-        // Event listeners for filters
+        }// Event listeners for filters
         document.getElementById('salesmanFilter').addEventListener('change', applyFilters);
         document.getElementById('statusFilter').addEventListener('change', applyFilters);
         document.getElementById('dateFrom').addEventListener('change', applyFilters);
@@ -873,6 +1074,8 @@
         document.getElementById('exactMatchBtn')
             .addEventListener('change', applyFilters);
         document.getElementById('categoryFilter')
+            .addEventListener('change', applyFilters);
+        document.getElementById('partyTypeFilter')
             .addEventListener('change', applyFilters);
 
         let isDescending = true; // Initially, sort in descending order
@@ -900,8 +1103,11 @@
             const rows = Array.from(tableBody.rows);
 
             rows.sort((rowA, rowB) => {
-                const quantityA = parseInt(rowA.cells[6].textContent);
-                const quantityB = parseInt(rowB.cells[6].textContent);
+               const quantityA =
+    parseInt(rowA.cells[rowA.cells.length - 2]?.textContent) || 0;
+
+const quantityB =
+    parseInt(rowB.cells[rowB.cells.length - 2]?.textContent) || 0;
                 return isDescending ? quantityB - quantityA : quantityA - quantityB;
             });
 
@@ -913,6 +1119,7 @@
 
             document.getElementById('salesmanFilter').value = "";
             document.getElementById('statusFilter').value = "";
+            document.getElementById('partyTypeFilter').value = "";
             document.getElementById('productCodeFilter').value = "";
             document.getElementById('dateFrom').value = "";
             document.getElementById('dateTo').value = "";
@@ -926,9 +1133,16 @@
         document.getElementById('downloadCsvBtn').addEventListener('click', function () {
 
             const headers = [
-                "S.No", "Order NO", "Salesperson", "Party Name",
-                "Product Code", "Product Name", "Unit",
-                "Total Quantity Sold", "Total Sales"
+                "S.No",
+                "Order NO",
+                "Type",
+                "Salesperson",
+                "Party Name",
+                "Product Code",
+                "Product Name",
+                "Unit",
+                "Total Quantity Sold",
+                "Total Sales (Rs.)"
             ];
 
             let csv = [headers.map(h => `"${h}"`).join(',')];
@@ -937,6 +1151,7 @@
                 const rowData = [
                     row.sno,
                     row.orderNo,
+                    row.partyType,
                     row.salesman,
                     row.partyName,
                     row.productCode,
@@ -967,7 +1182,7 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        });document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+        }); document.getElementById('downloadPdfBtn').addEventListener('click', function () {
 
             const { jsPDF } = window.jspdf;
 
@@ -986,6 +1201,7 @@
             const body = flatExportData.map(row => [
                 row.sno,
                 row.orderNo,
+                row.partyType,
                 row.salesman,
                 row.partyName,
                 row.productCode,
@@ -1065,7 +1281,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
     <script src="js/dev.js"></script>
- 
+
 </body>
 
 </html>
