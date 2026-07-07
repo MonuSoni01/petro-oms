@@ -79,7 +79,7 @@ const SALESMAN_PREFIX = {
     "Amit Soni": "AS",
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
-    "Rup Ranjan Bora": "RRB", 
+    "Rup Ranjan Bora": "RRB",
     "Mahesh Kumar": "MK",
 };
 
@@ -554,6 +554,8 @@ window.submitTableOrder = async function () {
 
             successPopup.style.display = "none";
 
+            resetOrderFormAfterSubmit();
+
             openPrintModal();
 
         }, 2200);
@@ -588,6 +590,57 @@ window.submitTableOrder = async function () {
     }
 
 };
+
+function resetOrderFormAfterSubmit() {
+
+    // ✅ Basic fields reset
+    salesman.value = "";
+    orderNo.value = "";
+    orderNo.placeholder = "AUTO";
+
+    const today = new Date().toISOString().split("T")[0];
+    orderDate.value = today;
+
+    partyName.value = "";
+    partyType.value = "";
+    partyAddress.value = "";
+    partyGST.value = "";
+    partyMobile.value = "";
+    partyTransport.value = "";
+
+    paymentType.value = "Advance";
+    dispatchDate.value = "";
+    orderNotes.value = "";
+
+    // ✅ Discount / totals reset
+    document.getElementById("hardwareDisc").value = 0;
+    document.getElementById("bathroomDisc").value = 0;
+    document.getElementById("stainlesssteelDisc").value = 0;
+
+    freightEl.value = 0;
+    specialDiscount.value = 0;
+    gstPercent.value = 18;
+
+    // ✅ Table reset
+    tbody.innerHTML = "";
+    addRow();
+
+    // ✅ Totals reset
+    recalc();
+
+    // ✅ Draft / autosave clear
+    localStorage.removeItem("petro_order_draft");
+    localStorage.removeItem("petro_order_auto_draft");
+    localStorage.removeItem("petro_order_data");
+    localStorage.removeItem("cart");
+
+    // ✅ Status message update
+    const status = document.getElementById("statusMsg");
+    if (status) {
+        status.textContent = "Ready to start new order";
+        status.className = "status-bar status-success show";
+    }
+}
 
 window.submitCartOrder = async function () {
 
@@ -779,47 +832,47 @@ function collectData() {
 
     const items = [...tbody.children].map(tr => {
 
-    const code =
-        tr.querySelector('.item-code')
-            ? tr.querySelector('.item-code').value.trim().toUpperCase()
-            : '';
+        const code =
+            tr.querySelector('.item-code')
+                ? tr.querySelector('.item-code').value.trim().toUpperCase()
+                : '';
 
-    return {
+        return {
 
-        code: code,
+            code: code,
 
-        name:
-            tr.querySelector('.item-name')
-                ? tr.querySelector('.item-name').value.trim()
-                : '',
+            name:
+                tr.querySelector('.item-name')
+                    ? tr.querySelector('.item-name').value.trim()
+                    : '',
 
-        // ⭐ NEW FIELD
-        category:
-            itemMaster[code]?.category || "",
+            // ⭐ NEW FIELD
+            category:
+                itemMaster[code]?.category || "",
 
-        qty:
-            tr.querySelector('.qty')
-                ? +tr.querySelector('.qty').value || 0
-                : 0,
+            qty:
+                tr.querySelector('.qty')
+                    ? +tr.querySelector('.qty').value || 0
+                    : 0,
 
-        unit:
-            tr.querySelector('.unit')
-                ? tr.querySelector('.unit').value
-                : '',
+            unit:
+                tr.querySelector('.unit')
+                    ? tr.querySelector('.unit').value
+                    : '',
 
-        rate:
-            tr.querySelector('.rate')
-                ? +tr.querySelector('.rate').value || 0
-                : 0,
+            rate:
+                tr.querySelector('.rate')
+                    ? +tr.querySelector('.rate').value || 0
+                    : 0,
 
-        amount:
-            parseFloat(
-                tr.querySelector('.amt')
-                    ?.textContent
-                    .replace(/[₹,]/g, "")
-            ) || 0
-    };
-});
+            amount:
+                parseFloat(
+                    tr.querySelector('.amt')
+                        ?.textContent
+                        .replace(/[₹,]/g, "")
+                ) || 0
+        };
+    });
 
     // Log the items and other order data
     // console.log("Collected order data:", {

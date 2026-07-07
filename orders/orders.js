@@ -892,8 +892,8 @@ window.viewOrder = function (id) {
         <th>Item Code</th>
         <th>Unit</th>
         <th>Qty</th>
-        <th>Rate Without GST</th>
-        <th>Total Without GST</th>
+        <th>After Discount Rate</th>
+        <th>After Discount Total</th>
       </tr>
     </thead>
     <tbody>
@@ -901,21 +901,50 @@ window.viewOrder = function (id) {
 
   if (items.length) {
     items.forEach((item) => {
+      const qty = numberValue(item?.qty || 0);
       const rateWithGst = numberValue(item?.rate ?? 0);
-      const totalWithGst = numberValue(item?.amount ?? item?.total ?? 0);
 
       const rateWithoutGst = rateWithGst / gstDividerForItems;
-      const totalWithoutGst = totalWithGst / gstDividerForItems;
+
+      /* category detect */
+      const itemCategory = normalizeText(
+        item?.category ||
+        item?.productCategory ||
+        item?.cat ||
+        ""
+      );
+
+      /* category discount */
+      let discountPercent = 0;
+
+      if (itemCategory.includes("hardware")) {
+        discountPercent = numberValue(order?.categoryDiscounts?.hardware || 0);
+      } else if (
+        itemCategory.includes("bathroom") ||
+        itemCategory.includes("bath")
+      ) {
+        discountPercent = numberValue(order?.categoryDiscounts?.bathroom || 0);
+      } else if (
+        itemCategory.includes("stainlesssteel") ||
+        itemCategory.includes("stainless steel") ||
+        itemCategory.includes("ss")
+      ) {
+        discountPercent = numberValue(order?.categoryDiscounts?.stainlesssteel || 0);
+      }
+
+      /* after discount rate without GST */
+      const afterDiscountRate = rateWithoutGst - (rateWithoutGst * discountPercent / 100);
+      const afterDiscountTotal = afterDiscountRate * qty;
 
       itemsHTML += `
-      <tr>
-        <td>${escapeHTML(item?.code || "-")}</td>
-        <td>${escapeHTML(item?.unit || "-")}</td>
-        <td>${escapeHTML(item?.qty ?? 0)}</td>
-        <td>₹${formatMoney(rateWithoutGst)}</td>
-        <td>₹${formatMoney(totalWithoutGst)}</td>
-      </tr>
-    `;
+  <tr>
+    <td>${escapeHTML(item?.code || "-")}</td>
+    <td>${escapeHTML(item?.unit || "-")}</td>
+    <td>${escapeHTML(qty)}</td>
+    <td>₹${formatMoney(afterDiscountRate)}</td>
+    <td>₹${formatMoney(afterDiscountTotal)}</td>
+  </tr>
+`;
     });
   } else {
     itemsHTML += `
@@ -962,7 +991,7 @@ window.viewOrder = function (id) {
 
   const displayTotals = calculateOrderDisplayTotals(order);
 
-const billingHTML = `
+  const billingHTML = `
   <div style="margin-top:15px;">
     <p><b>Taxable Amount:</b> ₹${formatMoney(displayTotals.taxableAmount)}</p>
     <p><b>Freight:</b> ₹${formatMoney(displayTotals.freight)}</p>
