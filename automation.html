@@ -1,890 +1,1188 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PETRO OMS | No Order Mail Automation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PETRO OMS | No Order Mail Automation</title>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Inter, Arial, sans-serif
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+    }
 
-        body {
-            background: #f4f7fb;
-            color: #111827;
-            padding: 24px
-        }
+    body {
+      background: #f4f7fb;
+      color: #111827;
+      padding: 24px;
+    }
 
-        .page {
-            max-width: 1200px;
-            margin: auto
-        }
+    .page {
+      max-width: 1200px;
+      margin: auto;
+    }
 
-        .topbar {
-            background: linear-gradient(135deg, #0f766e, #115e59);
-            color: white;
-            padding: 24px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 22px;
-            box-shadow: 0 10px 25px rgba(15, 118, 110, .25)
-        }
+    .topbar {
+      background: linear-gradient(135deg, #0f766e, #115e59);
+      color: white;
+      padding: 24px;
+      border-radius: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 25px rgba(15, 118, 110, .25);
+    }
 
-        .topbar h1 {
-            font-size: 26px;
-            margin-bottom: 6px
-        }
+    .topbar h1 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
 
-        .topbar p {
-            color: #d1fae5;
-            font-size: 14px
-        }
+    .topbar p {
+      color: #d1fae5;
+      font-size: 14px;
+    }
 
-        .btn {
-            border: none;
-            padding: 11px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: .2s;
-            font-size: 14px
-        }
+    .btn {
+      border: none;
+      padding: 11px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: .2s;
+      font-size: 14px;
+    }
 
-        .btn:hover {
-            transform: translateY(-1px)
-        }
+    .btn:hover {
+      transform: translateY(-1px);
+    }
 
-        .btn:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-            transform: none
-        }
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-        .btn-primary {
-            background: #0f766e;
-            color: white
-        }
+    .btn-primary {
+      background: #0f766e;
+      color: white;
+    }
 
-        .btn-dark {
-            background: #111827;
-            color: white
-        }
+    .btn-dark {
+      background: #111827;
+      color: white;
+    }
 
-        .btn-light {
-            background: white;
-            color: #0f766e
-        }
+    .btn-light {
+      background: white;
+      color: #0f766e;
+    }
 
-        .btn-danger {
-            background: #dc2626;
-            color: white
-        }
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
 
-        .btn-warning {
-            background: #f59e0b;
-            color: #111827
-        }
+    .btn-warning {
+      background: #f59e0b;
+      color: #111827;
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px
-        }
+    .btn-sm {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
 
-        .card {
-            background: white;
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
-            border: 1px solid #e5e7eb
-        }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
 
-        .card h2 {
-            font-size: 19px;
-            margin-bottom: 14px;
-            color: #0f766e
-        }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+      border: 1px solid #e5e7eb;
+    }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px
-        }
+    .card h2 {
+      font-size: 19px;
+      margin-bottom: 14px;
+      color: #0f766e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-        label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #374151;
-            margin-bottom: 6px;
-            display: block
-        }
+    .card h2 small {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 600;
+    }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            padding: 11px 12px;
-            outline: none;
-            font-size: 14px;
-            background: #fff
-        }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-        textarea {
-            min-height: 130px;
-            resize: vertical
-        }
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 6px;
+      display: block;
+    }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #0f766e;
-            box-shadow: 0 0 0 3px rgba(15, 118, 110, .12)
-        }
+    .hint {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+      line-height: 1.45;
+    }
 
-        .full {
-            grid-column: 1/-1
-        }
+    code {
+      background: #f3f4f6;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
 
-        .actions {
-            margin-top: 14px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap
-        }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 11px 12px;
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+    }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            margin-bottom: 18px
-        }
+    textarea {
+      min-height: 210px;
+      resize: vertical;
+      line-height: 1.45;
+    }
 
-        .stat {
-            background: white;
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, .07);
-            border: 1px solid #e5e7eb
-        }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #0f766e;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, .12);
+    }
 
-        .stat span {
-            color: #6b7280;
-            font-size: 13px;
-            font-weight: 700
-        }
+    input.invalid {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
+    }
 
-        .stat b {
-            display: block;
-            font-size: 26px;
-            margin-top: 8px;
-            color: #111827
-        }
+    .full {
+      grid-column: 1/-1;
+    }
 
-        .table-wrap {
-            overflow-x: auto;
-            margin-top: 14px
-        }
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 760px
-        }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
 
-        th,
-        td {
-            padding: 13px 12px;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: left;
-            font-size: 14px
-        }
+    .stat {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, .07);
+      border: 1px solid #e5e7eb;
+    }
 
-        th {
-            background: #f9fafb;
-            color: #374151;
-            font-size: 13px;
-            text-transform: uppercase
-        }
+    .stat span {
+      color: #6b7280;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-        .badge {
-            padding: 5px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 800;
-            display: inline-block
-        }
+    .stat b {
+      display: block;
+      font-size: 26px;
+      margin-top: 8px;
+      color: #111827;
+    }
 
-        .active,
-        .ok {
-            background: #dcfce7;
-            color: #166534
-        }
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+    }
 
-        .inactive,
-        .failed {
-            background: #fee2e2;
-            color: #991b1b
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
 
-        .missing {
-            background: #fef3c7;
-            color: #92400e
-        }
+    th,
+    td {
+      padding: 13px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 14px;
+      vertical-align: middle;
+    }
 
-        .mail {
-            background: #dbeafe;
-            color: #1d4ed8
-        }
+    th {
+      background: #f9fafb;
+      color: #374151;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
 
-        .toast {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            background: #111827;
-            color: white;
-            padding: 14px 18px;
-            border-radius: 12px;
-            display: none;
-            z-index: 9999;
-            font-weight: 700;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
-            max-width: 380px
-        }
+    .badge {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-block;
+      white-space: nowrap;
+    }
 
-        @media(max-width:850px) {
-            body {
-                padding: 14px
-            }
+    .active,
+    .ok {
+      background: #dcfce7;
+      color: #166534;
+    }
 
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start
-            }
+    .inactive,
+    .failed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
 
-            .grid {
-                grid-template-columns: 1fr
-            }
+    .missing {
+      background: #fef3c7;
+      color: #92400e;
+    }
 
-            .form-grid {
-                grid-template-columns: 1fr
-            }
+    .mail {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
 
-            .stats {
-                grid-template-columns: 1fr 1fr
-            }
-        }
-    </style>
+    .warn {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .muted {
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .search-box {
+      margin-bottom: 10px;
+      max-width: 320px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      display: none;
+      z-index: 9999;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+      max-width: 420px;
+      line-height: 1.35;
+    }
+
+    .fa-spin-custom {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @media(max-width:850px) {
+      body {
+        padding: 14px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar h1 {
+        font-size: 22px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="page">
+  <div class="page">
 
-        <div class="topbar">
-            <div>
-                <h1><i class="fa-solid fa-envelope-circle-check"></i> No Order Mail Automation</h1>
-                <p>Daily salesman order check. Agar order submit nahi hua, to reminder mail send hogi.</p>
-            </div>
+    <div class="topbar">
+      <div>
+        <h1><i class="fa-solid fa-envelope-circle-check"></i> No Order Mail Automation</h1>
+        <p>Daily salesman order check. If no order is submitted, a professional reminder email will be sent automatically.</p>
+      </div>
 
-            <button class="btn btn-light" onclick="goBack()">
-                <i class="fa-solid fa-arrow-left"></i> Back
-            </button>
+      <button class="btn btn-light" onclick="window.location.href='/admin-dashboard.html'">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span>Total Salesmen</span><b id="totalSalesmen">0</b></div>
+      <div class="stat"><span>Selected Date Orders</span><b id="todayOrders">0</b></div>
+      <div class="stat"><span>No Order</span><b id="noOrderCount">0</b></div>
+      <div class="stat"><span>Mail Sent</span><b id="mailQueued">0</b></div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <h2><i class="fa-solid fa-user-plus"></i> Add / Update Salesman</h2>
+
+        <div class="form-grid">
+          <div>
+            <label>Salesman Name</label>
+            <input type="text" id="salesmanName" placeholder="Amit Soni">
+          </div>
+
+          <div>
+            <label>Email</label>
+            <input type="email" id="salesmanEmail" placeholder="amit@petroindustech.com">
+          </div>
+
+          <div>
+            <label>Status</label>
+            <select id="salesmanStatus">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Reminder Enabled</label>
+            <select id="reminderEnabled">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label>Note</label>
+            <input type="text" id="salesmanNote" placeholder="Optional note">
+          </div>
         </div>
 
-        <div class="stats">
-            <div class="stat"><span>Total Salesmen</span><b id="totalSalesmen">0</b></div>
-            <div class="stat"><span>Today Orders</span><b id="todayOrders">0</b></div>
-            <div class="stat"><span>No Order</span><b id="noOrderCount">0</b></div>
-            <div class="stat"><span>Mail Sent</span><b id="mailQueued">0</b></div>
+        <p class="hint">
+          <i class="fa-solid fa-circle-info"></i>
+          Best practice: order form me <b>salesmanId</b>, <b>salesmanEmail</b>, aur <b>salesman</b> teeno save karo.
+          Ye final version old orders ko bhi name match se automatically ID/email se link karne ki try karega.
+        </p>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="saveSalesman()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Salesman
+          </button>
+
+          <button class="btn btn-dark" onclick="clearForm()">
+            <i class="fa-solid fa-rotate-left"></i> Clear
+          </button>
         </div>
+      </div>
 
-        <div class="grid">
+      <div class="card">
+        <h2><i class="fa-solid fa-gear"></i> Mail Template</h2>
 
-            <div class="card">
-                <h2><i class="fa-solid fa-user-plus"></i> Add / Update Salesman</h2>
+        <label>Subject</label>
+        <input type="text" id="mailSubject" value="Reminder: Daily Order Submission Pending – {{date}}">
 
-                <div class="form-grid">
-                    <div>
-                        <label>Salesman Name</label>
-                        <input type="text" id="salesmanName" placeholder="Amit Soni">
-                    </div>
+        <br><br>
 
-                    <div>
-                        <label>Email</label>
-                        <input type="email" id="salesmanEmail" placeholder="amit@petroindustech.com">
-                    </div>
+        <label>Mail Body</label>
+        <textarea id="mailBody">Dear {{name}},
 
-                    <div>
-                        <label>Status</label>
-                        <select id="salesmanStatus">
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
-                        </select>
-                    </div>
+We hope you are doing well.
 
-                    <div>
-                        <label>Reminder Enabled</label>
-                        <select id="reminderEnabled">
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
-                        </select>
-                    </div>
+Our records indicate that no sales order has been submitted from your account for {{date}}.
 
-                    <div class="full">
-                        <label>Note</label>
-                        <input type="text" id="salesmanNote" placeholder="Optional note">
-                    </div>
-                </div>
+Kindly review your pending customer follow-ups and ensure that all confirmed orders are entered into the OMS portal at the earliest. Timely order submission helps maintain smooth dispatch operations and accurate sales reporting.
 
-                <div class="actions">
-                    <button class="btn btn-primary" onclick="saveSalesman()">
-                        <i class="fa-solid fa-floppy-disk"></i> Save Salesman
-                    </button>
+If you have already submitted your orders, please disregard this email.
 
-                    <button class="btn btn-dark" onclick="clearForm()">
-                        <i class="fa-solid fa-rotate-left"></i> Clear
-                    </button>
-                </div>
-            </div>
+For any assistance or technical support, please get in touch with your reporting manager or the OMS Support Team.
 
-            <div class="card">
-                <h2><i class="fa-solid fa-gear"></i> Mail Template</h2>
+Thank you for your cooperation.
 
-                <label>Subject</label>
-                <input type="text" id="mailSubject" value="Daily Order Submission Reminder">
+Best Regards,
+PETRO OMS Team
+Petro Industech Pvt. Ltd.</textarea>
 
-                <br><br>
+        <p class="hint">Placeholders: <code>{{name}}</code> and <code>{{date}}</code> will be replaced automatically.</p>
 
-                <label>Mail Body</label>
-                <textarea id="mailBody">Dear {{name}},
-
-Aaj aapke account se koi order submit nahi hua hai.
-
-Please apne pending customers check karein aur agar koi confirmed order hai to OMS me submit karein.
-
-Date: {{date}}
-
-Regards,
-PETRO OMS Team</textarea>
-
-                <div class="actions">
-                    <button class="btn btn-primary" onclick="saveTemplate()">
-                        <i class="fa-solid fa-save"></i> Save Template
-                    </button>
-                </div>
-            </div>
-
+        <div class="actions">
+          <button class="btn btn-primary" onclick="saveTemplate()">
+            <i class="fa-solid fa-save"></i> Save Template
+          </button>
         </div>
-
-        <div class="card" style="margin-top:18px;">
-            <h2><i class="fa-solid fa-calendar-check"></i> Today Order Check</h2>
-
-            <div class="form-grid">
-                <div>
-                    <label>Check Date</label>
-                    <input type="date" id="checkDate">
-                </div>
-
-                <div>
-                    <label>Mode</label>
-                    <select id="checkMode">
-                        <option value="preview">Preview Only</option>
-                        <option value="send">Send Mail</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button class="btn btn-primary" id="runCheckBtn" onclick="runNoOrderCheck()">
-                    <i class="fa-solid fa-magnifying-glass-chart"></i> Run Check
-                </button>
-
-                <button class="btn btn-warning" onclick="loadSalesmen()">
-                    <i class="fa-solid fa-refresh"></i> Refresh
-                </button>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Salesman</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Today Order</th>
-                            <th>Mail Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultBody">
-                        <tr>
-                            <td colspan="7" style="text-align:center;color:#6b7280;">Run check to see result</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top:18px;">
-            <h2><i class="fa-solid fa-users"></i> Salesman Master List</h2>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Salesman</th>
-                            <th>Email</th>
-                            <th>Active</th>
-                            <th>Reminder</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="salesmanBody">
-                        <tr>
-                            <td colspan="6" style="text-align:center;color:#6b7280;">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      </div>
 
     </div>
 
-    <div class="toast" id="toast"></div>
+    <div class="card" style="margin-top:18px;">
+      <h2><i class="fa-solid fa-calendar-check"></i> Order Check</h2>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+      <div class="form-grid">
+        <div>
+          <label>Check Date</label>
+          <input type="date" id="checkDate">
+        </div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
-            authDomain: "petro-oms.firebaseapp.com",
-            projectId: "petro-oms",
-            storageBucket: "petro-oms.firebasestorage.app",
-            messagingSenderId: "562472760628",
-            appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
+        <div>
+          <label>Mode</label>
+          <select id="checkMode">
+            <option value="preview">Preview Only</option>
+            <option value="send">Send Mail</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="runCheckBtn" onclick="runNoOrderCheck()">
+          <i class="fa-solid fa-magnifying-glass-chart"></i> Run Check
+        </button>
+
+        <button class="btn btn-warning" onclick="loadSalesmen()">
+          <i class="fa-solid fa-refresh"></i> Refresh
+        </button>
+
+        <span id="lastRunLabel" class="hint" style="margin:0;"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Salesman</th>
+              <th>Email</th>
+              <th>Order Status</th>
+              <th>Matched By</th>
+              <th>Auto Fix</th>
+              <th>Mail Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody">
+            <tr>
+              <td colspan="8" style="text-align:center;color:#6b7280;">Run check to see result</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <h2>
+        <span><i class="fa-solid fa-users"></i> Salesman Master List</span>
+        <small id="salesmanListCount"></small>
+      </h2>
+
+      <input type="text" id="salesmanSearch" class="search-box" placeholder="Search by name or email..."
+        oninput="renderSalesmanTable()">
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Salesman</th>
+              <th>Email</th>
+              <th>Salesman ID</th>
+              <th>Active</th>
+              <th>Reminder</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="salesmanBody">
+            <tr>
+              <td colspan="7" style="text-align:center;color:#6b7280;">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
+      authDomain: "petro-oms.firebaseapp.com",
+      projectId: "petro-oms",
+      storageBucket: "petro-oms.firebasestorage.app",
+      messagingSenderId: "562472760628",
+      appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyEWm2LUgs4oe2TgYrheQkwCZ80GOqdb1QHFAR4MiQTGaj04Vc_k9UJ0BSbic7xOs1Y/exec";
+    const APPS_SCRIPT_SECRET = "PETRO_OMS_2026_SECRET";
+    const ADMIN_CC_EMAIL = "online@petroindustech.com";
+
+    let salesmen = [];
+    let editSalesmanId = null;
+    let mailQueuedCount = 0;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById("checkDate").value = getTodayIST();
+      await loadTemplate();
+      await loadSalesmen();
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+
+    function getTodayIST() {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const ist = new Date(utc + (5.5 * 60 * 60 * 1000));
+      return ist.toISOString().slice(0, 10);
+    }
+
+    function normalizeText(value) {
+      return String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+    }
+
+    function escapeHTML(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function safeDocId(value) {
+      return String(value || "").replace(/[.#$/[\]]/g, "_");
+    }
+
+    async function saveSalesman() {
+      const nameInput = document.getElementById("salesmanName");
+      const emailInput = document.getElementById("salesmanEmail");
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim().toLowerCase();
+      const active = document.getElementById("salesmanStatus").value === "true";
+      const reminderEnabled = document.getElementById("reminderEnabled").value === "true";
+      const note = document.getElementById("salesmanNote").value.trim();
+
+      nameInput.classList.remove("invalid");
+      emailInput.classList.remove("invalid");
+
+      if (!name) {
+        nameInput.classList.add("invalid");
+        return showToast("❌ Salesman name required");
+      }
+
+      if (!email || !isValidEmail(email)) {
+        emailInput.classList.add("invalid");
+        return showToast("❌ Valid email required");
+      }
+
+      const duplicate = salesmen.find(s => s.email && s.email.toLowerCase() === email && s.id !== editSalesmanId);
+      if (duplicate) {
+        emailInput.classList.add("invalid");
+        return showToast(`❌ Email already used by "${duplicate.name}"`);
+      }
+
+      const data = {
+        name,
+        nameLower: normalizeText(name),
+        email,
+        active,
+        reminderEnabled,
+        note,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        if (editSalesmanId) {
+          await db.collection("salesmen").doc(editSalesmanId).update(data);
+          showToast("✅ Salesman updated");
+        } else {
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await db.collection("salesmen").add(data);
+          showToast("✅ Salesman added");
+        }
+
+        clearForm();
+        await loadSalesmen();
+      } catch (error) {
+        console.error(error);
+        showToast("❌ Save failed");
+      }
+    }
+
+    async function loadSalesmen() {
+      const body = document.getElementById("salesmanBody");
+      body.innerHTML = `<tr><td colspan="7" style="text-align:center;">Loading...</td></tr>`;
+
+      try {
+        let snapshot;
+
+        try {
+          snapshot = await db.collection("salesmen").orderBy("name").get();
+        } catch (err) {
+          snapshot = await db.collection("salesmen").get();
+        }
+
+        salesmen = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })).sort((a, b) => normalizeText(a.name).localeCompare(normalizeText(b.name)));
+
+        renderSalesmanTable();
+        document.getElementById("totalSalesmen").textContent = salesmen.length;
+
+      } catch (error) {
+        console.error(error);
+        body.innerHTML = `<tr><td colspan="7" style="text-align:center;color:red;">Failed to load salesmen</td></tr>`;
+      }
+    }
+
+    function renderSalesmanTable() {
+      const body = document.getElementById("salesmanBody");
+      const countLabel = document.getElementById("salesmanListCount");
+      const query = normalizeText(document.getElementById("salesmanSearch").value);
+
+      const filtered = !query
+        ? salesmen
+        : salesmen.filter(s =>
+            normalizeText(s.name).includes(query) ||
+            normalizeText(s.email).includes(query)
+          );
+
+      countLabel.textContent = `${filtered.length} of ${salesmen.length}`;
+
+      if (!salesmen.length) {
+        body.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#6b7280;">No salesman found. Add salesman first.</td></tr>`;
+        return;
+      }
+
+      if (!filtered.length) {
+        body.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#6b7280;">No match found</td></tr>`;
+        return;
+      }
+
+      body.innerHTML = filtered.map((s, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${escapeHTML(s.name)}</td>
+          <td>${escapeHTML(s.email)}</td>
+          <td><code style="font-size:12px;cursor:pointer;" title="Click to copy" onclick="copyToClipboard('${s.id}')">${s.id}</code></td>
+          <td><span class="badge ${s.active !== false ? "active" : "inactive"}">${s.active !== false ? "Active" : "Inactive"}</span></td>
+          <td><span class="badge ${s.reminderEnabled !== false ? "active" : "inactive"}">${s.reminderEnabled !== false ? "Yes" : "No"}</span></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editSalesman('${s.id}')"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteSalesman('${s.id}')"><i class="fa fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showToast("📋 Salesman ID copied"));
+      } else {
+        const temp = document.createElement("input");
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        showToast("📋 Salesman ID copied");
+      }
+    }
+
+    function editSalesman(id) {
+      const s = salesmen.find(item => item.id === id);
+      if (!s) return;
+
+      editSalesmanId = id;
+      document.getElementById("salesmanName").value = s.name || "";
+      document.getElementById("salesmanEmail").value = s.email || "";
+      document.getElementById("salesmanStatus").value = String(s.active !== false);
+      document.getElementById("reminderEnabled").value = String(s.reminderEnabled !== false);
+      document.getElementById("salesmanNote").value = s.note || "";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteSalesman(id) {
+      const s = salesmen.find(item => item.id === id);
+      if (!confirm(`Delete salesman "${s ? s.name : id}"? This cannot be undone.`)) return;
+
+      try {
+        await db.collection("salesmen").doc(id).delete();
+        showToast("✅ Salesman deleted");
+        await loadSalesmen();
+      } catch (error) {
+        console.error(error);
+        showToast("❌ Delete failed");
+      }
+    }
+
+    function clearForm() {
+      editSalesmanId = null;
+      document.getElementById("salesmanName").value = "";
+      document.getElementById("salesmanEmail").value = "";
+      document.getElementById("salesmanStatus").value = "true";
+      document.getElementById("reminderEnabled").value = "true";
+      document.getElementById("salesmanNote").value = "";
+      document.getElementById("salesmanName").classList.remove("invalid");
+      document.getElementById("salesmanEmail").classList.remove("invalid");
+    }
+
+    async function saveTemplate() {
+      const subject = document.getElementById("mailSubject").value.trim();
+      const body = document.getElementById("mailBody").value.trim();
+
+      if (!subject || !body) return showToast("❌ Subject and body required");
+
+      try {
+        await db.collection("settings").doc("noOrderMailTemplate").set({
+          subject,
+          body,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast("✅ Template saved");
+      } catch (error) {
+        console.error(error);
+        showToast("❌ Template save failed");
+      }
+    }
+
+    async function loadTemplate() {
+      try {
+        const doc = await db.collection("settings").doc("noOrderMailTemplate").get();
+
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.subject) document.getElementById("mailSubject").value = data.subject;
+          if (data.body) document.getElementById("mailBody").value = data.body;
+        }
+      } catch (error) {
+        console.warn("Template load skipped", error);
+      }
+    }
+
+    function getOrderSalesmanId(order) {
+      return String(order.salesmanId || order.salesmanID || order.salesman_id || "").trim();
+    }
+
+    function getOrderSalesmanEmail(order) {
+      return normalizeText(order.salesmanEmail || order.salesman_email || order.email || "");
+    }
+
+    function getOrderSalesmanName(order) {
+      return normalizeText(order.salesman || order.salesmanName || order.salesman_name || order.salesPerson || order.salesperson || "");
+    }
+
+    function buildOrderIndex(ordersSnap) {
+      const byId = new Map();
+      const byEmail = new Map();
+      const byName = new Map();
+
+      ordersSnap.forEach(doc => {
+        const order = doc.data();
+        const item = { docId: doc.id, ref: doc.ref, data: order };
+
+        const salesmanId = getOrderSalesmanId(order);
+        const salesmanEmail = getOrderSalesmanEmail(order);
+        const salesmanName = getOrderSalesmanName(order);
+
+        if (salesmanId) {
+          if (!byId.has(salesmanId)) byId.set(salesmanId, []);
+          byId.get(salesmanId).push(item);
+        }
+
+        if (salesmanEmail) {
+          if (!byEmail.has(salesmanEmail)) byEmail.set(salesmanEmail, []);
+          byEmail.get(salesmanEmail).push(item);
+        }
+
+        if (salesmanName) {
+          if (!byName.has(salesmanName)) byName.set(salesmanName, []);
+          byName.get(salesmanName).push(item);
+        }
+      });
+
+      return { byId, byEmail, byName };
+    }
+
+    function matchSalesmanToOrders(salesman, index) {
+      const salesmanId = String(salesman.id || "");
+      const salesmanEmail = normalizeText(salesman.email);
+      const salesmanName = normalizeText(salesman.name);
+
+      if (salesmanId && index.byId.has(salesmanId)) {
+        return { matched: true, method: "ID", reliable: true, orders: index.byId.get(salesmanId), needsFix: false };
+      }
+
+      if (salesmanEmail && index.byEmail.has(salesmanEmail)) {
+        return { matched: true, method: "Email", reliable: true, orders: index.byEmail.get(salesmanEmail), needsFix: false };
+      }
+
+      if (salesmanName && index.byName.has(salesmanName)) {
+        return { matched: true, method: "Name", reliable: false, orders: index.byName.get(salesmanName), needsFix: true };
+      }
+
+      return { matched: false, method: "-", reliable: true, orders: [], needsFix: false };
+    }
+
+    async function autoFixOrdersWithSalesman(match, salesman) {
+      if (!match.needsFix || !match.orders || !match.orders.length) {
+        return { fixed: 0, skipped: 0 };
+      }
+
+      let fixed = 0;
+      let skipped = 0;
+
+      for (const orderItem of match.orders) {
+        const order = orderItem.data || {};
+
+        const updateData = {
+          salesmanId: salesman.id,
+          salesman: salesman.name,
+          salesmanName: salesman.name,
+          salesmanEmail: salesman.email,
+          salesmanLinkedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          salesmanLinkSource: "auto_name_match_from_no_order_page"
         };
 
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyEWm2LUgs4oe2TgYrheQkwCZ80GOqdb1QHFAR4MiQTGaj04Vc_k9UJ0BSbic7xOs1Y/exec";
-        const APPS_SCRIPT_SECRET = "PETRO_OMS_2026_SECRET";
-        const ADMIN_CC_EMAIL = "online@petroindustech.com";
-
-        let salesmen = [];
-        let editSalesmanId = null;
-        let mailQueuedCount = 0;
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            document.getElementById("checkDate").value = getTodayIST();
-            await loadTemplate();
-            await loadSalesmen();
-        });
-
-        function goBack() {
-            window.history.back();
+        try {
+          await orderItem.ref.set(updateData, { merge: true });
+          fixed++;
+        } catch (error) {
+          console.warn("Auto fix skipped for order:", orderItem.docId, error);
+          skipped++;
         }
+      }
 
-        function getTodayIST() {
-            const now = new Date();
-            const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
-            return istDate.toISOString().slice(0, 10);
-        }
+      return { fixed, skipped };
+    }
 
-        function normalizeText(value) {
-            return String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
-        }
+    async function runNoOrderCheck() {
+      const date = document.getElementById("checkDate").value;
+      const mode = document.getElementById("checkMode").value;
+      const resultBody = document.getElementById("resultBody");
+      const runBtn = document.getElementById("runCheckBtn");
 
-        function escapeHTML(value) {
-            return String(value || "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
+      if (!date) return showToast("❌ Select date");
 
-        async function saveSalesman() {
-            const name = document.getElementById("salesmanName").value.trim();
-            const email = document.getElementById("salesmanEmail").value.trim();
-            const active = document.getElementById("salesmanStatus").value === "true";
-            const reminderEnabled = document.getElementById("reminderEnabled").value === "true";
-            const note = document.getElementById("salesmanNote").value.trim();
+      if (!salesmen.length) await loadSalesmen();
 
-            if (!name) return showToast("❌ Salesman name required");
-            if (!email) return showToast("❌ Email required");
+      const activeSalesmenPreview = salesmen.filter(s => s.active !== false && s.reminderEnabled !== false && s.email);
 
-            const data = {
-                name,
-                email,
-                active,
-                reminderEnabled,
-                note,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
+      if (mode === "send") {
+        const ok = confirm(
+          `Send mode selected.\n\nDate: ${date}\nEligible salesmen: ${activeSalesmenPreview.length}\n\n` +
+          `Salesmen with missing orders will receive real emails. Already-sent emails will be skipped.\n\nContinue?`
+        );
+        if (!ok) return;
+      }
 
-            try {
-                if (editSalesmanId) {
-                    await db.collection("salesmen").doc(editSalesmanId).update(data);
-                    showToast("✅ Salesman updated");
-                } else {
-                    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                    await db.collection("salesmen").add(data);
-                    showToast("✅ Salesman added");
+      resultBody.innerHTML = `<tr><td colspan="8" style="text-align:center;"><i class="fa fa-spinner fa-spin-custom"></i> Checking orders...</td></tr>`;
+      runBtn.disabled = true;
+      runBtn.innerHTML = `<i class="fa fa-spinner fa-spin-custom"></i> Running...`;
+
+      try {
+        const activeSalesmen = salesmen.filter(s =>
+          s.active !== false &&
+          s.reminderEnabled !== false &&
+          s.email
+        );
+
+        const ordersSnap = await db
+          .collection("orders")
+          .where("orderDate", "==", date)
+          .get();
+
+        const orderIndex = buildOrderIndex(ordersSnap);
+
+        let noOrderList = [];
+        let sentCount = 0;
+        let autoFixedCount = 0;
+        let autoFixFailedCount = 0;
+        const rows = [];
+
+        for (let i = 0; i < activeSalesmen.length; i++) {
+          const salesman = activeSalesmen[i];
+          const match = matchSalesmanToOrders(salesman, orderIndex);
+          const hasOrder = match.matched;
+
+          let autoFixLabel = "-";
+          let autoFixClass = "muted";
+
+          if (hasOrder && match.needsFix) {
+            const fixResult = await autoFixOrdersWithSalesman(match, salesman);
+            autoFixedCount += fixResult.fixed;
+            autoFixFailedCount += fixResult.skipped;
+
+            if (fixResult.fixed > 0) {
+              autoFixLabel = `Linked ${fixResult.fixed}`;
+              autoFixClass = "ok";
+              match.method = "Name → Linked";
+              match.reliable = true;
+            } else {
+              autoFixLabel = "Fix Failed";
+              autoFixClass = "warn";
+            }
+          }
+
+          let mailStatus = hasOrder ? "Not Required" : "Pending";
+
+          if (!hasOrder) {
+            noOrderList.push(salesman);
+
+            if (mode === "send") {
+              const alreadySent = await checkAlreadySent(date, salesman.email);
+
+              if (alreadySent) {
+                mailStatus = "Already Sent";
+              } else {
+                try {
+                  await sendMailViaAppsScript(salesman, date);
+                  await saveMailLog(salesman, date, "Sent");
+                  sentCount++;
+                  mailStatus = "Sent";
+                } catch (err) {
+                  console.error("Mail failed:", err);
+                  await saveMailLog(salesman, date, "Failed", err.message);
+                  mailStatus = "Failed";
                 }
-
-                clearForm();
-                await loadSalesmen();
-            } catch (error) {
-                console.error(error);
-                showToast("❌ Save failed");
+              }
             }
-        }
+          }
 
-        async function loadSalesmen() {
-            const body = document.getElementById("salesmanBody");
-            body.innerHTML = `<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>`;
+          const mailBadgeClass =
+            mailStatus === "Sent" ? "mail" :
+            mailStatus === "Failed" ? "failed" :
+            mailStatus === "Already Sent" ? "muted" :
+            hasOrder ? "ok" : "missing";
 
-            try {
-                const snapshot = await db.collection("salesmen").orderBy("name").get();
+          const matchBadgeClass = !hasOrder ? "muted" : (match.reliable ? "ok" : "warn");
+          const matchLabel = !hasOrder ? "Not Found" : match.method;
 
-                salesmen = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-
-                if (!salesmen.length) {
-                    body.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#6b7280;">No salesman found. Add salesman first.</td></tr>`;
-                } else {
-                    body.innerHTML = salesmen.map((s, index) => `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${escapeHTML(s.name)}</td>
-            <td>${escapeHTML(s.email)}</td>
-            <td><span class="badge ${s.active !== false ? "active" : "inactive"}">${s.active !== false ? "Active" : "Inactive"}</span></td>
-            <td><span class="badge ${s.reminderEnabled !== false ? "active" : "inactive"}">${s.reminderEnabled !== false ? "Yes" : "No"}</span></td>
-            <td>
-              <button class="btn btn-warning" onclick="editSalesman('${s.id}')"><i class="fa fa-edit"></i></button>
-              <button class="btn btn-danger" onclick="deleteSalesman('${s.id}')"><i class="fa fa-trash"></i></button>
-            </td>
-          </tr>
-        `).join("");
+          rows.push(`
+            <tr>
+              <td>${i + 1}</td>
+              <td>${escapeHTML(salesman.name)}</td>
+              <td>${escapeHTML(salesman.email)}</td>
+              <td><span class="badge ${hasOrder ? "ok" : "missing"}">${hasOrder ? "Order Submitted" : "No Order"}</span></td>
+              <td><span class="badge ${matchBadgeClass}">${matchLabel}</span></td>
+              <td><span class="badge ${autoFixClass}">${autoFixLabel}</span></td>
+              <td><span class="badge ${mailBadgeClass}">${mailStatus}</span></td>
+              <td>
+                ${!hasOrder
+                  ? `<button class="btn btn-primary btn-sm" onclick="sendSingleMail('${salesman.id}', '${date}')"><i class="fa fa-envelope"></i> Send</button>`
+                  : "-"
                 }
-
-                document.getElementById("totalSalesmen").textContent =
-                    salesmen.filter(s => s.active !== false && s.reminderEnabled !== false).length;
-
-            } catch (error) {
-                console.error(error);
-                body.innerHTML = `<tr><td colspan="6" style="text-align:center;color:red;">Failed to load salesmen</td></tr>`;
-            }
+              </td>
+            </tr>
+          `);
         }
 
-        function editSalesman(id) {
-            const s = salesmen.find(item => item.id === id);
-            if (!s) return;
+        resultBody.innerHTML = rows.length
+          ? rows.join("")
+          : `<tr><td colspan="8" style="text-align:center;color:#6b7280;">No active salesman found</td></tr>`;
 
-            editSalesmanId = id;
-            document.getElementById("salesmanName").value = s.name || "";
-            document.getElementById("salesmanEmail").value = s.email || "";
-            document.getElementById("salesmanStatus").value = String(s.active !== false);
-            document.getElementById("reminderEnabled").value = String(s.reminderEnabled !== false);
-            document.getElementById("salesmanNote").value = s.note || "";
+        document.getElementById("todayOrders").textContent = ordersSnap.size;
+        document.getElementById("noOrderCount").textContent = noOrderList.length;
+        document.getElementById("lastRunLabel").textContent =
+          `Last run: ${new Date().toLocaleTimeString("en-IN")} · ${date}`;
 
-            window.scrollTo({ top: 0, behavior: "smooth" });
+        if (mode === "send") {
+          mailQueuedCount += sentCount;
+          document.getElementById("mailQueued").textContent = mailQueuedCount;
+          showToast(`✅ Check complete. ${sentCount} mail sent. ${autoFixedCount} order link fixed.`);
+        } else {
+          showToast(`✅ Preview complete. ${noOrderList.length} salesman no order. ${autoFixedCount} order link fixed.`);
         }
 
-        async function deleteSalesman(id) {
-            if (!confirm("Delete this salesman?")) return;
-
-            try {
-                await db.collection("salesmen").doc(id).delete();
-                showToast("✅ Salesman deleted");
-                await loadSalesmen();
-            } catch (error) {
-                console.error(error);
-                showToast("❌ Delete failed");
-            }
+        if (autoFixFailedCount > 0) {
+          showToast(`⚠️ ${autoFixFailedCount} order(s) could not be auto-linked. Check Firestore rules.`);
         }
 
-        function clearForm() {
-            editSalesmanId = null;
-            document.getElementById("salesmanName").value = "";
-            document.getElementById("salesmanEmail").value = "";
-            document.getElementById("salesmanStatus").value = "true";
-            document.getElementById("reminderEnabled").value = "true";
-            document.getElementById("salesmanNote").value = "";
-        }
+      } catch (error) {
+        console.error(error);
+        resultBody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:red;">Check failed</td></tr>`;
+        showToast("❌ Check failed. Open console for details.");
+      } finally {
+        runBtn.disabled = false;
+        runBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass-chart"></i> Run Check`;
+      }
+    }
 
-        async function saveTemplate() {
-            const subject = document.getElementById("mailSubject").value.trim();
-            const body = document.getElementById("mailBody").value.trim();
+    async function sendSingleMail(salesmanId, date) {
+      const salesman = salesmen.find(s => s.id === salesmanId);
+      if (!salesman) return showToast("❌ Salesman not found");
 
-            if (!subject || !body) return showToast("❌ Subject and body required");
+      if (!confirm(`Send reminder mail to ${salesman.name} (${salesman.email})?`)) return;
 
-            try {
-                await db.collection("settings").doc("noOrderMailTemplate").set({
-                    subject,
-                    body,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
+      try {
+        const alreadySent = await checkAlreadySent(date, salesman.email);
+        if (alreadySent) return showToast("⚠️ Mail already sent for this date");
 
-                showToast("✅ Template saved");
-            } catch (error) {
-                console.error(error);
-                showToast("❌ Template save failed");
-            }
-        }
+        await sendMailViaAppsScript(salesman, date);
+        await saveMailLog(salesman, date, "Sent");
 
-        async function loadTemplate() {
-            try {
-                const doc = await db.collection("settings").doc("noOrderMailTemplate").get();
+        mailQueuedCount++;
+        document.getElementById("mailQueued").textContent = mailQueuedCount;
 
-                if (doc.exists) {
-                    const data = doc.data();
-                    if (data.subject) document.getElementById("mailSubject").value = data.subject;
-                    if (data.body) document.getElementById("mailBody").value = data.body;
-                }
-            } catch (error) {
-                console.warn("Template load skipped", error);
-            }
-        }
+        showToast("✅ Mail sent successfully");
+        await runNoOrderCheck();
 
-        async function runNoOrderCheck() {
-            const date = document.getElementById("checkDate").value;
-            const mode = document.getElementById("checkMode").value;
-            const resultBody = document.getElementById("resultBody");
-            const runBtn = document.getElementById("runCheckBtn");
+      } catch (error) {
+        console.error(error);
+        await saveMailLog(salesman, date, "Failed", error.message);
+        showToast(`❌ Mail send failed: ${error.message}`);
+      }
+    }
 
-            if (!date) return showToast("❌ Select date");
+    async function checkAlreadySent(date, email) {
+      const id = safeDocId(`${date}_${email}`);
+      const doc = await db.collection("noOrderMailLogs").doc(id).get();
 
-            resultBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Checking orders...</td></tr>`;
-            runBtn.disabled = true;
+      if (!doc.exists) return false;
 
-            try {
-                if (!salesmen.length) await loadSalesmen();
+      const data = doc.data();
+      return data.mailStatus === "Sent";
+    }
 
-                const activeSalesmen = salesmen.filter(s =>
-                    s.active !== false &&
-                    s.reminderEnabled !== false &&
-                    s.email
-                );
+    async function saveMailLog(salesman, date, status = "Sent", errorMessage = "") {
+      const id = safeDocId(`${date}_${salesman.email}`);
 
-                const ordersSnap = await db
-                    .collection("orders")
-                    .where("orderDate", "==", date)
-                    .get();
+      await db.collection("noOrderMailLogs").doc(id).set({
+        date,
+        salesmanId: salesman.id,
+        salesmanName: salesman.name,
+        salesmanEmail: salesman.email,
+        type: "NO_ORDER_REMINDER",
+        mailStatus: status,
+        errorMessage,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    }
 
-                const todayOrders = [];
-                const orderSalesmanSet = new Set();
+    async function sendMailViaAppsScript(salesman, date) {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
+        throw new Error("Apps Script URL missing");
+      }
 
-                ordersSnap.forEach(doc => {
-                    const order = doc.data();
-                    todayOrders.push(order);
+      const subjectTemplate = document.getElementById("mailSubject").value.trim();
+      const bodyTemplate = document.getElementById("mailBody").value.trim();
 
-                    if (order.salesman) {
-                        orderSalesmanSet.add(normalizeText(order.salesman));
-                    }
-                });
+      const subject = subjectTemplate
+        .replaceAll("{{name}}", salesman.name)
+        .replaceAll("{{date}}", date);
 
-                let noOrderList = [];
-                let sentCount = 0;
-                const rows = [];
+      const body = bodyTemplate
+        .replaceAll("{{name}}", salesman.name)
+        .replaceAll("{{date}}", date);
 
-                for (let i = 0; i < activeSalesmen.length; i++) {
-                    const salesman = activeSalesmen[i];
-                    const hasOrder = orderSalesmanSet.has(normalizeText(salesman.name));
+      const payload = {
+        secret: APPS_SCRIPT_SECRET,
+        to: salesman.email,
+        cc: ADMIN_CC_EMAIL,
+        subject,
+        body,
+        salesmanId: salesman.id,
+        salesmanName: salesman.name,
+        orderStatus: "No Order",
+        date
+      };
 
-                    let mailStatus = hasOrder ? "Not Required" : "Pending";
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
 
-                    if (!hasOrder) {
-                        noOrderList.push(salesman);
+      return true;
+    }
 
-                        if (mode === "send") {
-                            const alreadySent = await checkAlreadySent(date, salesman.email);
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.style.display = "block";
 
-                            if (alreadySent) {
-                                mailStatus = "Already Sent";
-                            } else {
-                                try {
-                                    await sendMailViaAppsScript(salesman, date);
-                                    await saveMailLog(salesman, date, "Sent");
-                                    sentCount++;
-                                    mailStatus = "Sent";
-                                } catch (err) {
-                                    console.error("Mail failed:", err);
-                                    await saveMailLog(salesman, date, "Failed", err.message);
-                                    mailStatus = "Failed";
-                                }
-                            }
-                        }
-                    }
-
-                    const mailBadgeClass =
-                        mailStatus === "Sent" ? "mail" :
-                            mailStatus === "Failed" ? "failed" :
-                                hasOrder ? "ok" : "missing";
-
-                    rows.push(`
-          <tr>
-            <td>${i + 1}</td>
-            <td>${escapeHTML(salesman.name)}</td>
-            <td>${escapeHTML(salesman.email)}</td>
-            <td><span class="badge active">Active</span></td>
-            <td><span class="badge ${hasOrder ? "ok" : "missing"}">${hasOrder ? "Order Submitted" : "No Order"}</span></td>
-            <td><span class="badge ${mailBadgeClass}">${mailStatus}</span></td>
-            <td>
-              ${!hasOrder
-                            ? `<button class="btn btn-primary" onclick="sendSingleMail('${salesman.id}', '${date}')"><i class="fa fa-envelope"></i> Send</button>`
-                            : "-"
-                        }
-            </td>
-          </tr>
-        `);
-                }
-
-                resultBody.innerHTML = rows.length
-                    ? rows.join("")
-                    : `<tr><td colspan="7" style="text-align:center;color:#6b7280;">No active salesman found</td></tr>`;
-
-                document.getElementById("todayOrders").textContent = todayOrders.length;
-                document.getElementById("noOrderCount").textContent = noOrderList.length;
-
-                if (mode === "send") {
-                    mailQueuedCount += sentCount;
-                    document.getElementById("mailQueued").textContent = mailQueuedCount;
-                    showToast(`✅ Check complete. ${sentCount} mail sent`);
-                } else {
-                    showToast(`✅ Preview complete. ${noOrderList.length} salesman no order`);
-                }
-
-            } catch (error) {
-                console.error(error);
-                resultBody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:red;">Check failed</td></tr>`;
-                showToast("❌ Check failed");
-            } finally {
-                runBtn.disabled = false;
-            }
-        }
-
-        async function sendSingleMail(salesmanId, date) {
-            const salesman = salesmen.find(s => s.id === salesmanId);
-            if (!salesman) return showToast("❌ Salesman not found");
-
-            try {
-                const alreadySent = await checkAlreadySent(date, salesman.email);
-                if (alreadySent) return showToast("⚠️ Mail already sent today");
-
-                await sendMailViaAppsScript(salesman, date);
-                await saveMailLog(salesman, date, "Sent");
-
-                mailQueuedCount++;
-                document.getElementById("mailQueued").textContent = mailQueuedCount;
-
-                showToast("✅ Mail sent successfully");
-                await runNoOrderCheck();
-
-            } catch (error) {
-                console.error(error);
-                await saveMailLog(salesman, date, "Failed", error.message);
-                showToast(`❌ Mail send failed: ${error.message}`);
-            }
-        }
-
-        async function checkAlreadySent(date, email) {
-            const id = `${date}_${email}`.replace(/[.#$/[\]]/g, "_");
-            const doc = await db.collection("noOrderMailLogs").doc(id).get();
-
-            if (!doc.exists) return false;
-
-            const data = doc.data();
-            return data.mailStatus === "Sent";
-        }
-
-        async function saveMailLog(salesman, date, status = "Sent", errorMessage = "") {
-            const id = `${date}_${salesman.email}`.replace(/[.#$/[\]]/g, "_");
-
-            await db.collection("noOrderMailLogs").doc(id).set({
-                date,
-                salesmanName: salesman.name,
-                salesmanEmail: salesman.email,
-                type: "NO_ORDER_REMINDER",
-                mailStatus: status,
-                errorMessage,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-        }
-
-        async function sendMailViaAppsScript(salesman, date) {
-            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
-                throw new Error("Apps Script URL missing");
-            }
-
-            const subjectTemplate = document.getElementById("mailSubject").value.trim();
-            const bodyTemplate = document.getElementById("mailBody").value.trim();
-
-            const subject = subjectTemplate
-                .replaceAll("{{name}}", salesman.name)
-                .replaceAll("{{date}}", date);
-
-            const body = bodyTemplate
-                .replaceAll("{{name}}", salesman.name)
-                .replaceAll("{{date}}", date);
-
-            const payload = {
-                secret: APPS_SCRIPT_SECRET,
-                to: salesman.email,
-                cc: ADMIN_CC_EMAIL,
-
-                subject,
-                body,
-                salesmanName: salesman.name,
-                orderStatus: "No Order",
-            };
-
-            await fetch(APPS_SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify(payload)
-            });
-
-            return true;
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.style.display = "block";
-
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => {
-                toast.style.display = "none";
-            }, 2800);
-        }
-    </script>
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.style.display = "none";
+      }, 3500);
+    }
+  </script>
 
 </body>
-
 </html>

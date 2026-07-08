@@ -18,7 +18,7 @@ let deleteTargetOrderNo = null;
 let users = [];
 let amountSortDir = "desc";
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 10;
 let lastVisibleDoc = null;
 
 /* ===============================
