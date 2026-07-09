@@ -740,22 +740,24 @@ function saveDeliveredOrder(orderId, source) {
       });
 
       document.getElementById("modalContent").innerHTML = `
+<div class="success-box">
 
-        <h3 style="text-align:center">
-          Delivery Saved Successfully ✅
-        </h3>
+    <div class="success-icon">
+        <i class="fa-solid fa-circle-check"></i>
+    </div>
 
-        <p style="text-align:center;margin-top:8px;color:#666;">
-          Bill uploaded to Google Drive and saved in Firestore.
-        </p>
+    <h2>Delivery Saved Successfully</h2>
 
-        <div style="text-align:center;margin-top:15px;">
-          <button onclick="closeModal()">
-            Close
-          </button>
-        </div>
+    <p>
+        Bill uploaded to Google Drive and saved in Firestore.
+    </p>
 
-      `;
+    <button class="ubill-btn" onclick="closeModal()">
+        Close
+    </button>
+
+</div>
+`;
 
     })
 
@@ -848,7 +850,7 @@ function viewOrder(id) {
     <div class="view-order-wrap">
       <div class="view-order-header">
         <div class="view-order-left">
-          <h3 class="modal-title">Order Details – ${o.orderNo}</h3>
+          <h3 class="modal-title">${o.orderNo}</h3>
         </div>
 
         <button class="myq-btn myq-btn-download" onclick="downloadOrder('${o.id}')">
@@ -1717,98 +1719,490 @@ if (!loggedSalesman || !loginTime) {
 
 
 function downloadOrder(orderId) {
+  const o =
+    orders.find(x => x.id === orderId) ||
+    productOrders.find(x => x.id === orderId);
 
-  const printContents =
-    document.getElementById("modalContent").innerHTML;
+  if (!o) {
+    alert("Order not found");
+    return;
+  }
 
-  const win =
-    window.open("", "", "width=1200,height=800");
+  const items = o.cartItems || o.items || [];
+
+  const itemRows = items.map((i, index) => {
+    const qty = Number(i.qty || i.quantity || 0);
+    const rate = Number(i.rate || i.price || 0);
+    const amount = Number(i.amount || qty * rate || 0);
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${i.code || "-"}</td>
+        <td>${i.unit || "-"}</td>
+        <td class="right">${qty}</td>
+        <td class="right">₹${rate.toFixed(2)}</td>
+        <td class="right">₹${amount.toFixed(2)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const win = window.open("", "", "width=1200,height=900");
 
   win.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${o.orderNo || "Order"} - PETRO OMS</title>
 
-    <html>
+  <style>
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
 
-      <head>
+    * {
+      box-sizing: border-box;
+    }
 
-        <title>Order Download</title>
+    body {
+      font-family: Arial, sans-serif;
+      color: #1f2937;
+      margin: 0;
+      background: #fff;
+      font-size: 13px;
+    }
 
-        <style>
+    .invoice {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      padding: 18px;
+      position: relative;
+    }
 
-          body{
+    .watermark {
+      position: fixed;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-25deg);
+      font-size: 70px;
+      font-weight: 800;
+      color: rgba(16,128,130,0.06);
+      z-index: 0;
+      white-space: nowrap;
+    }
 
-            font-family:Arial;
-            padding:20px;
-            color:#111;
+    .content {
+      position: relative;
+      z-index: 1;
+    }
 
-          }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid #108082;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
 
-          table{
+    .company h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #108082;
+      letter-spacing: 0.5px;
+    }
 
-            width:100%;
-            border-collapse:collapse;
-            margin-top:15px;
+    .company p {
+      margin: 4px 0;
+      color: #4b5563;
+      font-size: 12px;
+    }
 
-          }
+    .doc-title {
+      text-align: right;
+    }
 
-          th,td{
+    .doc-title h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #111827;
+    }
 
-            border:1px solid #ddd;
-            padding:10px;
-            text-align:left;
+    .doc-title span {
+      display: inline-block;
+      margin-top: 8px;
+      background: #e6f7f7;
+      color: #108082;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 12px;
+    }
 
-          }
+    .top-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
 
-          th{
+    .info-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px;
+      background: #f9fafb;
+    }
 
-            background:#108082;
-            color:#fff;
+    .info-card label {
+      display: block;
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
 
-          }
+    .info-card strong {
+      font-size: 14px;
+      color: #111827;
+    }
 
-          h3,h4{
+    .section {
+      margin-top: 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-            margin-bottom:10px;
+    .section-title {
+      background: #108082;
+      color: #fff;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
 
-          }
+    .party-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+    }
 
-          .billing-row{
+    .party-item {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
 
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:8px;
+    .party-item:nth-child(odd) {
+      border-right: 1px solid #e5e7eb;
+    }
 
-          }
+    .party-item label {
+      display: block;
+      font-size: 11px;
+      color: #6b7280;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
 
-          .total{
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-            font-size:18px;
-            font-weight:bold;
+    th {
+      background: #f3f4f6;
+      color: #111827;
+      padding: 9px;
+      font-size: 12px;
+      border-bottom: 1px solid #d1d5db;
+      text-align: left;
+    }
 
-          }
+    td {
+      padding: 9px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
 
-          button{
+    .right {
+      text-align: right;
+    }
 
-            display:none;
+    .summary-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
 
-          }
+    .summary {
+      width: 360px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-        </style>
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
 
-      </head>
+    .summary-row.total {
+      background: #108082;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      border-bottom: none;
+    }
 
-      <body>
+    .discount-box {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
 
-        ${printContents}
+    .discount {
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f8fafc;
+      text-align: center;
+    }
 
-      </body>
+    .discount label {
+      display: block;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 700;
+    }
 
-    </html>
+    .discount strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 16px;
+    }
 
-  `);
+    .footer {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .signature {
+      width: 210px;
+      text-align: center;
+      padding-top: 45px;
+      border-top: 1px solid #111827;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .generated {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 10px;
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #108082;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 99;
+    }
+
+    @media print {
+      .print-btn {
+        display: none;
+      }
+
+      .invoice {
+        border: none;
+        padding: 0;
+      }
+
+      body {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+
+<div class="invoice">
+  <div class="watermark">PETRO OMS</div>
+
+  <div class="content">
+
+    <div class="header">
+      <div class="company">
+        <h1>PETRO INDUSTECH PVT LTD</h1>
+        <p>Manufacturing & Order Management System</p>
+        <p>Phone: +91-8000007336 | Email: contact@petroindustech.com</p>
+        <p>Website: www.oms.rankchahiye.com</p>
+      </div>
+
+      <div class="doc-title">
+        <h2>ORDER / QUOTATION</h2>
+        <span>${o.status || "Pending"}</span>
+      </div>
+    </div>
+
+    <div class="top-info">
+      <div class="info-card">
+        <label>Order No</label>
+        <strong>${o.orderNo || "-"}</strong>
+      </div>
+
+      <div class="info-card">
+        <label>Order Date</label>
+        <strong>${o.orderDate || "-"}</strong>
+      </div>
+
+      <div class="info-card">
+        <label>Grand Total</label>
+        <strong>₹${Number(o.grandTotal || 0).toFixed(2)}</strong>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Party Details</div>
+      <div class="party-grid">
+        <div class="party-item">
+          <label>Name</label>
+          ${o.party?.name || "-"}
+        </div>
+
+        <div class="party-item">
+          <label>Mobile</label>
+          ${o.party?.mobile || "-"}
+        </div>
+
+        <div class="party-item">
+          <label>GST</label>
+          ${o.party?.gst || "-"}
+        </div>
+
+        <div class="party-item">
+          <label>Address</label>
+          ${o.party?.address || "-"}
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Products</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px;">S.No</th>
+            <th>Code / Product</th>
+            <th>Unit</th>
+            <th class="right">Qty</th>
+            <th class="right">Rate</th>
+            <th class="right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemRows || `
+            <tr>
+              <td colspan="6" style="text-align:center;padding:25px;">No items found</td>
+            </tr>
+          `}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="discount-box">
+      <div class="discount">
+        <label>Hardware Discount</label>
+        <strong>${o.categoryDiscounts?.hardware ?? 0}%</strong>
+      </div>
+
+      <div class="discount">
+        <label>Bathroom Discount</label>
+        <strong>${o.categoryDiscounts?.bathroom ?? 0}%</strong>
+      </div>
+
+      <div class="discount">
+        <label>SS Discount</label>
+        <strong>${o.categoryDiscounts?.stainlesssteel ?? 0}%</strong>
+      </div>
+    </div>
+
+    <div class="summary-wrap">
+      <div class="summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong>₹${Number(o.subTotal || 0).toFixed(2)}</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Freight</span>
+          <strong>₹${Number(o.freight || 0).toFixed(2)}</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Special Discount</span>
+          <strong>₹${Number(o.specialDiscount || 0).toFixed(2)}</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>GST</span>
+          <strong>₹${Number(o.gstAmount || 0).toFixed(2)}</strong>
+        </div>
+
+        <div class="summary-row total">
+          <span>Grand Total</span>
+          <span>₹${Number(o.grandTotal || 0).toFixed(2)}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="signature">Customer Signature</div>
+      <div class="signature">Authorized Signature</div>
+    </div>
+
+    <div class="generated">
+      Generated from Petro OMS | www.oms.rankchahiye.com <br>
+      This is a computer-generated document.
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.onload = function() {
+    setTimeout(function() {
+      window.print();
+    }, 500);
+  };
+</script>
+
+</body>
+</html>
+`);
 
   win.document.close();
-
-  win.focus();
-
-  win.print();
 }

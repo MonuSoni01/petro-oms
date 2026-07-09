@@ -581,15 +581,16 @@ function renderCurrentPage() {
       const checked = selectedRowIds.has(orderId) ? "checked" : "";
 
       const billImageButton = billImage
-        ? `
-          <button
-            type="button"
-            class="btn btn-info btn-sm js-bill-image"
-            data-image="${escapeAttr(billImage)}">
-            <i class="fa fa-image"></i> View Image
-          </button>
-        `
-        : `<span style="color:#888;">Not Uploaded</span>`;
+  ? `
+      <a
+        href="${billImage}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-info btn-sm">
+        <i class="fa fa-image"></i> View Image
+      </a>
+    `
+  : `<span style="color:#888;">Not Uploaded</span>`;
 
       return `
         <tr>
