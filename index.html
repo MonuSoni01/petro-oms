@@ -806,19 +806,61 @@
     </script>
 
     <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", function () {
-                navigator.serviceWorker.register("/service-worker.js")
-                    .then(function () {
-                        console.log("PETRO ERP Service Worker registered");
-                    })
-                    .catch(function (error) {
-                        console.log("Service Worker registration failed:", error);
-                    });
-            });
-        }
-    </script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async function () {
+      try {
+        const registration = await navigator.serviceWorker.register(
+          "/service-worker.js",
+          {
+            updateViaCache: "none"
+          }
+        );
 
+        await registration.update();
+
+        console.log(
+          "PETRO ERP Service Worker registered:",
+          registration.scope
+        );
+
+        registration.addEventListener("updatefound", function () {
+          const newWorker = registration.installing;
+
+          if (!newWorker) return;
+
+          newWorker.addEventListener("statechange", function () {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              console.log("New PETRO ERP version available");
+
+              newWorker.postMessage({
+                type: "SKIP_WAITING"
+              });
+            }
+          });
+        });
+
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          function () {
+            if (window.__petroReloading) return;
+
+            window.__petroReloading = true;
+            window.location.reload();
+          }
+        );
+
+      } catch (error) {
+        console.error(
+          "Service Worker registration failed:",
+          error
+        );
+      }
+    });
+  }
+</script>
 
 </body>
 

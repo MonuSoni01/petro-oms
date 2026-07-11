@@ -1,8 +1,44 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    
+    <!-- Force browsers to revalidate this page and load the current deployment. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+        // Change this value whenever a new version is deployed.
+        const PETRO_APP_VERSION = "2026.07.11.3";
+
+        (async function clearOldAppCache() {
+            const savedVersion = localStorage.getItem("petro_app_version");
+            if (savedVersion === PETRO_APP_VERSION) return;
+
+            localStorage.setItem("petro_app_version", PETRO_APP_VERSION);
+
+            try {
+                if ("caches" in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                }
+
+                if ("serviceWorker" in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(registration => registration.unregister()));
+                }
+            } catch (error) {
+                console.warn("Old cache cleanup failed:", error);
+            }
+
+            const url = new URL(window.location.href);
+            if (url.searchParams.get("appVersion") !== PETRO_APP_VERSION) {
+                url.searchParams.set("appVersion", PETRO_APP_VERSION);
+                window.location.replace(url.toString());
+            }
+        })();
+    </script>
+      <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Quotations - PETRO OMS</title>
     <link rel="icon" href="/images/app-icon.png" />
@@ -10,10 +46,10 @@
     <!-- Firebase SDK (Remove async) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="sales-dashboard.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="sales-dashboard.css?v=2026.07.11.3">
+    <link rel="stylesheet" href="/css/style.css?v=2026.07.11.3">
 
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendor/bootstrap/css/bootstrap.min.css?v=2026.07.11.3" rel="stylesheet" />
 
 </head>
 
@@ -348,8 +384,8 @@
     </div>
 
     <!-- Import Firebase configuration and JavaScript file -->
-    <script src="../firebaseconfig.js"></script>
-    <script src="sales-dashboard.js"></script>
+    <script src="../firebaseconfig.js?v=2026.07.11.3"></script>
+    <script src="sales-dashboard.js?v=2026.07.11.3"></script>
 
     <script>
 
@@ -368,10 +404,10 @@
 
     </script>
 
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery.appear.js"></script>
-    <script src="js/script.js"></script>
+    <script src="vendor/jquery/jquery.min.js?v=2026.07.11.3"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js?v=2026.07.11.3"></script>
+    <script src="js/jquery.appear.js?v=2026.07.11.3"></script>
+    <script src="js/script.js?v=2026.07.11.3"></script>
     <!-- <script src="js/dev.js"></script> -->
 
 </body>

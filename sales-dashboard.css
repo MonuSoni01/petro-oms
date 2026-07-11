@@ -4327,3 +4327,14 @@ body.dark .filter-group select {
         width: 100%;
     }
 }
+.modal-items-table th:nth-child(2),
+.modal-items-table td:nth-child(2) {
+  text-align: left !important;
+}
+
+.modal-items-table td:nth-child(2) {
+  white-space: normal;
+  line-height: 1.5;
+  font-weight: 500;
+  vertical-align: top;
+}
