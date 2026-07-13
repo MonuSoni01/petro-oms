@@ -46,13 +46,11 @@ try {
 
 let allOrdersMaster = [];
 let filteredOrders = [];
-let currentRenderedOrders = [];
-let currentPage = 1;
+let currentRenderedOrders = []; 
 
 let deleteOrderId = null;
 let deleteOrderSource = "orders";
-
-const PAGE_SIZE = 10;
+ 
 const ADMIN_DELETE_PASSWORD = "2003";
 
 /* Selected rows across current pagination */
@@ -338,19 +336,43 @@ function clearTableBody() {
    orderBy("savedAt") remove kiya hai taaki savedAt missing orders gayab na hon.
 ============================================================ */
 
-async function fetchAllOrders() {
+let lastVisibleOrder = null;
+let firstVisibleOrder = null;
+let currentFirestorePage = 1;
+let hasNextFirestorePage = true;
+
+const FIREBASE_PAGE_SIZE = 10;
+async function fetchFirstOrdersPage() {
   showLoadingState();
 
   try {
-    const snapshot = await db.collection("orders").get({ source: "default" });
+    const snapshot = await db
+      .collection("orders")
+      .orderBy("savedAt", "desc")
+      .limit(FIREBASE_PAGE_SIZE + 1)
+      .get();
 
-    allOrdersMaster = snapshot.docs.map((doc) => ({
+    hasNextFirestorePage =
+      snapshot.docs.length > FIREBASE_PAGE_SIZE;
+
+    const visibleDocs =
+      snapshot.docs.slice(0, FIREBASE_PAGE_SIZE);
+
+    allOrdersMaster = visibleDocs.map((doc) => ({
       id: doc.id,
       source: "orders",
       ...doc.data(),
     }));
 
-    allOrdersMaster.sort((a, b) => getSortTime(b) - getSortTime(a));
+    if (visibleDocs.length) {
+      firstVisibleOrder = visibleDocs[0];
+      lastVisibleOrder = visibleDocs[visibleDocs.length - 1];
+    } else {
+      firstVisibleOrder = null;
+      lastVisibleOrder = null;
+    }
+
+    currentFirestorePage = 1;
 
     populateSalesmanMasterList();
     applyFiltersAndRender();
@@ -463,7 +485,7 @@ window.applyFiltersAndRender = function () {
 
   currentPage = 1;
   renderCurrentPage();
-  updatePaginationUI();
+  updateFirestorePaginationButtons();
   updateTableSubText();
 };
 
@@ -548,10 +570,8 @@ function renderCurrentPage() {
 
   if (selectAllRowsEl) selectAllRowsEl.checked = false;
 
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
-
-  const pageData = filteredOrders.slice(start, end);
+  const start = 0;
+  const pageData = filteredOrders;
   currentRenderedOrders = pageData;
 
   if (!filteredOrders.length) {
@@ -581,7 +601,7 @@ function renderCurrentPage() {
       const checked = selectedRowIds.has(orderId) ? "checked" : "";
 
       const billImageButton = billImage
-  ? `
+        ? `
       <a
         href="${billImage}"
         target="_blank"
@@ -590,7 +610,7 @@ function renderCurrentPage() {
         <i class="fa fa-image"></i> View Image
       </a>
     `
-  : `<span style="color:#888;">Not Uploaded</span>`;
+        : `<span style="color:#888;">Not Uploaded</span>`;
 
       return `
         <tr>
@@ -602,8 +622,7 @@ function renderCurrentPage() {
               ${checked}>
           </td>
 
-          <td>${start + index + 1}</td>
-
+          <td>${((currentFirestorePage - 1) * FIREBASE_PAGE_SIZE) + index + 1}</td>
           <td>${escapeHTML(order?.salesman || "-")}</td>
 
           <td>${escapeHTML(order?.orderNo || "-")}</td>
@@ -663,52 +682,116 @@ function renderCurrentPage() {
    PAGINATION
 ============================================================ */
 
-function getTotalPages() {
-  return Math.ceil(filteredOrders.length / PAGE_SIZE) || 1;
-}
+ 
 
-function updatePaginationUI() {
-  const totalPages = getTotalPages();
-
+function updateFirestorePaginationButtons() {
   if (pageIndicator) {
-    pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageIndicator.textContent =
+      `Page ${currentFirestorePage}`;
   }
 
   if (prevPageBtn) {
-    prevPageBtn.disabled = currentPage <= 1;
+    prevPageBtn.disabled =
+      currentFirestorePage <= 1;
   }
 
   if (nextPageBtn) {
-    nextPageBtn.disabled = currentPage >= totalPages;
+    nextPageBtn.disabled =
+      !hasNextFirestorePage;
   }
 }
 
-function goToPrevPage() {
-  if (currentPage <= 1) return;
+async function goToPrevPage() {
+  if (!firstVisibleOrder || currentFirestorePage <= 1) return;
 
-  currentPage--;
-  renderCurrentPage();
-  updatePaginationUI();
+  try {
+    if (prevPageBtn) prevPageBtn.disabled = true;
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+    const snapshot = await db
+      .collection("orders")
+      .orderBy("savedAt", "desc")
+      .endBefore(firstVisibleOrder)
+      .limitToLast(FIREBASE_PAGE_SIZE)
+      .get();
+
+    if (snapshot.empty) return;
+
+    allOrdersMaster = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      source: "orders",
+      ...doc.data(),
+    }));
+
+    firstVisibleOrder = snapshot.docs[0];
+    lastVisibleOrder = snapshot.docs[snapshot.docs.length - 1];
+
+    currentFirestorePage--;
+
+    hasNextFirestorePage = true;
+
+    populateSalesmanMasterList();
+    applyFiltersAndRender();
+    updateFirestorePaginationButtons();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+  } catch (error) {
+    console.error("Previous page error:", error);
+    showToast("❌ Previous page load failed");
+  }
 }
+async function goToNextPage() {
+  if (!lastVisibleOrder || !hasNextFirestorePage) return;
 
-function goToNextPage() {
-  const totalPages = getTotalPages();
+  try {
+    if (nextPageBtn) nextPageBtn.disabled = true;
 
-  if (currentPage >= totalPages) return;
+    const snapshot = await db
+      .collection("orders")
+      .orderBy("savedAt", "desc")
+      .startAfter(lastVisibleOrder)
+      .limit(FIREBASE_PAGE_SIZE + 1)
+      .get();
 
-  currentPage++;
-  renderCurrentPage();
-  updatePaginationUI();
+    hasNextFirestorePage =
+      snapshot.docs.length > FIREBASE_PAGE_SIZE;
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+    const visibleDocs =
+      snapshot.docs.slice(0, FIREBASE_PAGE_SIZE);
+
+    if (!visibleDocs.length) {
+      hasNextFirestorePage = false;
+      updateFirestorePaginationButtons();
+      return;
+    }
+
+    allOrdersMaster = visibleDocs.map((doc) => ({
+      id: doc.id,
+      source: "orders",
+      ...doc.data(),
+    }));
+
+    firstVisibleOrder = visibleDocs[0];
+    lastVisibleOrder = visibleDocs[visibleDocs.length - 1];
+
+    currentFirestorePage++;
+
+    populateSalesmanMasterList();
+    applyFiltersAndRender();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+  } catch (error) {
+    console.error("Next page error:", error);
+    showToast("❌ Next page load failed");
+    updateFirestorePaginationButtons();
+  }
 }
 
 if (prevPageBtn) {
@@ -1187,7 +1270,7 @@ window.confirmDelete = async function () {
     }
 
     renderCurrentPage();
-    updatePaginationUI();
+    updateFirestorePaginationButtons();
     updateTableSubText();
 
     window.closeDeleteModal();
@@ -1697,5 +1780,5 @@ document.addEventListener("keydown", (event) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   populateSalesmanMasterList();
-  fetchAllOrders();
+  fetchFirstOrdersPage();
 });

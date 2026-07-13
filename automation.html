@@ -375,7 +375,7 @@
       <div class="stat"><span>Total Salesmen</span><b id="totalSalesmen">0</b></div>
       <div class="stat"><span>Selected Date Orders</span><b id="todayOrders">0</b></div>
       <div class="stat"><span>No Order</span><b id="noOrderCount">0</b></div>
-      <div class="stat"><span>Mail Sent</span><b id="mailQueued">0</b></div>
+      <div class="stat"><span>Lifetime Mail Sent</span><b id="mailQueued">0</b></div>
     </div>
 
     <div class="grid">
@@ -577,7 +577,12 @@ Petro Industech Pvt. Ltd.</textarea>
 
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyEWm2LUgs4oe2TgYrheQkwCZ80GOqdb1QHFAR4MiQTGaj04Vc_k9UJ0BSbic7xOs1Y/exec";
     const APPS_SCRIPT_SECRET = "PETRO_OMS_2026_SECRET";
-    const ADMIN_CC_EMAIL = "online@petroindustech.com";
+    const ADMIN_CC_EMAILS = [
+      "online@petroindustech.com",
+      "niteshkhurana@petroindustech.com",
+      "rm@petroindustech.com",
+      "exim@petroindustech.com"
+    ];
 
     let salesmen = [];
     let editSalesmanId = null;
@@ -587,7 +592,32 @@ Petro Industech Pvt. Ltd.</textarea>
       document.getElementById("checkDate").value = getTodayIST();
       await loadTemplate();
       await loadSalesmen();
+      loadTotalSentMailCount();
     });
+
+    function loadTotalSentMailCount() {
+      const callbackName = "petroReceiveMailCount_" + Date.now();
+      const script = document.createElement("script");
+
+      window[callbackName] = function (response) {
+        mailQueuedCount = Number(response && response.totalSent) || 0;
+        document.getElementById("mailQueued").textContent = mailQueuedCount;
+        delete window[callbackName];
+        script.remove();
+      };
+
+      script.src = APPS_SCRIPT_URL
+        + "?action=stats&callback=" + encodeURIComponent(callbackName)
+        + "&t=" + Date.now();
+
+      script.onerror = function () {
+        document.getElementById("mailQueued").textContent = "-";
+        delete window[callbackName];
+        script.remove();
+      };
+
+      document.body.appendChild(script);
+    }
 
     function goBack() {
       window.history.back();
@@ -1151,7 +1181,7 @@ Petro Industech Pvt. Ltd.</textarea>
       const payload = {
         secret: APPS_SCRIPT_SECRET,
         to: salesman.email,
-        cc: ADMIN_CC_EMAIL,
+        cc: ADMIN_CC_EMAILS.join(","),
         subject,
         body,
         salesmanId: salesman.id,

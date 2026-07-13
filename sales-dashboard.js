@@ -19,6 +19,11 @@ let currentMaxAmountFilter = "";
 const db = firebase.firestore();
 const DRIVE_UPLOAD_URL = "https://script.google.com/macros/s/AKfycbyAbNdLjXn4-I6fao_HkGsdYsgWHKpmEp0b5tfEpzLAb5qEwe62aXEOy_j4WKi8CjNulg/exec";
 
+// Firestore read-cap: how many recent docs each listener pulls.
+// Raise this if a salesman with many orders stops seeing older ones.
+const ORDERS_FETCH_LIMIT = 300;
+const PRODUCTS_FETCH_LIMIT = 300;
+
 function getLoggedSalesman() {
   return localStorage.getItem("loggedSalesman") || localStorage.getItem("salesman") || "";
 }
@@ -116,6 +121,7 @@ function fetchOrders(prefix) {
 
   db.collection("orders")
     .orderBy("savedAt", "desc")
+    .limit(ORDERS_FETCH_LIMIT)
     .onSnapshot((snap) => {
 
       orders = [];
@@ -151,6 +157,8 @@ function fetchOrders(prefix) {
 function fetchProductOrders(prefix) {
 
   db.collection("products")
+    .orderBy("createdAt", "desc")
+    .limit(PRODUCTS_FETCH_LIMIT)
     .onSnapshot((snap) => {
 
       productOrders = [];
