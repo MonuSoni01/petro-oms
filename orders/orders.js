@@ -124,39 +124,94 @@ function formatMoney(value) {
   return numberValue(value).toFixed(2);
 }
 
+function buildISODate(year, month, day) {
+  const y = Number(year);
+  const m = Number(month);
+  const d = Number(day);
+
+  if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d)) {
+    return "";
+  }
+
+  const date = new Date(y, m - 1, d);
+
+  if (
+    date.getFullYear() !== y ||
+    date.getMonth() !== m - 1 ||
+    date.getDate() !== d
+  ) {
+    return "";
+  }
+
+  return `${String(y).padStart(4, "0")}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+
+function localDateToISO(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return "";
+
+  return buildISODate(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate()
+  );
+}
+
 function getOrderDateValue(value) {
   if (!value) return "";
 
   if (value && typeof value.toDate === "function") {
-    return value.toDate().toISOString().slice(0, 10);
+    return localDateToISO(value.toDate());
   }
 
   if (value instanceof Date) {
-    return value.toISOString().slice(0, 10);
+    return localDateToISO(value);
   }
 
-  if (typeof value === "string") {
-    return value.slice(0, 10);
+  if (typeof value === "number") {
+    return localDateToISO(new Date(value));
+  }
+
+  if (typeof value !== "string") return "";
+
+  const text = value.trim();
+  let match = text.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+
+  if (match) {
+    return buildISODate(match[1], match[2], match[3]);
+  }
+
+  match = text.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+
+  if (match) {
+    return buildISODate(match[3], match[2], match[1]);
   }
 
   return "";
 }
 
 function getOrderDate(order) {
-  return getOrderDateValue(
-    order?.orderDate ||
-    order?.savedAt ||
-    order?.createdAt ||
-    order?.date
-  );
+  // Table display and From/To filters must use the actual order date,
+  // not the record creation/saved timestamp.
+  return getOrderDateValue(order?.orderDate || order?.date);
+}
+
+function formatOrderDateForDisplay(order) {
+  const orderDate = getOrderDate(order);
+
+  if (!orderDate) return "-";
+
+  const [year, month, day] = orderDate.split("-");
+  return year && month && day ? `${day}-${month}-${year}` : orderDate;
 }
 
 function getSortTime(order) {
-  const value =
-    order?.savedAt ||
-    order?.orderDate ||
-    order?.createdAt ||
-    order?.date;
+  const normalizedOrderDate = getOrderDate(order);
+
+  if (normalizedOrderDate) {
+    return new Date(`${normalizedOrderDate}T00:00:00`).getTime();
+  }
+
+  const value = order?.savedAt || order?.createdAt || null;
 
   if (!value) return 0;
 
@@ -332,47 +387,27 @@ function clearTableBody() {
 
 /* ============================================================
    FETCH ALL ORDERS
-   NOTE:
-   orderBy("savedAt") remove kiya hai taaki savedAt missing orders gayab na hon.
+   All filters are applied to this complete in-memory list.
 ============================================================ */
 
-let lastVisibleOrder = null;
-let firstVisibleOrder = null;
-let currentFirestorePage = 1;
-let hasNextFirestorePage = true;
-
 const FIREBASE_PAGE_SIZE = 10;
+let currentPage = 1;
+
 async function fetchFirstOrdersPage() {
   showLoadingState();
 
   try {
     const snapshot = await db
       .collection("orders")
-      .orderBy("savedAt", "desc")
-      .limit(FIREBASE_PAGE_SIZE + 1)
       .get();
 
-    hasNextFirestorePage =
-      snapshot.docs.length > FIREBASE_PAGE_SIZE;
-
-    const visibleDocs =
-      snapshot.docs.slice(0, FIREBASE_PAGE_SIZE);
-
-    allOrdersMaster = visibleDocs.map((doc) => ({
+    allOrdersMaster = snapshot.docs.map((doc) => ({
       id: doc.id,
       source: "orders",
       ...doc.data(),
-    }));
+    })).sort((a, b) => getSortTime(b) - getSortTime(a));
 
-    if (visibleDocs.length) {
-      firstVisibleOrder = visibleDocs[0];
-      lastVisibleOrder = visibleDocs[visibleDocs.length - 1];
-    } else {
-      firstVisibleOrder = null;
-      lastVisibleOrder = null;
-    }
-
-    currentFirestorePage = 1;
+    currentPage = 1;
 
     populateSalesmanMasterList();
     applyFiltersAndRender();
@@ -433,6 +468,23 @@ window.applyFiltersAndRender = function () {
   const toDate = dateTo?.value || "";
 
   selectedRowIds.clear();
+
+  if (dateTo) dateTo.setCustomValidity("");
+
+  if (fromDate && toDate && fromDate > toDate) {
+    filteredOrders = [];
+    currentPage = 1;
+    renderCurrentPage();
+    updateFirestorePaginationButtons();
+
+    if (dateTo) {
+      dateTo.setCustomValidity("To Date must be the same as or after From Date.");
+      dateTo.reportValidity();
+    }
+
+    showToast("To Date, From Date se pehle nahi ho sakti.");
+    return;
+  }
 
   filteredOrders = allOrdersMaster.filter((order) => {
     const orderNo = normalizeText(order?.orderNo);
@@ -496,10 +548,25 @@ window.applyFiltersAndRender = function () {
 function updateTableSubText() {
   if (!tableSubText) return;
 
-  const total = filteredOrders.length;
+  const filteredTotal = filteredOrders.length;
   const allTotal = allOrdersMaster.length;
+  const start = filteredTotal
+    ? (currentPage - 1) * FIREBASE_PAGE_SIZE + 1
+    : 0;
+  const end = Math.min(currentPage * FIREBASE_PAGE_SIZE, filteredTotal);
 
-  tableSubText.textContent = `Showing ${total} of ${allTotal} orders`;
+  const hasFilters = Boolean(
+    searchBox?.value ||
+    salesmanFilterEl?.value ||
+    typeFilter?.value ||
+    statusFilter?.value ||
+    dateFrom?.value ||
+    dateTo?.value
+  );
+
+  tableSubText.textContent = hasFilters
+    ? `Showing ${start}-${end} of ${filteredTotal} matching orders (${allTotal} total)`
+    : `Showing ${start}-${end} of ${allTotal} orders`;
 }
 function ensureTotalsBar() {
   let bar = document.getElementById("ordersTotalsBar");
@@ -570,8 +637,8 @@ function renderCurrentPage() {
 
   if (selectAllRowsEl) selectAllRowsEl.checked = false;
 
-  const start = 0;
-  const pageData = filteredOrders;
+  const start = (currentPage - 1) * FIREBASE_PAGE_SIZE;
+  const pageData = filteredOrders.slice(start, start + FIREBASE_PAGE_SIZE);
   currentRenderedOrders = pageData;
 
   if (!filteredOrders.length) {
@@ -579,6 +646,7 @@ function renderCurrentPage() {
     showElement(emptyState);
     currentRenderedOrders = [];
     updateOrdersTotalsUI();
+    updateTableSubText();
     return;
   }
 
@@ -592,6 +660,7 @@ function renderCurrentPage() {
       const partyType = getPartyType(order);
       const partyTypeClean = normalizeText(partyType);
       const statusText = getOrderStatus(order);
+      const orderDate = formatOrderDateForDisplay(order);
       const total = getOrderTotal(order);
       const billImage = getBillImage(order);
 
@@ -622,10 +691,12 @@ function renderCurrentPage() {
               ${checked}>
           </td>
 
-          <td>${((currentFirestorePage - 1) * FIREBASE_PAGE_SIZE) + index + 1}</td>
+          <td>${start + index + 1}</td>
           <td>${escapeHTML(order?.salesman || "-")}</td>
 
           <td>${escapeHTML(order?.orderNo || "-")}</td>
+
+          <td>${escapeHTML(orderDate)}</td>
 
           <td>${escapeHTML(order?.party?.name || "-")}</td>
 
@@ -676,6 +747,7 @@ function renderCurrentPage() {
 
   updateSelectAllState();
   updateOrdersTotalsUI();
+  updateTableSubText();
 }
 
 /* ============================================================
@@ -684,114 +756,50 @@ function renderCurrentPage() {
 
  
 
+function getTotalPages() {
+  return Math.max(1, Math.ceil(filteredOrders.length / FIREBASE_PAGE_SIZE));
+}
+
 function updateFirestorePaginationButtons() {
+  const totalPages = getTotalPages();
+
   if (pageIndicator) {
-    pageIndicator.textContent =
-      `Page ${currentFirestorePage}`;
+    pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
   }
 
   if (prevPageBtn) {
-    prevPageBtn.disabled =
-      currentFirestorePage <= 1;
+    prevPageBtn.disabled = currentPage <= 1;
   }
 
   if (nextPageBtn) {
-    nextPageBtn.disabled =
-      !hasNextFirestorePage;
+    nextPageBtn.disabled = currentPage >= totalPages;
   }
 }
 
-async function goToPrevPage() {
-  if (!firstVisibleOrder || currentFirestorePage <= 1) return;
+function goToPrevPage() {
+  if (currentPage <= 1) return;
 
-  try {
-    if (prevPageBtn) prevPageBtn.disabled = true;
+  currentPage--;
+  renderCurrentPage();
+  updateFirestorePaginationButtons();
 
-    const snapshot = await db
-      .collection("orders")
-      .orderBy("savedAt", "desc")
-      .endBefore(firstVisibleOrder)
-      .limitToLast(FIREBASE_PAGE_SIZE)
-      .get();
-
-    if (snapshot.empty) return;
-
-    allOrdersMaster = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      source: "orders",
-      ...doc.data(),
-    }));
-
-    firstVisibleOrder = snapshot.docs[0];
-    lastVisibleOrder = snapshot.docs[snapshot.docs.length - 1];
-
-    currentFirestorePage--;
-
-    hasNextFirestorePage = true;
-
-    populateSalesmanMasterList();
-    applyFiltersAndRender();
-    updateFirestorePaginationButtons();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
-  } catch (error) {
-    console.error("Previous page error:", error);
-    showToast("❌ Previous page load failed");
-  }
+  document.querySelector(".orders-table-card")?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
 }
-async function goToNextPage() {
-  if (!lastVisibleOrder || !hasNextFirestorePage) return;
 
-  try {
-    if (nextPageBtn) nextPageBtn.disabled = true;
+function goToNextPage() {
+  if (currentPage >= getTotalPages()) return;
 
-    const snapshot = await db
-      .collection("orders")
-      .orderBy("savedAt", "desc")
-      .startAfter(lastVisibleOrder)
-      .limit(FIREBASE_PAGE_SIZE + 1)
-      .get();
+  currentPage++;
+  renderCurrentPage();
+  updateFirestorePaginationButtons();
 
-    hasNextFirestorePage =
-      snapshot.docs.length > FIREBASE_PAGE_SIZE;
-
-    const visibleDocs =
-      snapshot.docs.slice(0, FIREBASE_PAGE_SIZE);
-
-    if (!visibleDocs.length) {
-      hasNextFirestorePage = false;
-      updateFirestorePaginationButtons();
-      return;
-    }
-
-    allOrdersMaster = visibleDocs.map((doc) => ({
-      id: doc.id,
-      source: "orders",
-      ...doc.data(),
-    }));
-
-    firstVisibleOrder = visibleDocs[0];
-    lastVisibleOrder = visibleDocs[visibleDocs.length - 1];
-
-    currentFirestorePage++;
-
-    populateSalesmanMasterList();
-    applyFiltersAndRender();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
-  } catch (error) {
-    console.error("Next page error:", error);
-    showToast("❌ Next page load failed");
-    updateFirestorePaginationButtons();
-  }
+  document.querySelector(".orders-table-card")?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
 }
 
 if (prevPageBtn) {

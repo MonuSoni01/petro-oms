@@ -403,23 +403,23 @@ body {
 
 .orders-table th:nth-child(4),
 .orders-table td:nth-child(4) {
-    width: 135px;
+    width: 144px;
 }
 
 .orders-table th:nth-child(5),
 .orders-table td:nth-child(5) {
-    width: 210px;
+    width: 80px;
 }
 
 .orders-table th:nth-child(6),
 .orders-table td:nth-child(6) {
-    width: 105px;
+    width: 220px;
     text-align: center;
 }
 
 .orders-table th:nth-child(7),
 .orders-table td:nth-child(7) {
-    width: 120px;
+    width: 180px;
     text-align: right;
 }
 
@@ -431,13 +431,13 @@ body {
 
 .orders-table th:nth-child(9),
 .orders-table td:nth-child(9) {
-    width: 260px;
+    width: 80px;
     text-align: center;
 }
 
 .orders-table th:nth-child(10),
 .orders-table td:nth-child(10) {
-    width: 120px;
+    width: 240px;
     text-align: center;
 }
 
