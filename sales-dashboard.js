@@ -1805,16 +1805,27 @@ function downloadOrder(orderId) {
       <div class="header"><img class="logo" src="${logoUrl}" alt="PETRO Industries">
         <div class="company"><strong>PETRO INDUSTECH PVT. LTD.</strong><br>Phone: +91-8000007336<br>Email: contact@petroindustech.com</div></div>
       <div class="title">ORDER / QUOTATION</div>
-      <div class="meta"><div class="box"><h3>Party Details</h3>
-        <div class="line"><span class="label">Name:</span>${esc(order.party?.name)}</div>
-        <div class="line"><span class="label">Mobile:</span>${esc(order.party?.mobile)}</div>
-        <div class="line"><span class="label">Address:</span>${esc(order.party?.address)}</div>
-        <div class="line"><span class="label">GST:</span>${esc(order.party?.gst)}</div></div>
-        <div class="box"><h3>Order Details</h3>
-        <div class="line"><span class="label">Order No:</span>${esc(order.orderNo)}</div>
-        <div class="line"><span class="label">Date:</span>${esc(order.orderDate)}</div>
-        <div class="line"><span class="label">Status:</span>${esc(order.status || "Pending")}</div>
-        <div class="line"><span class="label">Salesman:</span>${esc(getLoggedSalesman())}</div></div></div>
+
+<div class="meta">
+  <div class="box">
+    <h3>Party Details</h3>
+
+    <div class="line"><span class="label">Name:</span>${esc(order.party?.name)}</div>
+    <div class="line"><span class="label">Mobile:</span>${esc(order.party?.mobile)}</div>
+    <div class="line"><span class="label">Address:</span>${esc(order.party?.address)}</div>
+    <div class="line"><span class="label">GST:</span>${esc(order.party?.gst)}</div>
+  </div>
+
+  <div class="box">
+    <h3>Order Details</h3>
+
+    <div class="line"><span class="label">Order No:</span>${esc(order.orderNo)}</div>
+    <div class="line"><span class="label">Date:</span>${esc(order.orderDate)}</div>
+    <div class="line"><span class="label">Status:</span>${esc(order.status || "Pending")}</div>
+    <div class="line"><span class="label">Salesman:</span>${esc(getLoggedSalesman())}</div>
+    <div class="line"><span class="label">Party Type:</span>${esc(order.party?.type || order.party?.partyType || order.partyType || order.type || "-")}</div>
+  </div>
+</div>
       <table><thead><tr><th style="width:5%">S.No.</th><th style="width:12%">Code</th><th>Item Name</th><th style="width:9%">Unit</th><th style="width:8%">Qty</th><th style="width:14%">Rate (Rs.)</th><th style="width:16%">Amount (Rs.)</th></tr></thead><tbody>${rows}</tbody></table>
       <div class="summary"><div><span>Subtotal</span><b>Rs. ${money(order.subTotal)}</b></div>
         <div><span>Freight</span><b>Rs. ${money(order.freight)}</b></div>
