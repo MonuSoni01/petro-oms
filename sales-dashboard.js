@@ -27,7 +27,7 @@
 
     // Replace this with the latest deployed Apps Script /exec URL.
     DRIVE_UPLOAD_URL:
-      "https://script.google.com/macros/s/AKfycbyvLw_BrRXcDI7lRsVE3gZZa11z_km1F1g_pk7pytl4Tl1IT2wEqxsjiVBorW-cBf1D/exec",
+      "https://script.google.com/macros/s/AKfycbyAbNdLjXn4-I6fao_HkGsdYsgWHKpmEp0b5tfEpzLAb5qEwe62aXEOy_j4WKi8CjNulg/exec",
 
     SESSION_TIME_MS: 24 * 60 * 60 * 1000,
     MAX_BILL_FILE_SIZE: 5 * 1024 * 1024,
@@ -86,7 +86,17 @@
 
   const $ = (id) => document.getElementById(id);
 
- 
+  function log(...args) {
+    console.log("[PETRO Sales Dashboard]", ...args);
+  }
+
+  function warn(...args) {
+    console.warn("[PETRO Sales Dashboard]", ...args);
+  }
+
+  function fail(...args) {
+    console.error("[PETRO Sales Dashboard]", ...args);
+  }
 
   function escapeHTML(value) {
     return String(value ?? "-")
