@@ -27,7 +27,7 @@
 
     // Replace this with the latest deployed Apps Script /exec URL.
     DRIVE_UPLOAD_URL:
-      "https://script.google.com/macros/s/AKfycbyAbNdLjXn4-I6fao_HkGsdYsgWHKpmEp0b5tfEpzLAb5qEwe62aXEOy_j4WKi8CjNulg/exec",
+      "https://script.google.com/macros/s/AKfycbyvLw_BrRXcDI7lRsVE3gZZa11z_km1F1g_pk7pytl4Tl1IT2wEqxsjiVBorW-cBf1D/exec",
 
     SESSION_TIME_MS: 24 * 60 * 60 * 1000,
     MAX_BILL_FILE_SIZE: 5 * 1024 * 1024,
