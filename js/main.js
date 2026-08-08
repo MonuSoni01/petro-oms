@@ -80,7 +80,7 @@ const SALESMAN_PREFIX = {
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
     "Rup Ranjan Bora": "RRB",
-    "Mahesh Kumar": "MK",
+    "Ashutosh Satapathy": "ASO",
 };
 
 
