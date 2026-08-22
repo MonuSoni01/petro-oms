@@ -88,7 +88,7 @@ const ALL_SALESMEN = [
   "Ankit Kalra",
   "Amit Soni",
   "Vivek Srivastava",
-  "Mahesh Kumar",
+  "Ashutosh Satapathy",
 ];
 
 /* ============================================================

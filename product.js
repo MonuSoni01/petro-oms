@@ -1665,19 +1665,7 @@ window.itemMaster = {
       KIT: { rate: 130 }
     },
     photo: "/images/products/bathroom/1070.webp"
-  },
-
-  "1071": {
-    name: "Liquid Soap Dispenser (Square)",
-    category: "bathroom",
-    units: {
-      PCS: { rate: 599 },
-      SET: { rate: 599 },
-      KIT: { rate: 599 }
-    },
-    photo: "/images/products/bathroom/1071.webp"
-  },
-
+  }, 
   "1072": {
     name: "Liquid Soap Dispenser (Hexagon)",
     category: "bathroom",

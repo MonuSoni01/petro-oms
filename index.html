@@ -541,6 +541,52 @@
             justify-content: center;
             align-items: center;
         }
+        .tracker-btn {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 20px;
+    background: #f5f6fa;
+    border: 1.5px solid transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    text-decoration: none;
+    color: #108082;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tracker-btn i {
+    font-size: 14px;
+}
+
+.tracker-btn:hover {
+    background: #e8f5e9;
+    border-color: #108082;
+    transform: translateY(-1px);
+}
+
+.tracker-btn:active {
+    transform: scale(0.96);
+}
+
+/* Dark Mode */
+body.dark-mode .tracker-btn {
+    background: #334155;
+    color: #00bfa6;
+}
+
+body.dark-mode .tracker-btn:hover {
+    background: #475569;
+    border-color: #00bfa6;
+}
     </style>
 </head>
 
@@ -557,6 +603,11 @@
 
                 <!-- RIGHT ICONS -->
                 <div class="right-icons">
+                    <!-- Tracker Button -->
+<a href="https://petropointsapp.netlify.app/" class="tracker-btn" title="Open Tracker">
+    <i class="fa-solid fa-chart-line"></i>
+    <span>Tracker</span>
+</a>
 
                     <!-- Theme Toggle -->
                     <div class="icon-btn" id="themeBtn" title="Toggle Theme">
