@@ -6,24 +6,20 @@ document.getElementById("passwordModal").onclick = function (e) {
 
 
 const SALESMAN_PREFIX = {
-    "Sariya Murtuza": "SM",
-    "Roshan Sharma": "RS",
+    "Sariya Murtuza": "SM", 
     "Rup Ranjan Bora": "RRB",
     "Ankit Kalra": "AK",
     "Amit Soni": "AS",
-    "Vivek Srivastava": "VS", 
-    "Ashutosh Satapathy": "ASO",
+    "Vivek Srivastava": "VS",  
 };
 
 // ⭐ Salesman-wise passwords
 const SALESMAN_PASSWORDS = {
-    "Sariya Murtuza": "sariya123",
-    "Roshan Sharma": "roshan123",
+    "Sariya Murtuza": "sariya123", 
     "Ankit Kalra": "ankit123",
     "Amit Soni": "amit123",
     "Vivek Srivastava": "vivek123",
-    "Rup Ranjan Bora": "rup123",
-    "Ashutosh Satapathy": "ashutosh123",
+    "Rup Ranjan Bora": "rup123", 
 };
 
 function openPasswordModal() {

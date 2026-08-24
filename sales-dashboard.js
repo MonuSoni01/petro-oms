@@ -51,8 +51,7 @@
       "Amit Soni": "AS",
       "Ankit Kalra": "AK",
       "Vivek Srivastava": "VS",
-      "Rup Ranjan Bora": "RRB",
-      "Ashutosh Satapathy": "ASO"
+      "Rup Ranjan Bora": "RRB", 
     })
   });
 
