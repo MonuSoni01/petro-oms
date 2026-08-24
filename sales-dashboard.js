@@ -23,7 +23,7 @@
 
 (() => {
   const CONFIG = Object.freeze({
-    APP_VERSION: "2026.08.04.1",
+    APP_VERSION: "2026.08.24.3",
 
     // Replace this with the latest deployed Apps Script /exec URL.
     DRIVE_UPLOAD_URL:
@@ -324,23 +324,6 @@
     state.db = firebase.firestore();
   }
 
-  function restoreDarkMode() {
-    const enabled = localStorage.getItem("petro_dark") === "true";
-    document.body.classList.toggle("dark", enabled);
-
-    const toggle = $("darkToggle");
-    if (toggle) toggle.checked = enabled;
-  }
-
-  function toggleDarkMode() {
-    const toggle = $("darkToggle");
-    const enabled = Boolean(toggle?.checked);
-    document.body.classList.toggle("dark", enabled);
-    localStorage.setItem("petro_dark", String(enabled));
-  }
-
-  window.toggleDarkMode = toggleDarkMode;
-
   /* -------------------------------------------------------------------------- */
   /* Filter UI                                                                   */
   /* -------------------------------------------------------------------------- */
@@ -438,7 +421,168 @@
         .modal-section-scroll{overflow:auto}
         @media(max-width:1400px){.petro-filter-grid{grid-template-columns:repeat(4,minmax(150px,1fr))}.petro-filter-search{grid-column:span 2}}
         @media(max-width:768px){.petro-filter-grid{grid-template-columns:1fr 1fr}.petro-filter-search{grid-column:1/-1}.petro-reset-filter{width:100%}}
-        @media(max-width:520px){.petro-filter-grid{grid-template-columns:1fr}.petro-filter-search{grid-column:auto}}
+        /* Better View Order modal */
+        #modal{padding:18px}
+        #modalBox{
+          width:min(980px,96vw)!important;
+          max-width:980px!important;
+          max-height:92vh!important;
+          border-radius:18px!important;
+          overflow:auto!important;
+          box-shadow:0 26px 80px rgba(15,23,42,.32)!important;
+        }
+        #modalContent{padding:4px 6px 18px}
+        .view-order-wrap{padding:6px 10px 14px}
+        .view-order-header{
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:14px;
+          position:sticky;
+          top:0;
+          z-index:4;
+          background:#fff;
+          padding:14px 4px 16px;
+          border-bottom:1px solid #e5e7eb
+        }
+        .view-order-header .modal-title{
+          margin:0;
+          font-size:24px;
+          line-height:1.3;
+          color:#172033;
+          overflow-wrap:anywhere
+        }
+        .modal-section{
+          margin-top:18px;
+          padding:18px;
+          border:1px solid #e6eaf0;
+          border-radius:14px;
+          background:#fbfcfd
+        }
+        .modal-section h4{
+          display:flex;
+          align-items:center;
+          gap:8px;
+          margin:0 0 14px;
+          padding-bottom:10px;
+          border-bottom:1px solid #e1e6ec;
+          font-size:15px;
+          color:#344054
+        }
+        .party-details-grid{
+          display:grid;
+          grid-template-columns:repeat(2,minmax(0,1fr));
+          gap:12px
+        }
+        .party-detail-item{
+          padding:12px 14px;
+          background:#fff;
+          border:1px solid #e6eaf0;
+          border-radius:11px;
+          min-width:0
+        }
+        .party-detail-label{
+          display:block;
+          margin-bottom:4px;
+          font-size:11px;
+          font-weight:700;
+          text-transform:uppercase;
+          letter-spacing:.03em;
+          color:#667085
+        }
+        .party-detail-item strong{
+          display:block;
+          font-size:14px;
+          color:#1d2939;
+          overflow-wrap:anywhere
+        }
+        .modal-section-scroll{
+          overflow-x:auto;
+          border:1px solid #e5e7eb;
+          border-radius:10px;
+          background:#fff
+        }
+        .modal-items-table{min-width:820px}
+        .modal-items-table th{white-space:nowrap}
+        .closeBtn{
+          position:sticky!important;
+          float:right;
+          top:8px!important;
+          right:8px!important;
+          z-index:10!important;
+          width:34px;
+          height:34px;
+          display:flex!important;
+          align-items:center;
+          justify-content:center;
+          border-radius:50%;
+          background:#fff;
+          box-shadow:0 4px 14px rgba(0,0,0,.15);
+          font-size:18px!important
+        }
+
+        /* Tablet / mobile filters: two fields in one row */
+        @media(max-width:768px){
+          .petro-filter-panel{padding:12px;border-radius:14px}
+          .petro-filter-grid{
+            grid-template-columns:repeat(2,minmax(0,1fr))!important;
+            gap:10px!important
+          }
+          .petro-filter-search{grid-column:1/-1!important}
+          .petro-reset-filter{grid-column:1/-1;width:100%}
+          .petro-filter-field input,.petro-filter-field select{height:40px;padding:0 10px}
+          .petro-filter-field{font-size:11px}
+          .view-order-header{
+            align-items:flex-start;
+            padding-right:38px
+          }
+          .view-order-header .modal-title{font-size:20px}
+        }
+
+        @media(max-width:520px){
+          #modal{padding:8px}
+          #modalBox{
+            width:100%!important;
+            max-width:100%!important;
+            max-height:96vh!important;
+            border-radius:14px!important
+          }
+          #modalContent{padding:0 2px 12px}
+          .view-order-wrap{padding:4px 5px 10px}
+          .view-order-header{
+            position:relative;
+            flex-direction:column;
+            gap:10px;
+            padding:12px 38px 12px 2px
+          }
+          .view-order-header .modal-title{
+            font-size:18px;
+            line-height:1.3
+          }
+          .view-order-header .myq-btn-download{
+            width:100%;
+            justify-content:center
+          }
+          .modal-section{
+            margin-top:12px;
+            padding:12px;
+            border-radius:12px
+          }
+          .party-details-grid{
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:8px
+          }
+          .party-detail-item{padding:10px}
+          .party-detail-item strong{font-size:13px}
+          .modal-items-table{min-width:760px}
+
+          /* Keep 2-column filters even on phone */
+          .petro-filter-grid{
+            grid-template-columns:repeat(2,minmax(0,1fr))!important
+          }
+          .petro-filter-search{grid-column:1/-1!important}
+          .petro-reset-filter{grid-column:1/-1!important}
+        }
       `;
       document.head.appendChild(style);
     }
@@ -525,9 +669,47 @@
           partyData.name ||
           partyData.partyName ||
           "-",
-        mobile: data.mobile || partyData.mobile || "-",
-        address: data.address || partyData.address || "-",
-        gst: data.gst || partyData.gst || "-",
+
+        mobile:
+          data.mobile ||
+          data.partyMobile ||
+          partyData.mobile ||
+          partyData.partyMobile ||
+          "-",
+
+        city:
+          data.city ||
+          data.partyCity ||
+          partyData.city ||
+          partyData.partyCity ||
+          partyData.address ||
+          data.address ||
+          "-",
+
+        // Backward compatibility for old saved orders.
+        address:
+          data.address ||
+          partyData.address ||
+          partyData.city ||
+          data.partyCity ||
+          "-",
+
+        distributor:
+          data.distributor ||
+          data.partyDistributor ||
+          partyData.distributor ||
+          partyData.partyDistributor ||
+          partyData.transport ||
+          data.transport ||
+          "-",
+
+        gst:
+          data.gst ||
+          data.partyGST ||
+          partyData.gst ||
+          partyData.partyGST ||
+          "-",
+
         type:
           data.partyType ||
           partyData.type ||
@@ -1659,12 +1841,35 @@
 
         ${remarkBlock}
 
-        <div class="modal-section">
-          <h4>Party Details</h4>
-          <p><b>Name:</b> ${escapeHTML(order.party?.name || "-")}</p>
-          <p><b>Mobile:</b> ${escapeHTML(order.party?.mobile || "-")}</p>
-          <p><b>Address:</b> ${escapeHTML(order.party?.address || "-")}</p>
-          <p><b>GST:</b> ${escapeHTML(order.party?.gst || "-")}</p>
+        <div class="modal-section party-details-section">
+          <h4><i class="fa fa-user-circle"></i> Party Details</h4>
+
+          <div class="party-details-grid">
+            <div class="party-detail-item">
+              <span class="party-detail-label">Name</span>
+              <strong>${escapeHTML(order.party?.name || "-")}</strong>
+            </div>
+
+            <div class="party-detail-item">
+              <span class="party-detail-label">Mobile</span>
+              <strong>${escapeHTML(order.party?.mobile || "-")}</strong>
+            </div>
+
+            <div class="party-detail-item">
+              <span class="party-detail-label">City</span>
+              <strong>${escapeHTML(order.party?.city || order.party?.address || "-")}</strong>
+            </div>
+
+            <div class="party-detail-item">
+              <span class="party-detail-label">GST</span>
+              <strong>${escapeHTML(order.party?.gst || "-")}</strong>
+            </div>
+
+            <div class="party-detail-item">
+              <span class="party-detail-label">Party Type</span>
+              <strong>${escapeHTML(order.party?.type || "-")}</strong>
+            </div>
+          </div>
         </div>
 
         <div class="modal-section">
@@ -1809,8 +2014,7 @@
               <h3>Party Details</h3>
               <div class="line"><span class="label">Name:</span>${escapeHTML(order.party?.name)}</div>
               <div class="line"><span class="label">Mobile:</span>${escapeHTML(order.party?.mobile)}</div>
-              <div class="line"><span class="label">Address:</span>${escapeHTML(order.party?.address)}</div>
-              <div class="line"><span class="label">GST:</span>${escapeHTML(order.party?.gst)}</div>
+              <div class="line"><span class="label">City:</span>${escapeHTML(order.party?.city || order.party?.address)}</div>              <div class="line"><span class="label">GST:</span>${escapeHTML(order.party?.gst)}</div>
             </div>
 
             <div class="box">
@@ -2122,8 +2326,6 @@
 
     try {
       initFirebase();
-      restoreDarkMode();
-
       if (!validateSession()) return;
 
       ensureFilterUI();

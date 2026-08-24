@@ -85,6 +85,370 @@
         .status-bar.show {
             animation: slideIn 0.5s ease-out;
         }
+    
+        /* =========================================================
+           PETRO OMS - RESPONSIVE CREATE ORDER UI
+           ========================================================= */
+
+        .order-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .order-card-title {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .new-order-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 9px 14px;
+            min-height: 38px;
+            background: #f1f3f5;
+            color: #202124;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .2s ease;
+        }
+
+        .new-order-btn:hover {
+            background: #e7eaed;
+            transform: translateY(-1px);
+        }
+
+        #distributor:disabled {
+            background: #f4f6f8;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .petro-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #itemsTable {
+            min-width: 900px;
+        }
+
+        @media (max-width: 991.98px) {
+            .petro-container {
+                width: 100%;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .petro-card {
+                padding: 16px !important;
+                border-radius: 12px;
+            }
+
+            .petro-row {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .petro-col-4 {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: none !important;
+                padding: 0 !important;
+            }
+
+            .petro-totals {
+                grid-template-columns: minmax(0, 1fr) minmax(130px, .7fr) !important;
+                gap: 10px 12px;
+            }
+
+            .action-bar {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .action-bar button {
+                width: 100%;
+                margin: 0 !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .top-bar {
+                display: none;
+            }
+
+            .top-nav .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .navbar-brand img {
+                height: 34px !important;
+            }
+
+            #adminDropdown {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .status-bar {
+                margin: 8px 10px 10px;
+                width: calc(100% - 20px);
+                padding: 9px 12px;
+                font-size: 13px;
+                border-radius: 9px;
+            }
+
+            .petro-container {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            .petro-card {
+                padding: 12px !important;
+                border-radius: 11px;
+            }
+
+            .order-card-head {
+                margin-bottom: 12px;
+            }
+
+            .order-card-title {
+                font-size: 15px;
+            }
+
+            .new-order-btn {
+                padding: 7px 11px;
+                min-height: 34px;
+                font-size: 12px;
+                border-radius: 9px;
+            }
+
+            .petro-row {
+                grid-template-columns: 1fr !important;
+                gap: 9px;
+            }
+
+            .petro-col-4 label {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+
+            .petro-col-4 input,
+            .petro-col-4 select {
+                width: 100%;
+                min-height: 42px;
+                font-size: 14px;
+                border-radius: 9px;
+            }
+
+            .table-header-bar {
+                gap: 8px;
+            }
+
+            .table-header-bar h6 {
+                font-size: 11px;
+                line-height: 1.35;
+                margin: 0;
+            }
+
+            .add-icon-btn {
+                min-width: 36px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .petro-totals {
+                grid-template-columns: minmax(0, 1fr) 112px !important;
+                font-size: 12px;
+                gap: 8px;
+            }
+
+            .petro-totals input {
+                width: 100%;
+                min-height: 38px;
+            }
+
+            .action-bar {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px;
+            }
+
+            .action-bar #submitBtn {
+                grid-column: 1 / -1;
+            }
+
+            .action-bar button {
+                min-height: 40px;
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            footer.footer {
+                margin-top: 24px !important;
+            }
+        }
+
+    
+        /* ================= NEW ORDER CONFIRM MODAL ================= */
+        .new-order-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.48);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 99999;
+        }
+
+        .new-order-modal-overlay.show {
+            display: flex;
+            animation: petroFadeIn .18s ease-out;
+        }
+
+        .new-order-modal-card {
+            width: min(430px, 100%);
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            transform: translateY(6px) scale(.98);
+            animation: petroModalIn .22s ease-out forwards;
+        }
+
+        .new-order-modal-icon {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 14px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(16, 130, 130, 0.12);
+            color: #108282;
+            font-size: 24px;
+        }
+
+        .new-order-modal-card h3 {
+            margin: 0 0 8px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: #172033;
+        }
+
+        .new-order-modal-card p {
+            margin: 0 auto;
+            max-width: 340px;
+            text-align: center;
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .new-order-modal-warning {
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            margin-top: 16px;
+            padding: 11px 12px;
+            border-radius: 11px;
+            background: #fff8e8;
+            color: #8a6516;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .new-order-modal-warning i {
+            margin-top: 2px;
+        }
+
+        .new-order-modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1.25fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .new-order-modal-actions button {
+            min-height: 44px;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+            transition: .18s ease;
+        }
+
+        .new-order-modal-cancel {
+            border: 1px solid #d9dee7;
+            background: #ffffff;
+            color: #344054;
+        }
+
+        .new-order-modal-cancel:hover {
+            background: #f7f8fa;
+        }
+
+        .new-order-modal-confirm {
+            border: 0;
+            background: #108282;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(16, 130, 130, 0.24);
+        }
+
+        .new-order-modal-confirm:hover {
+            background: #0d7373;
+            transform: translateY(-1px);
+        }
+
+        @keyframes petroFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes petroModalIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .new-order-modal-card {
+                padding: 20px 16px 16px;
+                border-radius: 16px;
+            }
+
+            .new-order-modal-card h3 {
+                font-size: 18px;
+            }
+
+            .new-order-modal-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .new-order-modal-confirm {
+                order: -1;
+            }
+        }
+
     </style>
 </head>
 
@@ -153,14 +517,7 @@
 
             <!-- RIGHT : ADMIN -->
             <div class="d-flex align-items-center">
-
-                <!-- DARK MODE -->
-                <label class="toggle-switch mb-0 mr-3">
-                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-                    <span class="slider"></span>
-                </label>
-
-                <!-- ADMIN DROPDOWN -->
+<!-- ADMIN DROPDOWN -->
                 <div class="dropdown">
                     <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
                         id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -214,37 +571,59 @@
 
     <div class="petro-container">
         <div class="petro-card">
+
+            <div class="order-card-head no-print">
+                <h5 class="order-card-title">
+                    <i class="fa-solid fa-cart-plus mr-1"></i>
+                    Create Order
+                </h5>
+
+                <button type="button" class="new-order-btn" onclick="newOrder()">
+                    <i class="fa-solid fa-plus mr-1"></i>
+                    New Order
+                </button>
+            </div>
+
             <div class="petro-row">
                 <div class="petro-col-4">
                     <label>
                         Salesman Name
                         <span style="color:red;">*</span>
                     </label>
+
                     <select id="salesman" required>
                         <option value="">Select Salesman</option>
-                        <option>Sariya Murtuza</option> 
+                        <option>Sariya Murtuza</option>
                         <option>Rup Ranjan Bora</option>
                         <option>Ankit Kalra</option>
                         <option>Vivek Srivastava</option>
-                        <option>Amit Soni</option>  
+                        <option>Amit Soni</option>
                     </select>
+
                     <small id="salesmanError" style="
-                            display:none;
-                            color:#dc3545;
-                            font-size:13px;
-                            font-weight:600;
-                            margin-top:5px;
-                            ">
+                        display:none;
+                        color:#dc3545;
+                        font-size:13px;
+                        font-weight:600;
+                        margin-top:5px;">
                         ● Salesman selection is mandatory
                     </small>
                 </div>
-                <div class="petro-col-4"><label>Order No.</label><input id="orderNo" placeholder="AUTO" readonly></div>
-                <div class="petro-col-4"><label>Date</label><input type="date" id="orderDate"></div>
+
+                <div class="petro-col-4">
+                    <label>Order No.</label>
+                    <input id="orderNo" placeholder="AUTO" readonly>
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Date</label>
+                    <input type="date" id="orderDate">
+                </div>
             </div>
 
             <div class="petro-row">
                 <div class="petro-col-4">
-                    <label>Party Name </label>
+                    <label>Party Name</label>
                     <input id="partyName" placeholder="Party name">
                 </div>
 
@@ -258,26 +637,44 @@
                 </div>
 
                 <div class="petro-col-4">
-                    <label>Party Address</label>
-                    <input id="partyAddress" placeholder="Full address">
+                    <label>City</label>
+                    <input id="partyCity" placeholder="Enter city">
                 </div>
-                <div class="petro-col-4"><label>Party GST No.</label><input id="partyGST" placeholder="GSTIN"
-                        style="text-transform:uppercase" maxlength="15"></div>
-                <div class="petro-col-4"><label>Party Mobile No.</label><input id="partyMobile" maxlength="10"
-                        inputmode="numeric" pattern="[0-9]{10}" placeholder="10 digit mobile no."></div>
-                <div class="petro-col-4"><label>Party Marka / Transport</label><input id="partyTransport"
-                        placeholder="Marka / Transport"></div>
             </div>
 
             <div class="petro-row">
-                <div class="petro-col-4"><label>Payment Type</label><select id="paymentType">
-                        <option>Advance</option>
-                        <option>Credit</option>
-                    </select></div>
-                <div class="petro-col-4"><label>Expected Dispatch</label><input type="date" id="dispatchDate"></div>
-                <div class="petro-col-4"><label>Notes</label><input id="orderNotes"
-                        placeholder="Any special instruction"></div>
+                <div class="petro-col-4">
+                    <label>Party GST No.</label>
+                    <input id="partyGST"
+                        placeholder="GSTIN"
+                        style="text-transform:uppercase"
+                        maxlength="15">
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Party Mobile No.</label>
+                    <input id="partyMobile"
+                        maxlength="10"
+                        inputmode="numeric"
+                        pattern="[0-9]{10}"
+                        placeholder="10 digit mobile no.">
+                </div>
+
+                <div class="petro-col-4">
+                    <label>Distributor</label>
+                    <select id="distributor" disabled>
+                        <option value="">Select Salesman First</option>
+                    </select>
+                </div>
             </div>
+
+            <div class="petro-row">
+                <div class="petro-col-4">
+                    <label>Notes</label>
+                    <input id="orderNotes" placeholder="Any special instruction">
+                </div>
+            </div>
+
         </div>
 
         <div class="petro-card">
@@ -367,8 +764,7 @@
 
 
             <div class="action-bar no-print mt-3">
-                <button onclick="clearAll()">Clear</button>
-                <button onclick="saveDraft()">Save Draft</button>
+<button onclick="saveDraft()">Save Draft</button>
                 <button onclick="loadDraft()">Load Draft</button>
                 <button id="submitBtn" class="primary" style="background: #108282;color: #fff;"
                     onclick="submitTableOrder()">Submit Order</button>
@@ -384,6 +780,48 @@
     <div id="suggestBox" style="position:absolute;background:#fff;border:1px solid #ccc;
             max-height:180px;overflow-y:auto;display:none;
             z-index:9999;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,0.15);width:240px;">
+    </div>
+
+    
+    <!-- =========================
+         NEW ORDER CONFIRM MODAL
+    ========================== -->
+    <div id="newOrderModal" class="new-order-modal-overlay" aria-hidden="true">
+        <div class="new-order-modal-card" role="dialog" aria-modal="true" aria-labelledby="newOrderModalTitle">
+
+            <div class="new-order-modal-icon">
+                <i class="fa-solid fa-file-circle-plus"></i>
+            </div>
+
+            <h3 id="newOrderModalTitle">Start a New Order?</h3>
+
+            <p>
+                This will clear the current order form and prepare a fresh order.
+            </p>
+
+            <div class="new-order-modal-warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>
+                    Any unsaved changes in the current form will be removed.
+                </span>
+            </div>
+
+            <div class="new-order-modal-actions">
+                <button type="button"
+                    class="new-order-modal-cancel"
+                    onclick="closeNewOrderModal()">
+                    Cancel
+                </button>
+
+                <button type="button"
+                    class="new-order-modal-confirm"
+                    onclick="confirmNewOrder()">
+                    <i class="fa-solid fa-plus mr-1"></i>
+                    Start New Order
+                </button>
+            </div>
+
+        </div>
     </div>
 
     <!-- SUCCESS POPUP -->

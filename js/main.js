@@ -62,12 +62,10 @@ if (orderDate && !orderDate.value) {
 }
 const partyName = document.getElementById("partyName");
 const partyType = document.getElementById("partyType");
-const partyAddress = document.getElementById("partyAddress");
+const partyCity = document.getElementById("partyCity");
 const partyGST = document.getElementById("partyGST");
 const partyMobile = document.getElementById("partyMobile");
-const partyTransport = document.getElementById("partyTransport");
-const paymentType = document.getElementById("paymentType");
-const dispatchDate = document.getElementById("dispatchDate");
+const distributor = document.getElementById("distributor");
 const orderNotes = document.getElementById("orderNotes");
 
 const tbody = document.getElementById('tbody');
@@ -82,6 +80,104 @@ const SALESMAN_PREFIX = {
     "Rup Ranjan Bora": "RRB",
     "Ashutosh Satapathy": "ASO",
 };
+
+// ================= SALESMAN → DISTRIBUTOR MAPPING =================
+//
+// Mapping is loaded from: Asm-Distributor.json
+//
+// Supported JSON formats:
+// 1) { "Sariya Murtuza": ["Distributor A", "Distributor B"] }
+// 2) { "Sariya Murtuza": [{"name":"Distributor A"}, {"name":"Distributor B"}] }
+// 3) { "Sariya Murtuza": [{"distributor":"Distributor A"}] }
+
+let asmDistributorMap = {};
+
+async function loadAsmDistributorMap() {
+    if (!distributor) return;
+
+    try {
+        const response = await fetch("./Asm-Distributor.json", {
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error(`Asm-Distributor.json HTTP ${response.status}`);
+        }
+
+        asmDistributorMap = await response.json();
+
+        populateDistributorDropdown(salesman?.value || "");
+
+    } catch (error) {
+        console.warn("Distributor mapping could not be loaded:", error);
+
+        distributor.innerHTML =
+            '<option value="">Distributor Mapping Not Loaded</option>';
+
+        distributor.disabled = true;
+    }
+}
+
+function normalizeDistributorList(value) {
+    if (!Array.isArray(value)) return [];
+
+    return value
+        .map(item => {
+            if (typeof item === "string") return item.trim();
+
+            if (item && typeof item === "object") {
+                return String(
+                    item.name ??
+                    item.distributor ??
+                    item.distributorName ??
+                    item.partyName ??
+                    ""
+                ).trim();
+            }
+
+            return "";
+        })
+        .filter(Boolean);
+}
+
+function populateDistributorDropdown(salesmanName, selectedValue = "") {
+    if (!distributor) return;
+
+    distributor.innerHTML = "";
+
+    if (!salesmanName) {
+        distributor.innerHTML =
+            '<option value="">Select Salesman First</option>';
+
+        distributor.disabled = true;
+        return;
+    }
+
+    const list = normalizeDistributorList(
+        asmDistributorMap?.[salesmanName]
+    );
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent =
+        list.length ? "Select Distributor" : "No Distributor Mapped";
+
+    distributor.appendChild(defaultOption);
+
+    list.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        distributor.appendChild(option);
+    });
+
+    distributor.disabled = list.length === 0;
+
+    if (selectedValue && list.includes(selectedValue)) {
+        distributor.value = selectedValue;
+    }
+}
+
 
 
 function autoOrderNo() {
@@ -108,6 +204,7 @@ if (salesman) {
                 newOrderNo || "Select Salesman to Generate Order No";
         }
 
+        populateDistributorDropdown(salesman.value.trim());
     });
 }
 
@@ -538,6 +635,17 @@ window.submitTableOrder = async function () {
         const order =
             collectData();
 
+        const validItems = (order.items || []).filter(
+            item => item.code && item.qty > 0
+        );
+
+        if (validItems.length === 0) {
+            alert("❌ Please add at least one valid item");
+            return;
+        }
+
+        order.items = validItems;
+
         await addDoc(
             collection(db, "orders"),
             order
@@ -554,21 +662,12 @@ window.submitTableOrder = async function () {
 
             successPopup.style.display = "none";
 
-            resetOrderFormAfterSubmit();
-
+            // Keep the submitted order visible for printing.
+            // resetOrderFormAfterSubmit() should be called by print/cancel flow if needed.
             openPrintModal();
 
         }, 2200);
 
-        return;
-
-        // THEN OPEN PRINT MODAL
-
-        setTimeout(() => {
-
-            openPrintModal();
-
-        }, 200);
 
     }
 
@@ -603,13 +702,13 @@ function resetOrderFormAfterSubmit() {
 
     partyName.value = "";
     partyType.value = "";
-    partyAddress.value = "";
+    partyCity.value = "";
     partyGST.value = "";
     partyMobile.value = "";
-    partyTransport.value = "";
-
-    paymentType.value = "Advance";
-    dispatchDate.value = "";
+    if (distributor) {
+        distributor.value = "";
+        populateDistributorDropdown("");
+    }
     orderNotes.value = "";
 
     // ✅ Discount / totals reset
@@ -897,13 +996,11 @@ function collectData() {
         party: {
             name: partyName.value.trim() || '',
             type: partyType.value || '',
-            address: partyAddress.value.trim() || '',
+            city: partyCity.value.trim() || '',
             gst: partyGST.value.trim() || '',
             mobile: partyMobile.value.trim() || '',
-            transport: partyTransport.value.trim() || ''
+            distributor: distributor?.value || ''
         },
-        paymentType: paymentType.value,
-        dispatchDate: dispatchDate.value,
         notes: orderNotes.value.trim(),
         items, // Return collected items from the cart
         categoryDiscounts: {
@@ -940,146 +1037,177 @@ window.saveDraft = function () {
 }
 
 
-window.loadDraft = function () {
-    const d = JSON.parse(localStorage.getItem('petro_order_draft') || 'null');
+function loadDraftFromStorage(storageKey = "petro_order_draft") {
+
+    const d = JSON.parse(
+        localStorage.getItem(storageKey) || "null"
+    );
+
     if (!d) {
-        const status = document.getElementById("statusMsg");
-
-        if (status) {
-            // Update the status message
-            status.textContent = "New order started";
-
-            // Add a smooth slide-in effect
-            status.classList.add("show"); // Adding the class to trigger the animation
-
-            // You can also add a specific class for success
-            status.classList.add("status-success");
-
-            // Call the addRow function to add a new row
-            addRow();
-        }
-
-        return;
+        return false;
     }
-    orderNo.value = d.orderNo || '';
+
+    orderNo.value = d.orderNo || "";
+
     if (d.orderDate) {
-
         orderDate.value = d.orderDate;
-
     } else {
-
-        const today = new Date();
-
         orderDate.value =
-            today.toISOString().split("T")[0];
-
+            new Date().toISOString().split("T")[0];
     }
-    salesman.value = d.salesman || '';
-    partyName.value = d.party?.name || '';
+
+    salesman.value = d.salesman || "";
+
+    partyName.value = d.party?.name || "";
     partyType.value = d.party?.type || "";
-    partyAddress.value = d.party?.address || '';
-    partyGST.value = d.party?.gst || '';
-    partyMobile.value = d.party?.mobile || '';
-    partyTransport.value = d.party?.transport || '';
-    paymentType.value = d.paymentType || 'Advance';
-    dispatchDate.value = d.dispatchDate || '';
-    orderNotes.value = d.notes || '';
+    partyCity.value =
+        d.party?.city ||
+        d.party?.address ||
+        "";
+
+    partyGST.value = d.party?.gst || "";
+    partyMobile.value = d.party?.mobile || "";
+    orderNotes.value = d.notes || "";
+
     freightEl.value = d.freight || 0;
     specialDiscount.value = d.specialDiscount || 0;
     gstPercent.value = d.gstPercent || 18;
-    hardwareDisc.value = d.categoryDiscounts?.hardware || 0;
-    bathroomDisc.value = d.categoryDiscounts?.bathroom || 0;
-    stainlesssteelDisc.value = d.categoryDiscounts?.stainlesssteel || 0;
 
-    tbody.innerHTML = '';
+    hardwareDisc.value =
+        d.categoryDiscounts?.hardware || 0;
+
+    bathroomDisc.value =
+        d.categoryDiscounts?.bathroom || 0;
+
+    stainlesssteelDisc.value =
+        d.categoryDiscounts?.stainlesssteel || 0;
+
+    populateDistributorDropdown(
+        d.salesman || "",
+        d.party?.distributor ||
+        d.party?.transport ||
+        ""
+    );
+
+    tbody.innerHTML = "";
+
     (d.items || []).forEach(addRow);
-    if ((d.items || []).length === 0) addRow();
+
+    if ((d.items || []).length === 0) {
+        addRow();
+    }
+
     recalc();
-    // console.log('Draft loaded');
+
+    return true;
 }
 
-window.clearAll = function () {
-    if (!confirm('Clear form?')) return;
+window.loadDraft = function () {
 
-    // Clear form input values
-    document.querySelectorAll('input').forEach(i => i.value = '');
+    const loaded =
+        loadDraftFromStorage("petro_order_draft");
 
-    // Reset specific fields
+    if (!loaded) {
+        const status =
+            document.getElementById("statusMsg");
+
+        if (status) {
+            status.textContent = "No saved draft found";
+            status.className =
+                "status-bar status-warning show";
+        }
+    }
+};
+
+window.newOrder = function () {
+    openNewOrderModal();
+};
+
+window.openNewOrderModal = function () {
+    const modal = document.getElementById("newOrderModal");
+    if (!modal) return;
+
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+};
+
+window.closeNewOrderModal = function () {
+    const modal = document.getElementById("newOrderModal");
+    if (!modal) return;
+
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+};
+
+window.confirmNewOrder = function () {
+
+    closeNewOrderModal();
+
     salesman.value = "";
-    partyType.value = "";       // ✅ important
-    paymentType.value = "Advance";
-
-    // Clear the cart table and reset rows
-    tbody.innerHTML = '';
-    addRow();  // Ensure the default row is added
-
-    // Reset summary fields
-    freightEl.value = 0;
-    specialDiscount.value = 0;
-    gstPercent.value = 18;
-    hardwareDisc.value = 0;
-    bathroomDisc.value = 0;
-    stainlesssteelDisc.value = 0;
-
-    // Clear any cart-related data from localStorage
-    localStorage.removeItem("petro_order_data");  // Remove the form data
-    localStorage.removeItem("cart");  // Remove cart data
-    localStorage.removeItem("petro_order_auto_draft");  // Remove any saved draft
-
-    // Reset the order summary values
-    const cartSubtotal = document.getElementById("cartSubtotal");
-    const gstAmount = document.getElementById("gstAmount");
-    const cartTotal = document.getElementById("cartTotal");
-    const summaryItems = document.getElementById("summaryItems");
-    const extraCharges = document.getElementById("extraCharges");
-
-    if (cartSubtotal) cartSubtotal.textContent = '0.00';
-    if (gstAmount) gstAmount.textContent = '0.00';
-    if (cartTotal) cartTotal.textContent = '0.00';
-    if (summaryItems) summaryItems.textContent = '0';
-    if (extraCharges) extraCharges.textContent = '0';
-
-    const today = new Date();
-
-    orderDate.value =
-        today.toISOString().split("T")[0];
-
-    // Recalculate the totals (just to ensure everything is reset)
-    recalc();
-
-    // console.log("Form, Cart, and LocalStorage cleared.");
-}
-
-function toggleDarkMode() {
-    document.body.classList.toggle('dark');
-    localStorage.setItem('petro_dark', document.body.classList.contains('dark'));
-}
-(function init() {
+    orderNo.value = "";
+    orderNo.placeholder = "AUTO";
 
     const today = new Date()
         .toISOString()
         .split("T")[0];
 
-    if (orderDate && !orderDate.value) {
-        orderDate.value = today;
+    orderDate.value = today;
+
+    partyName.value = "";
+    partyType.value = "";
+    partyCity.value = "";
+    partyGST.value = "";
+    partyMobile.value = "";
+    orderNotes.value = "";
+
+    populateDistributorDropdown("");
+
+    document.getElementById("hardwareDisc").value = 0;
+    document.getElementById("bathroomDisc").value = 0;
+    document.getElementById("stainlesssteelDisc").value = 0;
+
+    freightEl.value = 0;
+    specialDiscount.value = 0;
+    gstPercent.value = 18;
+
+    tbody.innerHTML = "";
+    addRow();
+
+    localStorage.removeItem("petro_order_draft");
+    localStorage.removeItem("petro_order_auto_draft");
+    localStorage.removeItem("petro_order_data");
+    localStorage.removeItem("cart");
+
+    recalc();
+
+    const status = document.getElementById("statusMsg");
+
+    if (status) {
+        status.textContent = "New order started";
+        status.className = "status-bar status-info show";
     }
+};
 
-    const draft =
-        localStorage.getItem(
-            "petro_order_draft"
-        );
+// Close modal if user clicks outside the card
+document.addEventListener("click", (event) => {
+    const modal = document.getElementById("newOrderModal");
 
-    if (draft) {
-
-        loadDraft();
-
-    } else {
-
-        addRow();
-
+    if (modal && event.target === modal) {
+        closeNewOrderModal();
     }
+});
 
-})();
+// Close modal using Escape key
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeNewOrderModal();
+    }
+});
+
+// Backward compatibility if another file still calls clearAll()
+window.clearAll = window.newOrder;
+
+
 
 
 // ✅ PWA: Service Worker Registration
@@ -1141,19 +1269,34 @@ document.addEventListener("change", () => {
 
 });
 
+// ================= PAGE STARTUP =================
+(async function initPage() {
 
-const savedDraft =
-    localStorage.getItem(
-        "petro_order_auto_draft"
-    );
+    const today =
+        new Date().toISOString().split("T")[0];
 
-if (savedDraft) {
+    if (orderDate && !orderDate.value) {
+        orderDate.value = today;
+    }
 
-    loadDraft();
+    await loadAsmDistributorMap();
 
-} else {
+    const autoDraftLoaded =
+        loadDraftFromStorage(
+            "petro_order_auto_draft"
+        );
 
-    addRow();
+    if (!autoDraftLoaded) {
+        const manualDraftLoaded =
+            loadDraftFromStorage(
+                "petro_order_draft"
+            );
 
-}
+        if (!manualDraftLoaded) {
+            addRow();
+            populateDistributorDropdown("");
+        }
+    }
+
+})();
 
