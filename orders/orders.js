@@ -78,20 +78,6 @@ const selectAllRowsEl = document.getElementById("selectAllRows");
 const tableSubText = document.getElementById("tableSubText");
 
 /* ============================================================
-   SALESMAN MASTER LIST
-============================================================ */
-
-const ALL_SALESMEN = [
-  "Sariya Murtuza",
-  "Roshan Sharma",
-  "Rup Ranjan Bora",
-  "Ankit Kalra",
-  "Amit Soni",
-  "Vivek Srivastava",
-  "Ashutosh Satapathy",
-];
-
-/* ============================================================
    HELPERS
 ============================================================ */
 
@@ -232,7 +218,44 @@ function getSortTime(order) {
 }
 
 function getPartyType(order) {
-  return order?.party?.type || order?.type || "Secondary";
+  return (
+    order?.party?.type ||
+    order?.partyType ||
+    order?.type ||
+    "Secondary"
+  );
+}
+
+function getPartyCity(order) {
+  return (
+    order?.party?.city ||
+    order?.partyCity ||
+    order?.party?.address ||
+    order?.address ||
+    "-"
+  );
+}
+
+function getDistributor(order) {
+  return (
+    order?.party?.distributor ||
+    order?.party?.partyDistributor ||
+    order?.party?.transport ||
+    order?.distributor ||
+    order?.partyDistributor ||
+    order?.transport ||
+    "-"
+  );
+}
+
+function getPartyAddress(order) {
+  return (
+    order?.party?.address ||
+    order?.address ||
+    order?.party?.city ||
+    order?.partyCity ||
+    "-"
+  );
 }
 
 function getOrderStatus(order) {
@@ -357,7 +380,7 @@ function showLoadingState() {
   if (ordersBody) {
     ordersBody.innerHTML = `
       <tr>
-        <td colspan="10" style="text-align:center; padding:30px; color:#888;">
+        <td colspan="11" style="text-align:center; padding:30px; color:#888;">
           <i class="fa fa-spinner fa-spin"></i> Loading orders...
         </td>
       </tr>
@@ -371,7 +394,7 @@ function showErrorState(message) {
   if (ordersBody) {
     ordersBody.innerHTML = `
       <tr>
-        <td colspan="10" style="text-align:center; padding:30px; color:#d93025;">
+        <td colspan="11" style="text-align:center; padding:30px; color:#d93025;">
           <i class="fa fa-triangle-exclamation"></i> ${escapeHTML(message)}
         </td>
       </tr>
@@ -420,7 +443,7 @@ async function fetchFirstOrdersPage() {
 
 /* ============================================================
    SALESMAN DROPDOWN
-   Hardcoded + Database unique names
+   ONLY NAMES THAT ACTUALLY EXIST IN LOADED ORDERS
 ============================================================ */
 
 function populateSalesmanMasterList() {
@@ -430,16 +453,13 @@ function populateSalesmanMasterList() {
 
   const salesmanSet = new Set();
 
-  ALL_SALESMEN.forEach((name) => {
-    if (name) salesmanSet.add(name.trim());
-  });
-
   allOrdersMaster.forEach((order) => {
-    if (order?.salesman) salesmanSet.add(String(order.salesman).trim());
+    const name = String(order?.salesman || "").trim();
+    if (name) salesmanSet.add(name);
   });
 
   const salesmanList = Array.from(salesmanSet).sort((a, b) =>
-    a.localeCompare(b)
+    a.localeCompare(b, undefined, { sensitivity: "base" })
   );
 
   salesmanFilterEl.innerHTML = `<option value="">All Salesmen</option>`;
@@ -451,7 +471,11 @@ function populateSalesmanMasterList() {
     salesmanFilterEl.appendChild(option);
   });
 
-  salesmanFilterEl.value = selectedValue;
+  if (selectedValue && salesmanSet.has(selectedValue)) {
+    salesmanFilterEl.value = selectedValue;
+  } else {
+    salesmanFilterEl.value = "";
+  }
 }
 
 /* ============================================================
@@ -491,6 +515,7 @@ window.applyFiltersAndRender = function () {
     const partyName = normalizeText(order?.party?.name);
     const partyMobile = normalizeText(order?.party?.mobile);
     const partyGST = normalizeText(order?.party?.gst);
+    const distributor = normalizeText(getDistributor(order));
     const salesman = normalizeText(order?.salesman);
     const partyType = normalizeText(getPartyType(order));
     const status = normalizeText(getOrderStatus(order));
@@ -502,6 +527,7 @@ window.applyFiltersAndRender = function () {
         partyName,
         partyMobile,
         partyGST,
+        distributor,
         salesman,
         partyType,
         status,
@@ -699,6 +725,8 @@ function renderCurrentPage() {
           <td>${escapeHTML(orderDate)}</td>
 
           <td>${escapeHTML(order?.party?.name || "-")}</td>
+
+          <td>${escapeHTML(getDistributor(order))}</td>
 
           <td>
             <span class="badge ${typeBadgeClass}">
@@ -1113,49 +1141,144 @@ window.viewOrder = function (id) {
     : "";
 
   div.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;position:sticky;top:0;background:#fff;z-index:100;padding:10px 0;">
-      <div style="font-size:24px;font-weight:600;">
-        Order Details #${escapeHTML(order?.orderNo || "-")}
+    <div class="order-view-shell">
+
+      <div class="order-view-topbar">
+        <div>
+          <div class="order-view-kicker">Order Details</div>
+          <h2>#${escapeHTML(order?.orderNo || "-")}</h2>
+        </div>
+
+        <div class="order-view-actions">
+          <button class="btn order-download-btn" onclick="downloadOrder()">
+            <i class="fa fa-download"></i>
+            Download
+          </button>
+
+          <button class="btn order-close-btn" onclick="closeModal()" aria-label="Close">
+            <i class="fa fa-xmark"></i>
+          </button>
+        </div>
       </div>
 
-      <div>
-        <button class="btn btn-success btn-sm" onclick="downloadOrder()" style="margin-right:10px;">
-          <i class="fa fa-download"></i> Download
-        </button>
+      ${cancelReasonHTML}
 
-        <button class="btn btn-light btn-sm" onclick="closeModal()">✖</button>
+      <div class="order-summary-grid">
+
+        <section class="order-detail-card">
+          <div class="detail-card-title">
+            <i class="fa-solid fa-building-user"></i>
+            Party Details
+          </div>
+
+          <div class="detail-list">
+            <div class="detail-row">
+              <span>Name</span>
+              <strong>${escapeHTML(order?.party?.name || "-")}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Mobile</span>
+              <strong>${escapeHTML(order?.party?.mobile || "-")}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>City</span>
+              <strong>${escapeHTML(getPartyCity(order))}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>GST</span>
+              <strong>${escapeHTML(order?.party?.gst || "-")}</strong>
+            </div>
+
+            <div class="detail-row detail-row-highlight">
+              <span>Party Type</span>
+              <strong>${escapeHTML(getPartyType(order))}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Distributor</span>
+              <strong>${escapeHTML(getDistributor(order))}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="order-detail-card">
+          <div class="detail-card-title">
+            <i class="fa-solid fa-receipt"></i>
+            Order Details
+          </div>
+
+          <div class="detail-list">
+            <div class="detail-row">
+              <span>Order No.</span>
+              <strong>${escapeHTML(order?.orderNo || "-")}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Order Date</span>
+              <strong>${escapeHTML(formatOrderDateForDisplay(order))}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Salesman</span>
+              <strong>${escapeHTML(order?.salesman || "-")}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Status</span>
+              <strong>
+                <span class="badge-status ${statusClass(statusText)}">
+                  ${escapeHTML(statusText)}
+                </span>
+              </strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Grand Total</span>
+              <strong class="detail-money">
+                ₹${formatMoney(displayTotals.grandTotalInclGst)}
+              </strong>
+            </div>
+          </div>
+        </section>
+
       </div>
-    </div>
 
-    <hr style="border:1px solid #ccc;">
+      <section class="order-view-section">
+        <div class="order-section-title">
+          <i class="fa-solid fa-boxes-stacked"></i>
+          Items
+        </div>
 
-    ${cancelReasonHTML}
+        <div class="order-items-scroll">
+          ${itemsHTML}
+        </div>
+      </section>
 
-    <div style="margin-bottom:20px;">
-      <h4 style="font-size:18px;font-weight:600;">Party Details</h4>
-      <p><b>Name:</b> ${escapeHTML(order?.party?.name || "-")}</p>
-      <p><b>Mobile:</b> ${escapeHTML(order?.party?.mobile || "-")}</p>
-      <p><b>Address:</b> ${escapeHTML(order?.party?.address || "-")}</p>
-      <p><b>GST:</b> ${escapeHTML(order?.party?.gst || "-")}</p>
-      <p><b>Type:</b> ${escapeHTML(getPartyType(order))}</p>
-      <p><b>Salesman:</b> ${escapeHTML(order?.salesman || "-")}</p>
-      <p><b>Order Date:</b> ${escapeHTML(getOrderDate(order) || "-")}</p>
-      <p><b>Status:</b> ${escapeHTML(statusText)}</p>
-    </div>
+      <div class="order-bottom-grid">
 
-    <div style="margin-bottom:20px;">
-      <h4 style="font-size:18px;font-weight:600;">Items</h4>
-      ${itemsHTML}
-    </div>
+        <section class="order-view-section">
+          <div class="order-section-title">
+            <i class="fa-solid fa-percent"></i>
+            Category Discounts
+          </div>
 
-    <div style="margin-bottom:20px;">
-      <h4 style="font-size:18px;font-weight:600;color:#108082;">Category Discounts</h4>
-      ${categoryDiscountsHTML}
-    </div>
+          ${categoryDiscountsHTML}
+        </section>
 
-    <div>
-      <h4 style="font-size:18px;font-weight:600;color:#108082;">Billing</h4>
-      ${billingHTML}
+        <section class="order-view-section">
+          <div class="order-section-title">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+            Billing
+          </div>
+
+          ${billingHTML}
+        </section>
+
+      </div>
+
     </div>
   `;
 
@@ -1501,9 +1624,19 @@ const exportColumns = [
     get: (order) => order?.party?.gst || "-",
   },
   {
+    key: "city",
+    label: "City",
+    get: (order) => getPartyCity(order),
+  },
+  {
+    key: "distributor",
+    label: "Distributor",
+    get: (order) => getDistributor(order),
+  },
+  {
     key: "address",
     label: "Address",
-    get: (order) => order?.party?.address || "-",
+    get: (order) => getPartyAddress(order),
   },
   {
     key: "total",
