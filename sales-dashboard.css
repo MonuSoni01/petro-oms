@@ -4339,3 +4339,1289 @@ body.dark .filter-group select {
   vertical-align: top;
 }
 
+
+/* =========================================================
+   2026-08-29 - S.NO + PREMIUM MOBILE PARTY-FIRST CARD
+========================================================= */
+
+/* Desktop serial number */
+.sno-col {
+  width: 72px;
+  text-align: center !important;
+}
+
+.td-sno {
+  width: 72px;
+  text-align: center;
+}
+
+.erp-sno {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  border-radius: 10px;
+  background: #eef8f8;
+  border: 1px solid #d1eeee;
+  color: #108082;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.mobile-order-label {
+  display: none;
+}
+
+/* Better desktop alignment after adding S.No. */
+@media (min-width: 992px) {
+  .myq-table {
+    min-width: 1260px;
+  }
+
+  .myq-table th:first-child,
+  .myq-table td:first-child {
+    text-align: center;
+  }
+
+  .td-party .erp-info-box {
+    min-width: 210px;
+  }
+}
+
+@media (max-width: 991px) {
+  /* Turn each row into a controlled card stack */
+  .erp-mobile-card {
+    display: flex !important;
+    flex-direction: column;
+    position: relative;
+    padding: 18px 14px 16px !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5edf2 !important;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdfd 100%) !important;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .07) !important;
+    overflow: hidden;
+  }
+
+  .erp-mobile-card::before {
+    width: 4px !important;
+    background: linear-gradient(180deg, #108082, #17a2a5) !important;
+  }
+
+  .erp-mobile-card > td {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* S.No. becomes a neat badge in top-right */
+  .erp-mobile-card .td-sno {
+    order: 0;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 3;
+  }
+
+  .erp-mobile-card .td-sno::before {
+    display: none !important;
+  }
+
+  .erp-mobile-card .erp-sno {
+    min-width: 32px;
+    height: 28px;
+    border-radius: 999px;
+    padding: 0 10px;
+    font-size: 11px;
+    background: #eefafa;
+    border-color: #cdeaea;
+  }
+
+  /* PARTY FIRST */
+  .erp-mobile-card .td-party {
+    order: 1;
+    padding-right: 52px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .erp-mobile-card .td-order-no {
+    order: 2;
+    margin-bottom: 10px !important;
+  }
+
+  .erp-mobile-card td[data-label="Total"] { order: 3; }
+  .erp-mobile-card td[data-label="Action"] { order: 4; }
+  .erp-mobile-card td[data-label="Status"] { order: 5; }
+  .erp-mobile-card td[data-label="Bill"] { order: 6; }
+  .erp-mobile-card td[data-label="Bill Amount"] { order: 7; }
+
+  /* Party hero */
+  .erp-party-hero {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    align-items: center !important;
+  }
+
+  .erp-party-hero .erp-info-icon {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, #e4f6f6, #f1fbfb) !important;
+    border: 1px solid #d4eeee;
+    color: #108082 !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.7);
+  }
+
+  .erp-party-copy {
+    min-width: 0;
+  }
+
+  .erp-party-hero .erp-label {
+    display: block !important;
+    margin: 0 0 3px !important;
+    font-size: 9px !important;
+    letter-spacing: .7px !important;
+    color: #94a3b8 !important;
+  }
+
+  .erp-party-hero .erp-value {
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    font-weight: 900 !important;
+    color: #0f172a !important;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* Order is now secondary information under Party */
+  .td-order-no::before {
+    display: none !important;
+  }
+
+  .td-order-no .erp-order-box {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4px 10px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: #f7fafc;
+    border: 1px solid #e9eef3;
+  }
+
+  .mobile-order-label {
+    display: block !important;
+    grid-column: 1 / -1;
+    margin-bottom: 0 !important;
+    color: #94a3b8 !important;
+    font-size: 9px !important;
+  }
+
+  .td-order-no .erp-order-id {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 900 !important;
+    color: #108082 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .td-order-no .erp-order-date {
+    display: inline-flex !important;
+    justify-self: end;
+    margin: 0 !important;
+    font-size: 10px !important;
+    white-space: nowrap;
+  }
+
+  .td-order-no .erp-status-chip {
+    display: none !important;
+  }
+
+  /* Clean labels and spacing */
+  .erp-mobile-card td::before {
+    margin-bottom: 6px !important;
+  }
+
+  .erp-mobile-card td[data-label="Total"] .erp-info-box {
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    background: #fbfcfd !important;
+  }
+
+  .erp-mobile-card .erp-action-wrap {
+    gap: 8px !important;
+  }
+
+  .erp-mobile-card .myq-btn,
+  .erp-mobile-card .status-dropdown,
+  .erp-mobile-card .erp-bill-pending,
+  .erp-mobile-card .status-badge,
+  .erp-mobile-card .bill-amt-display {
+    border-radius: 11px !important;
+  }
+
+  .erp-mobile-card .bill-amt-display {
+    background: #f7fbf8 !important;
+    border-color: #e2f1e6 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .erp-mobile-card {
+    padding: 16px 12px 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .erp-mobile-card .td-party {
+    padding-right: 46px !important;
+  }
+
+  .erp-party-hero .erp-info-icon {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .erp-party-hero .erp-value {
+    font-size: 15px !important;
+  }
+
+  .td-order-no .erp-order-box {
+    padding: 10px;
+  }
+
+  .td-order-no .erp-order-id {
+    font-size: 13px !important;
+  }
+}
+
+
+/* =========================================================
+   2026-08-29 - CLEAN QUEUE TABLE + COMPACT MOBILE CARD V2
+   Desktop: quotation-queue inspired single-line ERP table
+   Mobile: S.No + Customer on one top line, compact card
+========================================================= */
+
+/* ---------- DESKTOP / TABLET TABLE ---------- */
+@media (min-width: 992px) {
+  .myq-table-wrap {
+    padding: 10px 14px 14px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 6px 24px rgba(15, 23, 42, .06) !important;
+  }
+
+  .myq-table {
+    min-width: 1040px !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;
+  }
+
+  .myq-table thead th {
+    background: #f7f9fc !important;
+    color: #172033 !important;
+    border-top: 1px solid #e5eaf0 !important;
+    border-bottom: 1px solid #dfe5ec !important;
+    padding: 13px 12px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+
+  .myq-table thead th:first-child {
+    border-left: 1px solid #e5eaf0 !important;
+    border-radius: 8px 0 0 8px !important;
+  }
+
+  .myq-table thead th:last-child {
+    border-right: 1px solid #e5eaf0 !important;
+    border-radius: 0 8px 8px 0 !important;
+  }
+
+  .myq-table tbody td {
+    height: 58px !important;
+    padding: 10px 12px !important;
+    border-bottom: 1px solid #e8edf3 !important;
+    background: #fff !important;
+    font-size: 12.5px !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+  }
+
+  .myq-table tbody tr:hover td {
+    background: #fafcfd !important;
+  }
+
+  .myq-table th:nth-child(1), .myq-table td:nth-child(1) { width: 62px; text-align: center !important; }
+  .myq-table th:nth-child(2), .myq-table td:nth-child(2) { width: 175px; }
+  .myq-table th:nth-child(3), .myq-table td:nth-child(3) { min-width: 210px; }
+  .myq-table th:nth-child(4), .myq-table td:nth-child(4) { width: 130px; }
+  .myq-table th:nth-child(5), .myq-table td:nth-child(5) { width: 180px; }
+  .myq-table th:nth-child(6), .myq-table td:nth-child(6) { width: 160px; }
+  .myq-table th:nth-child(7), .myq-table td:nth-child(7) { width: 150px; }
+  .myq-table th:nth-child(8), .myq-table td:nth-child(8) { width: 125px; }
+
+  .erp-sno {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    border: 0 !important;
+    background: transparent !important;
+    color: #111827 !important;
+    font-weight: 800;
+  }
+
+  .td-order-no .erp-order-box { padding: 0 !important; background: transparent !important; border: 0 !important; }
+  .td-order-no .erp-order-id {
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-weight: 850 !important;
+    color: #0f172a !important;
+  }
+  .td-order-no .erp-order-date,
+  .td-order-no .mobile-order-label,
+  .td-order-no .erp-status-chip { display: none !important; }
+
+  .td-party .erp-info-box,
+  .myq-table td[data-label="Total"] .erp-info-box {
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    gap: 8px !important;
+  }
+
+  .td-party .erp-info-icon,
+  .myq-table td[data-label="Total"] .erp-info-icon { display: none !important; }
+  .td-party .erp-label,
+  .myq-table td[data-label="Total"] .erp-label { display: none !important; }
+
+  .td-party .erp-value {
+    font-size: 12.5px !important;
+    font-weight: 650 !important;
+    color: #1f2937 !important;
+  }
+
+  .myq-table td[data-label="Total"] .erp-amount {
+    margin: 0 !important;
+    font-size: 12.5px !important;
+    font-weight: 650 !important;
+    color: #111827 !important;
+  }
+
+  .erp-action-wrap {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+  }
+
+  .erp-action-wrap .myq-btn {
+    width: auto !important;
+    min-width: 74px !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    font-size: 11.5px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .status-dropdown {
+    width: 140px !important;
+    height: 34px !important;
+    border-radius: 7px !important;
+    padding: 0 28px 0 10px !important;
+    font-size: 11.5px !important;
+  }
+
+  .status-approved,
+  .erp-bill-pending {
+    min-width: 132px !important;
+    width: auto !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    border-radius: 999px !important;
+    padding: 0 12px !important;
+    font-size: 11px !important;
+  }
+
+  .myq-table td[data-label="Bill"] .myq-btn {
+    width: auto !important;
+    min-width: 92px !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    font-size: 11px !important;
+    box-shadow: none !important;
+  }
+
+  .bill-amt-display {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    font-size: 12.5px !important;
+    font-weight: 750 !important;
+    color: #111827 !important;
+  }
+}
+
+/* ---------- MOBILE COMPACT CARD ---------- */
+@media (max-width: 991px) {
+  .myq-table { border-spacing: 0 10px !important; }
+
+  .erp-mobile-card {
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    margin-bottom: 12px !important;
+    padding: 14px !important;
+    border: 1px solid #e4eaf0 !important;
+    border-radius: 16px !important;
+    background: #fff !important;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .055) !important;
+    overflow: hidden !important;
+  }
+
+  .erp-mobile-card::before {
+    width: 3px !important;
+    background: #108082 !important;
+  }
+
+  .erp-mobile-card > td {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  /* S.No + Customer are visually one top row */
+  .erp-mobile-card .td-sno {
+    order: 0;
+    position: absolute !important;
+    top: 14px !important;
+    left: 14px !important;
+    width: 30px !important;
+    z-index: 3;
+  }
+
+  .erp-mobile-card .td-sno::before { display: none !important; }
+  .erp-mobile-card .erp-sno {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    background: #eaf7f7 !important;
+    border: 1px solid #cde9e9 !important;
+    color: #108082 !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+  }
+
+  .erp-mobile-card .td-party {
+    order: 1;
+    min-height: 32px !important;
+    padding: 2px 0 10px 40px !important;
+    border-bottom: 1px solid #edf1f5 !important;
+  }
+
+  .erp-mobile-card .td-party::before { display: none !important; }
+  .erp-party-hero {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+  .erp-party-hero .erp-info-icon,
+  .erp-party-hero .erp-label { display: none !important; }
+  .erp-party-hero .erp-value {
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* Order No + Date one compact row */
+  .erp-mobile-card .td-order-no {
+    order: 2;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #edf1f5 !important;
+  }
+  .erp-mobile-card .td-order-no::before { display: none !important; }
+  .td-order-no .erp-order-box {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+    gap: 3px 10px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+  .mobile-order-label {
+    display: block !important;
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    color: #94a3b8 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .5px !important;
+  }
+  .td-order-no .erp-order-id {
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: #108082 !important;
+  }
+  .td-order-no .erp-order-date {
+    display: inline-flex !important;
+    margin: 0 !important;
+    font-size: 9.5px !important;
+    color: #64748b !important;
+    white-space: nowrap !important;
+  }
+  .td-order-no .erp-status-chip { display: none !important; }
+
+  /* Total is a simple horizontal row, not a large box */
+  .erp-mobile-card td[data-label="Total"] {
+    order: 3;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #edf1f5 !important;
+  }
+  .erp-mobile-card td[data-label="Total"]::before {
+    content: "Total" !important;
+    display: inline-block !important;
+    margin: 0 12px 0 0 !important;
+    font-size: 9px !important;
+  }
+  .erp-mobile-card td[data-label="Total"] .erp-info-box {
+    display: inline-flex !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    gap: 0 !important;
+  }
+  .erp-mobile-card td[data-label="Total"] .erp-info-icon,
+  .erp-mobile-card td[data-label="Total"] .erp-label { display: none !important; }
+  .erp-mobile-card td[data-label="Total"] .erp-amount {
+    margin: 0 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
+  }
+
+  /* actions */
+  .erp-mobile-card td[data-label="Action"] {
+    order: 4;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #edf1f5 !important;
+  }
+  .erp-mobile-card td[data-label="Action"]::before { margin-bottom: 5px !important; }
+  .erp-mobile-card .erp-action-wrap {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .erp-mobile-card .myq-btn {
+    width: 100% !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    font-size: 11.5px !important;
+    box-shadow: none !important;
+  }
+
+  /* Status + Bill in one two-column row */
+  .erp-mobile-card td[data-label="Status"] {
+    order: 5;
+    width: calc(50% - 4px) !important;
+    align-self: flex-start !important;
+    margin-top: 10px !important;
+  }
+  .erp-mobile-card td[data-label="Bill"] {
+    order: 6;
+    width: calc(50% - 4px) !important;
+    align-self: flex-end !important;
+    margin-top: -58px !important;
+  }
+  .erp-mobile-card td[data-label="Status"]::before,
+  .erp-mobile-card td[data-label="Bill"]::before {
+    margin-bottom: 5px !important;
+    font-size: 9px !important;
+  }
+  .erp-mobile-card .status-dropdown,
+  .erp-mobile-card .status-badge,
+  .erp-mobile-card .erp-bill-pending,
+  .erp-mobile-card td[data-label="Bill"] .myq-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 7px !important;
+    border-radius: 8px !important;
+    font-size: 10.5px !important;
+    white-space: nowrap !important;
+  }
+
+  .erp-mobile-card td[data-label="Bill Amount"] {
+    order: 7;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-top: 10px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid #edf1f5 !important;
+  }
+  .erp-mobile-card td[data-label="Bill Amount"]::before {
+    margin: 0 !important;
+    font-size: 9px !important;
+  }
+  .erp-mobile-card .bill-amt-display {
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #15803d !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    text-align: right !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .erp-mobile-card { padding: 12px !important; }
+  .erp-mobile-card .td-sno { top: 12px !important; left: 12px !important; }
+  .erp-mobile-card .td-party { padding-left: 38px !important; }
+  .erp-party-hero .erp-value { font-size: 14px !important; }
+  .td-order-no .erp-order-id { font-size: 12px !important; }
+}
+
+/* =========================================================
+   VIEW ORDER MODAL V3 — DESKTOP + MOBILE RESPONSIVE
+========================================================= */
+#modal {
+  padding: 20px !important;
+  align-items: center !important;
+}
+
+#modalBox {
+  width: min(1040px, 96vw) !important;
+  max-width: 1040px !important;
+  max-height: 92vh !important;
+  padding: 0 !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, .28) !important;
+}
+
+#modalContent {
+  padding: 22px 24px 26px !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+
+.closeBtn {
+  position: absolute !important;
+  top: 14px !important;
+  right: 14px !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 12px !important;
+  background: #f3f6f9 !important;
+  border: 1px solid #e3e8ee !important;
+  color: #64748b !important;
+  box-shadow: none !important;
+  z-index: 20 !important;
+}
+
+.view-order-wrap { padding: 0 !important; }
+
+.view-order-header {
+  position: sticky !important;
+  top: -22px !important;
+  z-index: 8 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin: 0 0 18px !important;
+  padding: 18px 54px 16px 4px !important;
+  background: rgba(255,255,255,.97) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e8edf2 !important;
+}
+
+.view-order-header .modal-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  font-size: 24px !important;
+  line-height: 1.25 !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+}
+
+.view-order-header .myq-btn-download {
+  min-width: 138px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+}
+
+.modal-section {
+  margin: 0 0 16px !important;
+  padding: 16px !important;
+  border: 1px solid #e5eaf0 !important;
+  border-radius: 14px !important;
+  background: #fbfcfe !important;
+}
+
+.modal-section h4 {
+  margin: 0 0 12px !important;
+  padding: 0 0 10px !important;
+  border-bottom: 1px solid #e6ebf0 !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: #263244 !important;
+}
+
+.party-details-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.party-detail-item {
+  min-width: 0 !important;
+  padding: 11px 12px !important;
+  border-radius: 10px !important;
+  border: 1px solid #e4e9ef !important;
+  background: #fff !important;
+}
+
+.party-detail-label {
+  margin-bottom: 4px !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  letter-spacing: .55px !important;
+  color: #7c8a9e !important;
+}
+
+.party-detail-item strong {
+  font-size: 12.5px !important;
+  line-height: 1.35 !important;
+  font-weight: 800 !important;
+  color: #152238 !important;
+}
+
+.modal-section-scroll {
+  width: 100% !important;
+  overflow-x: auto !important;
+  border: 1px solid #e3e8ee !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+}
+
+.modal-items-table {
+  width: 100% !important;
+  min-width: 780px !important;
+  margin: 0 !important;
+  border-collapse: collapse !important;
+}
+
+.modal-items-table th {
+  padding: 10px 9px !important;
+  background: #f0f4f8 !important;
+  color: #344054 !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+}
+
+.modal-items-table td {
+  padding: 10px 9px !important;
+  background: #fff !important;
+  color: #344054 !important;
+  font-size: 11.5px !important;
+  line-height: 1.35 !important;
+  vertical-align: middle !important;
+}
+
+.modal-items-table td:nth-child(3) {
+  min-width: 250px !important;
+  text-align: left !important;
+}
+
+/* Mobile: item table becomes readable item cards */
+@media (max-width: 700px) {
+  #modal {
+    padding: 7px !important;
+    align-items: flex-end !important;
+  }
+
+  #modalBox {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 94dvh !important;
+    max-height: 94dvh !important;
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  #modalContent {
+    padding: 14px 12px 22px !important;
+  }
+
+  .closeBtn {
+    position: fixed !important;
+    top: auto !important;
+    right: 18px !important;
+    margin-top: 4px !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+  }
+
+  .view-order-header {
+    top: -14px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 16px 42px 12px 0 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .view-order-header .modal-title {
+    font-size: 17px !important;
+    line-height: 1.35 !important;
+    text-align: left !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .view-order-header .myq-btn-download {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    border-radius: 10px !important;
+  }
+
+  .modal-section {
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .modal-section h4 {
+    font-size: 12.5px !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .party-details-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .party-detail-item {
+    padding: 9px !important;
+    border-radius: 9px !important;
+  }
+
+  .party-detail-label { font-size: 8px !important; }
+  .party-detail-item strong { font-size: 11px !important; }
+
+  .modal-section-scroll {
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .modal-items-table,
+  .modal-items-table tbody {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .modal-items-table thead { display: none !important; }
+
+  .modal-items-table .modal-item-row {
+    display: grid !important;
+    grid-template-columns: 52px 1fr 1fr !important;
+    gap: 7px 8px !important;
+    width: 100% !important;
+    margin-bottom: 9px !important;
+    padding: 10px !important;
+    border: 1px solid #e4e9ef !important;
+    border-radius: 11px !important;
+    background: #fff !important;
+    box-shadow: 0 2px 7px rgba(15,23,42,.035) !important;
+  }
+
+  .modal-items-table .modal-item-row td {
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    text-align: left !important;
+    font-size: 10.5px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .modal-items-table .modal-item-row td::before {
+    content: attr(data-label) !important;
+    display: block !important;
+    margin-bottom: 2px !important;
+    font-size: 7.5px !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .4px !important;
+    color: #94a3b8 !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(1) {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    padding: 6px !important;
+    border-radius: 7px !important;
+    background: #edf8f8 !important;
+    color: #108082 !important;
+    text-align: center !important;
+    font-weight: 900 !important;
+  }
+  .modal-items-table .modal-item-row td:nth-child(1)::before { display: none !important; }
+
+  .modal-items-table .modal-item-row td:nth-child(2) {
+    grid-column: 2 / 4 !important;
+    grid-row: 1 !important;
+    font-weight: 900 !important;
+    color: #108082 !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(3) {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    min-width: 0 !important;
+    padding: 7px 0 !important;
+    border-top: 1px dashed #e5eaf0 !important;
+    border-bottom: 1px dashed #e5eaf0 !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(4) { grid-column: 1 !important; grid-row: 3 !important; }
+  .modal-items-table .modal-item-row td:nth-child(5) { grid-column: 2 !important; grid-row: 3 !important; }
+  .modal-items-table .modal-item-row td:nth-child(6) { grid-column: 3 !important; grid-row: 3 !important; text-align: right !important; }
+  .modal-items-table .modal-item-row td:nth-child(7) {
+    grid-column: 1 / -1 !important;
+    grid-row: 4 !important;
+    margin-top: 2px !important;
+    padding-top: 7px !important;
+    border-top: 1px solid #edf1f5 !important;
+    text-align: right !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    color: #15803d !important;
+  }
+
+  .billing-row { font-size: 11px !important; padding: 5px 0 !important; }
+  .billing-row.total { font-size: 14px !important; }
+}
+
+@media (max-width: 390px) {
+  .party-details-grid { grid-template-columns: 1fr 1fr !important; }
+  .modal-items-table .modal-item-row {
+    grid-template-columns: 44px 1fr 1fr !important;
+    padding: 9px !important;
+  }
+}
+
+/* =========================================================
+   VIEW ORDER MODAL V4 — COMPACT DESKTOP + MOBILE
+   Keeps all data readable while reducing unnecessary height.
+========================================================= */
+
+/* Desktop modal: tighter width/spacing */
+#modalBox {
+  width: min(900px, 94vw) !important;
+  max-width: 900px !important;
+  max-height: 88vh !important;
+  border-radius: 14px !important;
+}
+
+#modalContent {
+  padding: 14px 16px 18px !important;
+}
+
+/* Close button always at top-right */
+.closeBtn {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  left: auto !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 9px !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  z-index: 50 !important;
+}
+
+.view-order-header {
+  position: sticky !important;
+  top: -14px !important;
+  gap: 10px !important;
+  margin: 0 0 10px !important;
+  padding: 12px 44px 10px 2px !important;
+}
+
+.view-order-header .modal-title {
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+}
+
+.view-order-header .myq-btn-download {
+  min-width: 118px !important;
+  height: 36px !important;
+  padding: 0 14px !important;
+  border-radius: 9px !important;
+  font-size: 11px !important;
+}
+
+.modal-section {
+  margin: 0 0 10px !important;
+  padding: 11px !important;
+  border-radius: 11px !important;
+}
+
+.modal-section h4 {
+  margin: 0 0 8px !important;
+  padding: 0 0 7px !important;
+  font-size: 12.5px !important;
+}
+
+.party-details-grid {
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 7px !important;
+}
+
+.party-detail-item {
+  padding: 8px 9px !important;
+  border-radius: 8px !important;
+}
+
+.party-detail-label {
+  margin-bottom: 2px !important;
+  font-size: 7.5px !important;
+}
+
+.party-detail-item strong {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+}
+
+.modal-items-table th {
+  padding: 7px 7px !important;
+  font-size: 10px !important;
+}
+
+.modal-items-table td {
+  padding: 7px 7px !important;
+  font-size: 10.5px !important;
+}
+
+.modal-items-table td:nth-child(3) {
+  min-width: 215px !important;
+}
+
+.billing-row {
+  padding: 4px 0 !important;
+  font-size: 11px !important;
+}
+.billing-row.total {
+  margin-top: 7px !important;
+  padding-top: 7px !important;
+  font-size: 13px !important;
+}
+
+/* Compact mobile popup */
+@media (max-width: 700px) {
+  #modal {
+    padding: 5px !important;
+    align-items: center !important;
+  }
+
+  #modalBox {
+    width: calc(100% - 4px) !important;
+    max-width: 430px !important;
+    height: auto !important;
+    max-height: 96dvh !important;
+    border-radius: 14px !important;
+  }
+
+  #modalContent {
+    padding: 10px 9px 12px !important;
+  }
+
+  .closeBtn {
+    position: absolute !important;
+    top: 7px !important;
+    right: 7px !important;
+    margin: 0 !important;
+    width: 29px !important;
+    height: 29px !important;
+    min-width: 29px !important;
+    min-height: 29px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+  }
+
+  .view-order-header {
+    top: -10px !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+    gap: 7px !important;
+    padding: 10px 34px 8px 0 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .view-order-header .modal-title {
+    grid-column: 1 / -1 !important;
+    font-size: 14.5px !important;
+    line-height: 1.2 !important;
+    padding-right: 0 !important;
+  }
+
+  .view-order-header .myq-btn-download {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    height: 34px !important;
+    min-width: 0 !important;
+    padding: 0 10px !important;
+    border-radius: 8px !important;
+    font-size: 10.5px !important;
+  }
+
+  .modal-section {
+    padding: 9px !important;
+    margin-bottom: 8px !important;
+    border-radius: 10px !important;
+  }
+
+  .modal-section h4 {
+    font-size: 11.5px !important;
+    margin-bottom: 7px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* 3 fields in first row when width allows; 2 columns on narrow phones */
+  .party-details-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .party-detail-item {
+    padding: 7px !important;
+    min-height: 44px !important;
+    border-radius: 8px !important;
+  }
+
+  .party-detail-label {
+    margin-bottom: 2px !important;
+    font-size: 7px !important;
+    letter-spacing: .35px !important;
+  }
+
+  .party-detail-item strong {
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Much smaller item cards */
+  .modal-items-table .modal-item-row {
+    grid-template-columns: 38px 1fr 1fr !important;
+    gap: 5px 6px !important;
+    margin-bottom: 6px !important;
+    padding: 7px !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+  }
+
+  .modal-items-table .modal-item-row td {
+    font-size: 9.5px !important;
+    line-height: 1.15 !important;
+  }
+
+  .modal-items-table .modal-item-row td::before {
+    margin-bottom: 1px !important;
+    font-size: 6.5px !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(1) {
+    padding: 4px !important;
+    border-radius: 6px !important;
+    font-size: 9.5px !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(2) {
+    font-size: 9.5px !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(3) {
+    padding: 5px 0 !important;
+    min-width: 0 !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .modal-items-table .modal-item-row td:nth-child(7) {
+    margin-top: 0 !important;
+    padding-top: 5px !important;
+    font-size: 10.5px !important;
+  }
+
+  .billing-row {
+    padding: 3px 0 !important;
+    font-size: 10px !important;
+  }
+  .billing-row.total {
+    font-size: 12px !important;
+    margin-top: 5px !important;
+    padding-top: 5px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .party-details-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  }
+  .modal-section { padding: 8px !important; }
+  .modal-items-table .modal-item-row {
+    grid-template-columns: 34px 1fr 1fr !important;
+    padding: 6px !important;
+  }
+}
+
+/* V5 view modal behavior is injected at runtime from sales-dashboard.js so it wins over older responsive overrides. */

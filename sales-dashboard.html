@@ -9,7 +9,7 @@
     <meta http-equiv="Expires" content="0" />
     <script>
         // Change this value whenever a new version is deployed.
-        const PETRO_APP_VERSION = "2026.08.24.1";
+        const PETRO_APP_VERSION = "2026.07.11.3";
 
         (async function clearOldAppCache() {
             const savedVersion = localStorage.getItem("petro_app_version");
@@ -46,10 +46,10 @@
     <!-- Firebase SDK (Remove async) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="sales-dashboard.css?v=2026.08.24.1">
-    <link rel="stylesheet" href="/css/style.css?v=2026.08.24.1">
+    <link rel="stylesheet" href="sales-dashboard.css?v=2026.07.11.3">
+    <link rel="stylesheet" href="/css/style.css?v=2026.07.11.3">
 
-    <link href="vendor/bootstrap/css/bootstrap.min.css?v=2026.08.24.1" rel="stylesheet" />
+    <link href="vendor/bootstrap/css/bootstrap.min.css?v=2026.07.11.3" rel="stylesheet" />
 
 </head>
 
@@ -114,7 +114,14 @@
 
             <!-- RIGHT : ADMIN -->
             <div class="d-flex align-items-center">
-<!-- ADMIN DROPDOWN -->
+
+                <!-- DARK MODE -->
+                <label class="toggle-switch mb-0 mr-3">
+                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+
+                <!-- ADMIN DROPDOWN -->
                 <div class="dropdown">
                     <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
                         id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -264,61 +271,21 @@
 
                         <tr>
 
-                            <th>
+                            <th class="sno-col">S.No.</th>
 
-                                <i class="fa fa-file-lines"></i>
+                            <th>Order No</th>
 
-                                Order No
+                            <th>Customer</th>
 
-                            </th>
+                            <th>Total</th>
 
-                            <th>
+                            <th>Action</th>
 
-                                <i class="fa fa-user"></i>
+                            <th>Status</th>
 
-                                Party
+                            <th>Bill</th>
 
-                            </th>
-
-                            <th>
-
-                                <i class="fa fa-indian-rupee-sign"></i>
-
-                                Total
-
-                            </th>
-
-                            <th>
-
-                                <i class="fa fa-bolt"></i>
-
-                                Action
-
-                            </th>
-
-                            <th>
-
-                                <i class="fa fa-chart-line"></i>
-
-                                Status
-
-                            </th>
-
-                            <th>
-
-                                <i class="fa fa-file-invoice"></i>
-
-                                Bill
-
-                            </th>
-
-                            <th>
-
-                                <i class="fa fa-wallet"></i>
-
-                                Bill Amount
-
-                            </th>
+                            <th>Bill Amount</th>
 
                         </tr>
 
@@ -377,12 +344,30 @@
     </div>
 
     <!-- Import Firebase configuration and JavaScript file -->
-    <script src="../firebaseconfig.js?v=2026.08.24.1"></script>
-    <script src="sales-dashboard.js?v=2026.08.24.1"></script>
-<script src="vendor/jquery/jquery.min.js?v=2026.08.24.1"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js?v=2026.08.24.1"></script>
-    <script src="js/jquery.appear.js?v=2026.08.24.1"></script>
-    <script src="js/script.js?v=2026.08.24.1"></script>
+    <script src="../firebaseconfig.js?v=2026.07.11.3"></script>
+    <script src="sales-dashboard.js"></script>
+
+    <script>
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById("darkToggle");
+
+            if (toggle.checked) {
+                body.classList.add("dark");
+                localStorage.setItem("petro_dark", true);
+            } else {
+                body.classList.remove("dark");
+                localStorage.setItem("petro_dark", false);
+            }
+        }
+
+    </script>
+
+    <script src="vendor/jquery/jquery.min.js?v=2026.07.11.3"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js?v=2026.07.11.3"></script>
+    <script src="js/jquery.appear.js?v=2026.07.11.3"></script>
+    <script src="js/script.js"></script>
     <!-- <script src="js/dev.js"></script> -->
 
 </body>

@@ -588,6 +588,70 @@
     }
   }
 
+
+  function ensureCompactViewModalStyles() {
+    if ($("petro-view-modal-v5-styles")) return;
+    const style = document.createElement("style");
+    style.id = "petro-view-modal-v5-styles";
+    style.textContent = `
+      /* V5: compact professional view modal */
+      #modalBox{width:min(900px,94vw)!important;max-width:900px!important;border-radius:14px!important;overflow:auto!important}
+      #modalContent{padding:12px 16px 16px!important}
+      .closeBtn{position:absolute!important;top:10px!important;right:10px!important;left:auto!important;float:none!important;width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;border-radius:8px!important;background:#f8fafc!important;border:1px solid #e2e8f0!important;color:#64748b!important;box-shadow:0 2px 8px rgba(15,23,42,.08)!important}
+      .view-order-wrap{padding:0!important}
+      .view-order-header{position:relative!important;top:auto!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin:0 0 10px!important;padding:10px 42px 10px 2px!important;background:linear-gradient(180deg,#fff,#fbfdff)!important;border-bottom:1px solid #e5e7eb!important}
+      .view-order-header .modal-title{margin:0!important;padding:0!important;font-size:19px!important;line-height:1.25!important;text-align:left!important;color:#0f172a!important}
+      .view-order-header .myq-btn-download{width:auto!important;min-width:118px!important;height:34px!important;padding:0 14px!important;border-radius:9px!important;font-size:11px!important;box-shadow:none!important}
+      .modal-section{padding:10px!important;margin:0 0 9px!important;border-radius:10px!important}
+      .modal-section h4{font-size:12px!important;margin:0 0 8px!important;padding-bottom:7px!important}
+      .party-details-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important}
+      .party-detail-item{padding:7px 8px!important;min-height:48px!important;border-radius:8px!important}
+      .party-detail-label{font-size:7px!important;margin-bottom:2px!important}
+      .party-detail-item strong{font-size:10.5px!important;line-height:1.15!important}
+      .modal-section-scroll{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;border-radius:8px!important}
+      .modal-items-table{display:table!important;width:100%!important;min-width:720px!important;border-collapse:collapse!important;border-spacing:0!important}
+      .modal-items-table thead{display:table-header-group!important}
+      .modal-items-table tbody{display:table-row-group!important}
+      .modal-items-table tr,.modal-items-table .modal-item-row{display:table-row!important;margin:0!important;padding:0!important;background:#fff!important;border:0!important;box-shadow:none!important}
+      .modal-items-table th,.modal-items-table td,.modal-items-table .modal-item-row td{display:table-cell!important;width:auto!important;margin:0!important;border:1px solid #e2e8f0!important;padding:6px 7px!important;font-size:9.5px!important;line-height:1.25!important;vertical-align:middle!important;background:#fff!important;color:#334155!important}
+      .modal-items-table th{background:#f1f5f9!important;font-size:9px!important;font-weight:800!important;white-space:nowrap!important}
+      .modal-items-table td::before,.modal-items-table .modal-item-row td::before{display:none!important;content:none!important}
+      .modal-items-table td:nth-child(1){text-align:center!important;min-width:45px!important}
+      .modal-items-table td:nth-child(2){min-width:75px!important;text-align:left!important}
+      .modal-items-table td:nth-child(3){min-width:260px!important;text-align:left!important;font-weight:600!important}
+      .modal-items-table td:nth-child(4),.modal-items-table td:nth-child(5){text-align:center!important;white-space:nowrap!important}
+      .modal-items-table td:nth-child(6),.modal-items-table td:nth-child(7){text-align:right!important;white-space:nowrap!important}
+
+      @media(max-width:700px){
+        #modal{padding:4px!important;align-items:center!important}
+        #modalBox{width:calc(100% - 8px)!important;max-width:430px!important;max-height:96dvh!important;border-radius:12px!important}
+        #modalContent{padding:8px 8px 10px!important}
+        .closeBtn{top:7px!important;right:7px!important;left:auto!important;width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;font-size:13px!important}
+        .view-order-header{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;padding:9px 35px 9px 2px!important;margin-bottom:7px!important}
+        .view-order-header .view-order-left{min-width:0!important}
+        .view-order-header .modal-title{grid-column:auto!important;font-size:13px!important;line-height:1.2!important;white-space:normal!important;overflow-wrap:anywhere!important}
+        .view-order-header .myq-btn-download{grid-column:auto!important;width:auto!important;min-width:88px!important;height:30px!important;padding:0 9px!important;border-radius:8px!important;font-size:9px!important;white-space:nowrap!important}
+        .modal-section{padding:8px!important;margin-bottom:7px!important;border-radius:9px!important}
+        .modal-section h4{font-size:10.5px!important;margin-bottom:6px!important;padding-bottom:5px!important}
+        .party-details-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}
+        .party-detail-item{padding:6px!important;min-height:40px!important;border-radius:7px!important}
+        .party-detail-label{font-size:6.5px!important;margin-bottom:1px!important}
+        .party-detail-item strong{font-size:9.5px!important}
+        .modal-section-scroll{overflow-x:auto!important;overflow-y:hidden!important}
+        .modal-items-table{display:table!important;width:720px!important;min-width:720px!important;table-layout:auto!important}
+        .modal-items-table thead{display:table-header-group!important}
+        .modal-items-table tbody{display:table-row-group!important}
+        .modal-items-table tr,.modal-items-table .modal-item-row{display:table-row!important}
+        .modal-items-table th,.modal-items-table td,.modal-items-table .modal-item-row td{display:table-cell!important;padding:6px!important;font-size:9px!important;border:1px solid #e2e8f0!important}
+        .modal-items-table th{font-size:8.5px!important}
+        .modal-items-table td:nth-child(3){min-width:235px!important}
+        .billing-row{font-size:9.5px!important;padding:3px 0!important}
+        .billing-row.total{font-size:11.5px!important}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   /* -------------------------------------------------------------------------- */
   /* Firestore normalization                                                     */
   /* -------------------------------------------------------------------------- */
@@ -903,7 +967,7 @@
 
     tableBody.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align:center;padding:28px;color:#991b1b;font-weight:700;">
+        <td colspan="8" style="text-align:center;padding:28px;color:#991b1b;font-weight:700;">
           ${escapeHTML(message)}
         </td>
       </tr>
@@ -1018,7 +1082,7 @@
       startIndex + state.rowsPerPage
     );
 
-    renderOrders(pageData);
+    renderOrders(pageData, startIndex);
     renderPagination(totalRecords, startIndex);
   }
 
@@ -1145,14 +1209,14 @@
     `;
   }
 
-  function renderOrders(list) {
+  function renderOrders(list, startIndex = 0) {
     const tableBody = $("myOrders");
     if (!tableBody) return;
 
     if (!list.length) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align:center;padding:30px;font-weight:700;color:#777;">
+          <td colspan="8" style="text-align:center;padding:30px;font-weight:700;color:#777;">
             No Orders Found
           </td>
         </tr>
@@ -1161,8 +1225,9 @@
     }
 
     tableBody.innerHTML = list
-      .map((order) => {
+      .map((order, index) => {
         const status = normalizeStatus(order.status);
+        const serialNo = startIndex + index + 1;
         const hasBill = Boolean(order.billImage || order.billUrl);
         const editAllowed = isEditAllowed(order);
         const billAmount =
@@ -1172,8 +1237,13 @@
 
         return `
           <tr class="erp-mobile-card">
-            <td data-label="Order">
+            <td data-label="S.No." class="td-sno">
+              <span class="erp-sno">${serialNo}</span>
+            </td>
+
+            <td data-label="Order" class="td-order-no">
               <div class="erp-order-box">
+                <div class="erp-label mobile-order-label">Order No.</div>
                 <div class="erp-order-id">${escapeHTML(order.orderNo || "-")}</div>
                 <div class="erp-order-date">
                   <i class="fa fa-calendar"></i>
@@ -1183,11 +1253,10 @@
               </div>
             </td>
 
-            <td data-label="Party">
-              <div class="erp-info-box">
+            <td data-label="Customer" class="td-party">
+              <div class="erp-info-box erp-party-hero">
                 <div class="erp-info-icon"><i class="fa fa-user"></i></div>
-                <div>
-                  <div class="erp-label">Party</div>
+                <div class="erp-party-copy">
                   <div class="erp-value">${escapeHTML(order.party?.name || "-")}</div>
                 </div>
               </div>
@@ -1198,7 +1267,7 @@
                 <div class="erp-info-icon green"><i class="fa fa-indian-rupee-sign"></i></div>
                 <div>
                   <div class="erp-label">Grand Total</div>
-                  <div class="erp-amount">${formatMoney(order.grandTotal)}</div>
+                  <div class="erp-amount">₹${formatMoney(order.grandTotal)}</div>
                 </div>
               </div>
             </td>
@@ -1792,14 +1861,14 @@
             const amount = toFiniteNumber(item.amount, qty * rate);
 
             return `
-              <tr>
-                <td>${index + 1}</td>
-                <td>${escapeHTML(item.code || "-")}</td>
-                <td>${escapeHTML(item.itemName || "-")}</td>
-                <td>${escapeHTML(item.unit || "-")}</td>
-                <td>${qty}</td>
-                <td>₹${formatMoney(rate)}</td>
-                <td>₹${formatMoney(amount)}</td>
+              <tr class="modal-item-row">
+                <td data-label="S.No.">${index + 1}</td>
+                <td data-label="Item Code">${escapeHTML(item.code || "-")}</td>
+                <td data-label="Item Name">${escapeHTML(item.itemName || "-")}</td>
+                <td data-label="Unit">${escapeHTML(item.unit || "-")}</td>
+                <td data-label="Qty">${qty}</td>
+                <td data-label="Rate">₹${formatMoney(rate)}</td>
+                <td data-label="Total">₹${formatMoney(amount)}</td>
               </tr>
             `;
           })
@@ -1842,7 +1911,7 @@
         ${remarkBlock}
 
         <div class="modal-section party-details-section">
-          <h4><i class="fa fa-user-circle"></i> Party Details</h4>
+          <h4><i class="fa fa-user-circle"></i> Customer Details</h4>
 
           <div class="party-details-grid">
             <div class="party-detail-item">
@@ -2329,6 +2398,7 @@
       if (!validateSession()) return;
 
       ensureFilterUI();
+      ensureCompactViewModalStyles();
 
       const rowsSelect = $("rowsPerPage");
       if (rowsSelect) {
