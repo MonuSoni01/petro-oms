@@ -495,6 +495,10 @@
                 <i class="fa-solid fa-box"></i> Mail Section
             </li>
 
+            <li id="vendorSubscriptionMenu" data-page="subscription-control.html" onclick="goPage('subscription-control.html')" style="display:none;">
+                <i class="fa-solid fa-key"></i> Subscription Control
+            </li>
+
             <!-- <li data-page="activity.html" onclick="goPage('activity.html')">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>Activity Logs</span>
@@ -718,41 +722,6 @@
             </div>
         </div>
 
-        <!-- RENEWAL MODAL -->
-        <div id="renewalModal" class="renewal-modal">
-            <div class="renewal-modal-box">
-
-                <div class="renewal-icon">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </div>
-
-                <h3 id="renewalModalTitle">Plan Expired</h3>
-
-                <p id="renewalModalMessage">Your subscription has expired.</p>
-
-                <div class="api-renew-box">
-                    <input type="text" id="renewalApiInput" placeholder="Enter Renewal API Key">
-
-                    <button class="btn-api" onclick="verifyRenewalApi()">
-                        Submit API Key
-                    </button>
-
-                    <small id="apiErrorMsg"></small>
-                </div>
-
-                <div class="renewal-actions">
-                    <button class="btn-renew" onclick="contactSupport()">
-                        Renew Subscription
-                    </button>
-
-                    <button class="btn-ok" onclick="closeRenewalModal()">
-                        Close
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
     </main>
 
     <div class="session-alert" id="sessionAlert"></div>
@@ -792,15 +761,11 @@
         const CONFIG = {
             LOGIN_PAGE: "login.html",
             SESSION_HOURS: 12,
-            ALLOWED_ROLES: ["admin", "super_admin", "manager"],
-            SUBSCRIPTION_COLLECTION: "subscription",
-            SUBSCRIPTION_DOC_ID: "TZxEjESFJ6xuT9V3ZGfM"
+            ALLOWED_ROLES: ["admin", "super_admin", "manager"]
         };
 
         let orders = [];
         let productOrders = [];
-        let subscriptionData = {};
-        let renewalChecked = false;
         let ordersUnsubscribe = null;
         let productsUnsubscribe = null;
 
@@ -859,6 +824,11 @@
                 adminRoleTextEl.innerText = adminRole.replace(/_/g, " ").toUpperCase();
             }
 
+            const vendorSubscriptionMenu = document.getElementById("vendorSubscriptionMenu");
+            if (vendorSubscriptionMenu && adminRole === "super_admin") {
+                vendorSubscriptionMenu.style.display = "flex";
+            }
+
             document.body.classList.add("dashboard-ready");
             return true;
         }
@@ -894,7 +864,7 @@
         function initDashboard() {
             refreshSessionTime();
 
-            loadRenewalData();
+            // Renewal is handled globally by /js/subscription-manager.js
             listenOrders();
             listenProductOrders();
 
@@ -980,189 +950,6 @@
                 toggle.checked = enabled;
             }
         }
-
-        /* ==============================
-           RENEWAL CHECK
-        ============================== */
-
-        async function loadRenewalData() {
-            if (renewalChecked) return;
-
-            renewalChecked = true;
-
-            try {
-                let data = null;
-
-                const knownDoc = await db
-                    .collection(CONFIG.SUBSCRIPTION_COLLECTION)
-                    .doc(CONFIG.SUBSCRIPTION_DOC_ID)
-                    .get();
-
-                if (knownDoc.exists) {
-                    data = knownDoc.data();
-                    subscriptionData = data || {};
-                } else {
-                    console.warn("Subscription doc ID not found. Fetching first doc...");
-
-                    const snap = await db
-                        .collection(CONFIG.SUBSCRIPTION_COLLECTION)
-                        .limit(1)
-                        .get();
-
-                    if (snap.empty) {
-                        console.warn("No subscription document found.");
-                        return;
-                    }
-
-                    data = snap.docs[0].data();
-                    subscriptionData = data || {};
-                }
-
-                checkRenewalStatus(data?.renewalDate);
-
-            } catch (err) {
-                console.error("Renewal fetch error:", err);
-            }
-        }
-
-        function showRenewalModal(title, message) {
-            const titleEl = document.getElementById("renewalModalTitle");
-            const messageEl = document.getElementById("renewalModalMessage");
-            const modalEl = document.getElementById("renewalModal");
-
-            if (titleEl) titleEl.innerText = title || "Subscription Alert";
-            if (messageEl) messageEl.innerText = message || "";
-            if (modalEl) modalEl.style.display = "flex";
-        }
-
-        function closeRenewalModal() {
-            const modalEl = document.getElementById("renewalModal");
-
-            if (modalEl) {
-                modalEl.style.display = "none";
-            }
-        }
-
-        window.closeRenewalModal = closeRenewalModal;
-
-        function checkRenewalStatus(renewalDate) {
-            const alertEl = document.getElementById("renewalAlert");
-
-            if (!alertEl) return;
-
-            alertEl.innerHTML = "";
-
-            if (!renewalDate) {
-                console.warn("renewalDate is empty/undefined");
-                return;
-            }
-
-            let expireDate;
-
-            if (renewalDate && typeof renewalDate.toDate === "function") {
-                expireDate = renewalDate.toDate();
-            } else {
-                const cleanStr = String(renewalDate).trim();
-
-                if (/^\d{4}-\d{2}-\d{2}$/.test(cleanStr)) {
-                    expireDate = new Date(cleanStr + "T00:00:00");
-                } else {
-                    expireDate = new Date(cleanStr);
-                }
-            }
-
-            if (isNaN(expireDate.getTime())) {
-                console.error("Invalid renewalDate value:", renewalDate);
-                return;
-            }
-
-            expireDate.setHours(0, 0, 0, 0);
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const diffDays = Math.round(
-                (expireDate - today) / (1000 * 60 * 60 * 24)
-            );
-
-            if (diffDays === 0) {
-                showRenewalModal(
-                    "⚠️ Plan Expiring Today",
-                    "Your subscription will expire today. Please renew immediately."
-                );
-
-                alertEl.innerHTML = `
-                    <div class="renewal-expired">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Your plan expires TODAY. Please renew immediately.
-                    </div>
-                `;
-                return;
-            }
-
-            if (diffDays < 0) {
-                showRenewalModal(
-                    "❌ Plan Expired",
-                    "Your subscription has expired. Please renew your plan."
-                );
-
-                alertEl.innerHTML = `
-                    <div class="renewal-expired">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                        Your plan has expired. Please renew your plan.
-                    </div>
-                `;
-                return;
-            }
-
-            if (diffDays > 0 && diffDays <= 7) {
-                alertEl.innerHTML = `
-                    <div class="renewal-warning">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Plan Expiring in ${diffDays} Day(s)
-                    </div>
-                `;
-            }
-        }
-
-        function contactSupport() {
-            window.open(
-                "https://rankchahiye.com/services/dashboard.html",
-                "_blank"
-            );
-        }
-
-        window.contactSupport = contactSupport;
-
-        async function verifyRenewalApi() {
-            const input = document.getElementById("renewalApiInput");
-            const error = document.getElementById("apiErrorMsg");
-
-            const enteredKey = String(input?.value || "").trim();
-            const firestoreKey = String(subscriptionData?.apiKey || "").trim();
-
-            if (!enteredKey) {
-                if (error) error.innerText = "Please enter API Key";
-                return;
-            }
-
-            if (!firestoreKey) {
-                if (error) error.innerText = "API key not found in subscription data.";
-                return;
-            }
-
-            if (enteredKey !== firestoreKey) {
-                if (error) error.innerText = "Invalid API Key";
-                return;
-            }
-
-            if (error) error.innerText = "";
-
-            showSessionAlert("Subscription Activated Successfully");
-            closeRenewalModal();
-        }
-
-        window.verifyRenewalApi = verifyRenewalApi;
 
         /* ==============================
            REALTIME FETCH ORDERS
@@ -1504,6 +1291,9 @@
     <script src="product.js"></script>
     <script src="js/script.js"></script>
 
+
+    <!-- Global OMS Subscription & Renewal Manager -->
+    <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
 </body>
 
 </html>

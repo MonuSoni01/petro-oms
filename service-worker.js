@@ -3,7 +3,7 @@
    NETWORK FIRST + SAFE OFFLINE CACHE
 ========================================= */
 
-const CACHE_NAME = "petro-oms-v5";
+const CACHE_NAME = "petro-oms-v6-renewal-auto-renewal-20260902";
 
 /* New service worker ko immediately activate karo */
 self.addEventListener("message", function (event) {
@@ -25,6 +25,7 @@ const STATIC_ASSETS = [
 
   "/vendor/jquery/jquery.min.js",
   "/vendor/bootstrap/js/bootstrap.bundle.min.js",
+  "/js/subscription-manager.js",
 
   "/images/logo.webp",
   "/images/whatsapp_logo.png",

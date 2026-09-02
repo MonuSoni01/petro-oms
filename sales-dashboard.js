@@ -258,6 +258,15 @@
     return isAllowedSource(source) ? source : "orders";
   }
 
+  // Match the salesman prefix as a complete order prefix only.
+  // Example: Amit Soni = AS should match AS-26-... but MUST NOT match ASO-26-....
+  function matchesSalesmanOrderPrefix(orderNo, prefix = state.prefix) {
+    const normalizedOrderNo = normalizeString(orderNo).toUpperCase();
+    const normalizedPrefix = normalizeString(prefix).toUpperCase();
+    if (!normalizedOrderNo || !normalizedPrefix) return false;
+    return normalizedOrderNo.startsWith(`${normalizedPrefix}-`);
+  }
+
   function isSafeHttpUrl(value) {
     try {
       const url = new URL(String(value), window.location.href);
@@ -795,7 +804,7 @@
 
         snapshot.forEach((doc) => {
           const order = normalizeOrderDocument(doc, source);
-          if (!order.orderNo || !order.orderNo.startsWith(state.prefix)) return;
+          if (!matchesSalesmanOrderPrefix(order.orderNo)) return;
           nextMap.set(doc.id, order);
         });
 
@@ -817,25 +826,28 @@
   function startRealtimeListeners() {
     stopRealtimeListeners();
 
-    const prefixEnd = `${state.prefix}\uf8ff`;
+    // Query with the separator included so short prefixes do not overlap.
+    // AS-... is Amit Soni; ASO-... belongs to a different prefix and is excluded.
+    const queryPrefix = `${state.prefix}-`;
+    const prefixEnd = `${queryPrefix}\uf8ff`;
 
     const ordersQuery = state.db
       .collection("orders")
-      .where("orderNo", ">=", state.prefix)
+      .where("orderNo", ">=", queryPrefix)
       .where("orderNo", "<=", prefixEnd)
       .orderBy("orderNo")
       .limit(CONFIG.ORDERS_FETCH_LIMIT);
 
     const productTopQuery = state.db
       .collection("products")
-      .where("orderNo", ">=", state.prefix)
+      .where("orderNo", ">=", queryPrefix)
       .where("orderNo", "<=", prefixEnd)
       .orderBy("orderNo")
       .limit(CONFIG.PRODUCTS_FETCH_LIMIT);
 
     const productNestedQuery = state.db
       .collection("products")
-      .where("partyDetails.orderNo", ">=", state.prefix)
+      .where("partyDetails.orderNo", ">=", queryPrefix)
       .where("partyDetails.orderNo", "<=", prefixEnd)
       .orderBy("partyDetails.orderNo")
       .limit(CONFIG.PRODUCTS_FETCH_LIMIT);

@@ -47,7 +47,7 @@ const firebaseConfig = {
     projectId: "petro-oms",
     storageBucket: "petro-oms.firebasestorage.app",
     messagingSenderId: "562472760628",
-    appId: "1:562472760628:web:3b4f4eda2c862b6e3ce161"
+    appId: "1:562472760628:web:384f4eda2c862b6e3ce161"
 };
 
 const app = initializeApp(firebaseConfig);

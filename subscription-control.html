@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMS Subscription Control</title>
+  <link rel="icon" href="/images/app-icon.png">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <style>
+    :root{
+      --primary:#108082;
+      --primary-dark:#0b6667;
+      --primary-soft:#ecf8f8;
+      --bg:#f4f7fb;
+      --surface:#ffffff;
+      --surface-soft:#f8fafc;
+      --text:#182433;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --shadow:0 10px 28px rgba(15,23,42,.06);
+      --success:#15803d;
+      --success-soft:#edfdf3;
+      --warning:#b45309;
+      --warning-soft:#fff7ed;
+      --danger:#dc2626;
+      --danger-soft:#fef2f2;
+      --info:#1d4ed8;
+      --info-soft:#eff6ff;
+      --radius:16px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#f8fbfd 0%, #f4f7fb 180px, #f4f7fb 100%);
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .page{max-width:1280px;margin:0 auto;padding:24px}
+
+    .hero{
+      background:linear-gradient(135deg,#ffffff 0%, #f8fdfd 100%);
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:22px 24px;
+      margin-bottom:18px;
+    }
+
+    .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--primary-dark);font-weight:800;font-size:12px;
+      letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;
+    }
+    .eyebrow::before{
+      content:"";width:10px;height:10px;border-radius:50%;background:var(--primary);
+      box-shadow:0 0 0 4px rgba(16,128,130,.10);
+    }
+    h1{margin:0;font-size:31px;line-height:1.15;letter-spacing:-.03em}
+    .hero-sub{margin-top:8px;color:var(--muted);max-width:760px;font-size:14px}
+
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+    .nav-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .nav-pills a{
+      text-decoration:none;color:#0f172a;background:#fff;border:1px solid var(--border);
+      padding:10px 14px;border-radius:999px;font-weight:700;font-size:13px;
+      transition:.18s ease;
+    }
+    .nav-pills a:hover{border-color:#b7d8d9;background:var(--primary-soft);color:var(--primary-dark)}
+
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}
+    .stat-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px 18px;
+      box-shadow:var(--shadow);
+      min-height:108px;
+    }
+    .stat-label{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px}
+    .stat-value{font-size:24px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px}
+    .stat-sub{font-size:12px;color:var(--muted)}
+
+    .status-chip,.badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:28px;padding:6px 11px;border-radius:999px;
+      font-size:12px;font-weight:800;
+    }
+    .status-active{background:var(--success-soft);color:var(--success)}
+    .status-warning{background:var(--warning-soft);color:var(--warning)}
+    .status-expired{background:var(--danger-soft);color:var(--danger)}
+    .status-suspended{background:#f1f5f9;color:#475569}
+    .status-pending{background:#fff7ed;color:#9a3412}
+    .status-activated{background:var(--success-soft);color:var(--success)}
+
+    .status-box{
+      display:none;margin-bottom:16px;border-radius:14px;padding:12px 14px;font-weight:700;border:1px solid var(--border)
+    }
+    .status-box.show{display:block}
+    .status-box.ok{background:var(--success-soft);color:#166534;border-color:#bbf7d0}
+    .status-box.err{background:var(--danger-soft);color:#991b1b;border-color:#fecaca}
+
+    .notice{
+      display:flex;gap:12px;align-items:flex-start;background:#fffdf7;border:1px solid #f5deb3;
+      color:#7c5a15;padding:14px 16px;border-radius:16px;margin-bottom:18px;box-shadow:var(--shadow)
+    }
+    .notice .icon{font-size:18px;line-height:1}
+    .notice strong{color:#6d4c10}
+
+    .section-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+    .section-title{margin:0;font-size:20px;letter-spacing:-.02em}
+    .section-desc{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    .license-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+    .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .field.full{grid-column:1/-1}
+
+    .panel-soft{
+      background:linear-gradient(180deg,#fbfdff 0%, #f8fbfd 100%);
+      border:1px solid var(--border);border-radius:16px;padding:16px
+    }
+
+    label{display:block;font-size:12px;font-weight:800;color:#334155;margin-bottom:7px}
+    input,select,textarea{
+      width:100%;background:#fff;border:1px solid #d7dee7;border-radius:12px;padding:12px 13px;
+      color:var(--text);font-size:14px;outline:none;transition:.16s ease;
+    }
+    input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(16,128,130,.10)}
+
+    button{
+      border:none;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:800;cursor:pointer;
+      transition:.16s ease;white-space:nowrap
+    }
+    button:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-secondary:hover{background:#e2e8f0}
+    .btn-success{background:#e8f7ed;color:#166534;border:1px solid #c8ead3;padding:9px 12px;border-radius:10px}
+    .btn-outline{background:#fff;border:1px solid var(--border);color:#334155}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .micro-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+    .info-list{display:grid;gap:12px}
+    .info-item{
+      display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--border);
+      border-radius:14px;background:#fff
+    }
+    .info-icon{
+      width:34px;height:34px;border-radius:10px;background:var(--primary-soft);color:var(--primary-dark);
+      display:grid;place-items:center;font-size:16px;font-weight:900;flex:0 0 34px
+    }
+    .info-item h4{margin:0 0 4px;font-size:13px}
+    .info-item p{margin:0;color:var(--muted);font-size:12px}
+
+    .doc-path{
+      margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);
+      color:#94a3b8;font-size:11px;word-break:break-all
+    }
+
+    .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .plan-card{
+      border:1px solid var(--border);border-radius:18px;background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+      padding:16px;box-shadow:0 6px 18px rgba(15,23,42,.04)
+    }
+    .plan-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+    .plan-name{font-size:18px;font-weight:900;letter-spacing:-.02em;margin:0}
+    .plan-sub{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .toggle-line{display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;font-weight:700}
+    .toggle-line input{width:auto;transform:scale(1.06)}
+    .plan-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .plan-fields .full{grid-column:1/-1}
+
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:16px;background:#fff}
+    table{width:100%;border-collapse:collapse;min-width:850px}
+    th,td{padding:14px 12px;border-bottom:1px solid #edf1f5;text-align:left;vertical-align:top}
+    th{background:#f8fafc;color:#64748b;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0;z-index:1}
+    tbody tr:hover{background:#fbfcfe}
+    .req-title{font-weight:800;font-size:13px;color:#0f172a;margin-bottom:4px}
+    .req-ref{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:#64748b;word-break:break-all}
+    .req-meta{font-size:12px;color:var(--muted)}
+    .amount{font-weight:900;color:#0f172a;font-size:14px}
+    .empty{text-align:center;color:var(--muted);padding:38px 16px;font-size:13px}
+
+    .proof-thumb{width:74px;height:52px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:#f8fafc;cursor:pointer;display:block}.proof-link{display:inline-block;margin-top:5px;font-size:11px;color:var(--primary-dark);font-weight:800;text-decoration:none}.proof-empty{font-size:11px;color:#94a3b8}.proof-modal{position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.82);display:none;align-items:center;justify-content:center;padding:20px}.proof-modal.show{display:flex}.proof-modal-card{position:relative;max-width:min(900px,96vw);max-height:92vh;background:#fff;border-radius:16px;padding:14px;box-shadow:0 30px 80px rgba(0,0,0,.35)}.proof-modal-card img{display:block;max-width:100%;max-height:82vh;object-fit:contain;border-radius:10px}.proof-close{position:absolute;right:-10px;top:-10px;width:34px;height:34px;border-radius:50%;background:#fff;color:#334155;border:1px solid var(--border);padding:0}
+    .footer-hint{margin-top:14px;color:var(--muted);font-size:12px}
+
+    @media(max-width:1100px){
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .license-layout{grid-template-columns:1fr}
+      .plans-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:720px){
+      .page{padding:14px}
+      .hero,.section-card,.stat-card{border-radius:16px}
+      .hero{padding:18px}
+      h1{font-size:26px}
+      .stats{grid-template-columns:1fr}
+      .fields,.plan-fields{grid-template-columns:1fr}
+      .field.full,.plan-fields .full{grid-column:auto}
+      .hero-actions{width:100%}
+      .hero-actions button{width:100%}
+      .actions button{width:100%}
+      .micro-actions{width:100%}
+      .micro-actions button{flex:1 1 100%}
+      .nav-pills a{width:100%;text-align:center}
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">Super Admin Control</div>
+        <h1>Subscription Control Center</h1>
+        <div class="hero-sub">Manage license validity, renewal plans, payment flow and activation requests from one clean control panel.</div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-outline" onclick="location.href='admin-dashboard.html'">← Back to Dashboard</button>
+      </div>
+    </div>
+    <div class="nav-pills">
+      <a href="#licenseSection">License Settings</a>
+      <a href="#plansSection">Renewal Plans</a>
+      <a href="#requestsSection">Renewal Requests</a>
+    </div>
+  </div>
+
+  <div id="statusBox" class="status-box"></div>
+
+  <div class="notice">
+    <div class="icon">🔒</div>
+    <div><strong>Important:</strong> Customers should use the normal <b>admin</b> role only. This page must remain restricted to your internal <b>super_admin</b> account.</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Current Status</div>
+      <div id="overviewStatusWrap"><span id="overviewStatus" class="status-chip status-suspended">--</span></div>
+      <div class="stat-sub">Live license condition</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Expiry Date</div>
+      <div class="stat-value" id="overviewExpiry">--</div>
+      <div class="stat-sub" id="overviewExpirySub">No expiry selected</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Warning Window</div>
+      <div class="stat-value" id="overviewWarning">10 Days</div>
+      <div class="stat-sub">Top renewal reminder start</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Allowed Users</div>
+      <div class="stat-value" id="overviewUsers">0</div>
+      <div class="stat-sub">Current plan capacity</div>
+    </div>
+  </div>
+
+  <section class="section-card" id="licenseSection">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">License Settings</h2>
+        <p class="section-desc">Control software name, expiry date, warning days, allowed users, payment link and support WhatsApp number.</p>
+      </div>
+      <span class="badge status-active">Live License Control</span>
+    </div>
+
+    <div class="license-layout">
+      <div class="panel-soft">
+        <div class="fields">
+          <div class="field">
+            <label>Company / Software Name</label>
+            <input id="companyName" placeholder="PETRO OMS">
+          </div>
+          <div class="field">
+            <label>License Status</label>
+            <select id="status">
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Expiry Date</label>
+            <input id="expiryDate" type="date">
+          </div>
+          <div class="field">
+            <label>Expiry Warning (Days)</label>
+            <input id="warningDays" type="number" min="0" value="10">
+          </div>
+          <div class="field">
+            <label>Allowed Users</label>
+            <input id="allowedUsers" type="number" min="0" value="0">
+          </div>
+          <div class="field">
+            <label>WhatsApp Number</label>
+            <input id="whatsappNumber" value="8750097457">
+          </div>
+          <div class="field full">
+            <label>Global Payment Link</label>
+            <input id="paymentLink" type="url" placeholder="https://razorpay.me/@rankchahiyedm">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" id="saveSettings">Save Settings</button>
+          <div class="micro-actions">
+            <button class="btn-secondary" onclick="extendLicense(3)">+3 Months</button>
+            <button class="btn-secondary" onclick="extendLicense(6)">+6 Months</button>
+            <button class="btn-secondary" onclick="extendLicense(12)">+12 Months</button>
+          </div>
+        </div>
+
+        <div class="doc-path" id="docPath"></div>
+      </div>
+
+      <div class="panel-soft">
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-icon">1</div>
+            <div>
+              <h4>Warning Banner Flow</h4>
+              <p>When the expiry enters the warning window, the customer will see a top renewal alert across the OMS.</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">2</div>
+            <div>
+              <h4>Expiry Lock Flow</h4>
+              <p>On expiry, the software locks and the customer can continue only after completing the renewal process.</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">3</div>
+            <div>
+              <h4>Payment Verification Flow</h4>
+              <p>Customer pays via the link, uploads the payment screenshot inside the OMS, and you verify it before activation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-card" id="plansSection">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Renewal Plans</h2>
+        <p class="section-desc">Set plan duration, pricing, included users and extra user charges. A plan-specific payment link can override the global payment link.</p>
+      </div>
+      <span class="badge" style="background:var(--info-soft);color:var(--info)">Pricing & Plan Rules</span>
+    </div>
+
+    <div class="plans-grid" id="plansBox"></div>
+
+    <div class="actions">
+      <button class="btn-primary" id="savePlans">Save Plans</button>
+    </div>
+  </section>
+
+  <section class="section-card" id="requestsSection">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Renewal Requests</h2>
+        <p class="section-desc">Customer payment proofs appear here after upload. Open the screenshot, verify the transaction, then activate the subscription.</p>
+      </div>
+      <span class="badge" style="background:var(--warning-soft);color:var(--warning)">Payment Proof Verification</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Request Details</th>
+            <th>Plan & Users</th>
+            <th>Amount</th>
+            <th>Payment Proof</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="requestsBody">
+          <tr><td colspan="6" class="empty">Loading renewal requests...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-hint">Tip: Keep plan prices updated before sharing the payment flow with customers.</div>
+  </section>
+</div>
+
+<script>
+"use strict";
+const firebaseConfig={apiKey:"AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",authDomain:"petro-oms.firebaseapp.com",projectId:"petro-oms",storageBucket:"petro-oms.firebasestorage.app",messagingSenderId:"562472760628",appId:"1:562472760628:web:384f4eda2c862b6e3ce161"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const PREFERRED="current", LEGACY="TZxEjESFJ6xuT9V3ZGfM";
+let subRef=null, config={}, requests=[];
+
+const DEFAULT_PLANS=[
+ {id:"quarterly",name:"Quarterly",durationMonths:3,basePrice:0,includedUsers:1,extraUserPrice:0,minUsers:1,maxUsers:100,paymentLink:"",active:true},
+ {id:"semi_half_yearly",name:"Semi Half-Yearly",durationMonths:6,basePrice:0,includedUsers:1,extraUserPrice:0,minUsers:1,maxUsers:100,paymentLink:"",active:true},
+ {id:"yearly",name:"Yearly",durationMonths:12,basePrice:0,includedUsers:1,extraUserPrice:0,minUsers:1,maxUsers:100,paymentLink:"",active:true}
+];
+
+function requireVendorSession(){
+ const role=String(localStorage.getItem("adminRole")||localStorage.getItem("user_role")||"").toLowerCase().replace(/[- ]/g,"_");
+ const email=localStorage.getItem("adminEmail")||localStorage.getItem("user_email")||"";
+ const status=localStorage.getItem("adminStatus")||"active";
+ if(!email || role!=="super_admin" || status!=="active"){
+   document.body.innerHTML='<div style="font-family:Inter,Arial,sans-serif;padding:50px;text-align:center"><h2>Vendor Access Required</h2><p>This page is restricted to an active <b>super_admin</b> session.</p><a href="login.html">Go to Login</a></div>';
+   throw new Error("Vendor access denied");
+ }
+}
+
+function val(id){return document.getElementById(id)}
+function show(msg,ok=true){const b=val("statusBox");b.textContent=msg;b.className="status-box show "+(ok?"ok":"err");setTimeout(()=>b.classList.remove("show"),5000)}
+function dateToYmd(d){if(!(d instanceof Date)||isNaN(d))return"";return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function toDate(v){if(!v)return null;let d;if(v&&typeof v.toDate==="function")d=v.toDate();else if(/^\d{4}-\d{2}-\d{2}$/.test(String(v)))d=new Date(String(v)+"T00:00:00");else d=new Date(v);return isNaN(d)?null:d}
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function money(n){return new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(n||0))}
+function migrateLegacyPlans(plans){
+ return (Array.isArray(plans)?plans:[]).map(p=>{
+   const id=String(p?.id||"").toLowerCase();
+   const name=String(p?.name||"").toLowerCase();
+   if(id==="monthly" || name==="monthly") return {...p,id:"quarterly",name:"Quarterly",durationMonths:3};
+   if(id==="half_yearly" || id==="half-yearly" || name==="6 months" || name==="half yearly") return {...p,id:"semi_half_yearly",name:"Semi Half-Yearly",durationMonths:6};
+   if(id==="yearly" || name==="yearly") return {...p,id:"yearly",name:"Yearly",durationMonths:12};
+   return p;
+ });
+}
+function getPlans(){
+ const raw=Array.isArray(config.plans)&&config.plans.length?config.plans:DEFAULT_PLANS.map(x=>({...x}));
+ return migrateLegacyPlans(raw);
+}
+function formatDateHuman(v){const d=toDate(v);if(!d)return"--";return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}
+function getStatusClass(status){
+ const s=String(status||"").toLowerCase();
+ if(s==="active") return "status-active";
+ if(s==="pending") return "status-pending";
+ if(s==="activated") return "status-activated";
+ if(s==="expired") return "status-expired";
+ if(s==="suspended"||s==="inactive") return "status-suspended";
+ return "status-suspended";
+}
+function daysLeft(exp){
+ const d=toDate(exp); if(!d) return null;
+ const t=new Date(); t.setHours(0,0,0,0); d.setHours(0,0,0,0);
+ return Math.ceil((d-t)/(1000*60*60*24));
+}
+function updateOverview(){
+ const status=(val("status")?.value || config.status || "active");
+ const exp=val("expiryDate")?.value || config.expiryDate || config.renewalDate || "";
+ const warning=Number(val("warningDays")?.value || config.warningDays || config.renewalWarningDays || 10);
+ const users=Number(val("allowedUsers")?.value || config.allowedUsers || 0);
+ const chip = `<span class="status-chip ${getStatusClass(status)}">${status.charAt(0).toUpperCase()+status.slice(1)}</span>`;
+ val("overviewStatusWrap").innerHTML = chip;
+ val("overviewWarning").textContent = `${warning} Days`;
+ val("overviewUsers").textContent = String(users);
+ if(exp){
+   val("overviewExpiry").textContent = formatDateHuman(exp);
+   const left = daysLeft(exp);
+   let msg = "Expiry scheduled";
+   if(left !== null){
+     if(left < 0) msg = `Expired ${Math.abs(left)} day(s) ago`;
+     else if(left === 0) msg = "Expires today";
+     else msg = `${left} day(s) remaining`;
+   }
+   val("overviewExpirySub").textContent = msg;
+ }else{
+   val("overviewExpiry").textContent = "--";
+   val("overviewExpirySub").textContent = "No expiry selected";
+ }
+}
+
+async function resolveRef(){
+ let r=db.collection("subscription").doc(PREFERRED),s=await r.get(); if(s.exists)return r;
+ r=db.collection("subscription").doc(LEGACY);s=await r.get(); if(s.exists)return r;
+ const q=await db.collection("subscription").limit(1).get(); if(!q.empty)return q.docs[0].ref;
+ return db.collection("subscription").doc(PREFERRED);
+}
+
+async function loadConfig(){
+ subRef=await resolveRef(); const s=await subRef.get(); config=s.exists?s.data():{};
+ const originalPlans=Array.isArray(config.plans)?config.plans:[];
+ const migratedPlans=migrateLegacyPlans(originalPlans);
+ const hadLegacy=originalPlans.some(p=>["monthly","half_yearly","half-yearly"].includes(String(p?.id||"").toLowerCase()) || ["monthly","6 months","half yearly"].includes(String(p?.name||"").toLowerCase()));
+ if(hadLegacy){
+   config.plans=migratedPlans;
+   await subRef.set({plans:migratedPlans,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+ }
+ val("companyName").value=config.companyName||config.softwareName||"OMS";
+ val("status").value=String(config.status||"active").toLowerCase();
+ val("expiryDate").value=dateToYmd(toDate(config.expiryDate||config.renewalDate))||"";
+ val("warningDays").value=Number(config.warningDays??config.renewalWarningDays??10);
+ val("allowedUsers").value=Number(config.allowedUsers||0);
+ val("whatsappNumber").value=String(config.whatsappNumber||config.supportWhatsapp||"8750097457");
+ val("paymentLink").value=config.paymentLink||config.renewalPaymentLink||"https://razorpay.me/@rankchahiyedm";
+ val("docPath").textContent=`Firebase document: subscription/${subRef.id}`;
+ renderPlans();
+ updateOverview();
+}
+
+function renderPlans(){
+ const plans=getPlans();
+ val("plansBox").innerHTML=plans.map((p,i)=>`<div class="plan-card plan" data-index="${i}">
+   <div class="plan-card-head">
+     <div>
+       <h3 class="plan-name">${esc(p.name||`Plan ${i+1}`)}</h3>
+       <div class="plan-sub">Plan ID: ${esc(p.id||`plan_${i+1}`)}</div>
+     </div>
+     <label class="toggle-line"><input class="p-active" type="checkbox" ${p.active!==false?"checked":""}> Active</label>
+   </div>
+   <div class="plan-fields">
+     <div>
+       <label>Plan ID</label>
+       <input class="p-id" value="${esc(p.id||`plan_${i+1}`)}">
+     </div>
+     <div>
+       <label>Plan Name</label>
+       <input class="p-name" value="${esc(p.name||"")}">
+     </div>
+     <div>
+       <label>Duration (Months)</label>
+       <input class="p-duration" type="number" min="1" value="${Number(p.durationMonths||1)}">
+     </div>
+     <div>
+       <label>Base Price ₹</label>
+       <input class="p-base" type="number" min="0" step="0.01" value="${Number(p.basePrice||0)}">
+     </div>
+     <div>
+       <label>Included Users</label>
+       <input class="p-included" type="number" min="0" value="${Number(p.includedUsers||0)}">
+     </div>
+     <div>
+       <label>Extra User Price ₹</label>
+       <input class="p-extra" type="number" min="0" step="0.01" value="${Number(p.extraUserPrice||0)}">
+     </div>
+     <div>
+       <label>Min Users</label>
+       <input class="p-min" type="number" min="1" value="${Number(p.minUsers||1)}">
+     </div>
+     <div>
+       <label>Max Users</label>
+       <input class="p-max" type="number" min="1" value="${Number(p.maxUsers||100)}">
+     </div>
+     <div class="full">
+       <label>Plan Payment Link (optional)</label>
+       <input class="p-link" type="url" value="${esc(p.paymentLink||"")}" placeholder="Leave blank to use global payment link">
+     </div>
+   </div>
+ </div>`).join("");
+}
+
+function collectPlans(){return [...document.querySelectorAll(".plan")].map((row,i)=>({
+ id:row.querySelector(".p-id").value.trim()||`plan_${i+1}`,
+ name:row.querySelector(".p-name").value.trim()||`Plan ${i+1}`,
+ durationMonths:Math.max(1,Number(row.querySelector(".p-duration").value||1)),
+ basePrice:Math.max(0,Number(row.querySelector(".p-base").value||0)),
+ includedUsers:Math.max(0,Number(row.querySelector(".p-included").value||0)),
+ extraUserPrice:Math.max(0,Number(row.querySelector(".p-extra").value||0)),
+ minUsers:Math.max(1,Number(row.querySelector(".p-min").value||1)),
+ maxUsers:Math.max(1,Number(row.querySelector(".p-max").value||100)),
+ paymentLink:row.querySelector(".p-link").value.trim(),active:row.querySelector(".p-active").checked
+}))}
+
+async function saveSettings(){
+ try{
+  const data={enabled:true,companyName:val("companyName").value.trim()||"OMS",status:val("status").value,expiryDate:val("expiryDate").value,renewalDate:val("expiryDate").value,warningDays:Math.max(0,Number(val("warningDays").value||10)),allowedUsers:Math.max(0,Number(val("allowedUsers").value||0)),whatsappNumber:val("whatsappNumber").value.replace(/\D/g,"")||"8750097457",paymentLink:val("paymentLink").value.trim(),currency:"INR",updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+  await subRef.set(data,{merge:true}); Object.assign(config,data); updateOverview(); show("Subscription settings saved successfully.");
+ }catch(e){console.error(e);show("Could not save settings: "+e.message,false)}
+}
+async function savePlans(){try{const plans=collectPlans();await subRef.set({plans,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});config.plans=plans;show("Renewal plans saved successfully.")}catch(e){console.error(e);show("Could not save plans: "+e.message,false)}}
+
+async function extendLicense(months){
+ try{
+  const current=toDate(val("expiryDate").value);const today=new Date();today.setHours(0,0,0,0);let base=current&&current>today?current:today;const next=new Date(base);next.setMonth(next.getMonth()+Number(months));const ymd=dateToYmd(next);
+  await subRef.set({status:"active",expiryDate:ymd,renewalDate:ymd,lastRenewalAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});val("expiryDate").value=ymd;val("status").value="active";config.expiryDate=ymd; updateOverview(); show(`License extended by ${months} month(s). New expiry: ${ymd}`)
+ }catch(e){console.error(e);show("Could not extend license: "+e.message,false)}
+}
+window.extendLicense=extendLicense;
+
+function listenRequests(){
+ db.collection("renewal_requests").orderBy("createdAt","desc").limit(30).onSnapshot(s=>{requests=s.docs.map(d=>({id:d.id,...d.data()}));renderRequests()},e=>{console.error(e);val("requestsBody").innerHTML='<tr><td colspan="6" class="empty">Unable to load requests.</td></tr>'})
+}
+function renderRequests(){
+ const body=val("requestsBody");if(!requests.length){body.innerHTML='<tr><td colspan="6" class="empty">No renewal requests yet.</td></tr>';return}
+ body.innerHTML=requests.map(r=>{
+   const reqName = esc(r.companyName||"Unnamed Company");
+   const reqPerson = esc(r.requester?.name||"");
+   const reqEmail = esc(r.requester?.email||"");
+   const reqPhone = esc(r.requester?.phone||"");
+   const planName = esc(r.planName||r.planId||"--");
+   const users = Number(r.requestedUsers||0);
+   const months = Number(r.durationMonths||0);
+   const status = String(r.status||"pending");
+   const badge = `<span class="status-chip ${getStatusClass(status)}">${esc(status.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()))}</span>`;
+   const proof = r.paymentProofDataUrl ? `<img class="proof-thumb" src="${r.paymentProofDataUrl}" alt="Payment proof" onclick="openProof('${esc(r.id)}')"><a href="#" class="proof-link" onclick="event.preventDefault();openProof('${esc(r.id)}')">View Screenshot</a>` : '<span class="proof-empty">Not uploaded yet</span>';
+   const canActivate = !!r.paymentProofDataUrl && status!=="activated";
+   const action = status==="activated" ? '<span class="status-chip status-activated">Activated</span>' : (canActivate ? `<button class="btn-success" onclick="activateRequest('${esc(r.id)}')">Verify & Activate</button>` : '<span class="proof-empty">Awaiting proof</span>');
+   return `<tr>
+     <td>
+       <div class="req-title">${reqName}</div>
+       <div class="req-ref">${esc(r.id)}</div>
+       <div class="req-meta">${reqPerson || 'Customer'}${reqEmail ? ` · ${reqEmail}` : ''}${reqPhone ? ` · ${reqPhone}` : ''}</div>
+     </td>
+     <td><div class="req-title">${planName}</div><div class="req-meta">${users} user(s) · ${months} month(s)</div></td>
+     <td><div class="amount">${money(r.amount)}</div></td>
+     <td>${proof}</td>
+     <td>${badge}</td>
+     <td>${action}</td>
+   </tr>`;
+ }).join("")
+}
+function openProof(id){
+ const r=requests.find(x=>x.id===id);if(!r?.paymentProofDataUrl)return;
+ let modal=document.getElementById("paymentProofModal");
+ if(!modal){
+   modal=document.createElement("div");modal.id="paymentProofModal";modal.className="proof-modal";
+   modal.innerHTML='<div class="proof-modal-card"><button class="proof-close" onclick="closeProof()">×</button><img id="paymentProofLarge" alt="Payment proof"></div>';
+   modal.addEventListener("click",e=>{if(e.target===modal)closeProof()});document.body.appendChild(modal);
+ }
+ document.getElementById("paymentProofLarge").src=r.paymentProofDataUrl;modal.classList.add("show");
+}
+function closeProof(){document.getElementById("paymentProofModal")?.classList.remove("show")}
+window.openProof=openProof;window.closeProof=closeProof;
+async function activateRequest(id){
+ const r=requests.find(x=>x.id===id);if(!r)return;
+ if(!confirm(`Activate ${r.planName||"this plan"} for ${r.requestedUsers||0} users after checking and verifying the uploaded payment screenshot?`))return;
+ try{
+  const snap=await subRef.get();const latest=snap.data()||{};const current=toDate(latest.expiryDate||latest.renewalDate);const today=new Date();today.setHours(0,0,0,0);let base=current&&current>today?current:today;const next=new Date(base);next.setMonth(next.getMonth()+Math.max(1,Number(r.durationMonths||1)));const ymd=dateToYmd(next);
+  const batch=db.batch();batch.set(subRef,{status:"active",expiryDate:ymd,renewalDate:ymd,allowedUsers:Math.max(1,Number(r.requestedUsers||1)),lastRenewalAt:firebase.firestore.FieldValue.serverTimestamp(),lastRenewalRequestId:id,lastPaymentAmount:Number(r.amount||0),updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  const rr=db.collection("renewal_requests").doc(id);batch.set(rr,{status:"activated",activatedAt:firebase.firestore.FieldValue.serverTimestamp(),activatedBy:localStorage.getItem("adminEmail")||"super_admin",newExpiryDate:ymd},{merge:true});await batch.commit();val("expiryDate").value=ymd;val("status").value="active";val("allowedUsers").value=Math.max(1,Number(r.requestedUsers||1));updateOverview();show(`Renewal activated. New expiry: ${ymd}`)
+ }catch(e){console.error(e);show("Activation failed: "+e.message,false)}
+}
+window.activateRequest=activateRequest;
+
+document.addEventListener("DOMContentLoaded",async()=>{
+  try{
+    requireVendorSession();
+    await loadConfig();
+    listenRequests();
+    val("saveSettings").addEventListener("click",saveSettings);
+    val("savePlans").addEventListener("click",savePlans);
+    ["status","expiryDate","warningDays","allowedUsers"].forEach(id=>val(id).addEventListener("input",updateOverview));
+  }catch(e){console.error(e)}
+});
+</script>
+</body>
+</html>

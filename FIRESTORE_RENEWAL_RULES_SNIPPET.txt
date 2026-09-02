@@ -1,0 +1,19 @@
+IMPORTANT: Review and merge this concept into your EXISTING Firestore rules. Do not paste it blindly over production rules.
+
+Security-grade subscription enforcement concept:
+
+function subscriptionIsActive() {
+  let sub = get(/databases/$(database)/documents/subscription/current).data;
+  return sub.enabled == true
+    && sub.status == "active"
+    && sub.expiryDate != null;
+}
+
+// If expiryDate is stored as a Firestore Timestamp, you can additionally enforce:
+// && sub.expiryDate > request.time;
+//
+// If expiryDate is stored as YYYY-MM-DD string (as this frontend currently supports),
+// convert the production architecture to a Timestamp before enforcing date comparison in rules.
+//
+// Apply subscriptionIsActive() together with your existing authentication/role conditions
+// on business collections such as orders/products/etc.
