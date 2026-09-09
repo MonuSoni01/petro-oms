@@ -77,8 +77,8 @@ const SALESMAN_PREFIX = {
     "Amit Soni": "AS",
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
-    "Rup Ranjan Bora": "RRB",
-    "Ashutosh Satapathy": "ASO",
+    "Rup Ranjan Bora": "RRB", 
+    "Prince Gupta" : "PG"
 };
 
 // ================= SALESMAN → DISTRIBUTOR MAPPING =================
