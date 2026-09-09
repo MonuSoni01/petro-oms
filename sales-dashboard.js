@@ -51,7 +51,8 @@
       "Amit Soni": "AS",
       "Ankit Kalra": "AK",
       "Vivek Srivastava": "VS",
-      "Rup Ranjan Bora": "RRB", 
+      "Rup Ranjan Bora": "RRB",
+      "Prince Gupta" :"PG"
     })
   });
 

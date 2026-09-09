@@ -11,6 +11,7 @@ const SALESMAN_PREFIX = {
     "Ankit Kalra": "AK",
     "Amit Soni": "AS",
     "Vivek Srivastava": "VS",  
+    "Prince Gupta" : "PG"
 };
 
 // ⭐ Salesman-wise passwords
@@ -20,6 +21,8 @@ const SALESMAN_PASSWORDS = {
     "Amit Soni": "amit123",
     "Vivek Srivastava": "vivek123",
     "Rup Ranjan Bora": "rup123", 
+    "Prince Gupta" : "prince123"
+    
 };
 
 function openPasswordModal() {
