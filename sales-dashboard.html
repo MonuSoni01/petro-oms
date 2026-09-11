@@ -9,8 +9,7 @@
     <meta http-equiv="Expires" content="0" />
     <script>
         // Change this value whenever a new version is deployed.
-        const PETRO_APP_VERSION = "2026.07.11.3";
-
+        const PETRO_APP_VERSION = "2026.08.24.3";
         (async function clearOldAppCache() {
             const savedVersion = localStorage.getItem("petro_app_version");
             if (savedVersion === PETRO_APP_VERSION) return;
@@ -46,7 +45,7 @@
     <!-- Firebase SDK (Remove async) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="sales-dashboard.css?v=2026.07.11.3">
+    <link rel="stylesheet" href="sales-dashboard.css?v=2026.08.24.3">
     <link rel="stylesheet" href="/css/style.css?v=2026.07.11.3">
 
     <link href="vendor/bootstrap/css/bootstrap.min.css?v=2026.07.11.3" rel="stylesheet" />
@@ -385,7 +384,7 @@
 
     <!-- Import Firebase configuration and JavaScript file -->
     <script src="../firebaseconfig.js?v=2026.07.11.3"></script>
-    <script src="sales-dashboard.js"></script>
+    <script src="sales-dashboard.js?v=2026.08.24.3"></script>
 
     <script>
 

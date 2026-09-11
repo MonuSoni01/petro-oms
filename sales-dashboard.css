@@ -5625,3 +5625,46 @@ body.dark .filter-group select {
 }
 
 /* V5 view modal behavior is injected at runtime from sales-dashboard.js so it wins over older responsive overrides. */
+
+.sheet{
+
+    width:210mm!important;
+
+    min-height:297mm!important;
+
+    margin:auto;
+
+    background:#fff;
+
+}
+
+
+
+.meta,
+table,
+.discount-summary-wrap,
+.notes,
+.footer{
+
+    break-inside:avoid;
+
+    page-break-inside:avoid;
+
+}
+
+
+
+table{
+
+    page-break-inside:auto;
+
+}
+
+
+tr{
+
+    page-break-inside:avoid;
+
+    page-break-after:auto;
+
+}

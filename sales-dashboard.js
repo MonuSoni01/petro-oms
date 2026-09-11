@@ -52,7 +52,7 @@
       "Ankit Kalra": "AK",
       "Vivek Srivastava": "VS",
       "Rup Ranjan Bora": "RRB",
-      "Prince Gupta" :"PG"
+      "Prince Gupta": "PG"
     })
   });
 
@@ -733,7 +733,7 @@
         bathroom: toFiniteNumber(data.categoryDiscounts?.bathroom),
         stainlesssteel: toFiniteNumber(
           data.categoryDiscounts?.stainlesssteel ??
-            data.categoryDiscounts?.stainlessSteel
+          data.categoryDiscounts?.stainlessSteel
         )
       },
       party: {
@@ -1292,40 +1292,38 @@
                   <i class="fa fa-eye"></i> View
                 </button>
 
-                ${
-                  editAllowed
-                    ? `
+                ${editAllowed
+            ? `
                       <button type="button" class="myq-btn myq-btn-edit"
                         data-action="edit-order" data-order-id="${escapeAttr(order.id)}">
                         <i class="fa fa-pen"></i> Edit
                       </button>
                     `
-                    : `
+            : `
                       <button type="button" class="myq-btn myq-btn-lock" disabled>
                         <i class="fa fa-lock"></i> Locked
                       </button>
                     `
-                }
+          }
               </div>
             </td>
 
             <td data-label="Status">${renderStatusControl(order)}</td>
 
             <td data-label="Bill">
-              ${
-                hasBill
-                  ? `
+              ${hasBill
+            ? `
                     <button type="button" class="myq-btn myq-btn-view"
                       data-action="view-bill" data-order-id="${escapeAttr(order.id)}">
                       <i class="fa fa-file-invoice"></i> View Bill
                     </button>
                   `
-                  : `
+            : `
                     <div class="erp-bill-pending">
                       <i class="fa fa-clock"></i> Bill Pending
                     </div>
                   `
-              }
+          }
             </td>
 
             <td data-label="Bill Amount">
@@ -1672,7 +1670,7 @@
 
       throw new Error(
         "Google Apps Script could not be reached. Check that the latest /exec URL is deployed as Web App, Execute as Me, and access is set to Anyone. Original error: " +
-          (error.message || "Failed to fetch")
+        (error.message || "Failed to fetch")
       );
     } finally {
       clearTimeout(timeoutId);
@@ -1868,12 +1866,12 @@
 
     const itemRows = items.length
       ? items
-          .map((item, index) => {
-            const qty = toFiniteNumber(item.qty ?? item.quantity);
-            const rate = toFiniteNumber(item.rate ?? item.price);
-            const amount = toFiniteNumber(item.amount, qty * rate);
+        .map((item, index) => {
+          const qty = toFiniteNumber(item.qty ?? item.quantity);
+          const rate = toFiniteNumber(item.rate ?? item.price);
+          const amount = toFiniteNumber(item.amount, qty * rate);
 
-            return `
+          return `
               <tr class="modal-item-row">
                 <td data-label="S.No.">${index + 1}</td>
                 <td data-label="Item Code">${escapeHTML(item.code || "-")}</td>
@@ -1884,8 +1882,8 @@
                 <td data-label="Total">₹${formatMoney(amount)}</td>
               </tr>
             `;
-          })
-          .join("")
+        })
+        .join("")
       : `<tr><td colspan="7" style="text-align:center;">No items found</td></tr>`;
 
     const remarkBlock =
@@ -2028,12 +2026,12 @@
     const items = order.cartItems || [];
     const rows = items.length
       ? items
-          .map((item, index) => {
-            const qty = toFiniteNumber(item.qty ?? item.quantity);
-            const rate = toFiniteNumber(item.rate ?? item.price);
-            const amount = toFiniteNumber(item.amount, qty * rate);
+        .map((item, index) => {
+          const qty = toFiniteNumber(item.qty ?? item.quantity);
+          const rate = toFiniteNumber(item.rate ?? item.price);
+          const amount = toFiniteNumber(item.amount, qty * rate);
 
-            return `
+          return `
               <tr>
                 <td class="center">${index + 1}</td>
                 <td>${escapeHTML(item.code || "-")}</td>
@@ -2044,8 +2042,8 @@
                 <td class="num">${formatMoney(amount)}</td>
               </tr>
             `;
-          })
-          .join("")
+        })
+        .join("")
       : '<tr><td colspan="7" class="center empty">No items</td></tr>';
 
     const logoUrl = new URL("images/logo.webp", window.location.href).href;
@@ -2073,7 +2071,19 @@
         <title>${escapeHTML(order.orderNo || "Petro Order")} - PETRO OMS</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>
         <style>
-          @page{size:A4;margin:11mm}*{box-sizing:border-box}body{margin:0;color:#20252a;font:12px Arial,sans-serif;background:#f3f4f6;padding:14px}.sheet{width:100%;max-width:800px;margin:auto;background:#fff;border:1px solid #1b7f82;position:relative;overflow:hidden}.sheet>*:not(.watermark){position:relative;z-index:1}.watermark{position:absolute;z-index:0;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-35deg);color:#108082;opacity:.055;font-size:74px;font-weight:800;letter-spacing:9px;white-space:nowrap;pointer-events:none}.header{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;border-bottom:3px solid #108082}.logo{max-width:190px;max-height:58px}.company{text-align:right;line-height:1.5}.company strong{color:#108082;font-size:18px}.title{background:#108082;color:white;text-align:center;font-size:18px;font-weight:700;letter-spacing:1px;padding:9px}.meta{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #9aa}.box{padding:12px 15px;min-height:105px}.box+.box{border-left:1px solid #9aa}.box h3{color:#108082;font-size:13px;margin:0 0 8px;text-transform:uppercase}.line{margin:4px 0}.label{display:inline-block;width:82px;font-weight:700}table{width:100%;border-collapse:collapse}th{background:#e7f3f3;color:#075e61;font-weight:700}th,td{border:1px solid #aeb8b8;padding:7px 6px}.center{text-align:center}.num{text-align:right;white-space:nowrap}.item-name{text-align:left;font-weight:600}.empty{padding:24px;color:#777}.discount-summary-wrap{display:grid;grid-template-columns:57% 43%;width:100%;border-bottom:1px solid #9aa}.discount-breakup{min-height:100%;border-right:1px solid #9aa}.discount-title{background:#e7f3f3;color:#075e61;font-size:12px;font-weight:700;padding:8px 12px;border-bottom:1px solid #aeb8b8}.discount-breakup>div:not(.discount-title){display:flex;align-items:center;justify-content:space-between;gap:15px;padding:7px 12px;border-bottom:1px solid #ccd3d3}.discount-breakup>div:last-child{border-bottom:none}.discount-breakup b{color:#075e61;white-space:nowrap}.summary{width:100%}.summary div{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:7px 12px;border-bottom:1px solid #ccd3d3}.summary b,.summary span:last-child{white-space:nowrap}.summary .grand{background:#108082;color:#fff;font-size:15px;font-weight:700}.notes{min-height:75px;padding:12px 15px;border-top:1px solid #9aa}.footer{display:flex;justify-content:space-between;align-items:end;min-height:85px;padding:12px 15px;border-top:1px solid #9aa}.sign{text-align:center;width:210px;padding-top:40px;border-bottom:1px solid #333}.website-footer{text-align:center;padding:8px;color:#075e61;font-weight:700;border-top:1px solid #ccd3d3}.toolbar{position:sticky;top:10px;z-index:20;max-width:800px;margin:0 auto 12px;display:flex;gap:10px;justify-content:flex-end}.toolbar button{border:0;border-radius:24px;padding:11px 16px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 5px 18px #0003}.download-btn{background:#108082}.share-btn{background:#25d366}.print-btn{background:#334155}.toolbar button:disabled{opacity:.65;cursor:wait}@media print{body{padding:0;background:#fff}.toolbar{display:none}.sheet{max-width:none;border:1px solid #1b7f82}}@media(max-width:700px){.meta,.discount-summary-wrap{grid-template-columns:1fr}.box+.box,.discount-breakup{border-left:0;border-right:0;border-top:1px solid #9aa}.header{align-items:flex-start;gap:10px}.company{font-size:10px}.company strong{font-size:14px}}
+          @page{size:A4;margin:11mm}*{box-sizing:border-box}body{
+
+margin:0;
+
+color:#20252a;
+
+font:12px Arial,sans-serif;
+
+background:#fff;
+
+padding:5px;
+
+}.sheet{width:100%;max-width:800px;margin:auto;background:#fff;border:1px solid #1b7f82;position:relative;overflow:hidden}.sheet>*:not(.watermark){position:relative;z-index:1}.watermark{position:absolute;z-index:0;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-35deg);color:#108082;opacity:.055;font-size:74px;font-weight:800;letter-spacing:9px;white-space:nowrap;pointer-events:none}.header{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;border-bottom:3px solid #108082}.logo{max-width:190px;max-height:58px}.company{text-align:right;line-height:1.5}.company strong{color:#108082;font-size:18px}.title{background:#108082;color:white;text-align:center;font-size:18px;font-weight:700;letter-spacing:1px;padding:9px}.meta{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #9aa}.box{padding:12px 15px;min-height:105px}.box+.box{border-left:1px solid #9aa}.box h3{color:#108082;font-size:13px;margin:0 0 8px;text-transform:uppercase}.line{margin:4px 0}.label{display:inline-block;width:82px;font-weight:700}table{width:100%;border-collapse:collapse}th{background:#e7f3f3;color:#075e61;font-weight:700}th,td{border:1px solid #aeb8b8;padding:7px 6px}.center{text-align:center}.num{text-align:right;white-space:nowrap}.item-name{text-align:left;font-weight:600}.empty{padding:24px;color:#777}.discount-summary-wrap{display:grid;grid-template-columns:57% 43%;width:100%;border-bottom:1px solid #9aa}.discount-breakup{min-height:100%;border-right:1px solid #9aa}.discount-title{background:#e7f3f3;color:#075e61;font-size:12px;font-weight:700;padding:8px 12px;border-bottom:1px solid #aeb8b8}.discount-breakup>div:not(.discount-title){display:flex;align-items:center;justify-content:space-between;gap:15px;padding:7px 12px;border-bottom:1px solid #ccd3d3}.discount-breakup>div:last-child{border-bottom:none}.discount-breakup b{color:#075e61;white-space:nowrap}.summary{width:100%}.summary div{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:7px 12px;border-bottom:1px solid #ccd3d3}.summary b,.summary span:last-child{white-space:nowrap}.summary .grand{background:#108082;color:#fff;font-size:15px;font-weight:700}.notes{min-height:75px;padding:12px 15px;border-top:1px solid #9aa}.footer{display:flex;justify-content:space-between;align-items:end;min-height:85px;padding:12px 15px;border-top:1px solid #9aa}.sign{text-align:center;width:210px;padding-top:40px;border-bottom:1px solid #333}.website-footer{text-align:center;padding:8px;color:#075e61;font-weight:700;border-top:1px solid #ccd3d3}.toolbar{position:sticky;top:10px;z-index:20;max-width:800px;margin:0 auto 12px;display:flex;gap:10px;justify-content:flex-end}.toolbar button{border:0;border-radius:24px;padding:11px 16px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 5px 18px #0003}.download-btn{background:#108082}.share-btn{background:#25d366}.print-btn{background:#334155}.toolbar button:disabled{opacity:.65;cursor:wait}@media print{body{padding:0;background:#fff}.toolbar{display:none}.sheet{max-width:none;border:1px solid #1b7f82}}@media(max-width:700px){.meta,.discount-summary-wrap{grid-template-columns:1fr}.box+.box,.discount-breakup{border-left:0;border-right:0;border-top:1px solid #9aa}.header{align-items:flex-start;gap:10px}.company{font-size:10px}.company strong{font-size:14px}}
         </style>
       </head>
       <body>
@@ -2144,7 +2154,7 @@
 
           <div class="notes"><b>Terms & Conditions</b><br>1. Goods once sold will not be taken back.<br>2. Subject to company terms and applicable jurisdiction.</div>
           <div class="footer"><div>This is a computer-generated document.</div><div class="sign">Authorised Signatory</div></div>
-          <div class="website-footer">Generated from Petro OMS | www.oms.rankchahiye.com</div>
+          <div class="website-footer">Generated from Petro OMS | www.petroindustech.com</div>
         </div>
 
         <script>
@@ -2153,21 +2163,80 @@
           const shareText = ${shareTextJS};
 
           async function createPdfBlob() {
-            if (typeof html2pdf === "undefined") {
-              throw new Error("PDF library could not load");
-            }
 
-            const worker = html2pdf().set({
-              margin: 8,
-              filename: fileName,
-              image: { type: "jpeg", quality: 0.98 },
-              html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-              jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-              pagebreak: { mode: ["css", "legacy"] }
-            }).from(document.getElementById("quotationSheet")).toPdf();
+    if (typeof html2pdf === "undefined") {
+        throw new Error("PDF library could not load");
+    }
 
-            return worker.outputPdf("blob");
-          }
+    const element = document.getElementById("quotationSheet");
+
+    if (!element) {
+        throw new Error("Quotation content not found");
+    }
+
+
+    const options = {
+
+        filename: fileName,
+
+        margin: [
+            8,
+            8,
+            8,
+            8
+        ],
+
+        image: {
+            type: "jpeg",
+            quality: 0.98
+        },
+
+
+        html2canvas: {
+
+            scale: 3,
+
+            useCORS: true,
+
+            allowTaint: true,
+
+            backgroundColor: "#ffffff",
+
+            scrollY: 0
+
+        },
+
+
+        jsPDF: {
+
+            unit: "mm",
+
+            format: "a4",
+
+            orientation: "portrait"
+
+        },
+
+
+        pagebreak: {
+
+            mode:[
+                "avoid-all",
+                "css",
+                "legacy"
+            ]
+
+        }
+
+    };
+
+
+    return await html2pdf()
+        .set(options)
+        .from(element)
+        .outputPdf("blob");
+
+}
 
           async function downloadPdf() {
             const button = document.getElementById("downloadPdfBtn");
