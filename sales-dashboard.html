@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +10,7 @@
     <meta http-equiv="Expires" content="0" />
     <script>
         // Change this value whenever a new version is deployed.
-        const PETRO_APP_VERSION = "2026.08.24.3";
+        const PETRO_APP_VERSION = "2026.09.12.1";
         (async function clearOldAppCache() {
             const savedVersion = localStorage.getItem("petro_app_version");
             if (savedVersion === PETRO_APP_VERSION) return;
@@ -45,7 +46,7 @@
     <!-- Firebase SDK (Remove async) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="sales-dashboard.css?v=2026.08.24.3">
+    <link rel="stylesheet" href="sales-dashboard.css?v=2026.09.12.1">
     <link rel="stylesheet" href="/css/style.css?v=2026.07.11.3">
 
     <link href="vendor/bootstrap/css/bootstrap.min.css?v=2026.07.11.3" rel="stylesheet" />
@@ -134,7 +135,7 @@
                         <a class="dropdown-item" href="index.html">
                             <i class="fa fa-user mr-2"></i> Home
                         </a>
-                        <a class="dropdown-item" style="color: red;" href="sales-login.html">
+                        <a class="dropdown-item" style="color: red;" href="#" id="salesLogoutBtn">
                             <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
                         </a>
                     </div>
@@ -269,6 +270,13 @@
                     <thead>
 
                         <tr>
+                              <th>
+
+                                <i class="fa fa-file-lines"></i>
+
+                               Sno
+
+                            </th>
 
                             <th>
 
@@ -384,7 +392,7 @@
 
     <!-- Import Firebase configuration and JavaScript file -->
     <script src="../firebaseconfig.js?v=2026.07.11.3"></script>
-    <script src="sales-dashboard.js?v=2026.08.24.3"></script>
+    <script src="sales-dashboard.js?v=2026.09.12.1"></script>
 
     <script>
 

@@ -23,13 +23,13 @@
 
 (() => {
   const CONFIG = Object.freeze({
-    APP_VERSION: "2026.08.24.3",
+    APP_VERSION: "2026.09.12.1",
 
     // Replace this with the latest deployed Apps Script /exec URL.
     DRIVE_UPLOAD_URL:
       "https://script.google.com/macros/s/AKfycbyvLw_BrRXcDI7lRsVE3gZZa11z_km1F1g_pk7pytl4Tl1IT2wEqxsjiVBorW-cBf1D/exec",
 
-    SESSION_TIME_MS: 24 * 60 * 60 * 1000,
+    SESSION_TIME_MS: 48 * 60 * 60 * 1000,
     MAX_BILL_FILE_SIZE: 5 * 1024 * 1024,
     DRIVE_UPLOAD_TIMEOUT_MS: 90 * 1000,
     ORDERS_FETCH_LIMIT: 1000,
@@ -150,6 +150,7 @@
   function resolveSalesmanPrefix(salesman) {
     return (
       localStorage.getItem("salesmanPrefix") ||
+      localStorage.getItem("prefix") ||
       CONFIG.SALESMAN_PREFIX[salesman] ||
       ""
     ).trim();
@@ -160,7 +161,9 @@
       "loggedSalesman",
       "salesman",
       "salesmanPrefix",
+      "prefix",
       "loginTime",
+      "sessionExpiresAt",
       "user_name",
       "user_role"
     ].forEach((key) => localStorage.removeItem(key));
@@ -296,7 +299,10 @@
       return false;
     }
 
-    if (Date.now() - loginTime > CONFIG.SESSION_TIME_MS) {
+    const storedExpiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
+    const expiresAt = storedExpiresAt || (loginTime + CONFIG.SESSION_TIME_MS);
+
+    if (!Number.isFinite(expiresAt) || Date.now() >= expiresAt) {
       clearLoginSession();
       redirectToLogin("Your session has expired. Please login again.");
       return false;
@@ -314,6 +320,11 @@
 
     state.salesman = salesman;
     state.prefix = prefix;
+
+    // Keep both historical prefix keys in sync.
+    localStorage.setItem("prefix", prefix);
+    localStorage.setItem("salesmanPrefix", prefix);
+    localStorage.setItem("sessionExpiresAt", String(expiresAt));
 
     const adminName = $("adminName");
     const welcome = $("welcome");
@@ -2310,7 +2321,18 @@ padding:5px;
   /* Events                                                                      */
   /* -------------------------------------------------------------------------- */
 
+  function logoutSalesUser() {
+    clearLoginSession();
+    localStorage.removeItem("admin");
+    window.location.replace("sales-login.html");
+  }
+
   function bindGlobalEvents() {
+    $("salesLogoutBtn")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      logoutSalesUser();
+    });
+
     document.addEventListener("input", (event) => {
       const target = event.target;
 

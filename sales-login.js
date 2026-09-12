@@ -1,184 +1,194 @@
+"use strict";
 
+const SESSION_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 
-document.getElementById("passwordModal").onclick = function (e) {
-    if (e.target === this) this.style.display = "none";
-}
-
-
-const SALESMAN_PREFIX = {
-    "Sariya Murtuza": "SM", 
+const SALESMAN_PREFIX = Object.freeze({
+    "Sariya Murtuza": "SM",
     "Rup Ranjan Bora": "RRB",
     "Ankit Kalra": "AK",
     "Amit Soni": "AS",
-    "Vivek Srivastava": "VS",  
-    "Prince Gupta" : "PG"
-};
+    "Vivek Srivastava": "VS",
+    "Prince Gupta": "PG"
+});
 
-// ⭐ Salesman-wise passwords
-const SALESMAN_PASSWORDS = {
-    "Sariya Murtuza": "sariya123", 
+const SALESMAN_PASSWORDS = Object.freeze({
+    "Sariya Murtuza": "sariya123",
     "Ankit Kalra": "ankit123",
     "Amit Soni": "amit123",
     "Vivek Srivastava": "vivek123",
-    "Rup Ranjan Bora": "rup123", 
-    "Prince Gupta" : "prince123"
-    
-};
+    "Rup Ranjan Bora": "rup123",
+    "Prince Gupta": "prince123"
+});
+
+function clearSalesSession() {
+    [
+        "user_role",
+        "user_name",
+        "salesman",
+        "loggedSalesman",
+        "prefix",
+        "salesmanPrefix",
+        "loginTime",
+        "sessionExpiresAt"
+    ].forEach((key) => localStorage.removeItem(key));
+}
+
+function checkExistingSession() {
+    const role = (localStorage.getItem("user_role") || "").trim();
+    const name = (
+        localStorage.getItem("loggedSalesman") ||
+        localStorage.getItem("salesman") ||
+        ""
+    ).trim();
+
+    const loginTime = Number(localStorage.getItem("loginTime") || 0);
+    const storedExpiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
+    const calculatedExpiresAt = loginTime ? loginTime + SESSION_DURATION : 0;
+    const expiresAt = storedExpiresAt || calculatedExpiresAt;
+
+    if (!role || !name || !loginTime || !expiresAt) return;
+
+    const validAccount =
+        role === "sales" &&
+        Object.prototype.hasOwnProperty.call(SALESMAN_PREFIX, name);
+
+    if (!validAccount || Date.now() >= expiresAt) {
+        clearSalesSession();
+        return;
+    }
+
+    // Keep old/new prefix storage keys synchronized for dashboard compatibility.
+    localStorage.setItem("prefix", SALESMAN_PREFIX[name]);
+    localStorage.setItem("salesmanPrefix", SALESMAN_PREFIX[name]);
+
+    window.location.replace("sales-dashboard.html");
+}
 
 function openPasswordModal() {
+    const salesman = document.getElementById("salesman");
+    const passwordField = document.getElementById("passwordField");
+    const errorMsg = document.getElementById("errorMsg");
+    const passwordModal = document.getElementById("passwordModal");
 
-    let name = document.getElementById("salesman").value.trim();
+    if (!salesman || !passwordField || !errorMsg || !passwordModal) return;
+
+    const name = salesman.value.trim();
 
     if (!name) {
         alert("Please select your name");
+        salesman.focus();
         return;
     }
 
-    document.getElementById("passwordField").value = "";
-    document.getElementById("errorMsg").style.display = "none";
-    document.getElementById("passwordModal").style.display = "flex";
+    passwordField.value = "";
+    errorMsg.textContent = "";
+    errorMsg.style.display = "none";
+    passwordModal.style.display = "flex";
+
+    setTimeout(() => passwordField.focus(), 100);
 }
 
 function verifyPassword() {
+    const salesman = document.getElementById("salesman");
+    const passwordField = document.getElementById("passwordField");
+    const errorMsg = document.getElementById("errorMsg");
 
-    let name =
-        document.getElementById("salesman").value.trim();
+    if (!salesman || !passwordField || !errorMsg) return;
 
-    let password =
-        document.getElementById("passwordField").value.trim();
+    const name = salesman.value.trim();
+    const password = passwordField.value;
 
-    const errorMsg =
-        document.getElementById("errorMsg");
-
-    // ✅ User account created hai ya nahi
-
-    if (!SALESMAN_PASSWORDS[name]) {
-
-        errorMsg.innerHTML =
-            "🔒 Your account is not activated yet. Contact Admin Team.";
-
-        errorMsg.style.display =
-            "block";
-
+    if (!name) {
+        closeModal();
+        alert("Please select your name");
+        salesman.focus();
         return;
     }
 
-    // ✅ Password Check
+    if (!Object.prototype.hasOwnProperty.call(SALESMAN_PASSWORDS, name)) {
+        errorMsg.textContent = "🔒 Your account is not activated yet. Contact Admin Team.";
+        errorMsg.style.display = "block";
+        return;
+    }
 
     if (password !== SALESMAN_PASSWORDS[name]) {
-
-        errorMsg.innerHTML =
-            "❌ Incorrect Password";
-
-        errorMsg.style.display =
-            "block";
-
+        errorMsg.textContent = "❌ Incorrect Password";
+        errorMsg.style.display = "block";
+        passwordField.focus();
+        passwordField.select();
         return;
     }
 
-    // ✅ ROLE SET
+    const prefix = SALESMAN_PREFIX[name];
+    if (!prefix) {
+        errorMsg.textContent = "⚠️ Salesman prefix is missing. Contact Admin Team.";
+        errorMsg.style.display = "block";
+        return;
+    }
 
-    localStorage.setItem(
-        "user_role",
-        "sales"
-    );
+    const loginTime = Date.now();
+    const expiresAt = loginTime + SESSION_DURATION;
 
-    localStorage.setItem(
-        "user_name",
-        name
-    );
+    clearSalesSession();
 
-    localStorage.setItem(
-        "salesman",
-        name
-    );
+    localStorage.setItem("user_role", "sales");
+    localStorage.setItem("user_name", name);
+    localStorage.setItem("salesman", name);
+    localStorage.setItem("loggedSalesman", name);
 
-    localStorage.setItem(
-        "loggedSalesman",
-        name
-    );
+    // Save both keys because older dashboard versions may use either one.
+    localStorage.setItem("prefix", prefix);
+    localStorage.setItem("salesmanPrefix", prefix);
 
-    localStorage.setItem(
-        "prefix",
-        SALESMAN_PREFIX[name]
-    );
+    localStorage.setItem("loginTime", String(loginTime));
+    localStorage.setItem("sessionExpiresAt", String(expiresAt));
+    localStorage.removeItem("admin");
 
-    localStorage.setItem(
-        "loginTime",
-        Date.now()
-    );
-
-    localStorage.removeItem(
-        "admin"
-    );
-
-    window.location.href =
-        "/sales-dashboard.html";
+    window.location.replace("sales-dashboard.html");
 }
+
 function togglePassword() {
     const passwordField = document.getElementById("passwordField");
     const icon = document.getElementById("togglePassword");
+    if (!passwordField || !icon) return;
 
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
-    } else {
-        passwordField.type = "password";
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
-    }
+    const show = passwordField.type === "password";
+    passwordField.type = show ? "text" : "password";
+    icon.classList.toggle("fa-eye", !show);
+    icon.classList.toggle("fa-eye-slash", show);
+}
+
+function closeModal() {
+    const modal = document.getElementById("passwordModal");
+    if (modal) modal.style.display = "none";
 }
 
 function goBack() {
     window.location.href = "https://oms.rankchahiye.com/";
 }
-function closeModal() {
-    document.getElementById("passwordModal").style.display = "none";
-}
-// Disable right click
-document.addEventListener("contextmenu", function (e) {
-    e.preventDefault();
+
+document.addEventListener("DOMContentLoaded", () => {
+    checkExistingSession();
+
+    const modal = document.getElementById("passwordModal");
+    const passwordField = document.getElementById("passwordField");
+
+    modal?.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal();
+    });
+
+    passwordField?.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") verifyPassword();
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeModal();
+    });
 });
 
-// Disable common dev shortcut keys
-document.addEventListener("keydown", function (e) {
-    // F12
-    if (e.key === "F12") {
-        e.preventDefault();
-        return false;
-    }
-
-    // Ctrl+Shift+I
-    if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "i")) {
-        e.preventDefault();
-        return false;
-    }
-
-    // Ctrl+Shift+J
-    if (e.ctrlKey && e.shiftKey && (e.key === "J" || e.key === "j")) {
-        e.preventDefault();
-        return false;
-    }
-
-    // Ctrl+Shift+C
-    if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
-        e.preventDefault();
-
-        return false;
-    }
-
-    // Ctrl+U
-    if (e.ctrlKey && (e.key === "U" || e.key === "u")) {
-        e.preventDefault();
-        return false;
-    }
-
-    // Ctrl+S optional
-    if (e.ctrlKey && (e.key === "S" || e.key === "s")) {
-        e.preventDefault();
-        return false;
-    }
-});
-
-
+/*
+ * NOTE:
+ * Right-click / F12 / Ctrl+U blocking is intentionally not used as security.
+ * Browser-side passwords/source code can always be inspected by a user.
+ * Real authentication should be moved to a server/Firebase Auth when possible.
+ */

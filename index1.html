@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -449,6 +451,111 @@
             }
         }
 
+    
+        /* =========================================================
+           POST-SUBMIT ORDER SAVED MODAL
+           Only Cancel + Print
+        ========================================================= */
+        .post-submit-modal {
+            position: relative;
+            width: min(420px, 100%);
+            padding: 28px 24px 22px;
+            text-align: center;
+        }
+
+        .post-submit-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 50%;
+            background: #f2f4f7;
+            color: #667085;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .18s ease;
+        }
+
+        .post-submit-close:hover {
+            background: #e8ecef;
+            color: #172033;
+            transform: rotate(90deg);
+        }
+
+        .post-submit-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            background: #e9f8f4;
+            color: #108282;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .post-submit-modal h3 {
+            margin: 0 0 7px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #172033;
+        }
+
+        .post-submit-modal p {
+            margin: 0;
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .post-submit-actions {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+            margin-top: 20px;
+        }
+
+        .post-submit-actions button {
+            min-height: 44px;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .post-submit-actions .btn-cancel {
+            border: 1px solid #d9dee7;
+            background: #fff;
+            color: #344054;
+        }
+
+        .post-submit-actions .print-action-btn {
+            border: 0;
+            background: #108282 !important;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(16,130,130,.22);
+        }
+
+        @media (max-width: 575.98px) {
+            .post-submit-modal {
+                padding: 24px 16px 18px;
+                border-radius: 16px;
+            }
+
+            .post-submit-actions {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            .post-submit-actions button {
+                min-height: 42px;
+            }
+        }
+
     </style>
 </head>
 
@@ -557,15 +664,37 @@
 
     <!-- ✅ Print Confirmation Modal -->
     <div id="printModal" class="custom-modal-overlay" style="display:none;">
-        <div class="custom-modal">
-            <h3>Order Saved</h3>
-            <p>Do you want to print this order?</p>
+        <div class="custom-modal post-submit-modal">
+            <button type="button"
+                class="post-submit-close"
+                onclick="finishOrderWithoutPrint()"
+                aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
-            <div class="modal-actions">
-                <button class="btn-cancel" onclick="closePrintModal()">Cancel</button>
-                <button class="btn-confirm" onclick="confirmPrint()">Print</button>
+            <div class="post-submit-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <h3>Order Saved</h3>
+            <p>Your order has been saved successfully.</p>
+
+            <div class="modal-actions post-submit-actions">
+                <button type="button"
+                    class="btn-cancel"
+                    onclick="finishOrderWithoutPrint()">
+                    Cancel
+                </button>
+
+                <button type="button"
+                    class="btn-confirm print-action-btn"
+                    onclick="printOrderAndReset()">
+                    <i class="fa-solid fa-print"></i>
+                    Print
+                </button>
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -584,67 +713,76 @@
                 </button>
             </div>
 
-            <div class="petro-row">
-                <div class="petro-col-4">
+            <div class="order-form-grid">
+                <div class="form-field span-2">
                     <label>
                         Salesman Name
-                        <span style="color:red;">*</span>
+                        <span class="required-star">*</span>
                     </label>
-
                     <select id="salesman" required>
                         <option value="">Select Salesman</option>
                         <option>Sariya Murtuza</option>
                         <option>Rup Ranjan Bora</option>
                         <option>Ankit Kalra</option>
                         <option>Vivek Srivastava</option>
-                        <option>Amit Soni</option> 
+                        <option>Amit Soni</option>
                         <option>Prince Gupta</option>
                     </select>
-
-                    <small id="salesmanError" style="
-                        display:none;
-                        color:#dc3545;
-                        font-size:13px;
-                        font-weight:600;
-                        margin-top:5px;">
-                        ● Salesman selection is mandatory
+                    <small id="salesmanError" class="field-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        Salesman selection is mandatory
                     </small>
                 </div>
 
-                <div class="petro-col-4">
-                    <label>Order No.</label>
-                    <input id="orderNo" placeholder="AUTO" readonly>
+                <div class="form-field">
+                    <label>Order No. <span class="required-star">*</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-hashtag"></i>
+                        <input id="orderNo" placeholder="AUTO" readonly required>
+                    </div>
                 </div>
 
-                <div class="petro-col-4">
-                    <label>Date</label>
-                    <input type="date" id="orderDate">
-                </div>
-            </div>
-
-            <div class="petro-row">
-                <div class="petro-col-4">
-                    <label>Party Name</label>
-                    <input id="partyName" placeholder="Party name">
+                <div class="form-field">
+                    <label>Date <span class="required-star">*</span></label>
+                    <input type="date" id="orderDate" required>
                 </div>
 
-                <div class="petro-col-4">
-                    <label>Party Type</label>
-                    <select id="partyType">
-                        <option value="">Select</option>
+                <div class="form-field span-2">
+                    <label>Party Name <span class="required-star">*</span></label>
+                    <input id="partyName" required placeholder="Enter party name">
+                </div>
+
+                <div class="form-field">
+                    <label>Party Type <span class="required-star">*</span></label>
+                    <select id="partyType" required>
+                        <option value="">Select Type</option>
                         <option value="Primary">Primary</option>
                         <option value="Secondary">Secondary</option>
                     </select>
                 </div>
 
-                <div class="petro-col-4">
+                <div class="form-field">
+                    <label>Distributor</label>
+                    <select id="distributor" disabled>
+                        <option value="">Select Salesman First</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
                     <label>City</label>
                     <input id="partyCity" placeholder="Enter city">
                 </div>
-            </div>
 
-            <div class="petro-row">
-                <div class="petro-col-4">
+                <div class="form-field">
+                    <label>Mobile No. <span class="required-star">*</span></label>
+                    <input id="partyMobile" required
+                        maxlength="10"
+                        inputmode="numeric"
+                        pattern="[0-9]{10}"
+                        placeholder="10 digit mobile no.">
+                </div>
+
+                <div class="form-field">
                     <label>Party GST No.</label>
                     <input id="partyGST"
                         placeholder="GSTIN"
@@ -652,30 +790,11 @@
                         maxlength="15">
                 </div>
 
-                <div class="petro-col-4">
-                    <label>Party Mobile No.</label>
-                    <input id="partyMobile"
-                        maxlength="10"
-                        inputmode="numeric"
-                        pattern="[0-9]{10}"
-                        placeholder="10 digit mobile no.">
-                </div>
-
-                <div class="petro-col-4">
-                    <label>Distributor</label>
-                    <select id="distributor" disabled>
-                        <option value="">Select Salesman First</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="petro-row">
-                <div class="petro-col-4">
+                <div class="form-field">
                     <label>Notes</label>
                     <input id="orderNotes" placeholder="Any special instruction">
                 </div>
             </div>
-
         </div>
 
         <div class="petro-card">
@@ -683,8 +802,14 @@
 
             <div class="petro-table-wrapper">
                 <div class="table-header-bar">
-                    <h6>Columns mirror your paper format (Item Serial/Name, Qty, Unit, Rate, Discount).</h6>
-                    <button class="add-icon-btn no-print" onclick="addRow()" title="Add Item">
+                    <div class="product-section-title">
+                        <span class="product-title-icon"><i class="fa-solid fa-box-open"></i></span>
+                        <div>
+                            <h6>Order Products</h6>
+                            <small>Add item code, quantity and pricing details</small>
+                        </div>
+                    </div>
+                    <button class="add-icon-btn no-print" onclick="addProductFromTop()" title="Add Product">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -710,57 +835,81 @@
             <!-- 🔥 CATEGORY DISCOUNT SECTION -->
 
 
-            <div class="petro-totals">
-
-                <!-- 🔥 CATEGORY DISCOUNT (NOW LIKE TOTALS ROWS) -->
-                <div><label><b>Hardware Discount (%)</b></label></div>
-                <div>
-                    <input type="number" id="hardwareDisc" value="0" min="0" max="100"
-                        oninput="applyCategoryDiscount()">
+            <div class="discount-section">
+                <div class="discount-section-head">
+                    <div>
+                        <h6>Discount & Charges</h6>
+                        <p class="discount-helper">Category discounts appear automatically for products in this order.</p>
+                    </div>
                 </div>
 
-                <div><label><b>Bathroom Discount (%)</b></label></div>
-                <div>
-                    <input type="number" id="bathroomDisc" value="0" min="0" max="100"
-                        oninput="applyCategoryDiscount()">
+                <div class="discount-grid">
+                    <div class="discount-field category-discount hardware" data-category-discount="hardware">
+                        <label>Hardware Discount (%)</label>
+                        <div class="discount-input-wrap">
+                            <input type="number" id="hardwareDisc" value="0" min="0" max="100"
+                                oninput="applyCategoryDiscount()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="discount-field category-discount bathroom" data-category-discount="bathroom">
+                        <label>Bathroom Discount (%)</label>
+                        <div class="discount-input-wrap">
+                            <input type="number" id="bathroomDisc" value="0" min="0" max="100"
+                                oninput="applyCategoryDiscount()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="discount-field category-discount ss" data-category-discount="stainlesssteel">
+                        <label>SS Discount (%)</label>
+                        <div class="discount-input-wrap">
+                            <input type="number" id="stainlesssteelDisc" value="0" min="0" max="100"
+                                oninput="applyCategoryDiscount()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="discount-field freight-field">
+                        <label>Freight & Forwarding (₹)</label>
+                        <div class="discount-input-wrap money-input">
+                            <span class="prefix">₹</span>
+                            <input id="freight" type="number" step="0.01" value="0" oninput="recalc()">
+                        </div>
+                    </div>
+
+                    <div class="discount-field special-field">
+                        <label>Special Discount (₹)</label>
+                        <div class="discount-input-wrap money-input">
+                            <span class="prefix">₹</span>
+                            <input id="specialDiscount" type="number" step="0.01" value="0" oninput="recalc()">
+                        </div>
+                    </div>
+
+                    <div class="discount-field gst-field">
+                        <label>GST %</label>
+                        <div class="discount-input-wrap readonly-wrap">
+                            <input id="gstPercent" type="number" value="18" readonly>
+                            <span>%</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- ✅ NEW STAINLESS STEEL -->
-
-                <div>
-
-                    <label>
-                        <b>SS Discount (%)</b>
-                    </label>
-
+                <div class="order-summary-grid">
+                    <div class="summary-card">
+                        <span>Sub-Total</span>
+                        <strong id="subTotal">0.00</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>GST Amount</span>
+                        <strong id="gstAmount">0.00</strong>
+                    </div>
+                    <div class="summary-card grand">
+                        <span>Grand Total</span>
+                        <strong id="grandTotal">0.00</strong>
+                    </div>
                 </div>
-
-                <div>
-
-                    <input type="number" id="stainlesssteelDisc" value="0" min="0" max="100"
-                        oninput="applyCategoryDiscount()">
-
-                </div>
-
-                <!-- normal totals continue -->
-                <div><label>Freight & Forwarding (₹)</label></div>
-                <div><input id="freight" type="number" step="0.01" value="0" oninput="recalc()"></div>
-
-                <div><label>Special Discount (₹)</label></div>
-                <div><input id="specialDiscount" type="number" step="0.01" value="0" oninput="recalc()"></div>
-
-                <div><label>GST %</label></div>
-                <div><input id="gstPercent" type="number" value="18" readonly></div>
-
-                <div><label>Sub-Total (₹)</label></div>
-                <div class="petro-right"><strong id="subTotal">0.00</strong></div>
-
-                <div><label>GST Amount (₹)</label></div>
-                <div class="petro-right"><strong id="gstAmount">0.00</strong></div>
-
-                <div><label>Grand Total (₹)</label></div>
-                <div class="petro-right"><strong id="grandTotal">0.00</strong></div>
-
             </div>
 
 
@@ -822,6 +971,21 @@
                 </button>
             </div>
 
+        </div>
+    </div>
+
+    <!-- PETRO MESSAGE / VALIDATION POPUP -->
+    <div id="petroMessageModal" class="petro-message-overlay" aria-hidden="true">
+        <div class="petro-message-card" role="dialog" aria-modal="true" aria-labelledby="petroMessageTitle">
+            <button type="button" class="petro-message-close" id="petroMessageClose" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="petro-message-icon" id="petroMessageIcon">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h3 id="petroMessageTitle">Please check the form</h3>
+            <p id="petroMessageText">Some information needs your attention.</p>
+            <button type="button" class="petro-message-ok" id="petroMessageOk">Okay</button>
         </div>
     </div>
 
@@ -945,9 +1109,11 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/jquery.appear.js"></script>
     <script src="js/script.js"></script>
-    <script type="module" src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/petro-pdf.js?v=2026.09.12.6"></script>
+    <script type="module" src="js/main.js?v=2026.09.12.6"></script>
     <script type="module" src="js/home-logic.js"></script> 
-    <script src="js/dev.js"></script>
+    <!-- <script src="js/dev.js"></script> -->
 
     <!-- Firebase compat SDK for global subscription/renewal manager -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>

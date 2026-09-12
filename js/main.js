@@ -29,11 +29,71 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
+// Keeps the exact submitted values until PDF/Print/Continue is finished.
+let lastSubmittedOrderForPdf = null;
+window.lastSubmittedOrderForPdf = null;
+
+
+// ================= PETRO MESSAGE / VALIDATION POPUP =================
+let petroMessageFocusTarget = null;
+
+function showPetroMessage(type = "error", title = "Please check the form", message = "Some information needs your attention.", focusTarget = null) {
+    const overlay = document.getElementById("petroMessageModal");
+    const card = overlay?.querySelector(".petro-message-card");
+    const icon = document.getElementById("petroMessageIcon");
+    const titleEl = document.getElementById("petroMessageTitle");
+    const textEl = document.getElementById("petroMessageText");
+
+    if (!overlay || !card || !titleEl || !textEl || !icon) {
+        console.warn(title + ": " + message);
+        if (focusTarget?.focus) focusTarget.focus();
+        return;
+    }
+
+    card.classList.remove("success", "warning", "error");
+    card.classList.add(type);
+
+    const iconMap = {
+        success: "fa-solid fa-circle-check",
+        warning: "fa-solid fa-triangle-exclamation",
+        error: "fa-solid fa-circle-exclamation"
+    };
+    icon.innerHTML = `<i class="${iconMap[type] || iconMap.error}"></i>`;
+    titleEl.textContent = title;
+    textEl.textContent = message;
+    petroMessageFocusTarget = focusTarget || null;
+
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden", "false");
+}
+
+function closePetroMessage() {
+    const overlay = document.getElementById("petroMessageModal");
+    if (!overlay) return;
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden", "true");
+
+    const target = petroMessageFocusTarget;
+    petroMessageFocusTarget = null;
+    setTimeout(() => target?.focus?.(), 70);
+}
+
+window.showPetroMessage = showPetroMessage;
+window.closePetroMessage = closePetroMessage;
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("petroMessageOk")?.addEventListener("click", closePetroMessage);
+    document.getElementById("petroMessageClose")?.addEventListener("click", closePetroMessage);
+    document.getElementById("petroMessageModal")?.addEventListener("click", (e) => {
+        if (e.target?.id === "petroMessageModal") closePetroMessage();
+    });
+});
+
 // Check if the current page is not 'cart-page'
 if (!document.body.classList.contains('main-page')) {
     // This code will run only if the current page is NOT the cart-page page
     if (typeof itemMaster === "undefined") {
-        alert("❌ Item Master not loaded. Please refresh.");
+        setTimeout(() => showPetroMessage("error", "Item Master Not Loaded", "Please refresh the page and try again."), 0);
     }
 }
 
@@ -106,10 +166,11 @@ async function loadAsmDistributorMap() {
 
         asmDistributorMap = await response.json();
 
-        populateDistributorDropdown(salesman?.value || "");
+        refreshDistributorState();
 
     } catch (error) {
         console.warn("Distributor mapping could not be loaded:", error);
+        setTimeout(() => showPetroMessage("warning", "Distributor Mapping Unavailable", "Distributor list could not be loaded. You can still continue with a Primary order."), 0);
 
         distributor.innerHTML =
             '<option value="">Distributor Mapping Not Loaded</option>';
@@ -193,6 +254,31 @@ function autoOrderNo() {
     return `${prefix}-${fyCode}-${day}${month}-${hour}${minute}`;
 }
 
+function refreshDistributorState(selectedValue = "") {
+    if (!distributor) return;
+
+    const type = partyType?.value?.trim() || "";
+    const salesmanName = salesman?.value?.trim() || "";
+
+    // Primary orders do not require a distributor.
+    if (type === "Primary") {
+        distributor.innerHTML = '<option value="">Not Required for Primary</option>';
+        distributor.value = "";
+        distributor.disabled = true;
+        return;
+    }
+
+    // Until Secondary is selected, keep Distributor disabled.
+    if (type !== "Secondary") {
+        distributor.innerHTML = '<option value="">Select Party Type First</option>';
+        distributor.value = "";
+        distributor.disabled = true;
+        return;
+    }
+
+    populateDistributorDropdown(salesmanName, selectedValue);
+}
+
 if (salesman) {
     salesman.addEventListener("change", () => {
 
@@ -204,10 +290,41 @@ if (salesman) {
                 newOrderNo || "Select Salesman to Generate Order No";
         }
 
-        populateDistributorDropdown(salesman.value.trim());
+        refreshDistributorState();
     });
 }
 
+if (partyType) {
+    partyType.addEventListener("change", () => {
+        refreshDistributorState();
+    });
+}
+
+
+
+function refreshProductRowActions() {
+    const body = document.getElementById("tbody");
+    if (!body) return;
+
+    const rows = [...body.querySelectorAll("tr")];
+
+    rows.forEach((row, index) => {
+        const nextBtn = row.querySelector(".next-product-btn");
+        const actions = row.querySelector(".product-row-actions");
+        const isLast = index === rows.length - 1;
+
+        row.classList.toggle("is-last-product-row", isLast);
+
+        if (nextBtn) {
+            nextBtn.style.display = isLast ? "" : "none";
+        }
+
+        if (actions) {
+            actions.classList.toggle("last-row-actions", isLast);
+        }
+    });
+}
+window.refreshProductRowActions = refreshProductRowActions;
 
 window.addRow = function (data = {}) {
     // Ensure tbody exists
@@ -220,19 +337,40 @@ window.addRow = function (data = {}) {
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-        <td class="petro-right"><span class="sr">${idx}</span></td>
-        <td><input class="item-code" placeholder="Item Code" value="${data.code || ''}" oninput="lookupItem(this)"></td>
-        <td><input class="item-name" placeholder="Item Name" value="${data.name || ''}" oninput="lookupItemByName(this)"></td>
-        <td><input class="qty" type="number" min="0" step="1" value="${data.qty || 0}" oninput="recalc()"></td>
-        <td>
+        <td class="petro-right" data-label="Sr"><span class="sr">${idx}</span></td>
+        <td data-label="Item Code"><input class="item-code" placeholder="Item Code" value="${data.code || ''}" oninput="lookupItem(this)"></td>
+        <td data-label="Item Name"><input class="item-name" placeholder="Item Name" value="${data.name || ''}" oninput="lookupItemByName(this)"></td>
+        <td data-label="Qty" class="qty-cell">
+            <div class="qty-stepper">
+                <button type="button" class="qty-btn qty-minus" onclick="adjustQty(this,-1)" aria-label="Decrease quantity">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <input class="qty" type="number" min="1" step="1" inputmode="numeric"
+                    placeholder="Qty" value="${Number(data.qty) > 0 ? data.qty : ''}"
+                    oninput="normalizeQtyInput(this); recalc()">
+                <button type="button" class="qty-btn qty-plus" onclick="adjustQty(this,1)" aria-label="Increase quantity">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+        </td>
+        <td data-label="Unit">
             <select class="unit" onchange="updateRateOnUnitChange(this.closest('tr'))">
                 <!-- Dynamically populate unit options here -->
             </select>
         </td>
-        <td><input class="rate" type="number" min="0" step="0.01" value="${data.rate || 0}" oninput="recalc()" readonly></td> 
-        <td class="petro-right"><strong class="amt">0.00</strong></td>
-        <td class="no-print">
-            <button class="petro-btn warn" onclick="removeRow(this)">Remove</button>
+        <td data-label="Rate"><input class="rate" type="number" min="0" step="0.01" value="${data.rate || 0}" oninput="recalc()" readonly></td> 
+        <td class="petro-right" data-label="Amount"><strong class="amt">0.00</strong></td>
+        <td class="no-print" data-label="Action">
+            <div class="product-row-actions">
+                <button type="button" class="row-action-btn remove-product-btn" onclick="removeRow(this)">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>Remove</span>
+                </button>
+                <button type="button" class="row-action-btn next-product-btn" onclick="addNextProduct(this)">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Add Next Product</span>
+                </button>
+            </div>
         </td>
     `;
 
@@ -255,9 +393,79 @@ window.addRow = function (data = {}) {
     }
 
     tbody.appendChild(tr);
+    refreshProductRowActions();
     recalc();
+    return tr;
 }
 
+
+window.addProductFromTop = function () {
+    const body = document.getElementById("tbody");
+    if (!body) return;
+
+    const rows = [...body.querySelectorAll("tr")];
+
+    if (!rows.length) {
+        const row = addRow();
+        row?.querySelector(".item-code")?.focus();
+        return;
+    }
+
+    const lastRow = rows[rows.length - 1];
+    const nextBtn = lastRow.querySelector(".next-product-btn");
+
+    if (nextBtn) {
+        addNextProduct(nextBtn);
+    }
+};
+
+window.addNextProduct = function (btn) {
+    const currentRow = btn?.closest("tr");
+    const body = document.getElementById("tbody");
+    if (!currentRow || !body) return;
+
+    const rows = [...body.querySelectorAll("tr")];
+    if (currentRow !== rows[rows.length - 1]) {
+        refreshProductRowActions();
+        return;
+    }
+
+    const codeInput = currentRow.querySelector(".item-code");
+    const qtyInput = currentRow.querySelector(".qty");
+    const code = codeInput?.value?.trim() || "";
+    const qty = +(qtyInput?.value || 0);
+
+    if (!code) {
+        showPetroMessage(
+            "warning",
+            "Item Code Required",
+            "Please select or enter the current product before adding the next product.",
+            codeInput
+        );
+        return;
+    }
+
+    if (qty <= 0) {
+        showPetroMessage(
+            "warning",
+            "Quantity Required",
+            "Please enter a quantity greater than 0 before adding the next product.",
+            qtyInput
+        );
+        return;
+    }
+
+    const newRow = addRow();
+    if (!newRow) return;
+
+    refreshProductRowActions();
+
+    requestAnimationFrame(() => {
+        const newCodeInput = newRow.querySelector(".item-code");
+        newRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        setTimeout(() => newCodeInput?.focus(), 220);
+    });
+};
 
 
 // Ensure autoSave runs after checking if tbody exists
@@ -277,6 +485,29 @@ window.autoSave = function () {
     // console.log("Updated");
 }
 
+
+window.adjustQty = function (btn, delta) {
+    const wrap = btn.closest(".qty-stepper");
+    const input = wrap?.querySelector(".qty");
+    if (!input) return;
+
+    const current = parseInt(input.value, 10) || 0;
+    const next = Math.max(0, current + delta);
+
+    // Keep the field visually clean: zero becomes blank.
+    input.value = next > 0 ? String(next) : "";
+    recalc();
+};
+
+window.normalizeQtyInput = function (input) {
+    if (!input) return;
+    let value = String(input.value || "").replace(/[^0-9]/g, "");
+    if (!value || Number(value) <= 0) {
+        input.value = "";
+        return;
+    }
+    input.value = String(parseInt(value, 10));
+};
 
 window.updateRateOnUnitChange = function (tr) {
     const code = tr.querySelector(".item-code").value.trim().toUpperCase();
@@ -475,10 +706,68 @@ if (document.getElementById("tbody")) {
 
 
 window.removeRow = function (btn) {
-    btn.closest('tr').remove();
-    [...tbody.querySelectorAll('.sr')].forEach((el, i) => el.textContent = i + 1);
-    recalc();
+    const row = btn?.closest("tr");
+    const body = document.getElementById("tbody");
+    if (!row || !body) return;
+
+    row.classList.add("product-row-removing");
+
+    setTimeout(() => {
+        row.remove();
+
+        if (body.children.length === 0) {
+            addRow();
+        }
+
+        [...body.querySelectorAll(".sr")].forEach((el, i) => {
+            el.textContent = i + 1;
+        });
+
+        refreshProductRowActions();
+        recalc();
+    }, 130);
 }
+
+
+function getNormalizedItemCategory(code) {
+    const raw = String(itemMaster?.[code]?.category || "").toLowerCase().replace(/[\s_-]+/g, "");
+    if (!raw) return "";
+    if (raw.includes("hardware")) return "hardware";
+    if (raw.includes("bathroom")) return "bathroom";
+    if (raw.includes("stainlesssteel") || raw === "ss" || raw.includes("stainless")) return "stainlesssteel";
+    return "";
+}
+
+function updateVisibleCategoryDiscounts() {
+    const body = document.getElementById("tbody");
+    const active = new Set();
+
+    if (body) {
+        body.querySelectorAll("tr").forEach(tr => {
+            const code = tr.querySelector(".item-code")?.value?.trim().toUpperCase() || "";
+            if (!code) return;
+            const cat = getNormalizedItemCategory(code);
+            if (cat) active.add(cat);
+        });
+    }
+
+    const configs = [
+        ["hardware", "hardwareDisc"],
+        ["bathroom", "bathroomDisc"],
+        ["stainlesssteel", "stainlesssteelDisc"]
+    ];
+
+    configs.forEach(([category, inputId]) => {
+        const card = document.querySelector(`[data-category-discount="${category}"]`);
+        const input = document.getElementById(inputId);
+        const visible = active.has(category);
+
+        if (card) card.classList.toggle("is-hidden", !visible);
+        if (!visible && input && input.value !== "0") input.value = 0;
+    });
+}
+
+window.updateVisibleCategoryDiscounts = updateVisibleCategoryDiscounts;
 
 function getCategoryDiscByCode(code) {
 
@@ -551,8 +840,14 @@ window.submitTableOrder = async function () {
         salesmanError.style.display =
             "block";
 
-        salesman.focus();
+        showPetroMessage("error", "Salesman Required", "Please select a salesman before creating the order.", salesman);
 
+        return;
+    }
+
+    // ✅ DATE VALIDATION
+    if (!orderDate.value) {
+        showPetroMessage("error", "Date Required", "Please select an order date.", orderDate);
         return;
     }
 
@@ -565,11 +860,7 @@ window.submitTableOrder = async function () {
 
     if (orderDate.value > today) {
 
-        alert(
-            "❌ Future Date Not Allowed"
-        );
-
-        orderDate.focus();
+        showPetroMessage("warning", "Future Date Not Allowed", "Please select today or an earlier date.", orderDate);
 
         return;
     }
@@ -577,9 +868,7 @@ window.submitTableOrder = async function () {
 
     if (!orderNo.value.trim()) {
 
-        alert("❌ Order Number Required");
-
-        orderNo.focus();
+        showPetroMessage("error", "Order Number Required", "Please select a salesman so the order number can be generated.", salesman);
 
         return;
     }
@@ -588,9 +877,7 @@ window.submitTableOrder = async function () {
 
     if (!partyName.value.trim()) {
 
-        alert("❌ Party Name Required");
-
-        partyName.focus();
+        showPetroMessage("error", "Party Name Required", "Please enter the party name before submitting the order.", partyName);
 
         return;
     }
@@ -599,9 +886,7 @@ window.submitTableOrder = async function () {
 
     if (!partyType.value.trim()) {
 
-        alert("❌ Please Select Party Type");
-
-        partyType.focus();
+        showPetroMessage("error", "Party Type Required", "Please select Primary or Secondary.", partyType);
 
         return;
     }
@@ -610,18 +895,14 @@ window.submitTableOrder = async function () {
 
     if (!partyMobile.value.trim()) {
 
-        alert("❌ Party Mobile Number Required");
-
-        partyMobile.focus();
+        showPetroMessage("error", "Mobile Number Required", "Please enter the party mobile number.", partyMobile);
 
         return;
     }
 
     if (!/^[0-9]{10}$/.test(partyMobile.value.trim())) {
 
-        alert("❌ Mobile Number Must Be 10 Digits");
-
-        partyMobile.focus();
+        showPetroMessage("error", "Invalid Mobile Number", "Mobile number must contain exactly 10 digits.", partyMobile);
 
         return;
     }
@@ -640,11 +921,16 @@ window.submitTableOrder = async function () {
         );
 
         if (validItems.length === 0) {
-            alert("❌ Please add at least one valid item");
+            showPetroMessage("error", "Add a Product", "Please add at least one valid product with quantity greater than 0.");
             return;
         }
 
         order.items = validItems;
+
+        // Snapshot BEFORE reset so PDF always receives the full submitted order.
+        lastSubmittedOrderForPdf = JSON.parse(JSON.stringify(order));
+        window.lastSubmittedOrderForPdf = lastSubmittedOrderForPdf;
+        lastSubmittedOrderForPdf.status = lastSubmittedOrderForPdf.status || "Pending";
 
         await addDoc(
             collection(db, "orders"),
@@ -662,9 +948,9 @@ window.submitTableOrder = async function () {
 
             successPopup.style.display = "none";
 
-            // Keep the submitted order visible for printing.
-            // resetOrderFormAfterSubmit() should be called by print/cancel flow if needed.
-            openPrintModal();
+            // Keep the submitted order visible until the user chooses Print or Continue.
+            // The form resets immediately after that choice.
+            showPostSubmitPrintModal();
 
         }, 2200);
 
@@ -675,7 +961,7 @@ window.submitTableOrder = async function () {
 
         console.error(error);
 
-        alert("Error saving order");
+        showPetroMessage("error", "Order Could Not Be Saved", error?.message || "Please check your internet connection and try again.");
 
     }
 
@@ -707,7 +993,7 @@ function resetOrderFormAfterSubmit() {
     partyMobile.value = "";
     if (distributor) {
         distributor.value = "";
-        populateDistributorDropdown("");
+        refreshDistributorState();
     }
     orderNotes.value = "";
 
@@ -765,7 +1051,7 @@ window.submitCartOrder = async function () {
             )
         ) {
 
-            alert("Please add at least one valid item");
+            showPetroMessage("error", "Add a Product", "Please add at least one valid product with quantity greater than 0.");
 
             btn.disabled = false;
 
@@ -797,7 +1083,7 @@ window.submitCartOrder = async function () {
 
         }
 
-        alert("Products saved");
+        showPetroMessage("success", "Products Saved", "Products were saved successfully.");
 
         localStorage.removeItem("cart");
 
@@ -811,7 +1097,7 @@ window.submitCartOrder = async function () {
 
         console.error(error);
 
-        alert("Error saving products");
+        showPetroMessage("error", "Products Could Not Be Saved", error?.message || "Please try again.");
 
         btn.disabled = false;
 
@@ -826,6 +1112,8 @@ window.applyCategoryDiscount = function () {
 }
 
 window.recalc = function () {
+
+    updateVisibleCategoryDiscounts();
 
     let inclusiveTotal = 0;
 
@@ -1033,7 +1321,7 @@ function collectData() {
 
 window.saveDraft = function () {
     localStorage.setItem('petro_order_draft', JSON.stringify(collectData()));
-    alert('✅ Draft saved locally.');
+    showPetroMessage("success", "Draft Saved", "Your order draft has been saved on this device.");
 }
 
 
@@ -1082,8 +1370,7 @@ function loadDraftFromStorage(storageKey = "petro_order_draft") {
     stainlesssteelDisc.value =
         d.categoryDiscounts?.stainlesssteel || 0;
 
-    populateDistributorDropdown(
-        d.salesman || "",
+    refreshDistributorState(
         d.party?.distributor ||
         d.party?.transport ||
         ""
@@ -1097,6 +1384,7 @@ function loadDraftFromStorage(storageKey = "petro_order_draft") {
         addRow();
     }
 
+    refreshProductRowActions();
     recalc();
 
     return true;
@@ -1160,7 +1448,7 @@ window.confirmNewOrder = function () {
     partyMobile.value = "";
     orderNotes.value = "";
 
-    populateDistributorDropdown("");
+    refreshDistributorState();
 
     document.getElementById("hardwareDisc").value = 0;
     document.getElementById("bathroomDisc").value = 0;
@@ -1201,6 +1489,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
         closeNewOrderModal();
+        closePetroMessage();
     }
 });
 
@@ -1294,9 +1583,102 @@ document.addEventListener("change", () => {
 
         if (!manualDraftLoaded) {
             addRow();
-            populateDistributorDropdown("");
+            refreshDistributorState();
         }
     }
 
 })();
 
+
+
+// Close the saved-order modal when the user taps outside it.
+document.addEventListener("click", (event) => {
+    if (event.target?.id === "printModal") {
+        finishOrderWithoutPrint();
+    }
+});
+
+// =========================================================
+// POST-SUBMIT PDF / PRINT + GUARANTEED FORM RESET
+// =========================================================
+// The exact submitted data stays in lastSubmittedOrderForPdf.
+// Reset happens only after Continue / Download / Print action.
+
+window.showPostSubmitPrintModal = function () {
+    const modal = document.getElementById("printModal");
+
+    if (!modal) {
+        resetOrderFormAfterSubmit();
+        lastSubmittedOrderForPdf = null;
+        return;
+    }
+
+    modal.style.display = "flex";
+};
+
+window.finishOrderWithoutPrint = function () {
+    const modal = document.getElementById("printModal");
+    if (modal) modal.style.display = "none";
+
+    resetOrderFormAfterSubmit();
+
+    lastSubmittedOrderForPdf = null;
+    window.lastSubmittedOrderForPdf = null;
+};
+
+window.printOrderAndReset = function () {
+    const modal = document.getElementById("printModal");
+
+    if (!lastSubmittedOrderForPdf) {
+        showPetroMessage("error", "Print Data Missing", "Submitted order data is no longer available.");
+        return;
+    }
+
+    if (!window.PetroPDF) {
+        showPetroMessage("error", "PDF Tool Not Loaded", "Please refresh the page and try again.");
+        return;
+    }
+
+    try {
+        // Open the SAME approved quotation design for printing.
+        window.PetroPDF.preview(lastSubmittedOrderForPdf, {
+            logoUrl: new URL("images/logo.webp", window.location.href).href,
+            autoPrint: true
+        });
+
+        if (modal) modal.style.display = "none";
+
+        // The print preview already has its own copy of the order.
+        // It is now safe to reset the create-order form.
+        resetOrderFormAfterSubmit();
+        lastSubmittedOrderForPdf = null;
+        window.lastSubmittedOrderForPdf = null;
+    } catch (error) {
+        console.error(error);
+        showPetroMessage("error", "Print Preview Could Not Open", error?.message || "Please allow pop-ups and try again.");
+    }
+};
+
+
+window.testPetroPdf = function () {
+
+    if (!window.lastSubmittedOrderForPdf) {
+        alert("Pehle ek order submit karo.");
+        return;
+    }
+
+    if (!window.PetroPDF) {
+        alert("Petro PDF module load nahi hua.");
+        return;
+    }
+
+    window.PetroPDF.preview(
+        window.lastSubmittedOrderForPdf,
+        {
+            logoUrl: new URL(
+                "images/logo.webp",
+                window.location.href
+            ).href
+        }
+    );
+};

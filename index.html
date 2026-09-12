@@ -1,925 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PETRO ERP | Sales, CRM & OMS</title>
-    <!-- SEO / PWA Meta -->
-    <meta name="description"
-        content="PETRO ERP is a complete business management platform for Sales, CRM, Orders, Dispatch, QC, Packing, Customer Visits, Reports and Team Operations.">
-    <meta name="robots" content="noindex,nofollow,noarchive">
-    <meta name="theme-color" content="#108082">
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/images/petro-erp.png">
-    <link rel="apple-touch-icon" href="/images/petro-erp.png">
-
-    <!-- iOS PWA -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="PETRO ERP">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        :root {
-            --bg: #f7f8fc;
-            --card: #ffffff;
-            --text: #222;
-            --muted: #777;
-            --primary: #00897b;
-        }
-
-        body.dark-mode {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f1f5f9;
-            --muted: #94a3b8;
-            --primary: #00bfa6;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .container {
-            max-width: 480px;
-            margin: auto;
-            min-height: 100vh;
-        }
-
-        /* ========================
-   HEADER
-======================== */
-
-        .header {
-            background: #fff;
-            padding: 15px 15px 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            height: 40px;
-        }
-
-        .right-icons {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f5f6fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            transition: .2s;
-            border: 1.5px solid transparent;
-        }
-
-        .icon-btn:hover {
-            background: #e8f5e9;
-            border-color: #00897b;
-        }
-
-        /* ========================
-   DROPDOWN
-======================== */
-
-        .dropdown-wrap {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: 48px;
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.13);
-            border: 1px solid #e8f5e9;
-            min-width: 190px;
-            overflow: hidden;
-            display: none;
-            z-index: 9999;
-            animation: dropIn .18s ease;
-        }
-
-        .dropdown-menu.open {
-            display: block;
-        }
-
-        @keyframes dropIn {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .drop-header {
-            padding: 12px 16px 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .drop-header p {
-            font-size: 11px;
-            color: #aaa;
-            margin: 0;
-        }
-
-        .drop-header h4 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #222;
-            margin: 2px 0 0;
-        }
-
-        .drop-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: .15s;
-            text-decoration: none;
-        }
-
-        .drop-item:hover {
-            background: #f4fbf7;
-        }
-
-        .drop-item:active {
-            background: #e0f5ec;
-        }
-
-        .drop-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .drop-item.admin .drop-icon {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .drop-item.sales .drop-icon {
-            background: #e8f5e9;
-            color: #00897b;
-        }
-
-        .drop-info {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .drop-info strong {
-            font-size: 13px;
-            font-weight: 600;
-            color: #222;
-        }
-
-        .drop-info span {
-            font-size: 10px;
-            color: #aaa;
-            margin-top: 1px;
-        }
-
-        .drop-divider {
-            height: 1px;
-            background: #f5f5f5;
-            margin: 0 12px;
-        }
-
-        .drop-check {
-            font-size: 15px;
-            color: #00897b;
-            display: none;
-        }
-
-        .drop-item.active-role .drop-check {
-            display: block;
-        }
-
-        .drop-item.active-role .drop-info strong {
-            color: #00897b;
-        }
-
-        /* ========================
-   BANNER
-======================== */
-
-        .banner {
-            margin: 15px;
-            border-radius: 18px;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--primary), #00695c);
-            color: white;
-            position: relative;
-            min-height: 170px;
-            padding: 20px;
-        }
-
-        .banner-content {
-            width: 55%;
-        }
-
-        .banner h2 {
-            font-size: 18px;
-            line-height: 28px;
-        }
-
-        .banner h1 {
-            font-size: 34px;
-            font-weight: 700;
-        }
-
-        .banner p {
-            margin-top: 10px;
-            font-size: 13px;
-            opacity: .9;
-        }
-
-        .banner img {
-            position: absolute;
-            right: 1px;
-            bottom: 2px;
-            width: 170px;
-        }
-
-        .role-badge {
-            display: inline-block;
-            margin-top: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            padding: 4px 14px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        /* ========================
-   SECTION TITLE
-======================== */
-
-        .section-title {
-            padding: 0 15px;
-            margin-top: 10px;
-        }
-
-        .section-title h3 {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .section-title p {
-            color: #777;
-            font-size: 13px;
-        }
-
-        /* ========================
-   ORDER CARDS
-======================== */
-
-        .cards {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-        }
-
-        .card {
-            flex: 1;
-            background: var(--card);
-            color: var(--text);
-            border-radius: 18px;
-            padding: 12px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
-            cursor: pointer;
-            transition: transform .2s, box-shadow .2s;
-        }
-
-        .card:active {
-            transform: scale(0.97);
-        }
-
-        .card.green {
-            background: #f4fbf7;
-        }
-
-        .card.purple {
-            background: #faf7ff;
-        }
-
-        .card-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            margin: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 28px;
-        }
-
-        .green .card-icon {
-            background: #dff5e8;
-            color: #0a9b56;
-        }
-
-        .purple .card-icon {
-            background: #efe6ff;
-            color: #7a3cff;
-        }
-
-        .card h4 {
-            margin-top: 18px;
-            font-size: 19px;
-            line-height: 30px;
-        }
-
-        .card h4 span {
-            display: block;
-        }
-
-        .green h4 span {
-            color: #0a9b56;
-        }
-
-        .purple h4 span {
-            color: #7a3cff;
-        }
-
-        .card p {
-            margin-top: 12px;
-            color: #666;
-            font-size: 13px;
-        }
-
-        .arrow-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            margin: 20px auto 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 18px;
-        }
-
-        .green .arrow-btn {
-            background: #00897b;
-        }
-
-        .purple .arrow-btn {
-            background: #7a3cff;
-        }
-
-        /* ========================
-   DARK MODE
-======================== */
-
-        body.dark-mode {
-            background: #0f172a;
-        }
-
-        body.dark-mode .header {
-            background: #1e293b;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        body.dark-mode .icon-btn {
-            background: #334155;
-            color: #e2e8f0;
-        }
-
-        body.dark-mode .icon-btn:hover {
-            background: #475569;
-            border-color: #00897b;
-        }
-
-        body.dark-mode .icon-btn i {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-mode .card {
-            background: #1e293b;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        body.dark-mode .card.green {
-            background: #0f2a1e;
-        }
-
-        body.dark-mode .card.purple {
-            background: #1a0f2e;
-        }
-
-        body.dark-mode .card p {
-            color: #94a3b8;
-        }
-
-        body.dark-mode .section-title h3 {
-            color: #f1f5f9;
-        }
-
-        body.dark-mode .section-title p {
-            color: #64748b;
-        }
-
-        body.dark-mode .dropdown-menu {
-            background: #1e293b;
-            border-color: #334155;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        body.dark-mode .drop-header {
-            border-bottom-color: #334155;
-        }
-
-        body.dark-mode .drop-header h4 {
-            color: #f1f5f9;
-        }
-
-        body.dark-mode .drop-item:hover {
-            background: #273449;
-        }
-
-        body.dark-mode .drop-info strong {
-            color: #f1f5f9;
-        }
-
-        body.dark-mode .drop-divider {
-            background: #334155;
-        }
-
-        .visit-card {
-            margin: 15px;
-            padding: 15px;
-            background: #00897b;
-            color: #fff;
-            border-radius: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            transition: 0.2s;
-        }
-
-        .visit-card:hover {
-            transform: scale(1.02);
-        }
-
-        .visit-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .visit-icon {
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-        }
-
-        .visit-card h3 {
-            font-size: 16px;
-            margin-bottom: 3px;
-        }
-
-        .visit-card p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .visit-action {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .tracker-btn {
-            height: 40px;
-            padding: 0 14px;
-            border-radius: 20px;
-            background: #f5f6fa;
-            border: 1.5px solid transparent;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-
-            text-decoration: none;
-            color: #108082;
-
-            font-size: 12px;
-            font-weight: 600;
-
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tracker-btn i {
-            font-size: 14px;
-        }
-
-        .tracker-btn:hover {
-            background: #e8f5e9;
-            border-color: #108082;
-            transform: translateY(-1px);
-        }
-
-        .tracker-btn:active {
-            transform: scale(0.96);
-        }
-
-        /* Dark Mode */
-        body.dark-mode .tracker-btn {
-            background: #334155;
-            color: #00bfa6;
-        }
-
-        body.dark-mode .tracker-btn:hover {
-            background: #475569;
-            border-color: #00bfa6;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PETRO ERP | Sales, CRM & OMS</title>
+
+  <meta name="description" content="PETRO ERP is a complete business management platform for Sales, CRM, Orders, Dispatch, QC, Packing, Customer Visits, Reports and Team Operations." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="theme-color" content="#0f8f7d" />
+
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/images/petro-erp.png" />
+  <link rel="apple-touch-icon" href="/images/petro-erp.png" />
+
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PETRO ERP" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#f5f8fb;
+      --card:#fff;
+      --text:#0e1630;
+      --muted:#6d7588;
+      --primary:#0b9882;
+      --primary-dark:#087462;
+      --primary-soft:#eaf8f4;
+      --line:#e8edf2;
+      --purple:#7339ff;
+      --purple-soft:#f3edff;
+      --shadow:0 18px 45px rgba(19,42,61,.08);
+      --shadow-sm:0 8px 24px rgba(19,42,61,.07);
+    }
+
+    body.dark-mode{
+      --bg:#0f172a;
+      --card:#172033;
+      --text:#f4f7fb;
+      --muted:#9aa6b8;
+      --primary:#1bc4aa;
+      --primary-dark:#0c8f7a;
+      --primary-soft:#102f2a;
+      --line:#273247;
+      --shadow:0 18px 45px rgba(0,0,0,.28);
+      --shadow-sm:0 8px 24px rgba(0,0,0,.24);
+    }
+
+    html,body{min-height:100%}
+    body{
+      background:
+        radial-gradient(circle at 20% 0%, rgba(11,152,130,.08), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(115,57,255,.06), transparent 24%),
+        var(--bg);
+      color:var(--text);
+      font-family:'Poppins',sans-serif;
+      transition:.25s ease;
+    }
+
+    .app-shell{
+      width:100%;
+      max-width:520px;
+      margin:0 auto;
+      min-height:100vh;
+      padding-bottom:28px;
+    }
+
+    /* HEADER */
+    .header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(224,229,235,.8);
+    }
+
+    body.dark-mode .header{
+      background:rgba(23,32,51,.92);
+      border-bottom-color:#273247;
+    }
+
+    .topbar{
+      height:76px;
+      padding:0 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .brand-link{display:flex;align-items:center}
+    .logo{
+      height:42px;
+      width:auto;
+      object-fit:contain;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .tracker-btn{
+      height:42px;
+      padding:0 15px;
+      border-radius:22px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none;
+      font-size:12px;
+      font-weight:700;
+      color:var(--primary-dark);
+      background:linear-gradient(180deg,#ffffff,#f2f7f7);
+      border:1px solid #e6eeee;
+      box-shadow:0 5px 16px rgba(22,65,63,.07);
+    }
+
+    body.dark-mode .tracker-btn{
+      background:#223047;
+      color:#39dbc2;
+      border-color:#2d3e59;
+    }
+
+    .circle-btn{
+      width:42px;
+      height:42px;
+      border:0;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f5f7fa;
+      color:#0e2744;
+      font-size:16px;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:inset 0 0 0 1px #edf0f3;
+    }
+
+    .circle-btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(14,39,68,.08)}
+    .circle-btn:active{transform:scale(.96)}
+
+    body.dark-mode .circle-btn{
+      background:#243149;
+      color:#edf4fb;
+      box-shadow:inset 0 0 0 1px #32415b;
+    }
+
+    /* ROLE DROPDOWN */
+    .role-wrap{position:relative}
+
+    .role-menu{
+      position:absolute;
+      top:52px;
+      right:0;
+      width:220px;
+      border-radius:18px;
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:0 20px 50px rgba(18,36,52,.18);
+      overflow:hidden;
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(-8px) scale(.98);
+      transform-origin:top right;
+      transition:.18s ease;
+      z-index:1200;
+    }
+
+    .role-menu.open{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0) scale(1);
+    }
+
+    .role-menu-head{
+      padding:14px 16px 12px;
+      border-bottom:1px solid var(--line);
+    }
+    .role-menu-head span{
+      display:block;
+      font-size:10px;
+      color:var(--muted);
+      margin-bottom:2px;
+    }
+    .role-menu-head strong{
+      font-size:14px;
+      color:var(--text);
+      font-weight:700;
+    }
+
+    .role-option{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 16px;
+      text-decoration:none;
+      color:var(--text);
+      cursor:pointer;
+      transition:.16s ease;
+    }
+    .role-option:hover{background:rgba(11,152,130,.06)}
+    .role-option + .role-option{border-top:1px solid var(--line)}
+
+    .role-ico{
+      width:36px;height:36px;border-radius:11px;
+      display:flex;align-items:center;justify-content:center;
+      flex:0 0 36px;
+    }
+    .role-option.admin .role-ico{background:#e9f3ff;color:#1976d2}
+    .role-option.sales .role-ico{background:#eaf8f4;color:#0b9882}
+
+    .role-label{flex:1;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .role-label span{font-size:13px;font-weight:600}
+    .role-check{opacity:0;color:var(--primary);font-size:13px}
+    .role-option.active .role-check{opacity:1}
+    .role-option.active .role-label span{color:var(--primary)}
+
+    /* CONTENT */
+    .content{padding:14px 14px 0}
+
+    .hero{
+      position:relative;
+      min-height:238px;
+      border-radius:28px;
+      padding:28px 24px 24px;
+      overflow:hidden;
+      color:#fff;
+      background:
+        radial-gradient(circle at 86% 18%, rgba(255,255,255,.15), transparent 23%),
+        linear-gradient(135deg,#0b8f80 0%,#088575 54%,#076f64 100%);
+      box-shadow:0 20px 45px rgba(0,111,95,.18);
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      width:220px;height:220px;
+      border-radius:50%;
+      right:-80px;top:-70px;
+      background:rgba(255,255,255,.06);
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      width:180px;height:180px;
+      border-radius:50%;
+      left:-75px;bottom:-105px;
+      background:rgba(255,255,255,.05);
+    }
+
+    .hero-copy{
+      position:relative;
+      z-index:3;
+      width:56%;
+      min-width:220px;
+    }
+    .hero h1{
+      font-size:31px;
+      line-height:1.12;
+      font-weight:800;
+      letter-spacing:-.7px;
+      margin-bottom:12px;
+    }
+    .hero p{
+      font-size:14px;
+      line-height:1.55;
+      color:rgba(255,255,255,.92);
+      max-width:215px;
+    }
+
+    .role-badge{
+      margin-top:18px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      backdrop-filter:blur(8px);
+    }
+
+    .hero-tag{
+      position:absolute;
+      left:24px;
+      bottom:22px;
+      z-index:3;
+      font-size:9px;
+      letter-spacing:3px;
+      line-height:1.7;
+      color:rgba(255,255,255,.82);
+      text-transform:uppercase;
+    }
+    .hero-tag:before{
+      content:"";
+      display:block;
+      width:38px;height:4px;border-radius:4px;
+      margin-bottom:10px;
+      background:#38e1ca;
+    }
+
+    .hero-product{
+      position:absolute;
+      right:-4px;
+      bottom:0;
+      width:52%;
+      max-width:240px;
+      z-index:2;
+      object-fit:contain;
+      filter:drop-shadow(0 18px 20px rgba(0,0,0,.16));
+    }
+
+    /* SALES VISIT */
+    .visit-card{
+      margin-top:18px;
+      position:relative;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:16px 16px;
+      border-radius:24px;
+      background:linear-gradient(135deg,var(--card) 30%,#f0fbf7 100%);
+      border:1px solid #e7f1ed;
+      box-shadow:var(--shadow-sm);
+      cursor:pointer;
+      overflow:hidden;
+      transition:.2s ease;
+    }
+    .visit-card:hover{transform:translateY(-2px)}
+    body.dark-mode .visit-card{
+      background:linear-gradient(135deg,#172033 35%,#12342f 100%);
+      border-color:#28453f;
+    }
+    .visit-card:after{
+      content:"";
+      position:absolute;
+      width:180px;height:80px;
+      border-radius:50%;
+      right:-65px;bottom:-42px;
+      background:rgba(27,196,170,.09);
+      transform:rotate(-9deg);
+    }
+
+    .visit-icon{
+      width:58px;height:58px;
+      border-radius:18px;
+      display:flex;align-items:center;justify-content:center;
+      flex:0 0 58px;
+      color:#fff;
+      font-size:20px;
+      background:linear-gradient(145deg,#19bca3,#088977);
+      box-shadow:0 10px 24px rgba(11,152,130,.24);
+    }
+    .visit-copy{flex:1;min-width:0;position:relative;z-index:2}
+    .visit-copy h3{font-size:18px;font-weight:700;margin-bottom:3px}
+    .visit-copy p{font-size:11.5px;color:var(--muted);line-height:1.45}
+    .visit-arrow{
+      width:46px;height:46px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      flex:0 0 46px;
+      color:#fff;font-size:17px;
+      background:linear-gradient(145deg,#13aa94,#087c6d);
+      position:relative;z-index:2;
+    }
+
+    /* SECTION */
+    .section-head{
+      margin:30px 2px 14px;
+    }
+    .section-head:before{
+      content:"";
+      display:block;
+      width:44px;height:5px;border-radius:10px;
+      background:#20cbb2;
+      margin-bottom:12px;
+    }
+    .section-head h2{
+      font-size:27px;
+      line-height:1.15;
+      font-weight:800;
+      letter-spacing:-.5px;
+      margin-bottom:6px;
+    }
+    .section-head p{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .order-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .order-card{
+      position:relative;
+      min-height:316px;
+      border-radius:25px;
+      padding:20px 17px;
+      border:1px solid rgba(220,228,235,.8);
+      box-shadow:var(--shadow-sm);
+      overflow:hidden;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+    .order-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+    .order-card:active{transform:scale(.985)}
+
+    .order-card.green{background:linear-gradient(160deg,#f5fffb 0%,#eefbf6 100%)}
+    .order-card.purple{background:linear-gradient(160deg,#fcfaff 0%,#f6f0ff 100%)}
+    body.dark-mode .order-card.green{background:linear-gradient(160deg,#142b27,#12221f);border-color:#25423c}
+    body.dark-mode .order-card.purple{background:linear-gradient(160deg,#251f36,#1d1830);border-color:#3a3150}
+
+    .order-icon{
+      width:68px;height:68px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:26px;
+      margin-bottom:26px;
+    }
+    .green .order-icon{background:#dff7ed;color:#08a866}
+    .purple .order-icon{background:#eadfff;color:#7339ff}
+
+    .order-card h3{
+      font-size:18px;
+      line-height:1.38;
+      font-weight:700;
+      margin-bottom:9px;
+    }
+    .order-card h3 span{display:block;font-size:20px}
+    .green h3 span{color:#08a866}
+    .purple h3 span{color:#7339ff}
+
+    .order-card p{
+      font-size:12px;
+      line-height:1.6;
+      color:var(--muted);
+      min-height:58px;
+    }
+
+    .card-footer{
+      position:absolute;
+      left:17px;right:17px;bottom:18px;
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+    }
+    .get-started{font-size:12px;font-weight:700}
+    .green .get-started{color:#0b8f67}
+    .purple .get-started{color:#7339ff}
+    .mini-arrow{
+      width:46px;height:46px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:17px;
+      box-shadow:0 9px 20px rgba(0,0,0,.12);
+    }
+    .green .mini-arrow{background:linear-gradient(145deg,#14a991,#087b6c)}
+    .purple .mini-arrow{background:linear-gradient(145deg,#8d52ff,#6122f5)}
+
+    .order-card:after{
+      content:"";
+      position:absolute;
+      width:150px;height:82px;
+      border-radius:50%;
+      bottom:-55px;
+      opacity:.8;
+    }
+    .green:after{left:-45px;background:rgba(27,196,170,.10)}
+    .purple:after{right:-40px;background:rgba(115,57,255,.10)}
+
+    .footer-note{
+      margin:28px 8px 0;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      text-align:center;
+      color:#a2aabb;
+      font-size:9px;
+      letter-spacing:2.4px;
+      text-transform:uppercase;
+      line-height:1.8;
+    }
+
+    @media (max-width:430px){
+      .topbar{padding:0 14px}
+      .tracker-btn{padding:0 12px}
+      .content{padding-left:12px;padding-right:12px}
+      .hero{min-height:225px;padding:24px 20px}
+      .hero h1{font-size:27px}
+      .hero-copy{width:58%;min-width:0}
+      .hero-product{width:54%}
+      .hero-tag{left:20px}
+      .order-card{min-height:305px;padding:18px 15px}
+      .order-card h3{font-size:16px}
+      .order-card h3 span{font-size:18px}
+    }
+
+    @media (max-width:355px){
+      .tracker-btn span{display:none}
+      .tracker-btn{width:42px;padding:0;justify-content:center}
+      .hero h1{font-size:24px}
+      .hero p{font-size:12px}
+      .order-grid{gap:10px}
+      .order-card{padding:16px 12px}
+      .section-head h2{font-size:24px}
+    }
+  </style>
 </head>
 
 <body>
+  <div class="app-shell">
 
-    <div class="container">
+    <header class="header">
+      <div class="topbar">
+        <a class="brand-link" href="https://oms.rankchahiye.com/">
+          <img src="/images/logo.webp" class="logo" alt="PETRO ERP">
+        </a>
 
-        <!-- HEADER -->
-        <div class="header">
-            <div class="topbar">
+        <div class="actions">
+          <a href="https://petropointsapp.netlify.app/" class="tracker-btn" title="Open Tracker">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Tracker</span>
+          </a>
 
-                <!-- LOGO (hamburger removed) -->
-                <a href="https://oms.rankchahiye.com/"> <img src="/images/logo.webp" class="logo" alt="Petro ERP"></a>
+          <button class="circle-btn" id="themeBtn" type="button" title="Toggle Theme" aria-label="Toggle theme">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
 
-                <!-- RIGHT ICONS -->
-                <div class="right-icons">
-                    <!-- Tracker Button -->
-                    <a href="https://petropointsapp.netlify.app/" class="tracker-btn" title="Open Tracker">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Tracker</span>
-                    </a>
+          <div class="role-wrap">
+            <button class="circle-btn" id="userBtn" type="button" title="Switch Role" aria-label="Switch role" aria-expanded="false">
+              <i class="fa-regular fa-user" id="userIcon"></i>
+            </button>
 
-                    <!-- Theme Toggle -->
-                    <div class="icon-btn" id="themeBtn" title="Toggle Theme">
-                        <i class="fa-solid fa-sun" id="themeIcon"></i>
-                    </div>
+            <div class="role-menu" id="roleMenu">
+              <div class="role-menu-head">
+                <span>Switch Role</span>
+                <strong id="activeRoleName">Select a role</strong>
+              </div>
 
-                    <!-- User Dropdown -->
-                    <div class="dropdown-wrap">
-                        <div class="icon-btn" id="userBtn" title="Select Role">
-                            <i class="fa-regular fa-user" id="userIcon"></i>
-                        </div>
+              <a href="admin-dashboard.html" class="role-option admin" id="adminItem" data-role="admin">
+                <span class="role-ico"><i class="fa-solid fa-shield-halved"></i></span>
+                <span class="role-label">
+                  <span>Admin</span>
+                  <i class="fa-solid fa-check role-check"></i>
+                </span>
+              </a>
 
-                        <div class="dropdown-menu" id="dropMenu">
-
-                            <div class="drop-header">
-                                <p>Switch Role</p>
-                                <h4 id="activeRoleName">Select a role</h4>
-                            </div>
-
-                            <div class="drop-item admin" id="adminItem" onclick="selectRole('admin')">
-                                <div class="drop-icon">
-                                    <i class="fa-solid fa-shield-halved"></i>
-                                </div>
-                                <a href="admin-dashboard.html">
-                                    <div class="drop-info">
-                                        <strong>Admin</strong>
-                                    </div>
-                                </a>
-                                <i class="fa-solid fa-check drop-check"></i>
-                            </div>
-
-                            <div class="drop-divider"></div>
-
-                            <div class="drop-item sales" id="salesItem" onclick="selectRole('salesman')">
-                                <div class="drop-icon">
-                                    <i class="fa-solid fa-briefcase"></i>
-                                </div>
-                                <a href="sales-dashboard.html">
-                                    <div class="drop-info">
-                                        <strong>Salesman</strong>
-                                    </div>
-                                </a>
-                                <i class="fa-solid fa-check drop-check"></i>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
+              <a href="sales-dashboard.html" class="role-option sales" id="salesItem" data-role="salesman">
+                <span class="role-ico"><i class="fa-solid fa-briefcase"></i></span>
+                <span class="role-label">
+                  <span>Salesman</span>
+                  <i class="fa-solid fa-check role-check"></i>
+                </span>
+              </a>
             </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <section class="hero">
+        <div class="hero-copy">
+          <h1 id="greetText">Good Morning,</h1>
+          <p>Let's take care of your orders today.</p>
+
+          <div class="role-badge" id="roleBadge">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>No Role Selected</span>
+          </div>
         </div>
 
-        <!-- BANNER -->
-        <div class="banner">
-            <div class="banner-content">
-                <h2 id="greetText">Good Morning,</h2>
-                <p>Let's take care of your orders today.</p>
-                <div class="role-badge" id="roleBadge">No Role Selected</div>
-            </div>
-            <img src="images/012.png" alt="Truck">
+        
+        <img src="images/012.png" alt="PETRO Products" class="hero-product">
+      </section>
+
+      <section class="visit-card" id="salesVisitCard">
+        <div class="visit-icon"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="visit-copy">
+          <h3>Sales Visit Form</h3>
+          <p>Record customer visits &amp; meeting details</p>
         </div>
+        <div class="visit-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      </section>
 
-        <!-- =======================
-     SALES VISIT FORM CARD
-======================= -->
-        <div class="visit-card" onclick="openSalesVisit()">
+      <section class="section-head">
+        <h2>CREATE NEW ORDER</h2>
+        <p>Choose how you want to create a new order</p>
+      </section>
 
-            <div class="visit-left">
-                <div class="visit-icon">
-                    <i class="fa-solid fa-briefcase"></i>
-                </div>
+      <section class="order-grid">
+        <article class="order-card green" id="withoutImageBtn">
+          <div class="order-icon">
+            <i class="fa-regular fa-file-lines"></i>
+          </div>
 
-                <div>
-                    <h3>Sales Visit Form</h3>
-                    <p>Record customer visits & meeting details</p>
-                </div>
-            </div>
+          <h3>
+            Order Create
+            <span>Without Image</span>
+          </h3>
 
-            <div class="visit-action">
-                <i class="fa-solid fa-arrow-right"></i>
-            </div>
+          <p>Quick order entry without images</p>
 
-        </div>
+          <div class="card-footer">
+            <span class="get-started">Get Started</span>
+            <span class="mini-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </article>
 
-        <!-- TITLE -->
-        <div class="section-title">
-            <h3>CREATE NEW ORDER</h3>
-            <p>Choose how you want to create a new order</p>
-        </div>
+        <article class="order-card purple" id="withImageBtn">
+          <div class="order-icon">
+            <i class="fa-regular fa-image"></i>
+          </div>
 
-        <!-- CARDS -->
-        <div class="cards">
+          <h3>
+            Order Create
+            <span>With Image</span>
+          </h3>
 
-            <div class="card green" id="withoutImageBtn">
-                <div class="card-icon">
-                    <i class="fa-regular fa-file-lines"></i>
-                </div>
-                <h4>
-                    Order Create
-                    <span>Without Image</span>
-                </h4>
-                <p>Quick order entry without images</p>
-                <div class="arrow-btn">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-            </div>
+          <p>Add product images with your order</p>
 
-            <div class="card purple" id="withImageBtn">
-                <div class="card-icon">
-                    <i class="fa-regular fa-image"></i>
-                </div>
-                <h4>
-                    Order Create
-                    <span>With Image</span>
-                </h4>
-                <p>Add product images with your order</p>
-                <div class="arrow-btn">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-            </div>
+          <div class="card-footer">
+            <span class="get-started">Get Started</span>
+            <span class="mini-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </article>
+      </section>
 
-        </div>
+      <div class="footer-note">
+        PETRO ERP<br>
+        Simple • Smart • Stronger Together
+      </div>
 
-    </div>
+    </main>
+  </div>
 
-    <script>
+  <script>
+    const roleMenu = document.getElementById('roleMenu');
+    const userBtn = document.getElementById('userBtn');
+    const userIcon = document.getElementById('userIcon');
+    const adminItem = document.getElementById('adminItem');
+    const salesItem = document.getElementById('salesItem');
+    const activeRoleName = document.getElementById('activeRoleName');
+    const roleBadge = document.getElementById('roleBadge');
 
-        // =========================
-        // ROLE SELECTION
-        // =========================
+    function updateRoleUI(role) {
+      adminItem.classList.remove('active');
+      salesItem.classList.remove('active');
 
-        function selectRole(role) {
-            localStorage.setItem('erp_role', role);
+      if (role === 'admin') {
+        adminItem.classList.add('active');
+        activeRoleName.textContent = 'Admin';
+        roleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i><span>Admin Mode</span>';
+        userIcon.style.color = '#1976d2';
+      } else if (role === 'salesman') {
+        salesItem.classList.add('active');
+        activeRoleName.textContent = 'Salesman';
+        roleBadge.innerHTML = '<i class="fa-solid fa-briefcase"></i><span>Salesman Mode</span>';
+        userIcon.style.color = '#0b9882';
+      } else {
+        activeRoleName.textContent = 'Select a role';
+        roleBadge.innerHTML = '<i class="fa-solid fa-user-shield"></i><span>No Role Selected</span>';
+        userIcon.style.color = '';
+      }
+    }
 
-            document.querySelectorAll('.drop-item').forEach(i => i.classList.remove('active-role'));
+    function setRole(role) {
+      localStorage.setItem('erp_role', role);
+      updateRoleUI(role);
+      roleMenu.classList.remove('open');
+      userBtn.setAttribute('aria-expanded', 'false');
+    }
 
-            if (role === 'admin') {
-                document.getElementById('adminItem').classList.add('active-role');
-                document.getElementById('activeRoleName').textContent = 'Admin';
-                document.getElementById('roleBadge').textContent = '🛡️ Admin Mode';
-                document.getElementById('userIcon').style.color = '#1565c0';
-            } else {
-                document.getElementById('salesItem').classList.add('active-role');
-                document.getElementById('activeRoleName').textContent = 'Salesman';
-                document.getElementById('roleBadge').textContent = '💼 Salesman Mode';
-                document.getElementById('userIcon').style.color = '#00897b';
-            }
+    // Role button click => dropdown open/close
+    userBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = roleMenu.classList.toggle('open');
+      userBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
 
-            document.getElementById('dropMenu').classList.remove('open');
-        }
+    // Prevent click inside dropdown from closing before role is handled
+    roleMenu.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
 
-        // Init role from localStorage
-        const savedRole = localStorage.getItem('erp_role');
-        if (savedRole) selectRole(savedRole);
+    // Save role first, then allow link navigation
+    adminItem.addEventListener('click', function() {
+      setRole('admin');
+    });
 
-        // =========================
-        // DROPDOWN TOGGLE
-        // =========================
+    salesItem.addEventListener('click', function() {
+      setRole('salesman');
+    });
 
-        document.getElementById('userBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.getElementById('dropMenu').classList.toggle('open');
-        });
+    // Outside click closes dropdown
+    document.addEventListener('click', function() {
+      roleMenu.classList.remove('open');
+      userBtn.setAttribute('aria-expanded', 'false');
+    });
 
-        document.addEventListener('click', () => {
-            document.getElementById('dropMenu').classList.remove('open');
-        });
+    // ESC closes dropdown
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        roleMenu.classList.remove('open');
+        userBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
 
-        // =========================
-        // DARK MODE TOGGLE
-        // =========================
+    // Init role
+    updateRoleUI(localStorage.getItem('erp_role'));
 
-        const themeBtn = document.getElementById('themeBtn');
-        const themeIcon = document.getElementById('themeIcon');
+    // Theme
+    const themeBtn = document.getElementById('themeBtn');
+    const themeIcon = document.getElementById('themeIcon');
 
-        if (localStorage.getItem('erp_theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
-        }
+    function syncThemeIcon() {
+      const isDark = document.body.classList.contains('dark-mode');
+      themeIcon.className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    }
 
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            themeIcon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
-            localStorage.setItem('erp_theme', isDark ? 'dark' : 'light');
-        });
+    if (localStorage.getItem('erp_theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+    syncThemeIcon();
 
-        // =========================
-        // GREETING
-        // =========================
+    themeBtn.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('erp_theme', isDark ? 'dark' : 'light');
+      syncThemeIcon();
+    });
 
-        const hour = new Date().getHours();
-        const greetEl = document.getElementById('greetText');
-        if (hour < 12) greetEl.textContent = 'Good Morning,';
-        else if (hour < 17) greetEl.textContent = 'Good Afternoon,';
-        else greetEl.textContent = 'Good Evening,';
+    // Greeting
+    const hour = new Date().getHours();
+    const greetText = document.getElementById('greetText');
+    if (hour < 12) greetText.textContent = 'Good Morning,';
+    else if (hour < 17) greetText.textContent = 'Good Afternoon,';
+    else greetText.textContent = 'Good Evening,';
 
-        // =========================
-        // USERNAME
-        // =========================
+    // Navigation
+    document.getElementById('salesVisitCard').addEventListener('click', function() {
+      window.location.href = 'https://petro-sales-eod.netlify.app/';
+    });
 
-        const username = localStorage.getItem('username');
-        if (username) {
-            document.getElementById('userName').innerHTML = username + ' 👋';
-        }
+    document.getElementById('withoutImageBtn').addEventListener('click', function() {
+      window.location.href = 'index1.html';
+    });
 
-        // =========================
-        // CARD NAVIGATION
-        // =========================
+    document.getElementById('withImageBtn').addEventListener('click', function() {
+      window.location.href = '/e-commerce/index1.html';
+    });
+  </script>
 
-        document.getElementById('withoutImageBtn').addEventListener('click', () => {
-            window.location.href = 'index1.html';
-        });
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", async function () {
+        try {
+          const registration = await navigator.serviceWorker.register(
+            "/service-worker.js",
+            { updateViaCache: "none" }
+          );
 
-        document.getElementById('withImageBtn').addEventListener('click', () => {
-            window.location.href = '/e-commerce/index1.html';
-        });
+          await registration.update();
 
-        // =========================
-        // CARD TOUCH EFFECT
-        // =========================
+          registration.addEventListener("updatefound", function () {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
 
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('touchstart', () => card.style.transform = 'scale(0.97)');
-            card.addEventListener('touchend', () => card.style.transform = 'scale(1)');
-        });
-
-        // =========================
-        // LOAD ANIMATION
-        // =========================
-
-        window.addEventListener('load', () => {
-            document.querySelectorAll('.card').forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.4s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0px)';
-                }, index * 150);
+            newWorker.addEventListener("statechange", function () {
+              if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                newWorker.postMessage({ type: "SKIP_WAITING" });
+              }
             });
-        });
-        function openSalesVisit() {
-            window.location.href = "https://petro-sales-eod.netlify.app/";
+          });
+
+          navigator.serviceWorker.addEventListener("controllerchange", function () {
+            if (window.__petroReloading) return;
+            window.__petroReloading = true;
+            window.location.reload();
+          });
+
+        } catch (error) {
+          console.error("Service Worker registration failed:", error);
         }
+      });
+    }
+  </script>
 
-    </script>
-
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", async function () {
-                try {
-                    const registration = await navigator.serviceWorker.register(
-                        "/service-worker.js",
-                        {
-                            updateViaCache: "none"
-                        }
-                    );
-
-                    await registration.update();
-
-                    console.log(
-                        "PETRO ERP Service Worker registered:",
-                        registration.scope
-                    );
-
-                    registration.addEventListener("updatefound", function () {
-                        const newWorker = registration.installing;
-
-                        if (!newWorker) return;
-
-                        newWorker.addEventListener("statechange", function () {
-                            if (
-                                newWorker.state === "installed" &&
-                                navigator.serviceWorker.controller
-                            ) {
-                                console.log("New PETRO ERP version available");
-
-                                newWorker.postMessage({
-                                    type: "SKIP_WAITING"
-                                });
-                            }
-                        });
-                    });
-
-                    navigator.serviceWorker.addEventListener(
-                        "controllerchange",
-                        function () {
-                            if (window.__petroReloading) return;
-
-                            window.__petroReloading = true;
-                            window.location.reload();
-                        }
-                    );
-
-                } catch (error) {
-                    console.error(
-                        "Service Worker registration failed:",
-                        error
-                    );
-                }
-            });
-        }
-    </script>
-
-
-    <!-- Firebase compat SDK for global subscription/renewal manager -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <!-- Global OMS Subscription & Renewal Manager -->
-    <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
 </body>
-
 </html>

@@ -1,5 +1,5 @@
 /* =========================================================
-   PETRO OMS â€” FULL PREMIUM RESPONSIVE CSS
+   PETRO OMS — FULL PREMIUM RESPONSIVE CSS
    FOR COMPLETE SALES DASHBOARD
 ========================================================= */
 
@@ -1741,7 +1741,7 @@ body {
 }
 
 /* =========================================================
-   MOBILE UI FIX â€” CLEAN COMPACT ERP
+   MOBILE UI FIX — CLEAN COMPACT ERP
 ========================================================= */
 
 @media(max-width:768px) {
@@ -1965,7 +1965,7 @@ body {
 }
 
 /* ==================================================
-   PETRO OMS â€“ SALES DASHBOARD FULL RESPONSIVE
+   PETRO OMS – SALES DASHBOARD FULL RESPONSIVE
 ================================================== */
 
 :root {
@@ -5011,7 +5011,7 @@ body.dark .filter-group select {
 }
 
 /* =========================================================
-   VIEW ORDER MODAL V3 — DESKTOP + MOBILE RESPONSIVE
+   VIEW ORDER MODAL V3 â€” DESKTOP + MOBILE RESPONSIVE
 ========================================================= */
 #modal {
   padding: 20px !important;
@@ -5356,7 +5356,7 @@ body.dark .filter-group select {
 }
 
 /* =========================================================
-   VIEW ORDER MODAL V4 — COMPACT DESKTOP + MOBILE
+   VIEW ORDER MODAL V4 â€” COMPACT DESKTOP + MOBILE
    Keeps all data readable while reducing unnecessary height.
 ========================================================= */
 
