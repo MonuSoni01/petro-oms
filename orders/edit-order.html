@@ -3,334 +3,1282 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Edit Order - PETRO OMS</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="orders.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="/images/app-icon.png" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
+    <meta
+        name="theme-color"
+        content="#108082"
+    >
 
+    <title>Edit Order | PETRO OMS</title>
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- Edit Order CSS -->
+    <link
+        rel="stylesheet"
+        href="edit-order.css?v=2026.09.24.5"
+    >
+
+    <!-- Favicon -->
+    <link
+        rel="icon"
+        href="/images/app-icon.png"
+    >
+
+    <!-- Product Master -->
     <script src="../product.js"></script>
 </head>
 
+
 <body>
 
-    <!-- Whatsapp Section -->
-    <div class="whats_link">
-        <a target="_blank" href="https://wa.me/918000007336?text=">
-            <img src="/images/whatsapp_logo.png" alt="" id="whatsapp-icon" /></a>
-    </div>
+    <!-- =====================================================
+         TOP NAVBAR
+    ====================================================== -->
 
-    <!-- Phone Section -->
-    <div class="phone_link">
-        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
-            <img src="/images/app.webp" alt="" id="whatsapp-icon" /></a>
-    </div>
-    <!-- Top Navbar -->
-    <div class="top-bar" style="background: #108082;">
-        <div class="container-fluid">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
-                    <div class="contact-details">
-                        <ul class="d-flex">
-                            <li>
-                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
-                            </li>
-                            <li>
-                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
-                                    contact@petroindustech.com</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+    <nav class="topnav">
 
-                <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
-                    <div class="news-box">
-                        <ul class="footer-social topnav-social-icon">
-                            <li>
-                                <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
-                                        class="fa-brands fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
-                                        class="fa-brands fa-instagram"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
-                                        class="fa-brands fa-youtube"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://x.com/Petroindustech" target="_blank"><i
-                                        class="fa-brands fa-x-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
-                                        class="fa-brands fa-pinterest"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <a
+            href="/"
+            class="brand"
+        >
+            <img
+                src="/images/logo.webp"
+                alt="PETRO"
+            >
+        </a>
+
+
+        <div class="navuser">
+
+            <button
+                class="iconbtn"
+                id="darkBtn"
+                type="button"
+                title="Dark Mode"
+            >
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+
+            <span>
+                <i class="fa-solid fa-user"></i>
+
+                <b id="adminName">
+                    User
+                </b>
+            </span>
+
         </div>
-    </div>
 
-    <!-- Navbar Section -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
-        <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
-
-            <!-- LEFT : LOGO -->
-            <a class="navbar-brand" href="https://oms.rankchahiye.com/">
-                <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
-            </a>
-
-            <!-- RIGHT : ADMIN -->
-            <div class="d-flex align-items-center">
-
-                <!-- DARK MODE -->
-                <label class="toggle-switch mb-0 mr-3">
-                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-                    <span class="slider"></span>
-                </label>
-
-                 
-
-            </div>
-        </div>
     </nav>
-    <div class="container mt-4">
-        <h3>Edit Order</h3>
 
-        <div id="loader" style="padding:20px; font-size:18px;">Loading order...</div>
 
-        <div id="editArea" style="display:none">
 
-            <!-- ORDER DETAILS -->
-            <div class="petro-card">
+    <!-- =====================================================
+         MAIN PAGE
+    ====================================================== -->
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <label>Order No</label>
-                        <input id="orderNo" class="form-control" readonly>
+    <main class="page">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <header class="hero">
+
+            <div>
+
+                <!-- BACK BUTTON -->
+
+                <button
+                    class="back"
+                    type="button"
+                    onclick="goBackToOrders()"
+                >
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back to Orders
+                </button>
+
+
+
+                <!-- TITLE -->
+
+                <div class="title">
+
+                    <span class="titleicon">
+
+                        <i class="fa-solid fa-pen-to-square"></i>
+
+                    </span>
+
+
+                    <div>
+
+                        <h1>
+                            Edit Order
+                        </h1>
+
+                        <p>
+                            Update party, items, billing and order status information.
+                        </p>
+
                     </div>
-                    <div class="col-md-4">
-                        <label>Status</label>
-                        <select id="orderStatus" required>
-                            <option value="Pending">Pending</option>
-                            <option value="Quotation Sent">Quotation Sent</option>
-                            <option value="Payment Received">Payment Received</option>
-                            <option value="Partial Delivered">Partial Delivered</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Hold">Hold</option>
-                            <option value="Cancelled">Cancelled</option>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             LOADER
+        ================================================== -->
+
+        <div
+            id="loader"
+            class="loader"
+        >
+
+            <span></span>
+
+
+            <div>
+
+                <b>
+                    Loading order...
+                </b>
+
+                <small>
+                    Please wait while order information is fetched.
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             EDIT AREA
+        ================================================== -->
+
+        <section
+            id="editArea"
+            style="display:none;"
+        >
+
+
+
+            <!-- =================================================
+                 ORDER INFORMATION
+            ================================================== -->
+
+            <div class="card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="cardhead">
+
+                    <span>
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                    </span>
+
+
+                    <div>
+
+                        <h2>
+                            Order Information
+                        </h2>
+
+                        <p>
+                            Core order and workflow details
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ORDER FIELDS -->
+
+                <div class="grid g4">
+
+
+                    <!-- ==============================
+                         ORDER NUMBER - LOCKED
+                    =============================== -->
+
+                    <div class="field">
+
+                        <label>
+                            Order No.
+                        </label>
+
+
+                        <div class="locked">
+
+                            <i class="fa-solid fa-lock"></i>
+
+
+                            <input
+                                id="orderNo"
+                                type="text"
+                                readonly
+                                tabindex="-1"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <small>
+                            Order number cannot be changed.
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- ==============================
+                         ORDER DATE - LOCKED
+                    =============================== -->
+
+                    <div class="field">
+
+                        <label>
+                            Order Date
+                        </label>
+
+
+                        <div class="locked">
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+
+                            <input
+                                id="orderDate"
+                                type="date"
+                                readonly
+                                tabindex="-1"
+                            >
+
+                        </div>
+
+
+                        <small>
+                            Order date cannot be changed.
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- ==============================
+                         SALESMAN DROPDOWN
+                    =============================== -->
+
+                    <div class="field">
+
+                        <label for="salesmanName">
+
+                            Salesman
+
+                        </label>
+
+
+                        <select
+                            id="salesmanName"
+                            disabled
+                        >
+
+                            <option value="">
+                                Select Salesman
+                            </option>
+
+                            <option value="Sariya Murtuza">
+                                Sariya Murtuza
+                            </option>
+
+                            <option value="Rup Ranjan Bora">
+                                Rup Ranjan Bora
+                            </option>
+
+                            <option value="Ankit Kalra">
+                                Ankit Kalra
+                            </option>
+
+                            <option value="Vivek Srivastava">
+                                Vivek Srivastava
+                            </option>
+
+                            <option value="Amit Soni">
+                                Amit Soni
+                            </option>
+
+                            <option value="Prince Gupta">
+                                Prince Gupta
+                            </option>
+
+                            <option value="Shubham Meena">
+                                Shubham Meena
+                            </option>
+
                         </select>
+
+
+                        <small>
+                            Salesman cannot be changed.
+                        </small>
+
                     </div>
-                    <!-- Cancel Remark Popup -->
-                    <div id="cancelRemarkModal" style="
-        display:none;
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background:rgba(0,0,0,0.5);
-        justify-content:center;
-        align-items:center;
-        z-index:9999;
-">
 
-                        <div style="
-        background:#fff;
-        padding:20px;
-        border-radius:10px;
-        width:350px;
-        box-shadow:0 5px 15px rgba(0,0,0,0.2);
-    ">
 
-                            <h3 style="margin-bottom:10px;">
-                                Cancel Order
-                            </h3>
 
-                            <label>
-                                Reason for Cancellation:
-                            </label>
+                    <!-- ==============================
+                         STATUS - EDITABLE
+                    =============================== -->
 
-                            <textarea id="cancelRemark" rows="3" class="form-control" placeholder="Enter reason..."
-                                style="margin-top:8px;"></textarea>
+                    <div class="field">
 
-                            <div style="
-            margin-top:15px;
-            text-align:right;
-        ">
+                        <label for="orderStatus">
 
-                                <button class="btn btn-secondary" onclick="closeCancelPopup()">
-                                    Cancel
-                                </button>
+                            Status
 
-                                <button class="btn btn-danger" onclick="confirmCancelRemark()">
-                                    OK
-                                </button>
+                            <em>*</em>
 
-                            </div>
+                        </label>
+
+
+                        <select
+                            id="orderStatus"
+                            required
+                        >
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Quotation Sent">
+                                Quotation Sent
+                            </option>
+
+                            <option value="Payment Received">
+                                Payment Received
+                            </option>
+
+                            <option value="Partial Delivered">
+                                Partial Delivered
+                            </option>
+
+                            <option value="Delivered">
+                                Delivered
+                            </option>
+
+                            <option value="Hold">
+                                Hold
+                            </option>
+
+                            <option value="Cancelled">
+                                Cancelled
+                            </option>
+
+                        </select>
+
+
+                        <small>
+                            Order status can be changed.
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 PARTY DETAILS
+            ================================================== -->
+
+            <div class="card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="cardhead">
+
+                    <span>
+
+                        <i class="fa-solid fa-building-user"></i>
+
+                    </span>
+
+
+                    <div>
+
+                        <h2>
+                            Party Details
+                        </h2>
+
+                        <p>
+                            Customer, contact and distributor information
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="grid g4">
+
+
+                    <!-- PARTY NAME -->
+
+                    <div class="field span2">
+
+                        <label for="partyName">
+
+                            Party Name
+
+                            <em>*</em>
+
+                        </label>
+
+
+                        <input
+                            id="partyName"
+                            type="text"
+                            placeholder="Enter party name"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+
+                    <!-- PARTY TYPE -->
+
+                    <div class="field">
+
+                        <label for="partyType">
+
+                            Party Type
+
+                        </label>
+
+
+                        <select id="partyType">
+
+                            <option value="">
+                                Select Type
+                            </option>
+
+                            <option value="Primary">
+                                Primary
+                            </option>
+
+                            <option value="Secondary">
+                                Secondary
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- DISTRIBUTOR -->
+
+                    <div class="field">
+
+                        <label for="distributor">
+
+                            Distributor
+
+                        </label>
+
+
+                        <input
+                            id="distributor"
+                            type="text"
+                            placeholder="Distributor name"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+
+                    <!-- CITY -->
+
+                    <div class="field">
+
+                        <label for="partyCity">
+
+                            City
+
+                        </label>
+
+
+                        <input
+                            id="partyCity"
+                            type="text"
+                            placeholder="Enter city"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+
+                    <!-- MOBILE -->
+
+                    <div class="field">
+
+                        <label for="partyMobile">
+
+                            Mobile No.
+
+                        </label>
+
+
+                        <input
+                            id="partyMobile"
+                            type="tel"
+                            inputmode="numeric"
+                            maxlength="10"
+                            placeholder="10 digit mobile no."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+
+                    <!-- GST -->
+
+                    <div class="field">
+
+                        <label for="partyGST">
+
+                            Party GST No.
+
+                        </label>
+
+
+                        <input
+                            id="partyGST"
+                            type="text"
+                            placeholder="GSTIN"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+
+                    <!-- PARTY ADDRESS -->
+
+                    <div class="field span2">
+
+                        <label for="partyAddress">
+
+                            Party Address
+
+                        </label>
+
+
+                        <textarea
+                            id="partyAddress"
+                            rows="3"
+                            placeholder="Enter complete party address"
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- NOTES -->
+
+                    <div class="field span2">
+
+                        <label for="orderNotes">
+
+                            Notes / Remarks
+
+                        </label>
+
+
+                        <textarea
+                            id="orderNotes"
+                            rows="3"
+                            placeholder="Any special instruction or remarks"
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- =================================================
+                 ORDER ITEMS
+            ================================================== -->
+
+            <div class="card">
+
+
+                <div class="cardhead actions">
+
+
+                    <div class="headgroup">
+
+                        <span>
+
+                            <i class="fa-solid fa-boxes-stacked"></i>
+
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Order Items
+                            </h2>
+
+                            <p>
+                                Edit product, quantity and unit information
+                            </p>
 
                         </div>
 
                     </div>
-                    <div class="col-md-4">
-                        <label>Party Name</label>
-                        <input id="partyName" class="form-control">
-                    </div>
+
+
+
+                    <button
+                        class="outline"
+                        type="button"
+                        onclick="addItemRow()"
+                    >
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Add Item
+
+                    </button>
+
+
                 </div>
 
-                <br>
-
-                <div class="row">
 
 
-                    <div class="col-md-4">
-                        <label>Party Type</label>
-                        <select id="partyType" class="form-control">
-                            <option value="">Select</option>
-                            <option value="Primary">Primary</option>
-                            <option value="Secondary">Secondary</option>
-                        </select>
-                    </div>
+                <div class="tablewrap">
 
 
-                    <div class="col-md-4">
-                        <label>Party Mobile</label>
-                        <input id="partyMobile" class="form-control">
-                    </div>
+                    <table>
 
-                    <div class="col-md-4">
-                        <label>Party GST Number</label>
-                        <input id="partyGST" class="form-control">
-                    </div>
 
-                    <div class="col-md-12 mt-2">
-                        <label>Party Address</label>
-                        <input id="partyAddress" class="form-control">
-                    </div>
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Item Code
+                                </th>
+
+                                <th>
+                                    Item Name
+                                </th>
+
+                                <th>
+                                    Qty
+                                </th>
+
+                                <th>
+                                    Unit
+                                </th>
+
+                                <th>
+                                    Rate (₹)
+                                </th>
+
+                                <th>
+                                    After Discount (₹)
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody id="itemsBody">
+
+                            <!-- JS WILL LOAD ITEMS -->
+
+                        </tbody>
+
+
+                    </table>
+
 
                 </div>
+
 
             </div>
 
 
-            <!-- ITEMS TABLE -->
-            <div class="petro-card">
-                <h5>Order Items</h5>
-                <table class="table table-bordered edit-items-table">
-                    <thead>
-                        <tr>
-                            <th>Item Code</th>
-                            <th>Item Name</th>
-                            <th>Qty</th>
-                            <th>Unit</th>
-                            <th>Rate (₹)</th>
-                            <th>Amount (₹)</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
 
-                    <tbody id="itemsBody"></tbody>
-                </table>
 
-                <button class="btn btn-success btn-sm" onclick="addItemRow()">+ Add Item</button>
+            <!-- =================================================
+                 BOTTOM GRID
+            ================================================== -->
+
+            <div class="bottom">
+
+
+
+                <!-- =============================================
+                     CATEGORY DISCOUNTS
+                ============================================== -->
+
+                <div class="card nomargin">
+
+
+                    <div class="cardhead">
+
+                        <span>
+
+                            <i class="fa-solid fa-percent"></i>
+
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Category Discounts
+                            </h2>
+
+                            <p>
+                                Discount percentage by category
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="grid g3">
+
+
+                        <!-- HARDWARE -->
+
+                        <div class="field">
+
+                            <label for="hardwareDisc">
+
+                                Hardware Discount (%)
+
+                            </label>
+
+
+                            <input
+                                id="hardwareDisc"
+                                type="number"
+                                min="0"
+                                max="100"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+
+                        <!-- BATHROOM -->
+
+                        <div class="field">
+
+                            <label for="bathroomDisc">
+
+                                Bathroom Discount (%)
+
+                            </label>
+
+
+                            <input
+                                id="bathroomDisc"
+                                type="number"
+                                min="0"
+                                max="100"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+
+                        <!-- SS -->
+
+                        <div class="field">
+
+                            <label for="stainlesssteelDisc">
+
+                                SS Discount (%)
+
+                            </label>
+
+
+                            <input
+                                id="stainlesssteelDisc"
+                                type="number"
+                                min="0"
+                                max="100"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+                <!-- =============================================
+                     BILLING
+                ============================================== -->
+
+                <div class="card nomargin">
+
+
+                    <div class="cardhead">
+
+                        <span>
+
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Billing & Charges
+                            </h2>
+
+                            <p>
+                                Final order calculation
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- BILLING INPUTS -->
+
+                    <div class="grid g3">
+
+
+                        <!-- FREIGHT -->
+
+                        <div class="field">
+
+                            <label for="freight">
+
+                                Freight
+
+                            </label>
+
+
+                            <input
+                                id="freight"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+
+                        <!-- SPECIAL DISCOUNT -->
+
+                        <div class="field">
+
+                            <label for="specialDiscount">
+
+                                Special Discount
+
+                            </label>
+
+
+                            <input
+                                id="specialDiscount"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+
+                        <!-- GST -->
+
+                        <div class="field">
+
+                            <label for="gstPercent">
+
+                                GST %
+
+                            </label>
+
+
+                            <input
+                                id="gstPercent"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="18"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- TOTAL BOXES -->
+
+                    <div class="totals">
+
+
+                        <!-- SUBTOTAL -->
+
+                        <div>
+
+                            <span>
+                                Subtotal
+                            </span>
+
+
+                            <b>
+
+                                ₹
+
+                                <input
+                                    id="subTotal"
+                                    type="text"
+                                    value="0.00"
+                                    readonly
+                                >
+
+                            </b>
+
+                        </div>
+
+
+
+                        <!-- GST AMOUNT -->
+
+                        <div>
+
+                            <span>
+                                GST Amount
+                            </span>
+
+
+                            <b>
+
+                                ₹
+
+                                <input
+                                    id="gstAmount"
+                                    type="text"
+                                    value="0.00"
+                                    readonly
+                                >
+
+                            </b>
+
+                        </div>
+
+
+
+                        <!-- GRAND TOTAL -->
+
+                        <div class="grand">
+
+                            <span>
+                                Grand Total
+                            </span>
+
+
+                            <b>
+
+                                ₹
+
+                                <input
+                                    id="grandTotal"
+                                    type="text"
+                                    value="0.00"
+                                    readonly
+                                >
+
+                            </b>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
             </div>
 
-            <!-- CATEGORY DISCOUNTS -->
-            <div class="petro-card">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label><b>Hardware Discount (%)</b></label>
-                        <input id="hardwareDisc" type="number" class="form-control" value="0" min="0" max="100"
-                            oninput="calcTotals()">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label><b>Bathroom Discount (%)</b></label>
-                        <input id="bathroomDisc" type="number" class="form-control" value="0" min="0" max="100"
-                            oninput="calcTotals()">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label><b>SS Discount (%)</b></label>
-                        <input id="stainlesssteelDisc" type="number" class="form-control" value="0" min="0" max="100"
-                            oninput="calcTotals()">
-                    </div>
-                </div>
-            </div>
 
 
-            <!-- BILLING AREA -->
-            <div class="petro-card">
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <label>Freight</label>
-                        <input id="freight" type="number" class="form-control" value="0" oninput="calcTotals()">
-                    </div>
+            <!-- =================================================
+                 SAVE ACTIONS
+            ================================================== -->
 
-                    <div class="col-md-4">
-                        <label>Special Discount</label>
-                        <input id="specialDiscount" type="number" class="form-control" value="0" oninput="calcTotals()">
-                    </div>
+            <div class="savebar">
 
-                    <div class="col-md-4">
-                        <label>GST %</label>
-                        <input id="gstPercent" type="number" class="form-control" value="0" oninput="calcTotals()">
-                    </div>
-                </div>
 
-                <br>
+                <button
+                    class="cancel"
+                    type="button"
+                    onclick="goBackToOrders()"
+                >
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <label>Subtotal</label>
-                        <input id="subTotal" class="form-control" readonly>
-                    </div>
+                    <i class="fa-solid fa-xmark"></i>
 
-                    <div class="col-md-4">
-                        <label>GST Amount</label>
-                        <input id="gstAmount" class="form-control" readonly>
-                    </div>
+                    Cancel
 
-                    <div class="col-md-4">
-                        <label>Grand Total</label>
-                        <input id="grandTotal" class="form-control" readonly>
-                    </div>
-                </div>
+                </button>
+
+
+
+                <button
+                    class="save"
+                    id="updateBtn"
+                    type="button"
+                    onclick="updateOrder()"
+                >
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Update Order
+
+                </button>
+
 
             </div>
 
 
-            <!-- UPDATE BUTTON -->
+        </section>
 
-            <button class="btn btn-primary btn-lg btn-block" onclick="updateOrder()">Update Order</button>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         PRODUCT SUGGESTIONS
+    ====================================================== -->
+
+    <div
+        id="suggestBox"
+        class="suggest"
+    ></div>
+
+
+
+    <!-- =====================================================
+         HOLD / CANCEL REASON MODAL
+    ====================================================== -->
+
+    <div
+        id="cancelRemarkModal"
+        class="modal"
+    >
+
+
+        <div class="modalcard">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="modalhead">
+
+
+                <b>
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    <span id="reasonTitle">
+                        Status Reason
+                    </span>
+
+                </b>
+
+
+
+                <button
+                    type="button"
+                    onclick="closeCancelPopup()"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- MODAL BODY -->
+
+            <div class="modalbody">
+
+
+                <label for="cancelRemark">
+
+                    Reason
+
+                    <em>*</em>
+
+                </label>
+
+
+                <textarea
+                    id="cancelRemark"
+                    rows="4"
+                    placeholder="Enter reason..."
+                ></textarea>
+
+
+            </div>
+
+
+
+            <!-- MODAL FOOTER -->
+
+            <div class="modalfoot">
+
+
+                <button
+                    class="cancel"
+                    type="button"
+                    onclick="closeCancelPopup()"
+                >
+
+                    Cancel
+
+                </button>
+
+
+
+                <button
+                    class="save"
+                    type="button"
+                    onclick="confirmCancelRemark()"
+                >
+
+                    Save Reason
+
+                </button>
+
+
+            </div>
+
 
         </div>
 
+
     </div>
 
-    <div id="suggestBox" style="position:absolute;background:#fff;border:1px solid #ccc;
-     max-height:180px;overflow-y:auto;display:none;z-index:9999;
-     border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,0.15);width:260px;">
-    </div>
-    <script type="module" src="edit-order.js"></script>
-    
-    <script src="/js/dev.js"></script>
-
-    <br><br><br>
 
 
-    <!-- Firebase compat SDK for global subscription/renewal manager -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <!-- Global OMS Subscription & Renewal Manager -->
-    <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
+    <!-- =====================================================
+         EDIT ORDER JS
+    ====================================================== -->
+
+    <script
+        type="module"
+        src="edit-order.js?v=2026.09.24.5"
+    ></script>
+
+
+    <!-- =====================================================
+         FIREBASE COMPAT
+         Kept because your ERP has other scripts using compat.
+    ====================================================== -->
+
+    <script
+        src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"
+    ></script>
+
+    <script
+        src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"
+    ></script>
+
+
+    <!-- SUBSCRIPTION MANAGER -->
+
+    <script
+        src="/js/subscription-manager.js?v=2026.09.02.3"
+    ></script>
+
+
 </body>
- 
 
 </html>

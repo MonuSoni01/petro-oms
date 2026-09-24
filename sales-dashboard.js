@@ -52,7 +52,8 @@
       "Ankit Kalra": "AK",
       "Vivek Srivastava": "VS",
       "Rup Ranjan Bora": "RRB",
-      "Prince Gupta": "PG"
+      "Prince Gupta": "PG", 
+      "Shubham Meena": "SS"
     })
   });
 

@@ -138,17 +138,13 @@ const SALESMAN_PREFIX = {
     "Ankit Kalra": "AK",
     "Vivek Srivastava": "VS",
     "Rup Ranjan Bora": "RRB", 
-    "Prince Gupta" : "PG"
+    "Prince Gupta" : "PG",
+    "Shubham Meena" : "SS"
 };
 
 // ================= SALESMAN → DISTRIBUTOR MAPPING =================
 //
-// Mapping is loaded from: Asm-Distributor.json
-//
-// Supported JSON formats:
-// 1) { "Sariya Murtuza": ["Distributor A", "Distributor B"] }
-// 2) { "Sariya Murtuza": [{"name":"Distributor A"}, {"name":"Distributor B"}] }
-// 3) { "Sariya Murtuza": [{"distributor":"Distributor A"}] }
+// Mapping is loaded from: Asm-Distributor.json 
 
 let asmDistributorMap = {};
 

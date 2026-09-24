@@ -1,401 +1,730 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 
+
+
 <head>
+
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
 
     <title>PETRO OMS | Orders</title>
 
+
+
     <link rel="icon" href="/images/app-icon.png" />
 
+
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <!-- Bootstrap -->
+
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
 
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
     <!-- Common CSS -->
+
     <link rel="stylesheet" href="/css/style.css">
 
+
+
     <!-- Page CSS -->
-    <link rel="stylesheet" href="orders.css?v=2026.08.24.2">
+
+    <link rel="stylesheet" href="orders.css?v=2026.08.24.5">
+
 </head>
+
+
 
 <body>
 
+
+
     <!-- SIDEBAR -->
+
     <aside id="sidebar">
+
         <div class="sidebar-logo">
+
             <img src="/images/petro-circle-logo.webp" alt="PETRO" />
+
         </div>
 
+
+
         <ul class="sidebar-menu">
+
             <li onclick="location.href='/admin-dashboard.html'">
+
                 <i class="fa-solid fa-chart-line"></i>
+
                 Dashboard
+
             </li>
+
+
 
             <li class="active" onclick="location.href='/orders/orders.html'">
+
                 <i class="fa-solid fa-list"></i>
+
                 Orders
+
             </li>
+
+
 
             <!-- <li onclick="location.href='/users/users.html'">
+
                 <i class="fa-solid fa-user"></i>
+
                 Customers
+
             </li> -->
+
+
 
             <li onclick="location.href='/dashboard/sales.html'">
+
                 <i class="fa-solid fa-box"></i>
+
                 Products Sales Report
+
             </li>
+
             <li onclick="location.href='/automation.html'">
+
                 <i class="fa-solid fa-clock-rotate-left"></i>
+
                 <span>Mail Section</span>
+
             </li>
+
+
 
             <!-- <li onclick="location.href='/activity.html'">
+
                 <i class="fa-solid fa-clock-rotate-left"></i>
+
                 <span>Activity Logs</span>
+
             </li> -->
-            
+
+
+
+
 
             <li onclick="location.href='/login.html'">
+
                 <i class="fa-solid fa-right-from-bracket"></i>
+
                 Log Out
+
             </li>
+
         </ul>
+
     </aside>
 
+
+
     <!-- MAIN CONTENT -->
+
     <main id="main" class="orders-page">
 
-       
-        
+
+
+
+
+
+
+
 
         <!-- NAVBAR -->
+
         <nav class="navbar navbar-expand-lg navbar-light bg-white top-nav petro-navbar">
+
             <div class="container-fluid d-flex justify-content-between align-items-center">
 
-                <a class="navbar-brand" href="https://oms.rankchahiye.com/">
+
+
+                <a class="navbar-brand" href="https\://oms.rankchahiye.com/">
+
                     <img src="/images/logo.webp" alt="PETRO Logo" class="img-fluid petro-logo">
+
                 </a>
+
+
 
                 <div class="d-flex align-items-center">
 
+
+
                     <label class="toggle-switch mb-0 mr-3">
+
                         <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+
                         <span class="slider"></span>
+
                     </label>
 
+
+
                     <div class="dropdown">
+
                         <a class="btn admin-btn dropdown-toggle d-flex align-items-center" href="#" role="button"
                             id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
                             <i class="fa fa-user-circle mr-2"></i>
+
                             <span id="adminName">Admin</span>
+
                         </a>
 
+
+
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+
                             <a class="dropdown-item" href="/admin-profile.html">
+
                                 <i class="fa fa-user mr-2"></i>
+
                                 Profile
+
                             </a>
+
                             <div class="dropdown-divider"></div>
+
                             <a class="dropdown-item text-danger" href="/login.html">
+
                                 <i class="fa fa-sign-out mr-2"></i>
+
                                 Logout
+
                             </a>
+
                         </div>
+
                     </div>
 
+
+
                 </div>
+
             </div>
+
         </nav>
+ 
 
-        <!-- PAGE HEADER -->
-        <section class="orders-hero">
-            <div>
-                <span class="page-kicker">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    Order Management
-                </span>
-                <h1>Orders Dashboard</h1>
-                <p>Search, filter, view, edit, delete and export PETRO OMS orders from one clean panel.</p>
-            </div>
-
-            <div class="hero-actions">
-                <button class="btn btn-outline-petro" onclick="clearAllFilters()">
-                    <i class="fa-solid fa-rotate-right"></i>
-                    Reset Filters
-                </button>
-                <button class="btn btn-petro" onclick="openExportModal()">
-                    <i class="fa-solid fa-download"></i>
-                    Export Report
-                </button>
-            </div>
-        </section>
 
         <!-- FILTER SECTION -->
+
         <section class="filters-box">
+
             <div class="filter-card-head">
+
                 <div>
+
                     <h3>
+
                         <i class="fa-solid fa-filter"></i>
+
                         Search & Filter Orders
+
                     </h3>
+
                     <p>Use filters to find specific orders quickly.</p>
+
                 </div>
 
+
+
                 <button id="clearFiltersBtn" class="btn btn-clear" onclick="clearAllFilters()">
+
                     <i class="fa-solid fa-xmark"></i>
+
                     Clear All
+
                 </button>
+
             </div>
+
+
 
             <div class="filter-divider"></div>
 
+
+
             <div class="filter-grid">
 
+
+
                 <div class="filter-field">
+
                     <label for="dateFrom">From Date</label>
+
                     <div class="input-icon-wrap">
+
                         <input type="date" id="dateFrom" class="form-control">
+
                     </div>
+
                 </div>
 
+
+
                 <div class="filter-field">
+
                     <label for="dateTo">To Date</label>
+
                     <div class="input-icon-wrap">
+
                         <input type="date" id="dateTo" class="form-control">
+
                     </div>
+
                 </div>
 
+
+
                 <div class="filter-field">
+
                     <label for="filterStatus">Status</label>
+
                     <select id="filterStatus" class="form-control">
+
                         <option value="">All Status</option>
+
                         <option value="Pending">Pending</option>
+
                         <option value="Quotation Sent">Quotation Sent</option>
+
                         <option value="Payment Received">Payment Received</option>
+
                         <option value="Partial Delivered">Partial Delivered</option>
+
                         <option value="Delivered">Delivered</option>
+
                         <option value="Hold">Hold</option>
+
                         <option value="Cancelled">Cancelled</option>
+
                     </select>
+
                 </div>
 
+
+
                 <div class="filter-field">
+
                     <label for="filterType">Type</label>
+
                     <select id="filterType" class="form-control">
+
                         <option value="">All Types</option>
+
                         <option value="Primary">Primary</option>
+
                         <option value="Secondary">Secondary</option>
+
                     </select>
+
                 </div>
+
+
 
                 <div class="filter-field filter-search">
+
                     <label for="searchBox">Search</label>
+
                     <div class="search-wrap">
+
                         <i class="fa-solid fa-magnifying-glass"></i>
+
                         <input type="text" id="searchBox" class="form-control"
                             placeholder="Search Order No / Party Name">
+
                     </div>
+
                 </div>
+
+
 
                 <div class="filter-field">
+
                     <label for="salesmanFilter">Salesman</label>
+
                     <select id="salesmanFilter" class="form-control">
+
                         <option value="">All Salesmen</option>
+
                     </select>
+
                 </div>
+
+
 
                 <div class="filter-field filter-action">
+
                     <label>&nbsp;</label>
+
                     <button class="btn btn-petro w-100" onclick="applyFiltersAndRender()">
+
                         <i class="fa-solid fa-filter"></i>
+
                         Apply
+
                     </button>
+
                 </div>
 
+
+
             </div>
+
         </section>
 
+
+
         <!-- ORDERS TABLE -->
+
         <section class="orders-table-card">
 
+
+
             <div class="table-card-head">
+
                 <div>
+
                     <h3>
+
                         <i class="fa-solid fa-table-list"></i>
+
                         All Orders
+
                     </h3>
+
                     <p id="tableSubText">Showing filtered order results</p>
+
                 </div>
 
+
+
                 <button class="btn btn-petro" onclick="openExportModal()">
+
                     <i class="fa fa-download"></i>
+
                     Download Data
+
                 </button>
+
             </div>
+
+
 
             <div class="table-responsive orders-table-wrap">
+
                 <table class="table table-hover orders-table">
+
                     <thead>
+
                         <tr>
+
                             <th>
+
                                 <input type="checkbox" id="selectAllRows" onchange="toggleAllRows(this)">
+
                             </th>
+
                             <th>Sr No</th>
+
                             <th>Salesman</th>
+
                             <th>Order No</th>
+
                             <th>Order Date</th>
+
                             <th>Party Name</th>
+
                             <th>Distributor</th>
+
                             <th>Type</th>
+
                             <th>Total (₹)</th>
+
                             <th>Status</th>
+
                             <th class="text-center">Action</th>
+
                             <th>Bill Image</th>
+
                         </tr>
+
                     </thead>
 
+
+
                     <tbody id="ordersBody"></tbody>
+
                 </table>
+
             </div>
 
+
+
             <div class="orders-footer">
+
                 <p id="emptyState" class="empty-state" style="display:none;">
+
                     <i class="fa-regular fa-folder-open"></i>
+
                     No orders found.
+
                 </p>
 
+
+
                 <div class="pagination-wrap">
+
                     <button id="prevPageBtn" class="btn btn-page">
+
                         <i class="fa fa-chevron-left"></i>
+
                         Prev
+
                     </button>
+
+
 
                     <span id="pageIndicator">Page 1</span>
 
+
+
                     <button id="nextPageBtn" class="btn btn-page active">
+
                         Next
+
                         <i class="fa fa-chevron-right"></i>
+
                     </button>
+
                 </div>
+
             </div>
+
+
 
         </section>
 
+
+
     </main>
 
+
+
     <!-- EXPORT MODAL -->
+
     <div id="exportModal" class="modal-overlay" style="display:none;">
+
         <div class="modal-box export-modal-box">
 
+
+
             <div class="modal-head">
+
                 <div>
+
                     <h4>Download Custom Report</h4>
+
                     <p>Select columns and download filtered data in CSV format.</p>
+
                 </div>
 
+
+
                 <button class="btn modal-close-btn" onclick="closeExportModal()">
+
                     <i class="fa-solid fa-xmark"></i>
+
                 </button>
+
             </div>
+
+
 
             <input type="text" id="columnSearch" class="form-control mb-3" placeholder="Search columns..."
                 oninput="renderExportColumns()">
 
+
+
             <div class="export-top-bar">
+
                 <label class="export-select-all">
+
                     <input type="checkbox" id="selectAllColumns" onchange="toggleAllColumns(this)">
+
                     Select All Columns
+
                 </label>
 
+
+
                 <b id="selectedColumnCount">0 Selected</b>
+
             </div>
+
+
 
             <div id="exportColumnsList"></div>
 
+
+
             <div class="export-btn-wrap">
+
                 <button class="btn btn-light w-50" onclick="closeExportModal()">Cancel</button>
+
                 <button class="btn btn-petro w-50" onclick="downloadCustomCSV()">
+
                     <i class="fa-solid fa-download"></i>
+
                     Download CSV
+
                 </button>
+
             </div>
 
+
+
         </div>
+
     </div>
 
+
+
     <!-- IMAGE MODAL -->
+
     <div id="imageModal" class="modal-overlay" style="display:none;">
+
         <div class="modal-box image-modal-box">
+
             <span class="testingclose" onclick="closeImageModal()">✖</span>
+
+
 
             <div id="imageSkeleton" class="skeleton-loader"></div>
 
+
+
             <img id="modalImage" src="" alt="Order Image">
+
         </div>
+
     </div>
+
+
 
     <!-- VIEW ORDER MODAL -->
+
     <div id="modal">
+
         <div id="modalBox">
+
             <div id="modalContent"></div>
+
         </div>
+
     </div>
 
+
+
     <!-- DELETE MODAL -->
+
     <div id="deleteModal" class="modal-overlay" style="display:none;">
+
         <div class="modal-box delete-modal-box">
 
+
+
             <div class="delete-icon">
+
                 <i class="fa-solid fa-trash"></i>
+
             </div>
 
+
+
             <h3>Delete Order</h3>
+
             <p>Enter admin password to delete this order.</p>
+
+
 
             <p id="deleteMsg" style="display:none;"></p>
 
+
+
             <div class="password-wrapper">
+
                 <input type="text" id="deletePass" class="form-control" placeholder="Enter Admin Password"
                     autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
                     data-lpignore="true" data-1p-ignore="true" style="-webkit-text-security: disc;" />
 
+
+
                 <i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
+
             </div>
+
+
 
             <div class="delete-actions">
+
                 <button class="btn btn-light" onclick="closeDeleteModal()">Cancel</button>
+
                 <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+
             </div>
 
+
+
         </div>
+
     </div>
 
+
+
     <!-- FIREBASE -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-    <!-- jQuery -->
-    <script src="/vendor/jquery/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="/vendor/jquery/jquery.min.js"></script>
 
-    <!-- Bootstrap -->
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Common JS -->
-    <script src="../js/script.js"></script>
+<!-- Common JS -->
+<script src="../js/script.js"></script>
 
-    <!-- Page JS -->
-    <script src="orders.js?v=2026.08.24.2"></script>
-
+<!-- Orders JS -->
+<script src="orders.js?v=2026.09.24.3"></script>
 
     <!-- Global OMS Subscription & Renewal Manager -->
+
     <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
+
 </body>
+
+
 
 </html>
