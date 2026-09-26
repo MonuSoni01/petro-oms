@@ -467,8 +467,8 @@ window.itemMaster = {
     "name": "Cable Manager (Single Pc Packing)",
     "category": "hardware",
     "units": {
-      "PKT": { "rate": 51.70 },
-      "CTN": { "rate": 51.70 * 12 }
+      "PCS": { "rate": 51.70 },
+      "PKT": { "rate": 51.70 * 12 }
     },
     "photo": "/images/products/hardware/170.webp"
   },
@@ -802,8 +802,8 @@ window.itemMaster = {
     name: "Hydraulic Door Closer PETRO (Pelmet Arm) 90 Degree Hold",
     category: "hardware",
     units: {
-      PKT: { rate: 1700.00 },
-      CTN: { rate: 1700.00 * 20 }
+      PCS: { rate: 2100.00 },
+      CTN: { rate: 2100.00 * 20 }
     },
     photo: "/images/products/hardware/411.webp"
   },
@@ -812,7 +812,7 @@ window.itemMaster = {
     name: "Sliding Door Roller 35mm B-1 Special PETRO",
     category: "hardware",
     units: {
-      PKT: { rate: 540.00 },
+      SET: { rate: 540.00 },
       CTN: { rate: 540.00 * 20 }
     },
     photo: "/images/products/hardware/451.webp"
@@ -822,7 +822,7 @@ window.itemMaster = {
     name: "Sliding Door Roller 35mm B-1 Regular IFCON",
     category: "hardware",
     units: {
-      PKT: { rate: 465.00 },
+      SET: { rate: 465.00 },
       CTN: { rate: 465.00 * 20 }
     },
     photo: "/images/products/hardware/453.webp"
@@ -1762,8 +1762,8 @@ window.itemMaster = {
       CTN: { rate: 32475, pcs: 25 }
     },
     photo: "/images/products/bathroom/1103.webp"
-  }, 
-   // ------------------------- //
+  },
+  // ------------------------- //
   // SS products  //
   // ------------------------- //
 
@@ -2399,41 +2399,41 @@ window.itemMaster = {
     },
     photo: "/images/products/stainlesssteel/1391.webp"
   },
-  
+
   "1601": {
-  name: "Liquid Soap Dispenser (Chrome)",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 1000 },
-    BOX: { rate: 1000 * 1 },
-    CTN: { rate: 1000 * 16 }
+    name: "Liquid Soap Dispenser (Chrome)",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1000 },
+      BOX: { rate: 1000 * 1 },
+      CTN: { rate: 1000 * 16 }
+    },
+    photo: "/images/products/stainlesssteel/1601.webp"
   },
-  photo: "/images/products/stainlesssteel/1601.webp"
-},
 
-"1602": {
-  name: "Liquid Soap Dispenser (Gold)",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 1350 },
-    BOX: { rate: 1350 * 1 },
-    CTN: { rate: 1350 * 16 }
+  "1602": {
+    name: "Liquid Soap Dispenser (Gold)",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1350 },
+      BOX: { rate: 1350 * 1 },
+      CTN: { rate: 1350 * 16 }
+    },
+    photo: "/images/products/stainlesssteel/1602.webp"
   },
-  photo: "/images/products/stainlesssteel/1602.webp"
-},
 
-"1603": {
-  name: "Liquid Soap Dispenser (Rose Gold)",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 1350 },
-    BOX: { rate: 1350 * 1 },
-    CTN: { rate: 1350 * 16 }
+  "1603": {
+    name: "Liquid Soap Dispenser (Rose Gold)",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1350 },
+      BOX: { rate: 1350 * 1 },
+      CTN: { rate: 1350 * 16 }
+    },
+    photo: "/images/products/stainlesssteel/1603.webp"
   },
-  photo: "/images/products/stainlesssteel/1603.webp"
-},
-  
-  
+
+
   "1376": {
     name: "SS Toilet Paper Holder",
     category: "stainlesssteel",
@@ -2544,66 +2544,66 @@ window.itemMaster = {
     photo: "/images/products/stainlesssteel/1391.webp"
   },
   "1160": {
-  name: "Toilet Paper Holder",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 910 },
-    BOX: { rate: 910 * 1 },
-    CTN: { rate: 910 * 81 }
+    name: "Toilet Paper Holder",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 910 },
+      BOX: { rate: 910 * 1 },
+      CTN: { rate: 910 * 81 }
+    },
+    photo: "/images/products/stainlesssteel/1160.webp"
   },
-  photo: "/images/products/stainlesssteel/1160.webp"
-},
 
-"1161": {
-  name: "Single Soap Dish",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 590 },
-    BOX: { rate: 590 * 2 },
-    CTN: { rate: 590 * 320 }
+  "1161": {
+    name: "Single Soap Dish",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 590 },
+      BOX: { rate: 590 * 2 },
+      CTN: { rate: 590 * 320 }
+    },
+    photo: "/images/products/stainlesssteel/1161.webp"
   },
-  photo: "/images/products/stainlesssteel/1161.webp"
-},
 
-"1162": {
-  name: "Towel Ring",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 610 },
-    BOX: { rate: 610 * 2 },
-    CTN: { rate: 610 * 160 }
+  "1162": {
+    name: "Towel Ring",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 610 },
+      BOX: { rate: 610 * 2 },
+      CTN: { rate: 610 * 160 }
+    },
+    photo: "/images/products/stainlesssteel/1162.webp"
   },
-  photo: "/images/products/stainlesssteel/1162.webp"
-},
 
-"1163": {
-  name: "Double Soap Dish",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 1100 },
-    BOX: { rate: 1100 * 2 },
-    CTN: { rate: 1100 * 160 }
+  "1163": {
+    name: "Double Soap Dish",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1100 },
+      BOX: { rate: 1100 * 2 },
+      CTN: { rate: 1100 * 160 }
+    },
+    photo: "/images/products/stainlesssteel/1163.webp"
+  }, "1164": {
+    name: "Towel Rod (24 inch)",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 1050 },
+      BOX: { rate: 1050 * 2 },
+      CTN: { rate: 1050 * 72 }
+    },
+    photo: "/images/products/stainlesssteel/1164.webp"
   },
-  photo: "/images/products/stainlesssteel/1163.webp"
-},"1164": {
-  name: "Towel Rod (24 inch)",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 1050 },
-    BOX: { rate: 1050 * 2 },
-    CTN: { rate: 1050 * 72 }
-  },
-  photo: "/images/products/stainlesssteel/1164.webp"
-},
 
-"1165": {
-  name: "Towel Rack With Hook (24 inch)",
-  category: "stainlesssteel",
-  units: {
-    PCS: { rate: 2660 },
-    BOX: { rate: 2660 * 1 },
-    CTN: { rate: 2660 * 12 }
+  "1165": {
+    name: "Towel Rack With Hook (24 inch)",
+    category: "stainlesssteel",
+    units: {
+      PCS: { rate: 2660 },
+      BOX: { rate: 2660 * 1 },
+      CTN: { rate: 2660 * 12 }
+    },
+    photo: "/images/products/stainlesssteel/1165.webp"
   },
-  photo: "/images/products/stainlesssteel/1165.webp"
-},
 };
