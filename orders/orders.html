@@ -22,8 +22,7 @@
 
     <!-- Font Awesome -->
 
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <!-- Bootstrap -->
 
@@ -224,8 +223,205 @@
             </div>
 
         </nav>
- 
 
+
+
+        <!-- =====================================================
+     PETRO OMS - ORDER KPI CARDS
+===================================================== -->
+
+        <section class="orders-kpi-section">
+
+            <div class="orders-kpi-grid">
+
+                <!-- TOTAL ORDERS -->
+                <button type="button" class="order-kpi-card kpi-total active" data-kpi-status=""
+                    onclick="filterByKpiStatus('')">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+
+                        <span class="kpi-percentage" id="totalOrdersPercent">
+                            100%
+                        </span>
+                    </div>
+
+                    <div class="kpi-main">
+                        <span class="kpi-title">Total Orders</span>
+                        <strong class="kpi-number" id="totalOrdersCount">0</strong>
+                    </div>
+
+                    <div class="kpi-progress">
+                        <span id="totalOrdersProgress" style="width:100%"></span>
+                    </div>
+
+                    <div class="kpi-footer">
+                        <span>Total Orders</span>
+                        <strong id="totalOrdersBottomPercent">100%</strong>
+                    </div>
+
+                </button>
+
+
+                <!-- DELIVERED -->
+                <button type="button" class="order-kpi-card kpi-delivered" data-kpi-status="Delivered"
+                    onclick="filterByKpiStatus('Delivered')">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <span class="kpi-percentage" id="deliveredPercent">
+                            0%
+                        </span>
+                    </div>
+
+                    <div class="kpi-main">
+                        <span class="kpi-title">Delivered</span>
+                        <strong class="kpi-number" id="deliveredCount">0</strong>
+                    </div>
+
+                    <div class="kpi-progress">
+                        <span id="deliveredProgress"></span>
+                    </div>
+
+                    <div class="kpi-footer">
+                        <span>Delivery Rate</span>
+                        <strong id="deliveredBottomPercent">0%</strong>
+                    </div>
+
+                </button>
+
+
+                <!-- PARTIAL DELIVERED -->
+                <button type="button" class="order-kpi-card kpi-partial" data-kpi-status="Partial Delivered"
+                    onclick="filterByKpiStatus('Partial Delivered')">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+
+                        <span class="kpi-percentage" id="partialPercent">
+                            0%
+                        </span>
+                    </div>
+
+                    <div class="kpi-main">
+                        <span class="kpi-title">Partial Delivered</span>
+                        <strong class="kpi-number" id="partialCount">0</strong>
+                    </div>
+
+                    <div class="kpi-progress">
+                        <span id="partialProgress"></span>
+                    </div>
+
+                    <div class="kpi-footer">
+                        <span>Partial Rate</span>
+                        <strong id="partialBottomPercent">0%</strong>
+                    </div>
+
+                </button>
+
+
+                <!-- PENDING -->
+                <button type="button" class="order-kpi-card kpi-pending" data-kpi-status="Pending"
+                    onclick="filterByKpiStatus('Pending')">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+
+                        <span class="kpi-percentage" id="pendingPercent">
+                            0%
+                        </span>
+                    </div>
+
+                    <div class="kpi-main">
+                        <span class="kpi-title">Pending</span>
+                        <strong class="kpi-number" id="pendingCount">0</strong>
+                    </div>
+
+                    <div class="kpi-progress">
+                        <span id="pendingProgress"></span>
+                    </div>
+
+                    <div class="kpi-footer">
+                        <span>Pending Rate</span>
+                        <strong id="pendingBottomPercent">0%</strong>
+                    </div>
+
+                </button>
+
+
+                <!-- HOLD -->
+                <button type="button" class="order-kpi-card kpi-hold" data-kpi-status="Hold"
+                    onclick="filterByKpiStatus('Hold')">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-pause"></i>
+                        </div>
+
+                        <span class="kpi-percentage" id="holdPercent">
+                            0%
+                        </span>
+                    </div>
+
+                    <div class="kpi-main">
+                        <span class="kpi-title">Hold</span>
+                        <strong class="kpi-number" id="holdCount">0</strong>
+                    </div>
+
+                    <div class="kpi-progress">
+                        <span id="holdProgress"></span>
+                    </div>
+
+                    <div class="kpi-footer">
+                        <span>Hold Rate</span>
+                        <strong id="holdBottomPercent">0%</strong>
+                    </div>
+
+                </button>
+
+
+                <!-- CANCELLED -->
+                <button type="button" class="order-kpi-card kpi-cancelled" data-kpi-status="Cancelled"
+                    onclick="filterByKpiStatus('Cancelled')">
+
+                    <div class="kpi-top">
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+
+                        <span class="kpi-percentage" id="cancelledPercent">
+                            0%
+                        </span>
+                    </div>
+
+                    <div class="kpi-main">
+                        <span class="kpi-title">Cancelled</span>
+                        <strong class="kpi-number" id="cancelledCount">0</strong>
+                    </div>
+
+                    <div class="kpi-progress">
+                        <span id="cancelledProgress"></span>
+                    </div>
+
+                    <div class="kpi-footer">
+                        <span>Cancel Rate</span>
+                        <strong id="cancelledBottomPercent">0%</strong>
+                    </div>
+
+                </button>
+
+            </div>
+
+        </section>
 
         <!-- FILTER SECTION -->
 
@@ -371,6 +567,15 @@
                     </select>
 
                 </div>
+                <div class="filter-field">
+
+    <label for="distributorFilter">Distributor</label>
+
+    <select id="distributorFilter" class="form-control">
+        <option value="">All Distributors</option>
+    </select>
+
+</div>
 
 
 
@@ -704,20 +909,20 @@
 
 
     <!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-<!-- jQuery -->
-<script src="/vendor/jquery/jquery.min.js"></script>
+    <!-- jQuery -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Common JS -->
-<script src="../js/script.js"></script>
+    <!-- Common JS -->
+    <script src="../js/script.js"></script>
 
-<!-- Orders JS -->
-<script src="orders.js?v=2026.09.24.3"></script>
+    <!-- Orders JS -->
+    <script src="orders.js?v=2026.09.24.3"></script>
 
     <!-- Global OMS Subscription & Renewal Manager -->
 

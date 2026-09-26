@@ -1,14 +1,4 @@
-/* ============================================================
-
-   PETRO OMS - ORDERS PAGE JS
-
-   CLEAN + FIXED VERSION
-
-   Firebase v8 Compat
-
-============================================================ */
-
-
+ 
 
 /* ============================================================
 
@@ -18,20 +8,13 @@
 
 
 
-const firebaseConfig = {
-
-  apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M",
-
-  authDomain: "petro-oms.firebaseapp.com",
-
-  projectId: "petro-oms",
-
-  storageBucket: "petro-oms.firebasestorage.app",
-
-  messagingSenderId: "562472760628",
-
-  appId: "1:562472760628:web:384f4eda2c862b6e3ce161",
-
+const firebaseConfig = { 
+  apiKey: "AIzaSyCdfQu5GCsBCyMHM7HX8GRzY-VTZaEMU5M", 
+  authDomain: "petro-oms.firebaseapp.com", 
+  projectId: "petro-oms", 
+  storageBucket: "petro-oms.firebasestorage.app", 
+  messagingSenderId: "562472760628", 
+  appId: "1:562472760628:web:384f4eda2c862b6e3ce161", 
 };
 
 
@@ -92,10 +75,11 @@ try {
 
 let allOrdersMaster = [];
 
+
 let filteredOrders = [];
 
 let currentRenderedOrders = [];
-let currentViewedOrderId = null; 
+let currentViewedOrderId = null;
 
 
 
@@ -142,6 +126,7 @@ const searchBox = document.getElementById("searchBox");
 const salesmanFilterEl = document.getElementById("salesmanFilter");
 
 
+const distributorFilterEl = document.getElementById("distributorFilter");
 
 const prevPageBtn = document.getElementById("prevPageBtn");
 
@@ -868,6 +853,7 @@ async function fetchFirstOrdersPage() {
 
 
     populateSalesmanMasterList();
+    populateDistributorMasterList();
 
     applyFiltersAndRender();
 
@@ -956,7 +942,48 @@ function populateSalesmanMasterList() {
   }
 
 }
+function populateDistributorMasterList() {
 
+  if (!distributorFilterEl) return;
+
+  const currentValue = distributorFilterEl.value;
+
+  const distributors = [
+    ...new Set(
+      allOrdersMaster
+        .map(order => {
+          return String(
+            order.distributorName ||
+            order.distributor ||
+            order.party?.distributorName ||
+            order.party?.distributor ||
+            ""
+          ).trim();
+        })
+        .filter(Boolean)
+    )
+  ].sort((a, b) =>
+    a.localeCompare(b, undefined, {
+      sensitivity: "base"
+    })
+  );
+
+
+  distributorFilterEl.innerHTML = `
+        <option value="">All Distributors</option>
+        ${distributors.map(name => `
+            <option value="${escapeHTML(name)}">
+                ${escapeHTML(name)}
+            </option>
+        `).join("")}
+    `;
+
+
+  // Preserve selected distributor
+  if (distributors.includes(currentValue)) {
+    distributorFilterEl.value = currentValue;
+  }
+}
 
 
 /* ============================================================
@@ -972,6 +999,7 @@ window.applyFiltersAndRender = function () {
   const searchText = normalizeText(searchBox?.value);
 
   const selectedSalesman = normalizeText(salesmanFilterEl?.value);
+  const selectedDistributor = normalizeText(distributorFilterEl?.value);
 
   const selectedType = normalizeText(typeFilter?.value);
 
@@ -1085,6 +1113,9 @@ window.applyFiltersAndRender = function () {
 
     }
 
+    if (selectedDistributor && distributor !== selectedDistributor) {
+      return false;
+    }
 
 
     if (selectedType && partyType !== selectedType) {
@@ -1126,7 +1157,8 @@ window.applyFiltersAndRender = function () {
 
 
   currentPage = 1;
-
+  /* Update KPI according to current filters */
+  updateOrderKpis();
   renderCurrentPage();
 
   updateFirestorePaginationButtons();
@@ -1691,64 +1723,47 @@ window.goNextPage = goToNextPage;
 
 ============================================================ */
 
+ let searchDebounceTimer = null;
 
+function runAutoFilter() {
+    window.applyFiltersAndRender();
+}
 
 if (salesmanFilterEl) {
-
-  salesmanFilterEl.addEventListener("change", window.applyFiltersAndRender);
-
+    salesmanFilterEl.addEventListener("change", runAutoFilter);
 }
 
-
+if (distributorFilterEl) {
+    distributorFilterEl.addEventListener("change", runAutoFilter);
+}
 
 if (typeFilter) {
-
-  typeFilter.addEventListener("change", window.applyFiltersAndRender);
-
+    typeFilter.addEventListener("change", runAutoFilter);
 }
-
-
 
 if (statusFilter) {
-
-  statusFilter.addEventListener("change", window.applyFiltersAndRender);
-
+    statusFilter.addEventListener("change", runAutoFilter);
 }
-
-
 
 if (dateFrom) {
-
-  dateFrom.addEventListener("change", window.applyFiltersAndRender);
-
+    dateFrom.addEventListener("change", runAutoFilter);
 }
-
-
 
 if (dateTo) {
-
-  dateTo.addEventListener("change", window.applyFiltersAndRender);
-
+    dateTo.addEventListener("change", runAutoFilter);
 }
-
-
-
-let searchDebounceTimer;
-
-
 
 if (searchBox) {
+    searchBox.addEventListener("input", function () {
 
-  searchBox.addEventListener("input", () => {
+        clearTimeout(searchDebounceTimer);
 
-    clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(function () {
+            runAutoFilter();
+        }, 300);
 
-    searchDebounceTimer = setTimeout(window.applyFiltersAndRender, 350);
-
-  });
-
+    });
 }
-
 
 
 /* ============================================================
@@ -1761,31 +1776,33 @@ if (searchBox) {
 
 window.clearAllFilters = function () {
 
-  if (searchBox) searchBox.value = "";
+    if (searchBox) searchBox.value = "";
+    if (statusFilter) statusFilter.value = "";
+    if (typeFilter) typeFilter.value = "";
+    if (salesmanFilterEl) salesmanFilterEl.value = "";
+    if (distributorFilterEl) distributorFilterEl.value = "";
+    if (dateFrom) dateFrom.value = "";
 
-  if (statusFilter) statusFilter.value = "";
+    if (dateTo) {
+        dateTo.value = "";
+        dateTo.setCustomValidity("");
+    }
 
-  if (dateFrom) dateFrom.value = "";
+    currentPage = 1;
 
-  if (dateTo) dateTo.value = "";
+    document.querySelectorAll(".order-kpi-card").forEach(card => {
+        card.classList.remove("active");
+    });
 
-  if (salesmanFilterEl) salesmanFilterEl.value = "";
+    const totalCard =
+        document.querySelector('.order-kpi-card[data-kpi-status=""]');
 
-  if (typeFilter) typeFilter.value = "";
+    if (totalCard) {
+        totalCard.classList.add("active");
+    }
 
-
-
-  selectedRowIds.clear();
-
-  currentPage = 1;
-
-
-
-  window.applyFiltersAndRender();
-
+    window.applyFiltersAndRender();
 };
-
-
 
 /* ============================================================
 
@@ -2591,377 +2608,377 @@ function updateSelectAllState() {
 
 function viewOrder(id) {
 
-    const o =
-        allOrdersMaster.find(x => x.id === id) ||
-        filteredOrders.find(x => x.id === id) ||
-        currentRenderedOrders.find(x => x.id === id);
+  const o =
+    allOrdersMaster.find(x => x.id === id) ||
+    filteredOrders.find(x => x.id === id) ||
+    currentRenderedOrders.find(x => x.id === id);
 
-    if (!o) {
-        alert("Order not found.");
-        return;
+  if (!o) {
+    alert("Order not found.");
+    return;
+  }
+
+  const modal = document.getElementById("modal");
+  const div = document.getElementById("modalContent");
+
+  if (!modal || !div) return;
+
+
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const safe = (value, fallback = "-") => {
+    if (
+      value === undefined ||
+      value === null ||
+      value === ""
+    ) {
+      return fallback;
     }
 
-    const modal = document.getElementById("modal");
-    const div = document.getElementById("modalContent");
+    return value;
+  };
 
-    if (!modal || !div) return;
 
+  const money = (value) => {
 
-    /* =====================================================
-       HELPERS
-    ===================================================== */
+    const num = Number(value);
 
-    const safe = (value, fallback = "-") => {
-        if (
-            value === undefined ||
-            value === null ||
-            value === ""
-        ) {
-            return fallback;
-        }
+    if (!Number.isFinite(num)) {
+      return "₹0.00";
+    }
 
-        return value;
-    };
-
-
-    const money = (value) => {
-
-        const num = Number(value);
-
-        if (!Number.isFinite(num)) {
-            return "₹0.00";
-        }
-
-        return "₹" + num.toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    };
-
-
-    const escapeHTML = (value) => {
-
-        return String(value ?? "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    };
-
-
-    const formatModalDate = (value) => {
-
-        if (!value) return "-";
-
-        try {
-
-            if (typeof formatDate === "function") {
-                return formatDate(value);
-            }
-
-        } catch (e) {}
-
-        const d = new Date(value);
-
-        if (Number.isNaN(d.getTime())) {
-            return String(value);
-        }
-
-        return d.toLocaleDateString("en-GB");
-    };
-
-
-    /* =====================================================
-       BASIC ORDER DATA
-    ===================================================== */
-
-    const party =
-        o.party ||
-        o.customer ||
-        {};
-
-
-    const partyName =
-        party.name ||
-        o.partyName ||
-        o.customerName ||
-        "-";
-
-
-    const mobile =
-        party.mobile ||
-        party.phone ||
-        o.mobile ||
-        o.phone ||
-        "-";
-
-
-    const city =
-        party.city ||
-        o.city ||
-        "-";
-
-
-    const state =
-        party.state ||
-        o.state ||
-        "";
-
-
-    const pincode =
-        party.pincode ||
-        o.pincode ||
-        "";
-
-
-    const gstNo =
-        party.gst ||
-        party.gstNo ||
-        party.gstin ||
-        o.gst ||
-        o.gstNo ||
-        o.gstin ||
-        "-";
-
-
-    const address =
-        party.address ||
-        o.address ||
-        o.partyAddress ||
-        "-";
-
-
-    const distributor =
-        party.distributor ||
-        o.distributor ||
-        o.distributorName ||
-        "-";
-
-
-    const partyType =
-        party.type ||
-        o.partyType ||
-        o.customerType ||
-        o.type ||
-        "-";
-
-
-    const orderNo =
-        o.orderNo ||
-        o.orderNumber ||
-        "-";
-
-
-    const orderDate =
-        o.orderDate ||
-        o.date ||
-        o.createdAt ||
-        "";
-
-
-    const salesman =
-        o.salesman ||
-        o.salesmanName ||
-        o.executiveName ||
-        o.createdByName ||
-        "-";
-
-
-    const status =
-        o.status ||
-        o.orderStatus ||
-        "Pending";
-
-
-    const remarks =
-        o.remarks ||
-        o.remark ||
-        o.notes ||
-        o.cancelRemark ||
-        "-";
-
-
-    /* =====================================================
-       ITEMS
-    ===================================================== */
-
-    const items =
-        o.cartItems ||
-        o.items ||
-        o.orderItems ||
-        [];
-
-
-    /* =====================================================
-       DISCOUNTS
-    ===================================================== */
-
-    const hardwareDiscount = Number(
-        o.hardwareDiscount ??
-        o.hardwareDiscountPercent ??
-        o.categoryDiscounts?.hardware ??
-        0
-    ) || 0;
-
-
-    const bathroomDiscount = Number(
-        o.bathroomDiscount ??
-        o.bathroomDiscountPercent ??
-        o.categoryDiscounts?.bathroom ??
-        0
-    ) || 0;
-
-
-    const ssDiscount = Number(
-        o.ssDiscount ??
-        o.ssDiscountPercent ??
-        o.categoryDiscounts?.ss ??
-        o.categoryDiscounts?.stainlessSteel ??
-        0
-    ) || 0;
-
-
-    /* =====================================================
-       BILLING
-    ===================================================== */
-
-    let calculatedTotal = 0;
-
-    items.forEach(item => {
-
-        const qty =
-            Number(item.qty ?? item.quantity ?? 0) || 0;
-
-        const rate =
-            Number(
-                item.afterDiscountRate ??
-                item.finalRate ??
-                item.rate ??
-                item.price ??
-                0
-            ) || 0;
-
-        const total =
-            Number(
-                item.afterDiscountTotal ??
-                item.finalAmount ??
-                item.amount ??
-                item.total ??
-                (qty * rate)
-            ) || 0;
-
-        calculatedTotal += total;
+    return "₹" + num.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
+  };
 
 
-    let totals = {};
+  const escapeHTML = (value) => {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
+
+  const formatModalDate = (value) => {
+
+    if (!value) return "-";
 
     try {
 
-        if (typeof calculateOrderDisplayTotals === "function") {
-            totals = calculateOrderDisplayTotals(o) || {};
-        }
+      if (typeof formatDate === "function") {
+        return formatDate(value);
+      }
 
-    } catch (error) {
-        console.warn("Could not calculate display totals:", error);
+    } catch (e) { }
+
+    const d = new Date(value);
+
+    if (Number.isNaN(d.getTime())) {
+      return String(value);
     }
 
-
-    const taxableAmount =
-        Number(
-            totals.taxable ??
-            totals.taxableAmount ??
-            o.taxableAmount ??
-            o.subtotal ??
-            calculatedTotal
-        ) || 0;
+    return d.toLocaleDateString("en-GB");
+  };
 
 
-    const freight =
-        Number(
-            totals.freight ??
-            o.freight ??
-            o.freightCharges ??
-            0
-        ) || 0;
+  /* =====================================================
+     BASIC ORDER DATA
+  ===================================================== */
+
+  const party =
+    o.party ||
+    o.customer ||
+    {};
 
 
-    const specialDiscount =
-        Number(
-            totals.specialDiscount ??
-            o.specialDiscount ??
-            o.extraDiscount ??
-            0
-        ) || 0;
+  const partyName =
+    party.name ||
+    o.partyName ||
+    o.customerName ||
+    "-";
 
 
-    const gstAmount =
-        Number(
-            totals.gst ??
-            totals.gstAmount ??
-            o.gstAmount ??
-            o.gst ??
-            0
-        ) || 0;
+  const mobile =
+    party.mobile ||
+    party.phone ||
+    o.mobile ||
+    o.phone ||
+    "-";
 
 
-    const grandTotal =
-        Number(
-            totals.grandTotal ??
-            totals.grandInclGST ??
-            o.grandTotal ??
-            o.totalAmount ??
-            (
-                taxableAmount +
-                freight -
-                specialDiscount +
-                gstAmount
-            )
-        ) || 0;
+  const city =
+    party.city ||
+    o.city ||
+    "-";
 
 
-    const beforeDiscount =
-        Number(
-            o.beforeDiscountTotal ??
-            o.totalBeforeDiscount ??
-            o.grossAmount ??
-            grandTotal
-        ) || 0;
+  const state =
+    party.state ||
+    o.state ||
+    "";
 
 
-    const categoryDiscountAmount =
-        Number(
-            o.categoryDiscountAmount ??
-            o.totalCategoryDiscount ??
-            0
-        ) || 0;
+  const pincode =
+    party.pincode ||
+    o.pincode ||
+    "";
 
 
-    /* =====================================================
-       BILL IMAGE
-    ===================================================== */
-
-    const billImage =
-        o.billImage ||
-        o.billUrl ||
-        o.billImageUrl ||
-        o.invoiceImage ||
-        "";
+  const gstNo =
+    party.gst ||
+    party.gstNo ||
+    party.gstin ||
+    o.gst ||
+    o.gstNo ||
+    o.gstin ||
+    "-";
 
 
-    /* =====================================================
-       ITEMS HTML
-    ===================================================== */
-
-    let itemsRows = "";
-
-    let itemsGrandTotal = 0;
+  const address =
+    party.address ||
+    o.address ||
+    o.partyAddress ||
+    "-";
 
 
-    if (!items.length) {
+  const distributor =
+    party.distributor ||
+    o.distributor ||
+    o.distributorName ||
+    "-";
 
-        itemsRows = `
+
+  const partyType =
+    party.type ||
+    o.partyType ||
+    o.customerType ||
+    o.type ||
+    "-";
+
+
+  const orderNo =
+    o.orderNo ||
+    o.orderNumber ||
+    "-";
+
+
+  const orderDate =
+    o.orderDate ||
+    o.date ||
+    o.createdAt ||
+    "";
+
+
+  const salesman =
+    o.salesman ||
+    o.salesmanName ||
+    o.executiveName ||
+    o.createdByName ||
+    "-";
+
+
+  const status =
+    o.status ||
+    o.orderStatus ||
+    "Pending";
+
+
+  const remarks =
+    o.remarks ||
+    o.remark ||
+    o.notes ||
+    o.cancelRemark ||
+    "-";
+
+
+  /* =====================================================
+     ITEMS
+  ===================================================== */
+
+  const items =
+    o.cartItems ||
+    o.items ||
+    o.orderItems ||
+    [];
+
+
+  /* =====================================================
+     DISCOUNTS
+  ===================================================== */
+
+  const hardwareDiscount = Number(
+    o.hardwareDiscount ??
+    o.hardwareDiscountPercent ??
+    o.categoryDiscounts?.hardware ??
+    0
+  ) || 0;
+
+
+  const bathroomDiscount = Number(
+    o.bathroomDiscount ??
+    o.bathroomDiscountPercent ??
+    o.categoryDiscounts?.bathroom ??
+    0
+  ) || 0;
+
+
+  const ssDiscount = Number(
+    o.ssDiscount ??
+    o.ssDiscountPercent ??
+    o.categoryDiscounts?.ss ??
+    o.categoryDiscounts?.stainlessSteel ??
+    0
+  ) || 0;
+
+
+  /* =====================================================
+     BILLING
+  ===================================================== */
+
+  let calculatedTotal = 0;
+
+  items.forEach(item => {
+
+    const qty =
+      Number(item.qty ?? item.quantity ?? 0) || 0;
+
+    const rate =
+      Number(
+        item.afterDiscountRate ??
+        item.finalRate ??
+        item.rate ??
+        item.price ??
+        0
+      ) || 0;
+
+    const total =
+      Number(
+        item.afterDiscountTotal ??
+        item.finalAmount ??
+        item.amount ??
+        item.total ??
+        (qty * rate)
+      ) || 0;
+
+    calculatedTotal += total;
+  });
+
+
+  let totals = {};
+
+  try {
+
+    if (typeof calculateOrderDisplayTotals === "function") {
+      totals = calculateOrderDisplayTotals(o) || {};
+    }
+
+  } catch (error) {
+    console.warn("Could not calculate display totals:", error);
+  }
+
+
+  const taxableAmount =
+    Number(
+      totals.taxable ??
+      totals.taxableAmount ??
+      o.taxableAmount ??
+      o.subtotal ??
+      calculatedTotal
+    ) || 0;
+
+
+  const freight =
+    Number(
+      totals.freight ??
+      o.freight ??
+      o.freightCharges ??
+      0
+    ) || 0;
+
+
+  const specialDiscount =
+    Number(
+      totals.specialDiscount ??
+      o.specialDiscount ??
+      o.extraDiscount ??
+      0
+    ) || 0;
+
+
+  const gstAmount =
+    Number(
+      totals.gst ??
+      totals.gstAmount ??
+      o.gstAmount ??
+      o.gst ??
+      0
+    ) || 0;
+
+
+  const grandTotal =
+    Number(
+      totals.grandTotal ??
+      totals.grandInclGST ??
+      o.grandTotal ??
+      o.totalAmount ??
+      (
+        taxableAmount +
+        freight -
+        specialDiscount +
+        gstAmount
+      )
+    ) || 0;
+
+
+  const beforeDiscount =
+    Number(
+      o.beforeDiscountTotal ??
+      o.totalBeforeDiscount ??
+      o.grossAmount ??
+      grandTotal
+    ) || 0;
+
+
+  const categoryDiscountAmount =
+    Number(
+      o.categoryDiscountAmount ??
+      o.totalCategoryDiscount ??
+      0
+    ) || 0;
+
+
+  /* =====================================================
+     BILL IMAGE
+  ===================================================== */
+
+  const billImage =
+    o.billImage ||
+    o.billUrl ||
+    o.billImageUrl ||
+    o.invoiceImage ||
+    "";
+
+
+  /* =====================================================
+     ITEMS HTML
+  ===================================================== */
+
+  let itemsRows = "";
+
+  let itemsGrandTotal = 0;
+
+
+  if (!items.length) {
+
+    itemsRows = `
             <tr>
                 <td colspan="7"
                     style="
@@ -2974,69 +2991,69 @@ function viewOrder(id) {
             </tr>
         `;
 
-    } else {
+  } else {
 
-        items.forEach((item, index) => {
+    items.forEach((item, index) => {
 
-            const qty =
-                Number(
-                    item.qty ??
-                    item.quantity ??
-                    0
-                ) || 0;
-
-
-            const originalRate =
-                Number(
-                    item.rate ??
-                    item.price ??
-                    0
-                ) || 0;
+      const qty =
+        Number(
+          item.qty ??
+          item.quantity ??
+          0
+        ) || 0;
 
 
-            const afterDiscountRate =
-                Number(
-                    item.afterDiscountRate ??
-                    item.finalRate ??
-                    item.discountedRate ??
-                    originalRate
-                ) || 0;
+      const originalRate =
+        Number(
+          item.rate ??
+          item.price ??
+          0
+        ) || 0;
 
 
-            const total =
-                Number(
-                    item.afterDiscountTotal ??
-                    item.finalAmount ??
-                    item.amount ??
-                    item.total ??
-                    (qty * afterDiscountRate)
-                ) || 0;
+      const afterDiscountRate =
+        Number(
+          item.afterDiscountRate ??
+          item.finalRate ??
+          item.discountedRate ??
+          originalRate
+        ) || 0;
 
 
-            itemsGrandTotal += total;
+      const total =
+        Number(
+          item.afterDiscountTotal ??
+          item.finalAmount ??
+          item.amount ??
+          item.total ??
+          (qty * afterDiscountRate)
+        ) || 0;
 
 
-            const code =
-                item.code ||
-                item.itemCode ||
-                item.sku ||
-                "-";
+      itemsGrandTotal += total;
 
 
-            const name =
-                item.name ||
-                item.itemName ||
-                item.productName ||
-                item.title ||
-                "-";
+      const code =
+        item.code ||
+        item.itemCode ||
+        item.sku ||
+        "-";
 
 
-            const unit =
-                item.unit ||
-                "-";
+      const name =
+        item.name ||
+        item.itemName ||
+        item.productName ||
+        item.title ||
+        "-";
 
 
-            itemsRows += `
+      const unit =
+        item.unit ||
+        "-";
+
+
+      itemsRows += `
 
                 <tr>
 
@@ -3074,58 +3091,58 @@ function viewOrder(id) {
 
             `;
 
-        });
+    });
 
-    }
-
-
-    /* =====================================================
-       STATUS LOGIC
-    ===================================================== */
-
-    const normalizedStatus =
-        String(status)
-            .trim()
-            .toLowerCase();
+  }
 
 
-    const statusRank = (() => {
+  /* =====================================================
+     STATUS LOGIC
+  ===================================================== */
 
-        if (
-            normalizedStatus.includes("deliver")
-        ) return 5;
-
-        if (
-            normalizedStatus.includes("dispatch")
-        ) return 4;
-
-        if (
-            normalizedStatus.includes("pack")
-        ) return 3;
-
-        if (
-            normalizedStatus.includes("confirm") ||
-            normalizedStatus.includes("payment")
-        ) return 2;
-
-        return 1;
-
-    })();
+  const normalizedStatus =
+    String(status)
+      .trim()
+      .toLowerCase();
 
 
-    const timelineStep = (
-        rank,
-        icon,
-        label,
-        dateText = ""
-    ) => {
+  const statusRank = (() => {
 
-        const active =
-            statusRank >= rank
-                ? "active"
-                : "";
+    if (
+      normalizedStatus.includes("deliver")
+    ) return 5;
 
-        return `
+    if (
+      normalizedStatus.includes("dispatch")
+    ) return 4;
+
+    if (
+      normalizedStatus.includes("pack")
+    ) return 3;
+
+    if (
+      normalizedStatus.includes("confirm") ||
+      normalizedStatus.includes("payment")
+    ) return 2;
+
+    return 1;
+
+  })();
+
+
+  const timelineStep = (
+    rank,
+    icon,
+    label,
+    dateText = ""
+  ) => {
+
+    const active =
+      statusRank >= rank
+        ? "active"
+        : "";
+
+    return `
 
             <div class="timeline-step ${active}">
 
@@ -3137,57 +3154,56 @@ function viewOrder(id) {
                     ${label}
                 </span>
 
-                ${
-                    dateText
-                        ? `
+                ${dateText
+        ? `
                             <span class="timeline-date">
                                 ${dateText}
                             </span>
                         `
-                        : ""
-                }
+        : ""
+      }
 
             </div>
 
         `;
 
-    };
+  };
 
 
-    /* =====================================================
-       PARTY ADDRESS
-    ===================================================== */
+  /* =====================================================
+     PARTY ADDRESS
+  ===================================================== */
 
-    const fullAddress = [
-        address !== "-" ? address : "",
-        city !== "-" ? city : "",
-        state,
-        pincode
-    ]
-        .filter(Boolean)
-        .join(", ");
-
-
-    /* =====================================================
-       WHATSAPP
-    ===================================================== */
-
-    const mobileDigits =
-        String(mobile)
-            .replace(/\D/g, "");
+  const fullAddress = [
+    address !== "-" ? address : "",
+    city !== "-" ? city : "",
+    state,
+    pincode
+  ]
+    .filter(Boolean)
+    .join(", ");
 
 
-    const whatsappNumber =
-        mobileDigits.length === 10
-            ? `91${mobileDigits}`
-            : mobileDigits;
+  /* =====================================================
+     WHATSAPP
+  ===================================================== */
+
+  const mobileDigits =
+    String(mobile)
+      .replace(/\D/g, "");
 
 
-    /* =====================================================
-       MODAL HTML
-    ===================================================== */
+  const whatsappNumber =
+    mobileDigits.length === 10
+      ? `91${mobileDigits}`
+      : mobileDigits;
 
-    div.innerHTML = `
+
+  /* =====================================================
+     MODAL HTML
+  ===================================================== */
+
+  div.innerHTML = `
 
     <div class="order-view-shell">
 
@@ -3323,9 +3339,8 @@ function viewOrder(id) {
                     Party Details
 
 
-                    ${
-                        typeof editOrder === "function"
-                            ? `
+                    ${typeof editOrder === "function"
+      ? `
                                 <button
                                     type="button"
                                     class="party-edit-btn"
@@ -3338,8 +3353,8 @@ function viewOrder(id) {
 
                                 </button>
                             `
-                            : ""
-                    }
+      : ""
+    }
 
                 </div>
 
@@ -3370,9 +3385,8 @@ function viewOrder(id) {
 
                             ${escapeHTML(mobile)}
 
-                            ${
-                                whatsappNumber
-                                    ? `
+                            ${whatsappNumber
+      ? `
                                         <a
                                             href="https://wa.me/${whatsappNumber}"
                                             target="_blank"
@@ -3386,8 +3400,8 @@ function viewOrder(id) {
                                             <i class="fa-brands fa-whatsapp"></i>
                                         </a>
                                     `
-                                    : ""
-                            }
+      : ""
+    }
 
                         </strong>
 
@@ -3876,9 +3890,8 @@ function viewOrder(id) {
                 <div class="bill-image-content">
 
 
-                    ${
-                        billImage
-                            ? `
+                    ${billImage
+      ? `
 
                                 <img
                                     src="${escapeHTML(billImage)}"
@@ -3890,7 +3903,7 @@ function viewOrder(id) {
                                 >
 
                             `
-                            : `
+      : `
 
                                 <div
                                     class="bill-image-preview"
@@ -3908,7 +3921,7 @@ function viewOrder(id) {
                                 </div>
 
                             `
-                    }
+    }
 
 
                     <div class="bill-image-info">
@@ -3918,18 +3931,16 @@ function viewOrder(id) {
 
                             <i class="fa-regular fa-file"></i>
 
-                            ${
-                                billImage
-                                    ? "Bill Uploaded"
-                                    : "Not Uploaded"
-                            }
+                            ${billImage
+      ? "Bill Uploaded"
+      : "Not Uploaded"
+    }
 
                         </div>
 
 
-                        ${
-                            billImage
-                                ? `
+                        ${billImage
+      ? `
 
                                     <button
                                         type="button"
@@ -3944,7 +3955,7 @@ function viewOrder(id) {
                                     </button>
 
                                 `
-                                : `
+      : `
 
                                     <span
                                         style="
@@ -3957,7 +3968,7 @@ function viewOrder(id) {
                                     </span>
 
                                 `
-                        }
+    }
 
 
                     </div>
@@ -3987,39 +3998,39 @@ function viewOrder(id) {
 
 
                         ${timelineStep(
-                            1,
-                            "fa-solid fa-pen-to-square",
-                            "Order Created",
-                            formatModalDate(orderDate)
-                        )}
+      1,
+      "fa-solid fa-pen-to-square",
+      "Order Created",
+      formatModalDate(orderDate)
+    )}
 
 
                         ${timelineStep(
-                            2,
-                            "fa-solid fa-check",
-                            "Confirmed"
-                        )}
+      2,
+      "fa-solid fa-check",
+      "Confirmed"
+    )}
 
 
                         ${timelineStep(
-                            3,
-                            "fa-solid fa-box",
-                            "Packing"
-                        )}
+      3,
+      "fa-solid fa-box",
+      "Packing"
+    )}
 
 
                         ${timelineStep(
-                            4,
-                            "fa-solid fa-truck",
-                            "Dispatched"
-                        )}
+      4,
+      "fa-solid fa-truck",
+      "Dispatched"
+    )}
 
 
                         ${timelineStep(
-                            5,
-                            "fa-solid fa-circle-check",
-                            "Delivered"
-                        )}
+      5,
+      "fa-solid fa-circle-check",
+      "Delivered"
+    )}
 
 
                     </div>
@@ -4045,11 +4056,10 @@ function viewOrder(id) {
 
                 <div class="order-notes-box">
 
-                    ${
-                        remarks !== "-"
-                            ? escapeHTML(remarks)
-                            : "No additional remarks available."
-                    }
+                    ${remarks !== "-"
+      ? escapeHTML(remarks)
+      : "No additional remarks available."
+    }
 
                 </div>
 
@@ -4064,72 +4074,72 @@ function viewOrder(id) {
     `;
 
 
-    /* =====================================================
-       OPEN MODAL
-    ===================================================== */
+  /* =====================================================
+     OPEN MODAL
+  ===================================================== */
 
-    modal.style.display = "flex";
+  modal.style.display = "flex";
 
-    document.body.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
 
 }
 function printOrderDetails(id) {
 
-    const o =
-        allOrdersMaster.find(x => x.id === id) ||
-        filteredOrders.find(x => x.id === id) ||
-        currentRenderedOrders.find(x => x.id === id);
+  const o =
+    allOrdersMaster.find(x => x.id === id) ||
+    filteredOrders.find(x => x.id === id) ||
+    currentRenderedOrders.find(x => x.id === id);
 
-    if (!o) {
-        alert("Order not found.");
-        return;
-    }
+  if (!o) {
+    alert("Order not found.");
+    return;
+  }
 
 
-    /*
-     * Sales dashboard wala PetroPDF available hai
-     * to SAME approved PDF/Print design use hoga.
-     */
+  /*
+   * Sales dashboard wala PetroPDF available hai
+   * to SAME approved PDF/Print design use hoga.
+   */
 
-    if (
-        window.PetroPDF &&
-        typeof window.PetroPDF.preview === "function"
-    ) {
+  if (
+    window.PetroPDF &&
+    typeof window.PetroPDF.preview === "function"
+  ) {
 
-        try {
+    try {
 
-            window.PetroPDF.preview(o, {
+      window.PetroPDF.preview(o, {
 
-                logoUrl:
-                    new URL(
-                        "images/logo.webp",
-                        window.location.href
-                    ).href,
+        logoUrl:
+          new URL(
+            "images/logo.webp",
+            window.location.href
+          ).href,
 
-                autoPrint: true
+        autoPrint: true
 
-            });
+      });
 
-            return;
+      return;
 
-        } catch (error) {
+    } catch (error) {
 
-            console.error(
-                "PETRO PDF print error:",
-                error
-            );
-
-        }
+      console.error(
+        "PETRO PDF print error:",
+        error
+      );
 
     }
 
+  }
 
-    /*
-     * Fallback:
-     * PetroPDF available nahi hai to browser print.
-     */
 
-    window.print();
+  /*
+   * Fallback:
+   * PetroPDF available nahi hai to browser print.
+   */
+
+  window.print();
 
 }
 /* ============================================================
@@ -4479,21 +4489,21 @@ window.closeModal = function () {
 
 
 window.downloadOrder = function (orderId = currentViewedOrderId) {
-    const order = allOrdersMaster.find((item) => String(item.id) === String(orderId)) || currentRenderedOrders.find((item) => String(item.id) === String(orderId));
-    if (!order) {
-      alert("Order not found");
-      return;
-    }
+  const order = allOrdersMaster.find((item) => String(item.id) === String(orderId)) || currentRenderedOrders.find((item) => String(item.id) === String(orderId));
+  if (!order) {
+    alert("Order not found");
+    return;
+  }
 
-    const items = Array.isArray(order.items) ? order.items : [];
-    const rows = items.length
-      ? items
-        .map((item, index) => {
-          const qty = numberValue(item.qty ?? item.quantity ?? 0);
-          const rate = numberValue(item.rate ?? item.price ?? 0);
-          const amount = parseAmountLikeDashboard(item.amount ?? item.total ?? (qty * rate));
+  const items = Array.isArray(order.items) ? order.items : [];
+  const rows = items.length
+    ? items
+      .map((item, index) => {
+        const qty = numberValue(item.qty ?? item.quantity ?? 0);
+        const rate = numberValue(item.rate ?? item.price ?? 0);
+        const amount = parseAmountLikeDashboard(item.amount ?? item.total ?? (qty * rate));
 
-          return `
+        return `
               <tr>
                 <td class="center">${index + 1}</td>
                 <td>${escapeHTML(item.code || "-")}</td>
@@ -4504,32 +4514,32 @@ window.downloadOrder = function (orderId = currentViewedOrderId) {
                 <td class="num">${formatMoney(amount)}</td>
               </tr>
             `;
-        })
-        .join("")
-      : '<tr><td colspan="7" class="center empty">No items</td></tr>';
+      })
+      .join("")
+    : '<tr><td colspan="7" class="center empty">No items</td></tr>';
 
 
-    const pdfTotals = calculateOrderDisplayTotals(order);
-    const pdfSubtotal = pdfTotals.taxableAmount;
+  const pdfTotals = calculateOrderDisplayTotals(order);
+  const pdfSubtotal = pdfTotals.taxableAmount;
 
-    const logoUrl = new URL("/images/logo.webp", window.location.href).href;
-    const popup = window.open("", "_blank", "width=1100,height=850");
+  const logoUrl = new URL("/images/logo.webp", window.location.href).href;
+  const popup = window.open("", "_blank", "width=1100,height=850");
 
-    if (!popup) {
-      alert("Please allow pop-ups to download the order PDF.");
-      return;
-    }
+  if (!popup) {
+    alert("Please allow pop-ups to download the order PDF.");
+    return;
+  }
 
-    const fileName = `${String(order.orderNo || "Petro-Quotation").replace(/[^a-zA-Z0-9_-]/g, "_")}-PETRO-OMS.pdf`;
-    const fileNameJS = JSON.stringify(fileName);
-    const shareTitleJS = JSON.stringify(
-      `Petro OMS Quotation ${order.orderNo || ""}`
-    );
-    const shareTextJS = JSON.stringify(
-      `Quotation ${order.orderNo || ""} - www.oms.rankchahiye.com`
-    );
+  const fileName = `${String(order.orderNo || "Petro-Quotation").replace(/[^a-zA-Z0-9_-]/g, "_")}-PETRO-OMS.pdf`;
+  const fileNameJS = JSON.stringify(fileName);
+  const shareTitleJS = JSON.stringify(
+    `Petro OMS Quotation ${order.orderNo || ""}`
+  );
+  const shareTextJS = JSON.stringify(
+    `Quotation ${order.orderNo || ""} - www.oms.rankchahiye.com`
+  );
 
-    popup.document.write(`<!doctype html>
+  popup.document.write(`<!doctype html>
       <html>
       <head>
         <meta charset="utf-8">
@@ -4769,8 +4779,8 @@ padding:5px;
       </body>
       </html>`);
 
-    popup.document.close();
-  };
+  popup.document.close();
+};
 
 /* ============================================================
 
@@ -5565,3 +5575,822 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchFirstOrdersPage();
 
 });
+/* =========================================================
+   PETRO OMS - KPI SYSTEM
+========================================================= */
+
+function normalizeKpiStatus(value) {
+
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+
+}
+
+
+/* =========================================================
+   GET ORDER STATUS
+========================================================= */
+
+function getKpiOrderStatus(order) {
+
+  return normalizeKpiStatus(
+    order.status ||
+    order.orderStatus ||
+    order.deliveryStatus ||
+    "Pending"
+  );
+
+}
+
+
+/* =========================================================
+   CALCULATE %
+========================================================= */
+
+function calculateKpiPercentage(count, total) {
+
+  if (!total || total <= 0) {
+    return 0;
+  }
+
+  return (count / total) * 100;
+
+}
+
+
+/* =========================================================
+   FORMAT %
+========================================================= */
+
+function formatKpiPercentage(value) {
+
+  const number = Number(value) || 0;
+
+  /*
+     0       => 0%
+     100     => 100%
+     51.93   => 51.9%
+  */
+
+  if (number === 0) return "0%";
+  if (number === 100) return "100%";
+
+  return number.toFixed(1) + "%";
+
+}
+
+
+/* =========================================================
+   UPDATE ONE KPI
+========================================================= */
+
+function setKpiData(config) {
+
+  const {
+    countId,
+    percentId,
+    bottomPercentId,
+    progressId,
+    count,
+    total
+  } = config;
+
+
+  const percentage = calculateKpiPercentage(
+    count,
+    total
+  );
+
+
+  const percentageText =
+    formatKpiPercentage(percentage);
+
+
+  const countElement =
+    document.getElementById(countId);
+
+  const percentElement =
+    document.getElementById(percentId);
+
+  const bottomPercentElement =
+    document.getElementById(bottomPercentId);
+
+  const progressElement =
+    document.getElementById(progressId);
+
+
+  if (countElement) {
+    countElement.textContent =
+      Number(count || 0).toLocaleString("en-IN");
+  }
+
+
+  if (percentElement) {
+    percentElement.textContent =
+      percentageText;
+  }
+
+
+  if (bottomPercentElement) {
+    bottomPercentElement.textContent =
+      percentageText;
+  }
+
+
+  if (progressElement) {
+
+    const safePercentage =
+      Math.max(
+        0,
+        Math.min(100, percentage)
+      );
+
+    progressElement.style.width =
+      safePercentage + "%";
+  }
+
+}
+
+
+/* =========================================================
+   GET ORDERS FOR KPI
+
+   IMPORTANT:
+   filteredOrders is normally used.
+
+   But if Status Filter itself is selected,
+   we calculate KPI using all OTHER filters so
+   remaining KPI cards do not become zero.
+========================================================= */
+
+function getOrdersForKpi() {
+
+  /*
+     We rebuild the filtered list here WITHOUT
+     applying status filter.
+
+     This keeps:
+
+     Search
+     Salesman
+     Party Type
+     Date From
+     Date To
+
+     but ignores Status.
+  */
+
+
+  let orders =
+    Array.isArray(allOrdersMaster)
+      ? [...allOrdersMaster]
+      : [];
+
+
+  /* =========================
+     SEARCH
+  ========================= */
+
+  const searchValue =
+    String(
+      searchBox?.value || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if (searchValue) {
+
+    orders = orders.filter(order => {
+
+      const searchableText = [
+
+        order.orderNo,
+        order.orderNumber,
+
+        order.partyName,
+        order.customerName,
+
+        order.mobile,
+        order.phone,
+
+        order.gst,
+        order.gstin,
+
+        order.distributor,
+        order.distributorName,
+
+        order.salesman,
+        order.salesmanName,
+
+        order.partyType,
+
+        order.status,
+        order.orderStatus
+
+      ]
+        .map(value =>
+          String(value || "").toLowerCase()
+        )
+        .join(" ");
+
+
+      return searchableText.includes(
+        searchValue
+      );
+
+    });
+
+  }
+
+
+  /* =========================
+     SALESMAN
+  ========================= */
+
+  const salesmanValue =
+    String(
+      salesmanFilter?.value || ""
+    ).trim();
+
+
+  if (salesmanValue) {
+
+    orders = orders.filter(order => {
+
+      const salesman =
+        order.salesman ||
+        order.salesmanName ||
+        "";
+
+      return String(salesman).trim() ===
+        salesmanValue;
+
+    });
+
+  }
+
+
+  /* =========================
+     PARTY TYPE
+  ========================= */
+
+  const partyTypeValue =
+    String(
+      typeFilter?.value || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if (partyTypeValue) {
+
+    orders = orders.filter(order => {
+
+      const type =
+        typeof getPartyType === "function"
+          ? getPartyType(order)
+          : (
+            order.partyType ||
+            ""
+          );
+
+
+      return String(type)
+        .trim()
+        .toLowerCase() === partyTypeValue;
+
+    });
+
+  }
+
+
+  /* =========================
+     DATE FROM / TO
+  ========================= */
+
+  const fromValue =
+    dateFrom?.value || "";
+
+  const toValue =
+    dateTo?.value || "";
+
+
+  if (fromValue || toValue) {
+
+    const fromDate =
+      fromValue
+        ? new Date(fromValue + "T00:00:00")
+        : null;
+
+
+    const toDate =
+      toValue
+        ? new Date(toValue + "T23:59:59")
+        : null;
+
+
+    orders = orders.filter(order => {
+
+      let orderDate = null;
+
+
+      /*
+       * Use your existing helper first
+       */
+
+      if (typeof getOrderDateObject === "function") {
+
+        try {
+
+          orderDate =
+            getOrderDateObject(order);
+
+        } catch (error) {
+
+          orderDate = null;
+
+        }
+
+      }
+
+
+      /*
+       * Fallback
+       */
+
+      if (
+        !orderDate ||
+        isNaN(orderDate.getTime())
+      ) {
+
+        const rawDate =
+          order.date ||
+          order.orderDate ||
+          order.createdAt ||
+          order.timestamp;
+
+
+        if (
+          rawDate &&
+          typeof rawDate.toDate === "function"
+        ) {
+
+          orderDate =
+            rawDate.toDate();
+
+        }
+
+        else if (rawDate) {
+
+          orderDate =
+            new Date(rawDate);
+
+        }
+
+      }
+
+
+      if (
+        !orderDate ||
+        isNaN(orderDate.getTime())
+      ) {
+
+        return false;
+
+      }
+
+
+      if (
+        fromDate &&
+        orderDate < fromDate
+      ) {
+
+        return false;
+
+      }
+
+
+      if (
+        toDate &&
+        orderDate > toDate
+      ) {
+
+        return false;
+
+      }
+
+
+      return true;
+
+    });
+
+  }
+
+
+  return orders;
+
+}
+
+
+/* =========================================================
+   UPDATE ALL KPI CARDS
+========================================================= */
+
+function updateOrderKpis() {
+
+  const data = Array.isArray(filteredOrders)
+    ? filteredOrders
+    : [];
+
+  const total = data.length;
+
+  let delivered = 0;
+  let partial = 0;
+  let pending = 0;
+  let hold = 0;
+  let cancelled = 0;
+
+  data.forEach(order => {
+
+    const status = String(getOrderStatus(order) || "Pending")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ");
+
+    switch (status) {
+
+      case "delivered":
+        delivered++;
+        break;
+
+      case "partial delivered":
+      case "partial delivery":
+      case "partially delivered":
+        partial++;
+        break;
+
+      case "hold":
+      case "on hold":
+        hold++;
+        break;
+
+      case "cancelled":
+      case "canceled":
+        cancelled++;
+        break;
+
+      case "pending":
+      case "":
+        pending++;
+        break;
+    }
+  });
+
+
+  // ==============================
+  // PERCENTAGE CALCULATOR
+  // ==============================
+
+  const percent = (count) => {
+    if (!total) return 0;
+    return Math.round((count / total) * 100);
+  };
+
+
+  const deliveredPct = percent(delivered);
+  const partialPct = percent(partial);
+  const pendingPct = percent(pending);
+  const holdPct = percent(hold);
+  const cancelledPct = percent(cancelled);
+
+
+  // ==============================
+  // TOTAL
+  // ==============================
+
+  setText("totalOrdersCount", total);
+  setText("totalOrdersPercent", total ? "100%" : "0%");
+  setText("totalOrdersBottomPercent", total ? "100%" : "0%");
+  setProgress("totalOrdersProgress", total ? 100 : 0);
+
+
+  // ==============================
+  // DELIVERED
+  // ==============================
+
+  setText("deliveredCount", delivered);
+  setText("deliveredPercent", deliveredPct + "%");
+  setText("deliveredBottomPercent", deliveredPct + "%");
+  setProgress("deliveredProgress", deliveredPct);
+
+
+  // ==============================
+  // PARTIAL DELIVERED
+  // ==============================
+
+  setText("partialCount", partial);
+  setText("partialPercent", partialPct + "%");
+  setText("partialBottomPercent", partialPct + "%");
+  setProgress("partialProgress", partialPct);
+
+
+  // ==============================
+  // PENDING
+  // ==============================
+
+  setText("pendingCount", pending);
+  setText("pendingPercent", pendingPct + "%");
+  setText("pendingBottomPercent", pendingPct + "%");
+  setProgress("pendingProgress", pendingPct);
+
+
+  // ==============================
+  // HOLD
+  // ==============================
+
+  setText("holdCount", hold);
+  setText("holdPercent", holdPct + "%");
+  setText("holdBottomPercent", holdPct + "%");
+  setProgress("holdProgress", holdPct);
+
+
+  // ==============================
+  // CANCELLED
+  // ==============================
+
+  setText("cancelledCount", cancelled);
+  setText("cancelledPercent", cancelledPct + "%");
+  setText("cancelledBottomPercent", cancelledPct + "%");
+  setProgress("cancelledProgress", cancelledPct);
+}
+
+
+/* =====================================================
+   KPI HELPER
+===================================================== */
+
+function setText(id, value) {
+
+  const el = document.getElementById(id);
+
+  if (el) {
+    el.textContent = value;
+  }
+}
+
+
+function setProgress(id, percentage) {
+
+  const el = document.getElementById(id);
+
+  if (el) {
+    el.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
+  }
+}
+function setKpiValue(id, value) {
+
+  const el = document.getElementById(id);
+
+  if (el) {
+    el.textContent = value;
+  }
+}
+
+
+function getKpiPercent(count, total) {
+
+  if (!total) return "0%";
+
+  return Math.round(
+    (count / total) * 100
+  ) + "%";
+}
+
+/* =========================================================
+   KPI CLICK -> STATUS FILTER
+========================================================= */
+
+function filterByKpiStatus(status) {
+
+  /*
+   * Update your existing Status dropdown
+   */
+
+  if (statusFilter) {
+
+    statusFilter.value =
+      status || "";
+
+  }
+
+
+  /*
+   * Reset pagination
+   */
+
+  if (
+    typeof currentPage !== "undefined"
+  ) {
+
+    currentPage = 1;
+
+  }
+
+
+  /*
+   * Run your existing filter function
+   */
+
+  if (
+    typeof applyFilters === "function"
+  ) {
+
+    applyFilters();
+
+  }
+
+  else if (
+    typeof filterOrders === "function"
+  ) {
+
+    filterOrders();
+
+  }
+
+  else {
+
+    console.warn(
+      "PETRO OMS: Filter function not found."
+    );
+
+  }
+
+
+  updateActiveKpiCard();
+
+}
+
+
+
+/* =========================================================
+   ACTIVE KPI
+========================================================= */
+
+function updateActiveKpiCard() {
+
+  const currentStatus =
+    normalizeKpiStatus(
+      statusFilter?.value || ""
+    );
+
+
+  document
+    .querySelectorAll(
+      ".order-kpi-card"
+    )
+    .forEach(card => {
+
+      const cardStatus =
+        normalizeKpiStatus(
+          card.dataset.kpiStatus || ""
+        );
+
+
+      card.classList.toggle(
+        "active",
+        cardStatus === currentStatus
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   KPI FILTER LISTENERS
+========================================================= */
+
+function initializeKpiSystem() {
+
+  /*
+   * Search
+   */
+
+  if (searchBox) {
+
+    searchBox.addEventListener(
+      "input",
+      function () {
+
+        setTimeout(
+          updateOrderKpis,
+          0
+        );
+
+      }
+    );
+
+  }
+
+
+  /*
+   * Salesman
+   */
+
+  if (salesmanFilter) {
+
+    salesmanFilter.addEventListener(
+      "change",
+      updateOrderKpis
+    );
+
+  }
+
+
+  /*
+   * Party Type
+   */
+
+  if (typeFilter) {
+
+    typeFilter.addEventListener(
+      "change",
+      updateOrderKpis
+    );
+
+  }
+
+
+  /*
+   * Status
+   */
+
+  if (statusFilter) {
+
+    statusFilter.addEventListener(
+      "change",
+      function () {
+
+        updateActiveKpiCard();
+
+        /*
+         * Counts remain based on other filters
+         */
+
+        updateOrderKpis();
+
+      }
+    );
+
+  }
+
+
+  /*
+   * FROM DATE
+   */
+
+  if (dateFrom) {
+
+    dateFrom.addEventListener(
+      "change",
+      updateOrderKpis
+    );
+
+  }
+
+
+  /*
+   * TO DATE
+   */
+
+  if (dateTo) {
+
+    dateTo.addEventListener(
+      "change",
+      updateOrderKpis
+    );
+
+  }
+
+
+  updateActiveKpiCard();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    initializeKpiSystem();
+
+  }
+);
+updateOrderKpis();
