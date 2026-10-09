@@ -2606,4 +2606,14 @@ window.itemMaster = {
     },
     photo: "/images/products/stainlesssteel/1165.webp"
   },
+  "1201": {
+    name: "Toilet Paper Holder",
+    category: "bathroom",
+    units: {
+      PCS: { rate: 1220, pcs: 1 },
+      BOX: { rate: 2440, pcs: 2 },
+      CTN: { rate: 82960, pcs: 68 }
+    },
+    photo: "/images/products/bathroom/1201.webp"
+  }
 };

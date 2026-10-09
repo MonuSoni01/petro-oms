@@ -9,7 +9,8 @@ const SALESMAN_PREFIX = Object.freeze({
     "Amit Soni": "AS",
     "Vivek Srivastava": "VS",
     "Prince Gupta": "PG",
-    "Shubham Meena": "SS"
+    "Shubham Meena": "SS",
+    "Sumanta Kumar": "Sk"
 });
 
 const SALESMAN_PASSWORDS = Object.freeze({
@@ -19,7 +20,8 @@ const SALESMAN_PASSWORDS = Object.freeze({
     "Vivek Srivastava": "vivek123",
     "Rup Ranjan Bora": "rup123",
     "Prince Gupta": "prince123",
-    "Shubham Meena": "shubham123"
+    "Shubham Meena": "shubham123",
+    "Sumanta Kumar": "sumanta123"
 });
 
 function clearSalesSession() {
