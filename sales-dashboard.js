@@ -53,7 +53,8 @@
       "Vivek Srivastava": "VS",
       "Rup Ranjan Bora": "RRB",
       "Prince Gupta": "PG", 
-      "Shubham Meena": "SS"
+      "Shubham Meena": "SS",
+      "Sumanta Kumar": "SK"
     })
   });
 

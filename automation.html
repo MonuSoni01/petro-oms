@@ -524,6 +524,74 @@ Petro Industech Pvt. Ltd.</textarea>
       </div>
     </div>
 
+    <!-- =====================================================
+         MONTHLY PENDING ORDER AUTOMATION
+    ====================================================== -->
+    <div class="card" style="margin-top:18px;">
+      <h2>
+        <span><i class="fa-solid fa-calendar-days"></i> Monthly Pending Order Automation</span>
+        <small>Pending + Bill/Photo Missing</small>
+      </h2>
+
+      <div class="form-grid">
+        <div>
+          <label>Mode</label>
+          <select id="monthlyPendingMode">
+            <option value="preview">Preview Only</option>
+            <option value="send">Send Mail</option>
+          </select>
+          <p class="hint">Preview first. Send mode will send one consolidated email to each salesman requiring action.</p>
+        </div>
+
+        <div>
+          <label>Rule</label>
+          <input type="text" value="Status = Pending + Bill/Photo Missing" disabled>
+          <p class="hint">Reporting Manager CC is maintained in Google Apps Script.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="runMonthlyPendingBtn" onclick="runMonthlyPendingCheck()">
+          <i class="fa-solid fa-magnifying-glass-chart"></i> Run Monthly Check
+        </button>
+
+        <button class="btn btn-warning" onclick="loadSalesmen()">
+          <i class="fa-solid fa-refresh"></i> Refresh Salesmen
+        </button>
+
+        <span id="monthlyPendingLastRun" class="hint" style="margin:0;"></span>
+      </div>
+
+      <div class="stats" style="margin-top:18px;">
+        <div class="stat"><span>Total OMS Orders</span><b id="monthlyTotalOrders">0</b></div>
+        <div class="stat"><span>Pending Orders</span><b id="monthlyPendingOrders">0</b></div>
+        <div class="stat"><span>Photo/Bill Missing</span><b id="monthlyMissingBills">0</b></div>
+        <div class="stat"><span>Salesmen Requiring Action</span><b id="monthlySalesmenAction">0</b></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Salesman</th>
+              <th>Total Orders</th>
+              <th>Pending</th>
+              <th>Photo/Bill Missing</th>
+              <th>Order Numbers</th>
+              <th>Mail To</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="monthlyPendingBody">
+            <tr>
+              <td colspan="8" style="text-align:center;color:#6b7280;">Run monthly check to see result</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="card" style="margin-top:18px;">
       <h2>
         <span><i class="fa-solid fa-users"></i> Salesman Master List</span>
@@ -1200,6 +1268,225 @@ Petro Industech Pvt. Ltd.</textarea>
       });
 
       return true;
+    }
+
+    /* =====================================================
+       MONTHLY PENDING ORDER AUTOMATION
+    ====================================================== */
+
+    function getMonthlyOrderNumber(order, docId = "") {
+      return String(
+        order.orderNo ||
+        order.orderNumber ||
+        order.odNo ||
+        order.orderId ||
+        docId ||
+        "-"
+      ).trim();
+    }
+
+    function isMonthlyPendingOrder(order) {
+      return normalizeText(order.status || "Pending") === "pending";
+    }
+
+    function hasMonthlyBillPhoto(order) {
+      return Boolean(
+        String(order.billImage || "").trim() ||
+        String(order.billImageUrl || "").trim() ||
+        String(order.imageUrl || "").trim()
+      );
+    }
+
+    function buildMonthlyPendingBody(salesman, totalOrders, pendingOrders, missingOrders, orderNumbers) {
+      const orderList = orderNumbers
+        .map((no, index) => `${index + 1}. ${no}`)
+        .join("\n");
+
+      return `Dear ${salesman.name},
+
+This is an automated reminder from PETRO OMS.
+
+Your current OMS order summary is as follows:
+
+Total Orders: ${totalOrders}
+Pending Orders: ${pendingOrders.length}
+Pending Orders with Bill/Photo Missing: ${missingOrders.length}
+
+Order Numbers Requiring Action:
+
+${orderList || "-"}
+
+Please review the above orders in OMS.
+
+If any order has already been delivered, please update its latest status in OMS. For orders that are still pending, please ensure the required bill/photo/document is uploaded wherever applicable.
+
+Kindly complete the required updates at the earliest.
+
+Regards,
+PETRO OMS Team
+Petro Industech Pvt. Ltd.
+
+This is an automated system-generated email.`;
+    }
+
+    async function sendMonthlyPendingMailFromPage(salesman, totalOrders, pendingOrders, missingOrders, orderNumbers) {
+      if (!salesman || !salesman.email) {
+        throw new Error("Salesman email missing");
+      }
+
+      const subject = `OMS Pending Orders Reminder | ${salesman.name} | ${missingOrders.length} Action Required`;
+      const body = buildMonthlyPendingBody(
+        salesman,
+        totalOrders,
+        pendingOrders,
+        missingOrders,
+        orderNumbers
+      );
+
+      const payload = {
+        secret: APPS_SCRIPT_SECRET,
+        mailType: "MONTHLY_PENDING",
+        to: salesman.email,
+        cc: "",
+        subject,
+        body,
+        salesmanId: salesman.id,
+        salesmanName: salesman.name,
+        orderStatus: `Pending Missing Photo: ${missingOrders.length}`,
+        date: getTodayIST()
+      };
+
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      return true;
+    }
+
+    async function runMonthlyPendingCheck() {
+      const mode = document.getElementById("monthlyPendingMode").value;
+      const body = document.getElementById("monthlyPendingBody");
+      const btn = document.getElementById("runMonthlyPendingBtn");
+
+      if (!salesmen.length) await loadSalesmen();
+
+      const activeSalesmen = salesmen.filter(s =>
+        s.active !== false &&
+        s.reminderEnabled !== false &&
+        s.email
+      );
+
+      if (mode === "send") {
+        const ok = confirm(
+          `REAL MAIL MODE\n\nEligible salesmen: ${activeSalesmen.length}\n\nOne consolidated mail will be sent to each salesman who has Pending orders with Bill/Photo missing. Reporting Manager CC will be added by Apps Script.\n\nContinue?`
+        );
+        if (!ok) return;
+      }
+
+      body.innerHTML = `<tr><td colspan="8" style="text-align:center;"><i class="fa fa-spinner fa-spin-custom"></i> Checking all OMS orders...</td></tr>`;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa fa-spinner fa-spin-custom"></i> Running...`;
+
+      try {
+        const ordersSnap = await db.collection("orders").get();
+        const orderIndex = buildOrderIndex(ordersSnap);
+
+        let totalPendingOrders = 0;
+        let totalMissingBills = 0;
+        let actionSalesmen = 0;
+        let sentCount = 0;
+        const rows = [];
+
+        for (let i = 0; i < activeSalesmen.length; i++) {
+          const salesman = activeSalesmen[i];
+          const match = matchSalesmanToOrders(salesman, orderIndex);
+          const salesmanOrders = match.orders || [];
+          const totalOrders = salesmanOrders.length;
+
+          const pendingOrders = salesmanOrders.filter(item =>
+            isMonthlyPendingOrder(item.data || {})
+          );
+
+          const missingOrders = pendingOrders.filter(item =>
+            !hasMonthlyBillPhoto(item.data || {})
+          );
+
+          const orderNumbers = missingOrders.map(item =>
+            getMonthlyOrderNumber(item.data || {}, item.docId)
+          );
+
+          totalPendingOrders += pendingOrders.length;
+          totalMissingBills += missingOrders.length;
+          if (missingOrders.length > 0) actionSalesmen++;
+
+          let actionLabel = missingOrders.length > 0
+            ? `<span class="badge missing">Preview</span>`
+            : `<span class="badge ok">No Action</span>`;
+
+          if (mode === "send" && missingOrders.length > 0) {
+            try {
+              await sendMonthlyPendingMailFromPage(
+                salesman,
+                totalOrders,
+                pendingOrders,
+                missingOrders,
+                orderNumbers
+              );
+              sentCount++;
+              actionLabel = `<span class="badge mail">Sent / Queued</span>`;
+            } catch (error) {
+              console.error("Monthly pending mail failed", salesman.name, error);
+              actionLabel = `<span class="badge failed">Failed</span>`;
+            }
+          }
+
+          const orderNumberHtml = orderNumbers.length
+            ? orderNumbers.map(no => `<code style="display:inline-block;margin:2px;">${escapeHTML(no)}</code>`).join(" ")
+            : "-";
+
+          rows.push(`
+            <tr>
+              <td>${i + 1}</td>
+              <td>${escapeHTML(salesman.name || "-")}</td>
+              <td>${totalOrders}</td>
+              <td>${pendingOrders.length}</td>
+              <td>${missingOrders.length ? `<span class="badge missing">${missingOrders.length}</span>` : `<span class="badge ok">0</span>`}</td>
+              <td style="max-width:360px;">${orderNumberHtml}</td>
+              <td>${escapeHTML(salesman.email || "Email Missing")}</td>
+              <td>${actionLabel}</td>
+            </tr>
+          `);
+        }
+
+        body.innerHTML = rows.length
+          ? rows.join("")
+          : `<tr><td colspan="8" style="text-align:center;color:#6b7280;">No active salesman found</td></tr>`;
+
+        document.getElementById("monthlyTotalOrders").textContent = ordersSnap.size;
+        document.getElementById("monthlyPendingOrders").textContent = totalPendingOrders;
+        document.getElementById("monthlyMissingBills").textContent = totalMissingBills;
+        document.getElementById("monthlySalesmenAction").textContent = actionSalesmen;
+        document.getElementById("monthlyPendingLastRun").textContent =
+          `Last run: ${new Date().toLocaleString("en-IN")}`;
+
+        showToast(
+          mode === "send"
+            ? `✅ Monthly check complete. ${sentCount} mail(s) processed.`
+            : `✅ Preview complete. ${actionSalesmen} salesman require action.`
+        );
+      } catch (error) {
+        console.error("Monthly pending automation failed", error);
+        body.innerHTML = `<tr><td colspan="8" style="text-align:center;color:red;">Monthly check failed. Open console for details.</td></tr>`;
+        showToast("❌ Monthly Pending Order check failed");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-magnifying-glass-chart"></i> Run Monthly Check`;
+      }
     }
 
     function showToast(message) {
