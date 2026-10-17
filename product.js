@@ -2445,6 +2445,7 @@ window.itemMaster = {
     photo: "/images/products/stainlesssteel/1376.webp"
   },
 
+
   "1377": {
     name: "SS Single Soap Dish",
     category: "stainlesssteel",
@@ -2615,5 +2616,164 @@ window.itemMaster = {
       CTN: { rate: 82960, pcs: 68 }
     },
     photo: "/images/products/bathroom/1201.webp"
-  }
+  },
+"710": {
+  name: 'Telescopic Channel 10" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 241 },
+    CTN: { rate: 241 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/710.webp"
+},
+
+"712": {
+  name: 'Telescopic Channel 12" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 290 },
+    CTN: { rate: 290 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/712.webp"
+},
+
+"714": {
+  name: 'Telescopic Channel 14" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 338 },
+    CTN: { rate: 338 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/714.webp"
+},
+
+"716": {
+  name: 'Telescopic Channel 16" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 386 },
+    CTN: { rate: 386 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/716.webp"
+},
+
+"718": {
+  name: 'Telescopic Channel 18" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 434 },
+    CTN: { rate: 434 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/718.webp"
+},
+
+"720": {
+  name: 'Telescopic Channel 20" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 482 },
+    CTN: { rate: 482 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/720.webp"
+},
+
+"722": {
+  name: 'Telescopic Channel 22" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 531 },
+    CTN: { rate: 531 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/722.webp"
+},
+
+"724": {
+  name: 'Telescopic Channel 24" Zinc PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 580 },
+    CTN: { rate: 580 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/724.webp"
+},
+
+"730": {
+  name: 'Telescopic Channel 10" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 241 },
+    CTN: { rate: 241 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/730.webp"
+},
+
+"732": {
+  name: 'Telescopic Channel 12" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 290 },
+    CTN: { rate: 290 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/732.webp"
+},
+
+"734": {
+  name: 'Telescopic Channel 14" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 338 },
+    CTN: { rate: 338 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/734.webp"
+},
+
+"736": {
+  name: 'Telescopic Channel 16" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 386 },
+    CTN: { rate: 386 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/736.webp"
+},
+
+"738": {
+  name: 'Telescopic Channel 18" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 434 },
+    CTN: { rate: 434 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/738.webp"
+},
+
+"740": {
+  name: 'Telescopic Channel 20" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 482 },
+    CTN: { rate: 482 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/740.webp"
+},
+
+"742": {
+  name: 'Telescopic Channel 22" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 531 },
+    CTN: { rate: 531 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/742.webp"
+},
+
+"744": {
+  name: 'Telescopic Channel 24" Black PETRO',
+  category: "hardware",
+  units: {
+    SET: { rate: 580 },
+    CTN: { rate: 580 * 10 }
+  },
+  photo: "/images/products/telescopicchannel/744.webp"
+},
 };
