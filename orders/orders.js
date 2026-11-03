@@ -460,27 +460,19 @@ function getPartyCity(order) {
 
 
 
+
 function getDistributor(order) {
-
   return (
-
+    order?.party?.distributorName ||
     order?.party?.distributor ||
-
     order?.party?.partyDistributor ||
-
-    order?.party?.transport ||
-
+    order?.distributorName ||
     order?.distributor ||
-
     order?.partyDistributor ||
-
-    order?.transport ||
-
     "-"
-
   );
-
 }
+
 
 
 
@@ -943,48 +935,55 @@ function populateSalesmanMasterList() {
   }
 
 }
+ 
 function populateDistributorMasterList() {
-
   if (!distributorFilterEl) return;
 
   const currentValue = distributorFilterEl.value;
+  const uniqueDistributors = new Map();
 
-  const distributors = [
-    ...new Set(
-      allOrdersMaster
-        .map(order => {
-          return String(
-            order.distributorName ||
-            order.distributor ||
-            order.party?.distributorName ||
-            order.party?.distributor ||
-            ""
-          ).trim();
-        })
-        .filter(Boolean)
-    )
-  ].sort((a, b) =>
-    a.localeCompare(b, undefined, {
-      sensitivity: "base"
-    })
+  allOrdersMaster.forEach((order) => {
+    const name = String(getDistributor(order) || "")
+      .trim()
+      .replace(/\s+/g, " ");
+
+   if (
+  !name ||
+  name === "-" ||
+  /^\+?[\d\s()-]{8,}$/.test(name)
+) return;
+
+    const key = normalizeText(name);
+
+    if (!uniqueDistributors.has(key)) {
+      uniqueDistributors.set(key, name);
+    }
+  });
+
+  const distributors = [...uniqueDistributors.values()]
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, {
+        sensitivity: "base"
+      })
+    );
+
+  distributorFilterEl.innerHTML =
+    '<option value="">All Distributors</option>';
+
+  distributors.forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    distributorFilterEl.appendChild(option);
+  });
+
+  const matched = distributors.find(
+    name => normalizeText(name) === normalizeText(currentValue)
   );
 
-
-  distributorFilterEl.innerHTML = `
-        <option value="">All Distributors</option>
-        ${distributors.map(name => `
-            <option value="${escapeHTML(name)}">
-                ${escapeHTML(name)}
-            </option>
-        `).join("")}
-    `;
-
-
-  // Preserve selected distributor
-  if (distributors.includes(currentValue)) {
-    distributorFilterEl.value = currentValue;
-  }
+  distributorFilterEl.value = matched || "";
 }
+
 
 
 /* PREMIUM ORDER FILTER HELPERS */
