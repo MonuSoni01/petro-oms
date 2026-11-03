@@ -814,7 +814,7 @@ function clearTableBody() {
 
 
 
-const FIREBASE_PAGE_SIZE = 10;
+let FIREBASE_PAGE_SIZE = 10;
 
 let currentPage = 1;
 
@@ -854,6 +854,7 @@ async function fetchFirstOrdersPage() {
 
     populateSalesmanMasterList();
     populateDistributorMasterList();
+    populatePetroProductList();
 
     applyFiltersAndRender();
 
@@ -986,6 +987,61 @@ function populateDistributorMasterList() {
 }
 
 
+/* PREMIUM ORDER FILTER HELPERS */
+const ordersPeriodEl = document.getElementById("ordersPeriod");
+const ordersBillEl = document.getElementById("billStatusFilter");
+const ordersProductEl = document.getElementById("productCodeFilter");
+const ordersPageSizeEl = document.getElementById("ordersPageSize");
+function petroDateLocal(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function syncOrdersPeriod() {
+  const mode = ordersPeriodEl?.value || "all";
+  document.querySelectorAll(".petro-custom-date").forEach(el => el.style.display = mode === "custom" ? "" : "none");
+  if (mode === "custom") return;
+  const now = new Date(), start = new Date(now), end = new Date(now);
+  if (mode === "yesterday") { start.setDate(now.getDate()-1); end.setDate(now.getDate()-1); }
+  else if (mode === "7days") start.setDate(now.getDate()-6);
+  else if (mode === "month") start.setDate(1);
+  else if (mode === "lastmonth") { start.setMonth(now.getMonth()-1,1); end.setDate(0); }
+  else if (mode === "year") start.setMonth(0,1);
+  if (dateFrom) dateFrom.value = mode === "all" ? "" : petroDateLocal(start);
+  if (dateTo) dateTo.value = mode === "all" ? "" : petroDateLocal(end);
+}
+function petroOrderItems(order) {
+  return Array.isArray(order?.items) ? order.items : Array.isArray(order?.orderItems) ? order.orderItems : [];
+}
+function petroProductMatch(order, raw) {
+  const query = normalizeText(raw).trim();
+  if (!query) return true;
+  const master = window.itemMaster || {};
+  return petroOrderItems(order).some(item => {
+    const code = String(item?.code ?? item?.itemCode ?? item?.productCode ?? "").trim();
+    const name = String(item?.name ?? item?.itemName ?? item?.productName ?? master[code]?.name ?? "");
+    return normalizeText(code).includes(query) || normalizeText(name).includes(query) ||
+      (master[code] && normalizeText(master[code].name).includes(query));
+  });
+}
+function populatePetroProductList() {
+  const list = document.getElementById("petroProductCodes");
+  if (!list) return;
+  list.replaceChildren();
+  Object.entries(window.itemMaster || {}).forEach(([code, item]) => {
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.label = item?.name || code;
+    list.appendChild(opt);
+  });
+}
+function updatePetroBillKpi() {
+  const total = filteredOrders.length;
+  const pending = filteredOrders.filter(o => !getBillImage(o)).length;
+  const count = document.getElementById("petroBillsPendingCount");
+  const pct = document.getElementById("petroBillsPendingPercent");
+  if (count) count.textContent = pending.toLocaleString("en-IN");
+  if (pct) pct.textContent = total ? `${Math.round(pending/total*100)}%` : "0%";
+}
+
 /* ============================================================
 
    APPLY FILTERS
@@ -1007,6 +1063,8 @@ window.applyFiltersAndRender = function () {
 
 
 
+  const selectedBill = ordersBillEl?.value || "";
+  const selectedProduct = ordersProductEl?.value || "";
   const fromDate = dateFrom?.value || "";
 
   const toDate = dateTo?.value || "";
@@ -1107,6 +1165,8 @@ window.applyFiltersAndRender = function () {
 
 
 
+    if (selectedBill && (getBillImage(order) ? "uploaded" : "pending") !== selectedBill) return false;
+    if (selectedProduct && !petroProductMatch(order, selectedProduct)) return false;
     if (selectedSalesman && salesman !== selectedSalesman) {
 
       return false;
@@ -1159,6 +1219,7 @@ window.applyFiltersAndRender = function () {
   currentPage = 1;
   /* Update KPI according to current filters */
   updateOrderKpis();
+  updatePetroBillKpi();
   renderCurrentPage();
 
   updateFirestorePaginationButtons();
@@ -1208,7 +1269,7 @@ function updateTableSubText() {
     statusFilter?.value ||
 
     dateFrom?.value ||
-
+    distributorFilterEl?.value || ordersBillEl?.value || ordersProductEl?.value ||
     dateTo?.value
 
   );
@@ -1431,7 +1492,7 @@ function renderCurrentPage() {
 
       <a
 
-        href="${billImage}"
+        href="${escapeAttr(billImage)}"
 
         target="_blank"
 
@@ -1445,7 +1506,7 @@ function renderCurrentPage() {
 
     `
 
-        : `<span style="color:#888;">Not Uploaded</span>`;
+        : `<span class="petro-bill-tag petro-bill-pending"><i class="fa-solid fa-file-circle-xmark"></i> Not Uploaded</span>`;
 
 
 
@@ -1475,7 +1536,7 @@ function renderCurrentPage() {
 
 
 
-          <td>${escapeHTML(order?.orderNo || "-")}</td>
+          <td><span class="petro-order-number">${escapeHTML(order?.orderNo || "-")}</span></td>
 
 
 
@@ -1483,7 +1544,7 @@ function renderCurrentPage() {
 
 
 
-          <td>${escapeHTML(order?.party?.name || "-")}</td>
+          <td><strong class="petro-party-name">${escapeHTML(order?.party?.name || "-")}</strong><small class="petro-party-mobile">${escapeHTML(order?.party?.mobile || "")}</small></td>
 
 
 
@@ -1531,7 +1592,7 @@ function renderCurrentPage() {
 
               data-source="${escapeAttr(source)}">
 
-              ✏ 
+              <i class="fa-solid fa-pen"></i>
 
             </button>
 
@@ -1729,6 +1790,11 @@ function runAutoFilter() {
     window.applyFiltersAndRender();
 }
 
+if (ordersPeriodEl) ordersPeriodEl.addEventListener("change", () => { syncOrdersPeriod(); runAutoFilter(); });
+if (ordersBillEl) ordersBillEl.addEventListener("change", runAutoFilter);
+if (ordersProductEl) ordersProductEl.addEventListener("input", () => { clearTimeout(searchDebounceTimer); searchDebounceTimer = setTimeout(runAutoFilter, 250); });
+if (ordersPageSizeEl) ordersPageSizeEl.addEventListener("change", () => { FIREBASE_PAGE_SIZE = Number(ordersPageSizeEl.value) || 10; currentPage = 1; renderCurrentPage(); updateFirestorePaginationButtons(); });
+syncOrdersPeriod();
 if (salesmanFilterEl) {
     salesmanFilterEl.addEventListener("change", runAutoFilter);
 }
@@ -1777,6 +1843,9 @@ if (searchBox) {
 window.clearAllFilters = function () {
 
     if (searchBox) searchBox.value = "";
+    if (ordersPeriodEl) ordersPeriodEl.value = "all";
+    if (ordersBillEl) ordersBillEl.value = "";
+    if (ordersProductEl) ordersProductEl.value = "";
     if (statusFilter) statusFilter.value = "";
     if (typeFilter) typeFilter.value = "";
     if (salesmanFilterEl) salesmanFilterEl.value = "";
@@ -1788,6 +1857,7 @@ window.clearAllFilters = function () {
         dateTo.setCustomValidity("");
     }
 
+    syncOrdersPeriod();
     currentPage = 1;
 
     document.querySelectorAll(".order-kpi-card").forEach(card => {
@@ -6174,66 +6244,11 @@ function getKpiPercent(count, total) {
 ========================================================= */
 
 function filterByKpiStatus(status) {
-
-  /*
-   * Update your existing Status dropdown
-   */
-
-  if (statusFilter) {
-
-    statusFilter.value =
-      status || "";
-
-  }
-
-
-  /*
-   * Reset pagination
-   */
-
-  if (
-    typeof currentPage !== "undefined"
-  ) {
-
-    currentPage = 1;
-
-  }
-
-
-  /*
-   * Run your existing filter function
-   */
-
-  if (
-    typeof applyFilters === "function"
-  ) {
-
-    applyFilters();
-
-  }
-
-  else if (
-    typeof filterOrders === "function"
-  ) {
-
-    filterOrders();
-
-  }
-
-  else {
-
-    console.warn(
-      "PETRO OMS: Filter function not found."
-    );
-
-  }
-
-
+  if (statusFilter) statusFilter.value = status || "";
+  currentPage = 1;
+  window.applyFiltersAndRender();
   updateActiveKpiCard();
-
 }
-
-
 
 /* =========================================================
    ACTIVE KPI

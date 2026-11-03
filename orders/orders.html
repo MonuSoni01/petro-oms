@@ -39,7 +39,10 @@
 
     <!-- Page CSS -->
 
-    <link rel="stylesheet" href="orders.css?v=2026.08.24.5">
+    <link rel="stylesheet" href="orders.css?v=2026.10.31.designfix2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 </head>
 
@@ -419,6 +422,7 @@
 
                 </button>
 
+            <div class="petro-billing-summary"><i class="fa-solid fa-file-invoice"></i><span>Bills Pending</span><strong id="petroBillsPendingCount">—</strong><span id="petroBillsPendingPercent">—</span><small>of filtered orders</small></div>
             </div>
 
         </section>
@@ -461,11 +465,12 @@
 
 
 
-            <div class="filter-grid">
+            <div class="filter-grid petro-filter-grid">
+                <div class="filter-field"><label for="ordersPeriod">Period</label><select id="ordersPeriod" class="form-control"><option value="all">All Time</option><option value="today">Today</option><option value="yesterday">Yesterday</option><option value="7days">Last 7 Days</option><option value="month">This Month</option><option value="lastmonth">Last Month</option><option value="year">This Year</option><option value="custom">Custom Dates</option></select></div>
 
 
 
-                <div class="filter-field">
+                <div class="filter-field petro-custom-date">
 
                     <label for="dateFrom">From Date</label>
 
@@ -479,7 +484,7 @@
 
 
 
-                <div class="filter-field">
+                <div class="filter-field petro-custom-date">
 
                     <label for="dateTo">To Date</label>
 
@@ -579,15 +584,17 @@
 
 
 
+                <div class="filter-field"><label for="billStatusFilter">Bill Status</label><select id="billStatusFilter" class="form-control"><option value="">All Bills</option><option value="uploaded">Uploaded</option><option value="pending">Pending</option></select></div>
+                <div class="filter-field petro-product-filter"><label for="productCodeFilter">Product Code / Name</label><input type="search" id="productCodeFilter" class="form-control" list="petroProductCodes" placeholder="Code or product name" autocomplete="off"><datalist id="petroProductCodes"></datalist></div>
                 <div class="filter-field filter-action">
 
                     <label>&nbsp;</label>
 
-                    <button class="btn btn-petro w-100" onclick="applyFiltersAndRender()">
+                    <button class="btn btn-petro w-100" onclick="clearAllFilters()">
 
-                        <i class="fa-solid fa-filter"></i>
+                        <i class="fa-solid fa-rotate-left"></i>
 
-                        Apply
+                        Reset
 
                     </button>
 
@@ -598,9 +605,6 @@
             </div>
 
         </section>
-
-
-
         <!-- ORDERS TABLE -->
 
         <section class="orders-table-card">
@@ -625,13 +629,13 @@
 
 
 
-                <button class="btn btn-petro" onclick="openExportModal()">
+                <div class="petro-table-actions"><button type="button" class="btn btn-petro petro-refresh" onclick="fetchFirstOrdersPage()"><i class="fa-solid fa-rotate"></i> Refresh</button><label for="ordersPageSize">Rows</label><select id="ordersPageSize" class="form-control"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select><button class="btn btn-petro" onclick="openExportModal()">
 
                     <i class="fa fa-download"></i>
 
                     Download Data
 
-                </button>
+                </button></div>
 
             </div>
 
@@ -657,7 +661,7 @@
 
                             <th>Order No</th>
 
-                            <th>Order Date</th>
+                            <th>Order Date <i class="fa-solid fa-sort"></i></th>
 
                             <th>Party Name</th>
 
@@ -671,7 +675,7 @@
 
                             <th class="text-center">Action</th>
 
-                            <th>Bill Image</th>
+                            <th>Bill</th>
 
                         </tr>
 
@@ -922,7 +926,8 @@
     <script src="../js/script.js"></script>
 
     <!-- Orders JS -->
-    <script src="orders.js?v=2026.09.24.3"></script>
+    <script src="../product.js?v=2026.10.31" defer></script>
+    <script src="orders.js?v=2026.10.31.premium" defer></script>
 
     <!-- Global OMS Subscription & Renewal Manager -->
 

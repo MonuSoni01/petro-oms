@@ -63,6 +63,7 @@
     salesman: "",
     prefix: "",
     ordersMap: new Map(),
+    legacySumantaMap: new Map(),
     productTopMap: new Map(),
     productNestedMap: new Map(),
     allOrders: [],
@@ -75,7 +76,8 @@
       dateFrom: "",
       dateTo: "",
       minAmount: "",
-      maxAmount: ""
+      maxAmount: "",
+      period: "all", salesperson: "", orderType: "", distributor: "", product: ""
     },
     unsubscribers: [],
     searchTimer: null,
@@ -151,11 +153,11 @@
 
   function resolveSalesmanPrefix(salesman) {
     return (
+      CONFIG.SALESMAN_PREFIX[salesman] ||
       localStorage.getItem("salesmanPrefix") ||
       localStorage.getItem("prefix") ||
-      CONFIG.SALESMAN_PREFIX[salesman] ||
       ""
-    ).trim();
+    ).trim().toUpperCase();
   }
 
   function clearLoginSession() {
@@ -360,67 +362,46 @@
       return;
     }
 
-    tableWrap.insertAdjacentHTML(
-      "beforebegin",
-      `
-      <section class="petro-filter-panel" aria-label="Order filters">
+    tableWrap.insertAdjacentHTML("beforebegin", `
+      <section class="petro-filter-panel" aria-label="Sales order filters">
         <div class="petro-filter-grid">
-          <label class="petro-filter-field petro-filter-search">
-            <span><i class="fa fa-search"></i> Search</span>
-            <input id="orderSearch" type="search" placeholder="Order no, party or mobile" autocomplete="off">
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Status</span>
-            <select id="statusFilter">
-              <option value="">All statuses</option>
-              <option value="Pending">Pending</option>
-              <option value="Quotation Sent">Quotation Sent</option>
-              <option value="Payment Received">Payment Received</option>
-              <option value="Partial Delivered">Partial Delivered</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Hold">Hold</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Bill</span>
-            <select id="billFilter">
-              <option value="">All bills</option>
-              <option value="uploaded">Bill uploaded</option>
-              <option value="pending">Bill pending</option>
-            </select>
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Date from</span>
-            <input id="dateFromFilter" type="date">
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Date to</span>
-            <input id="dateToFilter" type="date">
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Min amount</span>
-            <input id="minAmountFilter" type="number" min="0" step="0.01" placeholder="₹ 0">
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Max amount</span>
-            <input id="maxAmountFilter" type="number" min="0" step="0.01" placeholder="₹ 0">
-          </label>
-
-          <button type="button" id="resetFiltersBtn" class="petro-reset-filter">
-            <i class="fa fa-rotate-left"></i> Reset
-          </button>
+          <label class="petro-filter-field"><span>Period</span><select id="periodFilter">
+            <option value="all">All Time</option><option value="today">Today</option>
+            <option value="yesterday">Yesterday</option><option value="7days">Last 7 Days</option>
+            <option value="month">This Month</option><option value="lastmonth">Last Month</option>
+            <option value="year">This Year</option><option value="custom">Custom Dates</option>
+          </select></label>
+          <label class="petro-filter-field"><span>Salesperson</span><select id="salespersonFilter"><option value="">My Orders</option></select></label>
+          <label class="petro-filter-field"><span>Order Type</span><select id="orderTypeFilter"><option value="">All Types</option><option value="primary">Primary</option><option value="secondary">Secondary</option></select></label>
+          <label class="petro-filter-field"><span>Distributor</span><select id="distributorFilter"><option value="">All Distributors</option></select></label>
+          <label class="petro-filter-field"><span>Status</span><select id="statusFilter">
+            <option value="">All Statuses</option><option value="Pending">Pending</option><option value="Quotation Sent">Quotation Sent</option><option value="Payment Received">Payment Received</option><option value="Partial Delivered">Partial Delivered</option><option value="Delivered">Delivered</option><option value="Dispatched">Dispatched</option><option value="Hold">Hold</option><option value="Cancelled">Cancelled</option>
+          </select></label>
+          <label class="petro-filter-field"><span>Bill</span><select id="billFilter"><option value="">All Bills</option><option value="uploaded">Uploaded</option><option value="pending">Pending</option></select></label>
+          <label class="petro-filter-field"><span>Product Code</span><input id="productFilter" type="search" list="petroProductSuggestions" placeholder="Item code" autocomplete="off"><datalist id="petroProductSuggestions"></datalist></label>
+          <button type="button" id="resetFiltersBtn" class="petro-reset-filter"><i class="fa fa-rotate-left"></i> Reset</button>
         </div>
+        <div class="petro-filter-custom" id="petroCustomDates" hidden>
+          <label>From <input id="dateFromFilter" type="date"></label>
+          <label>To <input id="dateToFilter" type="date"></label>
+        </div>
+        <div class="petro-filter-results" id="petroFilterResults" aria-live="polite"></div>
       </section>
-      `
-    );
-
+    `);
+    const extraStyle=document.createElement("style");
+    extraStyle.id="petro-compact-filter-css";
+    extraStyle.textContent=`
+      .petro-filter-panel{margin:14px 0;padding:12px;background:#fff;border:1px solid #e3eaf0;border-radius:13px;box-shadow:0 3px 14px #102a3610}
+      .petro-filter-grid{display:flex!important;flex-wrap:nowrap!important;align-items:end;gap:8px;overflow-x:auto;padding-bottom:4px}
+      .petro-filter-field{display:flex;flex-direction:column;gap:5px;flex:1 0 116px;min-width:116px;font-size:11px;font-weight:600;color:#334155}
+      .petro-filter-field input,.petro-filter-field select{height:37px;width:100%;border:1px solid #d9e2e9;border-radius:8px;padding:0 8px;background:#fff;color:#1e293b;font-size:12px}
+      .petro-reset-filter{flex:0 0 auto;height:37px;padding:0 14px;border:0;border-radius:8px;background:#108082;color:white;font-weight:700;cursor:pointer}
+      .petro-filter-custom{display:flex;gap:12px;padding:8px 0;font-size:12px}.petro-filter-custom[hidden]{display:none}
+      .petro-filter-custom label{display:flex;gap:6px;align-items:center}.petro-filter-custom input{height:34px;border:1px solid #ddd;border-radius:7px}
+      .petro-filter-results{font-size:11px;color:#64748b;margin-top:5px}
+      @media(max-width:767px){.petro-filter-grid{gap:7px}.petro-filter-field{flex-basis:125px}.petro-filter-panel{padding:10px}}
+    `;
+    setTimeout(() => document.head.appendChild(extraStyle), 0);
     if (!$("petro-dashboard-runtime-styles")) {
       const style = document.createElement("style");
       style.id = "petro-dashboard-runtime-styles";
@@ -866,6 +847,10 @@
       .orderBy("partyDetails.orderNo")
       .limit(CONFIG.PRODUCTS_FETCH_LIMIT);
 
+    if(state.prefix==="SK"){
+      const legacyPrefix="Sk-",legacyEnd=legacyPrefix+"\uf8ff";
+      attachQueryListener({name:"Legacy Sumanta orders",query:state.db.collection("orders").where("orderNo",">=",legacyPrefix).where("orderNo","<=",legacyEnd).orderBy("orderNo").limit(CONFIG.ORDERS_FETCH_LIMIT),targetMap:"legacySumantaMap",source:"orders"});
+    }
     attachQueryListener({
       name: "Orders",
       query: ordersQuery,
@@ -940,6 +925,7 @@
 
     [
       ...state.ordersMap.values(),
+      ...state.legacySumantaMap.values(),
       ...state.productTopMap.values(),
       ...state.productNestedMap.values()
     ].forEach((order) => {
@@ -968,6 +954,7 @@
     );
 
     updateDashboardStats();
+    populateSalesFilterOptions();
     applySearchAndPagination();
   }
 
@@ -1030,6 +1017,27 @@
   /* Filters and pagination                                                      */
   /* -------------------------------------------------------------------------- */
 
+  function populateSalesFilterOptions() {
+    const person=$("salespersonFilter");
+    if(person){person.innerHTML="";const opt=document.createElement("option");opt.value="";opt.textContent=state.salesman+" (My Orders)";person.appendChild(opt);person.disabled=true;}
+    const dist=$("distributorFilter");
+    if(dist){const previous=dist.value;const names=[...new Set(state.allOrders.map(o=>normalizeString(o.party?.distributor)).filter(v=>v&&v!=="-"))].sort((a,b)=>a.localeCompare(b));dist.replaceChildren(new Option("All Distributors",""),...names.map(v=>new Option(v,v)));dist.value=names.includes(previous)?previous:"";state.filters.distributor=dist.value;}
+    const list=$("petroProductSuggestions");
+    if(list){const codes=new Set();state.allOrders.forEach(o=>(o.cartItems||[]).forEach(i=>{if(i.code&&i.code!=="-")codes.add(String(i.code));}));list.replaceChildren(...[...codes].sort().map(v=>{const opt=document.createElement("option");opt.value=v;const master=window.itemMaster?.[v];if(master)opt.label=master.name;return opt;}));}
+  }
+  function getPeriodBounds(period) {
+    if(!period||period==="all"||period==="custom")return null;
+    const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()),end=new Date(start);
+    if(period==="today")end.setDate(end.getDate()+1);
+    else if(period==="yesterday"){start.setDate(start.getDate()-1);}
+    else if(period==="7days"){start.setDate(start.getDate()-6);end.setDate(end.getDate()+1);}
+    else if(period==="month"){start.setDate(1);end.setMonth(end.getMonth()+1);end.setDate(1);}
+    else if(period==="lastmonth"){start.setDate(1);start.setMonth(start.getMonth()-1);end.setDate(1);}
+    else if(period==="year"){start.setMonth(0,1);end.setFullYear(end.getFullYear()+1);end.setMonth(0,1);}
+    else return null;
+    return [start,end];
+  }
+  function getOrderType(order){return normalizeString(order.party?.type||order.partyType||order.orderType).toLowerCase();}
   function getFilteredOrders() {
     const query = state.filters.search.toLowerCase();
 
@@ -1050,6 +1058,11 @@
         return false;
       }
 
+      if(state.filters.orderType && !getOrderType(order).includes(state.filters.orderType))return false;
+      if(state.filters.distributor && normalizeString(order.party?.distributor)!==state.filters.distributor)return false;
+      if(state.filters.product){const q=state.filters.product.toLowerCase();if(!(order.cartItems||[]).some(i=>String(i.code||"").toLowerCase().includes(q)||String(i.itemName||"").toLowerCase().includes(q)))return false;}
+      const bounds=getPeriodBounds(state.filters.period);
+      if(bounds){const date=getOrderDateValue(order);if(!date||date<bounds[0]||date>=bounds[1])return false;}
       if (state.filters.status && status !== state.filters.status) {
         return false;
       }
@@ -1092,6 +1105,7 @@
   function applySearchAndPagination() {
     const filtered = getFilteredOrders();
     const totalRecords = filtered.length;
+    if($("petroFilterResults"))$("petroFilterResults").textContent=`${totalRecords} matching orders • ${state.allOrders.length} loaded`;
     const totalPages = Math.max(
       1,
       Math.ceil(totalRecords / state.rowsPerPage)
@@ -1158,33 +1172,11 @@
   }
 
   function resetAllFilters() {
-    state.filters = {
-      search: "",
-      status: "",
-      bill: "",
-      dateFrom: "",
-      dateTo: "",
-      minAmount: "",
-      maxAmount: ""
-    };
-    state.currentPage = 1;
-
-    const fieldMap = {
-      orderSearch: "",
-      statusFilter: "",
-      billFilter: "",
-      dateFromFilter: "",
-      dateToFilter: "",
-      minAmountFilter: "",
-      maxAmountFilter: ""
-    };
-
-    Object.entries(fieldMap).forEach(([id, value]) => {
-      const element = $(id);
-      if (element) element.value = value;
-    });
-
-    applySearchAndPagination();
+    state.filters={search:"",status:"",bill:"",dateFrom:"",dateTo:"",minAmount:"",maxAmount:"",period:"all",salesperson:"",orderType:"",distributor:"",product:""};
+    ["orderSearch","statusFilter","billFilter","dateFromFilter","dateToFilter","minAmountFilter","maxAmountFilter","orderTypeFilter","distributorFilter","productFilter"].forEach(id=>{if($(id))$(id).value="";});
+    if($("periodFilter"))$("periodFilter").value="all";
+    if($("petroCustomDates"))$("petroCustomDates").hidden=true;
+    state.currentPage=1;applySearchAndPagination();
   }
 
   /* -------------------------------------------------------------------------- */
@@ -1235,6 +1227,23 @@
     `;
   }
 
+  // Show only the original creation time; never substitute a modified timestamp.
+  function formatCreatedDateTime(order) {
+    const date = parseDateValue(order.createdAt || order.savedAt);
+    if (!date) return "-";
+    return new Intl.DateTimeFormat("en-IN", {
+      timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit", hour12: true
+    }).format(date);
+  }
+
+  function getOrderTypeLabel(order) {
+    const raw = normalizeString(order.party?.type || order.partyType || order.orderType).trim().toLowerCase();
+    if (raw === "primary") return "Primary";
+    if (raw === "secondary") return "Secondary";
+    return "-";
+  }
+
   function renderOrders(list, startIndex = 0) {
     const tableBody = $("myOrders");
     if (!tableBody) return;
@@ -1242,7 +1251,7 @@
     if (!list.length) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="8" style="text-align:center;padding:30px;font-weight:700;color:#777;">
+          <td colspan="10" style="text-align:center;padding:30px;font-weight:700;color:#777;">
             No Orders Found
           </td>
         </tr>
@@ -1286,6 +1295,14 @@
                   <div class="erp-value">${escapeHTML(order.party?.name || "-")}</div>
                 </div>
               </div>
+            </td>
+
+            <td data-label="Order Type" class="td-order-type">
+              <span class="oms-order-type ${getOrderTypeLabel(order).toLowerCase()}">${escapeHTML(getOrderTypeLabel(order))}</span>
+            </td>
+
+            <td data-label="Created Date & Time" class="td-created-at">
+              <span class="oms-created-at">${escapeHTML(formatCreatedDateTime(order))}</span>
             </td>
 
             <td data-label="Total">
@@ -2338,6 +2355,9 @@ padding:5px;
     document.addEventListener("input", (event) => {
       const target = event.target;
 
+      if (target.id === "productFilter") {
+        debounceSearch(()=>{state.filters.product=target.value.trim();state.currentPage=1;applySearchAndPagination();});return;
+      }
       if (target.id === "orderSearch") {
         debounceSearch(() => {
           state.filters.search = target.value.trim().toLowerCase();
@@ -2371,6 +2391,15 @@ padding:5px;
         return;
       }
 
+      if(target.id==="periodFilter"){
+        state.filters.period=target.value;
+        if($("petroCustomDates"))$("petroCustomDates").hidden=target.value!=="custom";
+        state.currentPage=1;applySearchAndPagination();return;
+      }
+      if(target.id==="orderTypeFilter"||target.id==="distributorFilter"){
+        state.filters[target.id==="orderTypeFilter"?"orderType":"distributor"]=target.value;
+        state.currentPage=1;applySearchAndPagination();return;
+      }
       if (target.id === "statusFilter") {
         state.filters.status = target.value;
         state.currentPage = 1;

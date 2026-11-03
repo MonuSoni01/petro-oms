@@ -5125,3 +5125,77 @@ body.dark-mode .orders-footer,
         gap: 10px;
     }
 }
+/* PETRO PREMIUM ORDERS PAGE — 2026-10-31 */
+.orders-page { font-family: 'Poppins', sans-serif; background:#f3f7fa; }
+.orders-page .orders-table-card, .orders-page .filters-box { border:1px solid #e3edf2; border-radius:20px; box-shadow:0 9px 28px rgba(16,55,77,.055); }
+.petro-orders-heading {display:flex;justify-content:space-between;align-items:center;gap:16px;margin:22px 0 14px}
+.petro-orders-heading h2 {font-size:25px;font-weight:800;color:#10263d;margin:0}
+.petro-orders-heading h2 i {color:#108082;margin-right:8px}
+.petro-orders-heading p {font-size:12px;color:#75899b;margin:6px 0 0}
+.orders-page .petro-filter-grid {display:flex!important;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.orders-page .petro-filter-grid .filter-field {flex:1 1 142px;min-width:120px;max-width:none}
+.orders-page .petro-filter-grid .filter-search {flex:1.5 1 190px}
+.orders-page .petro-filter-grid .petro-product-filter {flex:1.4 1 180px}
+.orders-page .petro-filter-grid .filter-action {flex:0 0 100px}
+.orders-page .petro-filter-grid .form-control {height:40px!important;border-radius:9px;border:1px solid #d6e3eb;font-size:12px;padding:8px 10px}
+.orders-page .petro-filter-grid label {font-size:11px;font-weight:600;color:#4d6576}
+.orders-page .orders-table thead th {background:#e8f8f7!important;color:#075b60!important;font-size:11px;font-weight:700;white-space:nowrap;padding:15px 10px}
+.orders-page .orders-table td {vertical-align:middle;font-size:11px;padding:13px 10px;border-bottom:1px solid #edf2f6}
+.orders-page .orders-table tbody tr:hover {background:#f4fbfc}
+.petro-order-number {font-weight:700;color:#0876d9}
+.petro-party-name {display:block;color:#142b42;font-weight:600}
+.petro-party-mobile {display:block;color:#7890a0;margin-top:4px}
+.petro-bill-tag {display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:7px;font-weight:600;font-size:10px;white-space:nowrap;text-decoration:none!important}
+.petro-bill-pending {background:#fff0f0;color:#d93149;border:1px solid #ffd7dc}
+.petro-bill-uploaded {background:#e9f9ef;color:#0b8d46;border:1px solid #c4edd1}
+.petro-table-actions {display:flex;align-items:center;gap:9px}
+.petro-table-actions label {font-size:12px;color:#60798b;margin:0}
+.petro-table-actions select {width:75px;height:37px;border-radius:8px}
+.petro-billing-summary {display:flex;align-items:center;gap:12px;background:#fff9e9;color:#986300;border:1px solid #ffedbd;border-radius:14px;padding:12px 18px;margin:0 0 16px;font-size:12px}
+.petro-billing-summary strong {font-size:22px;color:#bf7900}
+.petro-billing-summary small {color:#8b7957}
+@media (min-width:1250px) {.orders-page .petro-filter-grid {flex-wrap:nowrap;overflow-x:auto;padding-bottom:7px}.orders-page .petro-filter-grid .filter-field {flex:0 0 140px}.orders-page .petro-filter-grid .filter-search,.orders-page .petro-filter-grid .petro-product-filter {flex-basis:185px}}
+@media (max-width:700px) {.petro-orders-heading h2{font-size:19px}.petro-orders-heading{flex-wrap:wrap}.petro-billing-summary{flex-wrap:wrap}.orders-page .petro-filter-grid .filter-field{flex:1 1 135px}.petro-table-actions{flex-wrap:wrap}}
+
+/* PETRO Orders — readable, aligned layout fix (2026-10-31) */
+.orders-page {font-family:'Poppins',sans-serif!important;font-size:14px;line-height:1.5}
+.orders-page .orders-kpi-section {padding-left:18px;padding-right:18px;margin-bottom:16px}
+.orders-page .orders-kpi-grid {display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:12px!important;align-items:stretch}
+.orders-page .order-kpi-card,.orders-page .petro-billing-summary {min-width:0!important;min-height:145px!important;width:100%!important;box-sizing:border-box;margin:0!important;border-radius:15px!important}
+.orders-page .order-kpi-card {padding:14px!important;text-align:left}
+.orders-page .order-kpi-card .kpi-title {font-size:12px!important}
+.orders-page .order-kpi-card .kpi-number {font-size:26px!important;line-height:1.3}
+.orders-page .order-kpi-card .kpi-footer {font-size:11px!important}
+.orders-page .petro-billing-summary {display:flex!important;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:5px!important;padding:14px!important;border-top:3px solid #e7a200!important;background:#fff8e9!important;font-size:12px!important}
+.orders-page .petro-billing-summary i {font-size:20px;color:#c08000}
+.orders-page .petro-billing-summary strong {font-size:26px!important;line-height:1.2}
+.orders-page .petro-billing-summary small {font-size:10px}
+.orders-page .filters-box {margin:16px 18px!important;padding:20px!important}
+.orders-page .filter-card-head h3 {font-size:18px!important}
+.orders-page .filter-card-head p {font-size:12px!important}
+.orders-page .petro-filter-grid {display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:10px!important;align-items:flex-end!important;padding:5px 0 9px!important;scrollbar-width:thin}
+.orders-page .petro-filter-grid .filter-field {flex:0 0 145px!important;min-width:145px!important}
+.orders-page .petro-filter-grid .filter-search {flex:0 0 205px!important}
+.orders-page .petro-filter-grid .petro-product-filter {flex:0 0 195px!important}
+.orders-page .petro-filter-grid .filter-action {flex:0 0 95px!important}
+.orders-page .petro-filter-grid label {font-size:12px!important;font-weight:600!important}
+.orders-page .petro-filter-grid .form-control {height:42px!important;font-size:13px!important;padding:8px 11px!important}
+.orders-page .orders-table-card {margin:16px 18px!important;padding:20px!important}
+.orders-page .table-card-head {margin-bottom:14px!important;gap:12px;align-items:center}
+.orders-page .table-card-head h3 {font-size:20px!important}
+.orders-page .table-card-head p {font-size:12px!important}
+.orders-page .orders-table-wrap {overflow-x:auto!important}
+.orders-page .orders-table {min-width:1120px!important;width:100%;table-layout:auto}
+.orders-page .orders-table thead th {font-size:12px!important;padding:14px 12px!important;letter-spacing:0!important}
+.orders-page .orders-table tbody td {font-size:13px!important;line-height:1.5!important;padding:13px 12px!important;vertical-align:middle!important}
+.orders-page .orders-table tbody tr {height:58px}
+.orders-page .petro-party-name {font-size:13px!important}
+.orders-page .petro-party-mobile {font-size:11px!important}
+.orders-page .petro-bill-tag {font-size:11px!important}
+.orders-page .petro-table-actions {flex-wrap:wrap;justify-content:flex-end}
+.orders-page .petro-table-actions label {font-size:12px!important}
+.orders-page .petro-refresh {background:#eef8f8!important;color:#087f80!important;border:1px solid #cce8e7!important}
+.orders-page .orders-footer {margin-top:0!important;padding:14px!important;min-height:0!important}
+@media(max-width:1500px){.orders-page .orders-kpi-grid {grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(max-width:900px){.orders-page .orders-kpi-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important}.orders-page .orders-table-card,.orders-page .filters-box {margin:12px!important;padding:14px!important}}
+@media(max-width:480px){.orders-page .order-kpi-card,.orders-page .petro-billing-summary {min-height:130px!important}.orders-page .order-kpi-card .kpi-number,.orders-page .petro-billing-summary strong {font-size:23px!important}}
