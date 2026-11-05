@@ -896,16 +896,6 @@ window.submitTableOrder = async function () {
 
         return;
     }
-    // ✅ CITY MANDATORY VALIDATION
-if (!partyCity.value.trim()) {
-    showPetroMessage(
-        "error",
-        "City Required",
-        "Please enter the party city before submitting the order.",
-        partyCity
-    );
-    return;
-}
 
     if (!/^[0-9]{10}$/.test(partyMobile.value.trim())) {
 

@@ -450,888 +450,25 @@
                 font-size: 24px;
             }
         }
-
-        /* PETRO MIS additions: isolated from existing admin styles */
-        .mis-wrap {
-            margin: 0 15px 24px
-        }
-
-        .mis-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-bottom: 15px
-        }
-
-        .mis-head h2 {
-            font-size: 23px;
-            font-weight: 800;
-            margin: 0;
-            color: #142334
-        }
-
-        .mis-head p {
-            margin: 4px 0 0;
-            color: #64748b
-        }
-
-        .mis-filters {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap
-        }
-
-        .mis-filters select,
-        .mis-filters input {
-            background: #fff;
-            border: 1px solid #d7e1e8;
-            border-radius: 9px;
-            padding: 9px 10px;
-            max-width: 175px;
-            color: #263b4a
-        }
-
-        .mis-kpis {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 13px;
-            margin-bottom: 16px
-        }
-
-        .mis-kpi,
-        .mis-panel {
-            background: #fff;
-            border: 1px solid #e6edf2;
-            border-radius: 15px;
-            box-shadow: 0 5px 19px rgba(25, 56, 73, .045)
-        }
-
-        .mis-kpi {
-            padding: 17px;
-            border-top: 3px solid #108082
-        }
-
-        .mis-kpi small {
-            display: block;
-            color: #66788c;
-            font-weight: 700
-        }
-
-        .mis-kpi strong {
-            display: block;
-            font-size: 25px;
-            margin-top: 8px;
-            color: #13263c;
-            overflow-wrap: anywhere
-        }
-
-        .mis-grid {
-            display: grid;
-            grid-template-columns: 1.35fr 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 16px
-        }
-
-        .mis-panel {
-            padding: 17px;
-            min-width: 0
-        }
-
-        .mis-panel h3 {
-            font-size: 16px;
-            font-weight: 800;
-            margin: 0 0 15px
-        }
-
-        .mis-bars {
-            display: flex;
-            align-items: end;
-            gap: 9px;
-            height: 195px;
-            border-bottom: 1px solid #dfe7eb;
-            padding-top: 12px
-        }
-
-        .mis-bar-col {
-            flex: 1;
-            min-width: 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: end;
-            height: 100%;
-            gap: 6px
-        }
-
-        .mis-bar {
-            background: linear-gradient(#21a8a7, #108082);
-            border-radius: 5px 5px 0 0;
-            min-height: 3px
-        }
-
-        .mis-bar-col span {
-            font-size: 10px;
-            color: #6b7c8d;
-            white-space: nowrap
-        }
-
-        .mis-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 0;
-            border-bottom: 1px solid #edf1f5;
-            font-size: 12px
-        }
-
-        .mis-line b {
-            font-size: 13px
-        }
-
-        .mis-progress {
-            height: 7px;
-            background: #eef2f5;
-            border-radius: 9px;
-            overflow: hidden;
-            margin-top: 5px
-        }
-
-        .mis-progress i {
-            display: block;
-            height: 100%;
-            background: #108082;
-            border-radius: 9px
-        }
-
-        .mis-tables {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 16px
-        }
-
-        .mis-table-scroll {
-            overflow-x: auto
-        }
-
-        .mis-table {
-            width: 100%;
-            font-size: 12px;
-            border-collapse: collapse;
-            white-space: nowrap
-        }
-
-        .mis-table th,
-        .mis-table td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #e9eff3;
-            text-align: left
-        }
-
-        .mis-table th {
-            background: #f5f8fa;
-            color: #566679
-        }
-
-        .mis-empty {
-            color: #82909e;
-            font-size: 13px;
-            padding: 20px 0
-        }
-
-        .mis-muted {
-            color: #81909b;
-            font-size: 12px;
-            margin-top: 10px
-        }
-
-        .dark-mode .mis-panel,
-        .dark-mode .mis-kpi {
-            background: #202d3a;
-            color: #fff;
-            border-color: #3b4b58
-        }
-
-        .dark-mode .mis-head h2,
-        .dark-mode .mis-kpi strong {
-            color: #fff
-        }
-
-        .dark-mode .mis-table th {
-            background: #263747;
-            color: #ddd
-        }
-
-        @media(max-width:1150px) {
-            .mis-kpis {
-                grid-template-columns: repeat(2, 1fr)
-            }
-
-            .mis-grid {
-                grid-template-columns: 1fr 1fr
-            }
-
-            .mis-grid .mis-panel:first-child {
-                grid-column: 1/-1
-            }
-        }
-
-        @media(max-width:700px) {
-            .mis-wrap {
-                margin: 0 10px 20px
-            }
-
-            .mis-kpis {
-                gap: 8px
-            }
-
-            .mis-kpi {
-                padding: 12px
-            }
-
-            .mis-kpi strong {
-                font-size: 20px
-            }
-
-            .mis-grid,
-            .mis-tables {
-                grid-template-columns: 1fr
-            }
-
-            .mis-grid .mis-panel:first-child {
-                grid-column: auto
-            }
-
-            .mis-filters input,
-            .mis-filters select {
-                max-width: 150px
-            }
-
-            .mis-head h2 {
-                font-size: 20px
-            }
-        }
-
-
-        /* PETRO MIS colorful responsive layout */
-        .mis-kpis-six {
-            grid-template-columns: repeat(6, minmax(0, 1fr)) !important
-        }
-
-        .mis-kpi {
-            position: relative;
-            min-height: 132px;
-            border: 1px solid #e8edf3 !important;
-            border-top: 0 !important
-        }
-
-        .mis-kpi strong {
-            font-size: clamp(20px, 1.7vw, 29px)
-        }
-
-        .mis-kpi small {
-            font-size: 12px
-        }
-
-        .mis-percent {
-            display: inline-block;
-            margin-top: 9px;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 3px 9px;
-            border-radius: 30px;
-            background: #ffffffbb
-        }
-
-        .mis-kpi-note {
-            display: block;
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 9px
-        }
-
-        .k-orange {
-            background: linear-gradient(130deg, #fff, #fff0e9)
-        }
-
-        .k-orange strong,
-        .k-orange small {
-            color: #df5a22
-        }
-
-        .k-green {
-            background: linear-gradient(130deg, #fff, #e8fbed)
-        }
-
-        .k-green strong,
-        .k-green small {
-            color: #14834a
-        }
-
-        .k-blue {
-            background: linear-gradient(130deg, #fff, #e9f4ff)
-        }
-
-        .k-blue strong,
-        .k-blue small {
-            color: #126be2
-        }
-
-        .k-purple {
-            background: linear-gradient(130deg, #fff, #f1eaff)
-        }
-
-        .k-purple strong,
-        .k-purple small {
-            color: #7439d8
-        }
-
-        .k-amber {
-            background: linear-gradient(130deg, #fff, #fff3d9)
-        }
-
-        .k-amber strong,
-        .k-amber small {
-            color: #bd7a00
-        }
-
-        .k-mint {
-            background: linear-gradient(130deg, #fff, #e5faf2)
-        }
-
-        .k-mint strong,
-        .k-mint small {
-            color: #098b67
-        }
-
-        .mis-leaders {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
-            margin-bottom: 15px
-        }
-
-        .mis-line:nth-child(4n+1) .mis-progress i {
-            background: #ff9b34
-        }
-
-        .mis-line:nth-child(4n+2) .mis-progress i {
-            background: #22bb7c
-        }
-
-        .mis-line:nth-child(4n+3) .mis-progress i {
-            background: #388cff
-        }
-
-        .mis-line:nth-child(4n) .mis-progress i {
-            background: #9461e9
-        }
-
-        .mis-table td:first-child {
-            font-weight: 700
-        }
-
-        .mis-table tr:hover td {
-            background: #f5fbfc
-        }
-
-        @media(max-width:1400px) {
-            .mis-kpis-six {
-                grid-template-columns: repeat(3, minmax(0, 1fr)) !important
-            }
-        }
-
-        @media(max-width:850px) {
-            .mis-kpis-six {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important
-            }
-
-            .mis-leaders {
-                grid-template-columns: 1fr
-            }
-        }
-
-        @media(max-width:440px) {
-            .mis-kpi {
-                padding: 11px;
-                min-height: 112px
-            }
-
-            .mis-kpi strong {
-                font-size: 20px
-            }
-
-            .mis-kpi small {
-                font-size: 11px
-            }
-        }
-
-        /* Compact product-code filter: uses product.js / window.itemMaster */
-        #misDashboard .mis-filters {
-            display: flex;
-            align-items: center;
-            flex-wrap: nowrap;
-            gap: 8px;
-            max-width: 100%;
-            width: 100%
-        }
-
-        #misDashboard .mis-filters>select {
-            flex: 0 1 160px;
-            min-width: 115px;
-            max-width: 175px
-        }
-
-        #misDashboard .mis-product-search {
-            position: relative;
-            display: flex;
-            align-items: center;
-            flex: 1 1 210px;
-            min-width: 155px;
-            max-width: 300px;
-            background: #fff;
-            border: 1px solid #d7e1e8;
-            border-radius: 11px;
-            padding: 0 9px;
-            gap: 7px;
-            color: #108082
-        }
-
-        #misDashboard .mis-product-search input {
-            border: 0 !important;
-            box-shadow: none !important;
-            outline: 0 !important;
-            min-width: 0 !important;
-            max-width: none !important;
-            width: 100%;
-            padding: 11px 0 !important;
-            font: inherit;
-            background: transparent
-        }
-
-        #misDashboard .mis-product-search button {
-            background: transparent;
-            border: 0;
-            color: #64748b;
-            font-size: 21px;
-            cursor: pointer
-        }
-
-        #misDashboard .mis-product-match {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #dce7e9;
-            border-radius: 8px;
-            padding: 7px 10px;
-            color: #334155;
-            font-size: 11px;
-            box-shadow: 0 5px 16px #142d3c1c;
-            display: none;
-            z-index: 12
-        }
-
-        #misDashboard .mis-product-match:not(:empty) {
-            display: block
-        }
-
-        #misDashboard .mis-reset {
-            flex: 0 0 auto;
-            border: 1px solid #108082;
-            background: #fff;
-            color: #108082;
-            border-radius: 10px;
-            padding: 11px 14px;
-            font-weight: 700;
-            cursor: pointer
-        }
-
-        @media(max-width:900px) {
-            #misDashboard .mis-filters {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                padding-bottom: 6px
-            }
-
-            #misDashboard .mis-filters>select {
-                flex: 0 0 145px
-            }
-
-            #misDashboard .mis-product-search {
-                flex: 0 0 210px
-            }
-
-            #misDashboard .mis-filters input[type=date] {
-                flex: 0 0 140px
-            }
-        }
-
-        /* One-row MIS filters; scroll horizontally on narrower screens */
-        #misDashboard .mis-head {
-            display: block
-        }
-
-        #misDashboard .mis-filters {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: visible;
-            gap: 7px;
-            width: 100%;
-            padding: 10px 0 12px;
-            scrollbar-width: thin
-        }
-
-        #misDashboard .mis-filters>select {
-            flex: 0 0 135px;
-            min-width: 135px;
-            max-width: 165px
-        }
-
-        #misDashboard .mis-filters #misDistributor {
-            flex-basis: 170px
-        }
-
-        #misDashboard .mis-filters #misPerson {
-            flex-basis: 155px
-        }
-
-        #misDashboard .mis-filters .mis-product-search {
-            flex: 0 0 200px;
-            min-width: 200px
-        }
-
-        #misDashboard .mis-filters input[type=date]:not([hidden]) {
-            flex: 0 0 145px;
-            min-width: 145px;
-            display: block !important
-        }
-
-        #misDashboard .mis-filters input[hidden] {
-            display: none !important
-        }
-
-        #misDashboard .mis-filters>select,
-        #misDashboard .mis-filters input {
-            font-size: 12px
-        }
-
-        #misDashboard .mis-reset {
-            white-space: nowrap
-        }
-    </style>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <style>
-        /* PETRO MIS premium redesign — scoped; existing navigation and Firebase logic untouched */
-        #misDashboard {
-            font-family: Poppins, Arial, sans-serif;
-            color: #12233f;
-            margin: 18px 22px 40px
-        }
-
-        #misDashboard * {
-            box-sizing: border-box
-        }
-
-        #misDashboard .mis-head {
-            margin-bottom: 20px
-        }
-
-        #misDashboard .mis-head h2 {
-            font-family: inherit;
-            font-size: clamp(20px, 2vw, 27px);
-            font-weight: 800;
-            color: #10203c
-        }
-
-        #misDashboard .mis-head p {
-            font-size: 12px;
-            color: #8292a9
-        }
-
-        #misDashboard .mis-filters select,
-        #misDashboard .mis-filters input {
-            min-width: 165px;
-            max-width: 215px;
-            padding: 12px 13px;
-            border-radius: 11px;
-            box-shadow: 0 4px 15px #1b41670b
-        }
-
-        #misDashboard .mis-overview {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 13px;
-            margin-bottom: 14px
-        }
-
-        #misDashboard .mis-overview-card {
-            background: #fff;
-            border: 1px solid #e8edf4;
-            border-radius: 16px;
-            padding: 16px 20px;
-            box-shadow: 0 7px 22px #2946630a
-        }
-
-        #misDashboard .mis-overview-card span {
-            display: block;
-            color: #65758b;
-            font-size: 12px;
-            font-weight: 600
-        }
-
-        #misDashboard .mis-overview-card i {
-            color: #108082;
-            margin-right: 7px
-        }
-
-        #misDashboard .mis-overview-card strong {
-            display: block;
-            margin-top: 7px;
-            font-size: 25px;
-            color: #0d2745;
-            font-weight: 800;
-            overflow-wrap: anywhere
-        }
-
-        #misDashboard .mis-kpis-six {
-            grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-            gap: 12px
-        }
-
-        #misDashboard .mis-kpi {
-            min-height: 150px;
-            padding: 16px 15px;
-            border-radius: 16px !important;
-            box-shadow: 0 7px 22px #2946630b !important;
-            overflow: hidden
-        }
-
-        #misDashboard .mis-kpi small {
-            font-size: 11px;
-            line-height: 1.7;
-            font-weight: 700
-        }
-
-        #misDashboard .mis-kpi small i {
-            font-size: 15px;
-            margin-right: 6px
-        }
-
-        #misDashboard .mis-kpi strong {
-            font-size: clamp(21px, 1.7vw, 30px);
-            font-weight: 800;
-            margin-top: 14px
-        }
-
-        #misDashboard .mis-percent {
-            font-size: 10px;
-            margin-top: 9px
-        }
-
-        #misDashboard .mis-panel {
-            border-radius: 16px;
-            padding: 19px;
-            box-shadow: 0 7px 22px #2946630b
-        }
-
-        #misDashboard .mis-panel h3 {
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 700;
-            color: #14223b
-        }
-
-        #misDashboard .mis-grid {
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 14px
-        }
-
-        #misDashboard .mis-donut-container {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            min-height: 190px
-        }
-
-        #misDashboard .mis-donut {
-            width: 155px;
-            height: 155px;
-            flex: 0 0 155px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            position: relative
-        }
-
-        #misDashboard .mis-donut:after {
-            content: '';
-            position: absolute;
-            inset: 28px;
-            border-radius: 50%;
-            background: #fff
-        }
-
-        #misDashboard .mis-donut-center {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            font-size: 10px;
-            color: #64748b
-        }
-
-        #misDashboard .mis-donut-center b {
-            display: block;
-            font-size: 23px;
-            color: #13233e
-        }
-
-        #misDashboard .mis-donut-legend {
-            flex: 1;
-            min-width: 0
-        }
-
-        #misDashboard .mis-legend-row {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            margin: 8px 0;
-            font-size: 10px
-        }
-
-        #misDashboard .mis-legend-row .mis-dot {
-            width: 9px;
-            height: 9px;
-            flex: 0 0 9px;
-            border-radius: 50%
-        }
-
-        #misDashboard .mis-legend-row .mis-legend-name {
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap
-        }
-
-        #misDashboard .mis-legend-row b {
-            font-size: 10px;
-            white-space: nowrap
-        }
-
-        #misDashboard .mis-leaders {
-            grid-template-columns: repeat(2, minmax(0, 1fr))
-        }
-
-        #misDashboard .mis-table {
-            font-family: inherit;
-            font-size: 11px
-        }
-
-        #misDashboard .mis-table th {
-            background: #f5f8fc;
-            font-weight: 700
-        }
-
-        #misDashboard .mis-table td {
-            padding: 11px 8px
-        }
-
-        #misDashboard .mis-bars {
-            height: 195px
-        }
-
-        #misDashboard .mis-bar {
-            background: linear-gradient(180deg, #25c2c1, #108082)
-        }
-
-        #misDashboard .mis-line {
-            font-family: inherit
-        }
-
-        @media(max-width:1350px) {
-            #misDashboard .mis-kpis-six {
-                grid-template-columns: repeat(3, minmax(0, 1fr)) !important
-            }
-
-            #misDashboard .mis-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr))
-            }
-
-            #misDashboard .mis-grid .mis-panel:first-child {
-                grid-column: auto
-            }
-        }
-
-        @media(max-width:900px) {
-            #misDashboard .mis-grid {
-                grid-template-columns: 1fr
-            }
-
-            #misDashboard .mis-leaders {
-                grid-template-columns: 1fr
-            }
-        }
-
-        @media(max-width:650px) {
-            #misDashboard {
-                margin: 12px 10px 28px
-            }
-
-            #misDashboard .mis-overview {
-                grid-template-columns: 1fr 1fr
-            }
-
-            #misDashboard .mis-overview-card:last-child {
-                grid-column: 1/-1
-            }
-
-            #misDashboard .mis-kpis-six {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important
-            }
-
-            #misDashboard .mis-kpi {
-                min-height: 125px;
-                padding: 12px
-            }
-
-            #misDashboard .mis-donut {
-                width: 130px;
-                height: 130px;
-                flex-basis: 130px
-            }
-
-            #misDashboard .mis-donut:after {
-                inset: 24px
-            }
-
-            #misDashboard .mis-donut-container {
-                gap: 9px
-            }
-
-            #misDashboard .mis-filters {
-                width: 100%
-            }
-
-            #misDashboard .mis-filters select {
-                flex: 1;
-                min-width: 130px
-            }
-        }
     </style>
 </head>
 
 <body>
- 
+
+    <!-- Whatsapp Section -->
+    <div class="whats_link">
+        <a target="_blank" href="https://wa.me/918000007336?text=">
+            <img src="images/whatsapp_logo.png" alt="WhatsApp" id="whatsapp-icon" />
+        </a>
+    </div>
+
+    <!-- App Section -->
+    <div class="phone_link">
+        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
+            <img src="https://www.petroindustech.com/images/app.webp" alt="Petro App" id="app-icon" />
+        </a>
+    </div>
+
     <!-- SIDEBAR -->
     <aside id="sidebar">
         <div class="sidebar-logo">
@@ -1354,9 +491,11 @@
             <li data-page="dashboard/sales.html" onclick="goPage('dashboard/sales.html')">
                 <i class="fa-solid fa-box"></i> Products Sales Report
             </li>
+             <li data-page="automation.html" onclick="goPage('automation.html')">
+                <i class="fa-solid fa-box"></i> Mail Section
+            </li>
 
-            <li id="vendorSubscriptionMenu" data-page="subscription-control.html"
-                onclick="goPage('subscription-control.html')" style="display:none;">
+            <li id="vendorSubscriptionMenu" data-page="subscription-control.html" onclick="goPage('subscription-control.html')" style="display:none;">
                 <i class="fa-solid fa-key"></i> Subscription Control
             </li>
 
@@ -1372,286 +511,216 @@
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main id="main"> 
+    <main id="main">
+
+        <!-- Top Navbar -->
+        <div class="top-bar" style="background: #108082;">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
+                        <div class="contact-details">
+                            <ul class="d-flex">
+                                <li>
+                                    <a href="tel:+91-8000007336">
+                                        <i class="fa-solid fa-phone"></i> +91-8000007336
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="mailto:contact@petroindustech.com">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        contact@petroindustech.com
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
+                        <div class="news-box">
+                            <ul class="footer-social topnav-social-icon">
+                                <li>
+                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank">
+                                        <i class="fa-brands fa-facebook"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.instagram.com/petroindustries/" target="_blank">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank">
+                                        <i class="fa-brands fa-youtube"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://x.com/Petroindustech" target="_blank">
+                                        <i class="fa-brands fa-x-twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank">
+                                        <i class="fa-brands fa-pinterest"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Navbar Section -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
+            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
+
+                <!-- LEFT : LOGO -->
+                <a class="navbar-brand" href="https://oms.rankchahiye.com/">
+                    <img src="images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
+                </a>
+
+                <!-- RIGHT : ADMIN -->
+                <div class="d-flex align-items-center">
+
+                    <!-- DARK MODE -->
+                    <label class="toggle-switch mb-0 mr-3">
+                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+                        <span class="slider"></span>
+                    </label>
+
+                    <!-- ADMIN DROPDOWN -->
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            style="border-radius:20px;">
+
+                            <i class="fa fa-user-circle text-success mr-2"></i>
+
+                            <span>
+                                <span id="adminName">Admin</span>
+                                <br>
+                                <small class="admin-meta" id="adminRoleText">ADMIN</small>
+                            </span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                            <a class="dropdown-item" href="admin-profile.html">
+                                <i class="fa fa-user mr-2"></i> Profile
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fa fa-sign-out mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
         <div id="renewalAlert"></div>
 
-        <!-- Legacy statistic nodes retained for existing JavaScript; visually hidden -->
-        <div class="legacy-admin-data" hidden>
-            <!-- TOP CARDS -->
-            <div class="container-fluid mt-5 p-5">
-                <div class="row g-3">
+        <!-- TOP CARDS -->
+        <div class="container-fluid mt-5 p-5">
+            <div class="row g-3">
 
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-title">Total Orders</div>
-                            <div class="stat-value" id="totalOrders">0</div>
-                            <div class="stat-icon">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Orders</div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-cart-shopping"></i>
                         </div>
                     </div>
-
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-title">Total Sales (₹)</div>
-                            <div class="stat-value" id="totalSales">₹0</div>
-                            <div class="stat-icon">
-                                <i class="fa-solid fa-money-bill"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-title">Today Orders</div>
-                            <div class="stat-value" id="todayOrders">0</div>
-                            <div class="stat-icon">
-                                <i class="fa-solid fa-calendar-day"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-title">Total Users</div>
-                            <div class="stat-value" id="totalUsers">0</div>
-                            <div class="stat-icon">
-                                <i class="fa-solid fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Sales (₹)</div>
+                        <div class="stat-value" id="totalSales">₹0</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-money-bill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Today Orders</div>
+                        <div class="stat-value" id="todayOrders">0</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Users</div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-
         </div>
-        <!-- PETRO MANAGEMENT MIS (read-only; live order snapshot) -->
-        <section class="mis-wrap" id="misDashboard">
-            <div class="mis-head">
-                <div>
-                    <h2>Business Performance Dashboard</h2>
-                    <p>Order pipeline, billing and top performers · values represent orders, not invoiced revenue</p>
-                </div>
-                <div class="mis-filters" aria-label="MIS filters">
-                    <select id="misPeriod" aria-label="Period">
-                        <option value="all" selected>All Time</option>
-                        <option value="today">Today</option>
-                        <option value="yesterday">Yesterday</option>
-                        <option value="week">Last 7 Days</option>
-                        <option value="month">This Month</option>
-                        <option value="last">Last Month</option>
-                        <option value="year">This Year</option>
-                        <option value="custom">Custom Dates</option>
-                    </select>
-                    <input type="date" id="misFrom" aria-label="From date" hidden><input type="date" id="misTo"
-                        aria-label="To date" hidden>
-                    <select id="misPerson" aria-label="Salesperson">
-                        <option value="">All Salespersons</option>
-                    </select>
-                    <select id="misOrderType" aria-label="Order Type">
-                        <option value="">All Types</option>
-                        <option value="primary">Primary</option>
-                        <option value="secondary">Secondary</option>
-                        <option value="unspecified">Unspecified</option>
-                    </select>
-                    <select id="misDistributor" aria-label="Distributor">
-                        <option value="">All Distributors</option>
-                    </select>
-                    <select id="misStatus" aria-label="Order Status">
-                        <option value="">All Statuses</option>
-                    </select>
-                    <select id="misBill" aria-label="Bill Status">
-                        <option value="">All Bills</option>
-                        <option value="pending">Bill Pending</option>
-                        <option value="uploaded">Bill Uploaded</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
-                    <div class="mis-product-search"><i class="fa-solid fa-barcode" aria-hidden="true"></i><input
-                            id="misProductCode" type="search" placeholder="Item code / product"
-                            aria-label="Search product by item code" autocomplete="off"
-                            list="misProductSuggestions"><datalist id="misProductSuggestions"></datalist><button
-                            id="misProductClear" type="button" title="Clear product filter"
-                            aria-label="Clear product filter">&times;</button>
-                        <div id="misProductMatch" class="mis-product-match" aria-live="polite"></div>
-                    </div>
-                    <button type="button" id="misReset" class="mis-reset"><i class="fa-solid fa-rotate-left"></i>
-                        Reset</button>
-                </div>
-            </div>
-            <div class="mis-overview">
-                <div class="mis-overview-card"><span><i class="fa-solid fa-cart-shopping"></i> Total
-                        Orders</span><strong id="misOrders">—</strong></div>
-                <div class="mis-overview-card"><span><i class="fa-solid fa-indian-rupee-sign"></i> Total Order
-                        Value</span><strong id="misSales">—</strong></div>
-                <div class="mis-overview-card"><span><i class="fa-solid fa-calendar-day"></i> Today's
-                        Orders</span><strong id="misToday">—</strong></div>
-            </div>
-            <div class="mis-kpis mis-kpis-six">
-                <div class="mis-kpi k-orange"><small><i class="fa-solid fa-clock"></i> Pending Orders</small><strong
-                        id="misPending">—</strong><span id="misPendingPct" class="mis-percent">—</span></div>
-                <div class="mis-kpi k-green"><small><i class="fa-solid fa-box"></i> Delivered Orders</small><strong
-                        id="misDelivered">—</strong><span id="misDeliveredPct" class="mis-percent">—</span></div>
-                <div class="mis-kpi k-blue"><small><i class="fa-solid fa-cubes-stacked"></i> Primary
-                        Orders</small><strong id="misPrimary">—</strong><span id="misPrimaryPct"
-                        class="mis-percent">—</span></div>
-                <div class="mis-kpi k-purple"><small><i class="fa-solid fa-truck-fast"></i> Secondary
-                        Orders</small><strong id="misSecondary">—</strong><span id="misSecondaryPct"
-                        class="mis-percent">—</span></div>
-                <div class="mis-kpi k-amber"><small><i class="fa-solid fa-file-invoice"></i> Bills
-                        Pending</small><strong id="misBillPending">—</strong><span id="misBillPendingPct"
-                        class="mis-percent">—</span></div>
-                <div class="mis-kpi k-mint"><small><i class="fa-solid fa-chart-line"></i> Average Order
-                        Value</small><strong id="misAverage">—</strong><span class="mis-kpi-note">Per order</span></div>
-            </div>
-            <div class="mis-grid">
-                <div class="mis-panel">
-                    <h3>Order Status Overview</h3>
-                    <div id="misStatuses" class="mis-donut-container"></div>
-                </div>
-                <div class="mis-panel">
-                    <h3>Primary vs Secondary</h3>
-                    <div id="misTypes" class="mis-donut-container"></div>
-                </div>
-                <div class="mis-panel">
-                    <h3>Bill Status</h3>
-                    <div id="misBills" class="mis-donut-container"></div>
-                </div>
-            </div>
-            <div class="mis-grid">
-                <div class="mis-panel">
-                    <h3>Monthly Order Value Trend</h3>
-                    <div class="mis-bars" id="misTrend"></div>
-                    <div class="mis-muted">Last 7 calendar months · order value</div>
-                </div>
-                <div class="mis-panel">
-                    <h3>Pending Order Aging</h3>
-                    <div id="misAging"></div>
-                </div>
-                <div class="mis-panel">
-                    <h3>Primary vs Secondary Value</h3>
-                    <div id="misTypeValue"></div>
-                </div>
-            </div>
-            <div class="mis-leaders">
-                <div class="mis-panel">
-                    <h3>🏆 Top 5 Parties</h3>
-                    <div class="mis-table-scroll">
-                        <table class="mis-table">
-                            <thead>
-                                <tr>
-                                    <th>Party</th>
-                                    <th>Orders</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody id="misParties"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="mis-panel">
-                    <h3>🏬 Top 5 Distributors</h3>
-                    <div class="mis-table-scroll">
-                        <table class="mis-table">
-                            <thead>
-                                <tr>
-                                    <th>Distributor</th>
-                                    <th>Orders</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody id="misDistributors"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="mis-panel">
-                    <h3>🥇 Top 5 Salespeople</h3>
-                    <div class="mis-table-scroll">
-                        <table class="mis-table">
-                            <thead>
-                                <tr>
-                                    <th>Salesperson</th>
-                                    <th>Orders</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody id="misSalespeople"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="mis-panel">
-                    <h3>📦 Top 5 Products</h3>
-                    <div class="mis-table-scroll">
-                        <table class="mis-table">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Qty</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody id="misProducts"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="mis-muted">Figures update from the existing OMS order snapshot. Orders without a valid date are
-                excluded from date-limited views; missing distributor/product fields are not guessed.</div>
-        </section>
 
-        <div class="legacy-admin-data" hidden>
-            <!-- PRODUCTS TABLE -->
-            <div class="container-fluid mt-4">
-                <div class="table-card">
-                    <h4 class="table-title">Display Recent Orders</h4>
+        <!-- PRODUCTS TABLE -->
+        <div class="container-fluid mt-4">
+            <div class="table-card">
+                <h4 class="table-title">Display Recent Orders</h4>
 
-                    <table class="table table-hover mt-3">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Party Name</th>
-                                <th>Party Type</th>
-                                <th>Grand Total</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
+                <table class="table table-hover mt-3">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Party Name</th>
+                            <th>Party Type</th>
+                            <th>Grand Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
 
-                        <tbody id="recentProductsBody">
-                            <tr>
-                                <td colspan="6" class="empty-row">Loading product orders...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <tbody id="recentProductsBody">
+                        <tr>
+                            <td colspan="6" class="empty-row">Loading product orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
 
-            <!-- RECENT ORDERS TABLE -->
-            <div class="container-fluid mt-4 mb-5">
-                <div class="table-card">
-                    <h4 class="table-title">Recent Orders</h4>
+        <!-- RECENT ORDERS TABLE -->
+        <div class="container-fluid mt-4 mb-5">
+            <div class="table-card">
+                <h4 class="table-title">Recent Orders</h4>
 
-                    <table class="table table-hover mt-3">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Party Name</th>
-                                <th>Party Type</th>
-                                <th>Grand Total</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
+                <table class="table table-hover mt-3">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Party Name</th>
+                            <th>Party Type</th>
+                            <th>Grand Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
 
-                        <tbody id="recentOrdersBody">
-                            <tr>
-                                <td colspan="6" class="empty-row">Loading recent orders...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <tbody id="recentOrdersBody">
+                        <tr>
+                            <td colspan="6" class="empty-row">Loading recent orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div> <!-- end legacy tables -->
+        </div>
 
     </main>
 
@@ -1911,7 +980,6 @@
 
                         loadDashboard();
                         loadRecentOrders();
-                        if (window.renderPetroMIS) window.renderPetroMIS(orders);
                     },
                     function (error) {
                         console.error("Orders snapshot error:", error);
@@ -2217,7 +1285,6 @@
         }
     </script>
 
-    <script src="js/admin-mis.js"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/jquery.appear.js"></script>
