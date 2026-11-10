@@ -1,0 +1,48 @@
+/* PETRO OMS Premium Compact Admin UI — scoped only to Admin Dashboard.
+   Sidebar intentionally untouched. Existing Firebase IDs and scripts preserved. */
+body[data-petro-page="Admin Dashboard"]{--premium-gap:10px;--premium-pad:15px;--premium-border:#dbe7ed;--premium-shadow:0 2px 9px rgba(15,45,61,.065);background:#f3f7fa}
+body[data-petro-page="Admin Dashboard"] #main{background:#f3f7fa!important;padding-bottom:16px!important}
+body[data-petro-page="Admin Dashboard"] #main .petro-dash-heading{padding:15px var(--premium-pad) 11px!important;gap:12px}
+body[data-petro-page="Admin Dashboard"] .petro-dash-heading h1{font-size:clamp(21px,1.65vw,27px)!important;letter-spacing:-.55px!important;line-height:1.12!important;margin:0!important;color:#102a3d}
+body[data-petro-page="Admin Dashboard"] .petro-dash-heading p{font-size:11px!important;margin:4px 0 0!important;color:#748698}
+body[data-petro-page="Admin Dashboard"] .petro-view-orders{padding:9px 13px!important;font-size:11px!important;border-radius:10px!important;box-shadow:none!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-kpis{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:var(--premium-gap)!important;padding:0 var(--premium-pad) 10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-dash-kpi{min-width:0;min-height:91px!important;padding:13px 11px!important;gap:10px!important;border-radius:12px!important;box-shadow:var(--premium-shadow)!important;transition:box-shadow .15s ease,transform .15s ease}
+body[data-petro-page="Admin Dashboard"] .petro-dash-kpi:hover{transform:translateY(-2px);box-shadow:0 5px 15px #163b461c!important}
+body[data-petro-page="Admin Dashboard"] .petro-dash-kpi .petro-kpi-icon{width:37px!important;height:37px!important;min-width:37px!important;border-radius:11px!important;font-size:16px!important}
+body[data-petro-page="Admin Dashboard"] .petro-dash-kpi .petro-kpi-copy{gap:3px!important;min-width:0}
+body[data-petro-page="Admin Dashboard"] .petro-dash-kpi .petro-kpi-copy strong{font-size:clamp(21px,1.65vw,29px)!important;line-height:1.05!important}
+body[data-petro-page="Admin Dashboard"] .petro-dash-kpi .petro-kpi-copy span{font-size:10.5px!important;line-height:1.2!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-minor{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:var(--premium-gap)!important;padding:0 var(--premium-pad) 10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-minor>div{min-height:62px!important;padding:10px 13px!important;gap:11px!important;border-radius:12px!important;box-shadow:var(--premium-shadow)!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-minor>div>i{min-width:37px!important;height:37px!important;border-radius:10px!important;font-size:15px!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-minor small{font-size:10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-minor b{font-size:clamp(16px,1.4vw,22px)!important;line-height:1.18!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-charts{grid-template-columns:1.22fr .98fr 1fr!important;gap:var(--premium-gap)!important;padding:0 var(--premium-pad) 10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-chart-card{min-height:252px!important;padding:13px!important;border-radius:12px!important;box-shadow:var(--premium-shadow)!important}
+body[data-petro-page="Admin Dashboard"] .petro-chart-head{margin-bottom:8px!important}
+body[data-petro-page="Admin Dashboard"] .petro-chart-head h3{font-size:13px!important}
+body[data-petro-page="Admin Dashboard"] .petro-chart-head span{font-size:10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-live-trend svg{max-height:185px!important}
+body[data-petro-page="Admin Dashboard"] .petro-trend-legend{font-size:10px!important;gap:10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-doughnut-layout{min-height:188px!important;gap:12px!important}
+body[data-petro-page="Admin Dashboard"] .petro-doughnut{width:132px!important;height:132px!important}
+body[data-petro-page="Admin Dashboard"] .petro-doughnut>div{width:92px!important;height:92px!important}
+body[data-petro-page="Admin Dashboard"] .petro-doughnut strong{font-size:23px!important}
+body[data-petro-page="Admin Dashboard"] .petro-doughnut-legend>div{font-size:10px!important;margin-bottom:7px!important}
+body[data-petro-page="Admin Dashboard"] .petro-top-party{padding:6px 0!important}
+body[data-petro-page="Admin Dashboard"] .petro-top-party>div{font-size:10px!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick{margin:0 var(--premium-pad) 10px!important;padding:9px 11px!important;border-radius:12px!important;display:flex;align-items:center;gap:13px;background:#e5f6f3!important}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick h3{font-size:12px!important;margin:0!important;white-space:nowrap}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick>div{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;flex:1;min-width:0}
+body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick a{padding:9px 7px!important;font-size:10.5px!important;border-radius:8px!important;background:#f2fffc!important}
+body[data-petro-page="Admin Dashboard"] .petro-recent-pair{display:grid!important;grid-template-columns:1fr 1fr!important;gap:var(--premium-gap)!important;margin:0 var(--premium-pad)!important;align-items:start}
+body[data-petro-page="Admin Dashboard"] #main .petro-recent-pair>.petro-recent-section{margin:0!important;padding:0!important;min-width:0}
+body[data-petro-page="Admin Dashboard"] #main .petro-recent-pair .table-card{min-height:215px!important;padding:12px!important;border-radius:12px!important;box-shadow:var(--premium-shadow)!important}
+body[data-petro-page="Admin Dashboard"] #main .petro-recent-pair .table-title{font-size:13px!important;margin:0 0 9px!important}
+body[data-petro-page="Admin Dashboard"] #main .petro-recent-pair table{margin-top:0!important;margin-bottom:0!important;min-width:590px!important}
+body[data-petro-page="Admin Dashboard"] #main .petro-recent-pair td,body[data-petro-page="Admin Dashboard"] #main .petro-recent-pair th{padding:8px 7px!important;font-size:10.5px!important;vertical-align:middle!important}
+body[data-petro-page="Admin Dashboard"] .petro-recent-view{font-size:10px!important}
+@media(max-width:1500px){body[data-petro-page="Admin Dashboard"] .petro-dashboard-kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}body[data-petro-page="Admin Dashboard"] .petro-dashboard-charts{grid-template-columns:1fr 1fr!important}body[data-petro-page="Admin Dashboard"] .petro-chart-parties{grid-column:1/-1!important}body[data-petro-page="Admin Dashboard"] .petro-chart-parties #petroAdminTopParties{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}}
+@media(max-width:1050px){body[data-petro-page="Admin Dashboard"] .petro-dashboard-charts{grid-template-columns:1fr!important}body[data-petro-page="Admin Dashboard"] .petro-chart-parties{grid-column:auto!important}body[data-petro-page="Admin Dashboard"] .petro-chart-parties #petroAdminTopParties{display:block}body[data-petro-page="Admin Dashboard"] .petro-recent-pair{grid-template-columns:1fr!important}}
+@media(max-width:768px){body[data-petro-page="Admin Dashboard"]{--premium-pad:11px;--premium-gap:8px}body[data-petro-page="Admin Dashboard"] .petro-dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}body[data-petro-page="Admin Dashboard"] .petro-dash-kpi{min-height:79px!important;padding:10px!important}body[data-petro-page="Admin Dashboard"] .petro-dashboard-minor{grid-template-columns:1fr!important}body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick{display:block!important}body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick h3{margin-bottom:8px!important}body[data-petro-page="Admin Dashboard"] .petro-dashboard-quick>div{grid-template-columns:repeat(2,minmax(0,1fr))!important}body[data-petro-page="Admin Dashboard"] .petro-doughnut{width:120px!important;height:120px!important}body[data-petro-page="Admin Dashboard"] .petro-doughnut>div{width:84px!important;height:84px!important}}

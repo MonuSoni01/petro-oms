@@ -471,7 +471,7 @@
             LOGIN_PAGE: "login.html",
             DASHBOARD_PAGE: "admin-dashboard.html",
             LOGIN_COLLECTION: "sales-login",
-            SESSION_HOURS: 12,
+            SESSION_HOURS: 24 * 365 * 100,
             ALLOWED_ROLES: ["admin", "super_admin", "manager"]
         };
 
@@ -546,7 +546,7 @@
             let expiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
 
             if (!expiresAt && email && role && status === "active") {
-                expiresAt = Date.now() + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+                expiresAt = Number.MAX_SAFE_INTEGER;
                 localStorage.setItem("sessionExpiresAt", String(expiresAt));
             }
 
@@ -757,7 +757,7 @@
             const role = normalizeRole(data.role);
             const status = normalizeText(data.status);
             const now = Date.now();
-            const expiresAt = now + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+            const expiresAt = Number.MAX_SAFE_INTEGER;
 
             localStorage.setItem("adminUid", authUser?.uid || data.uid || "");
             localStorage.setItem("adminEmail", data.email || "");

@@ -3,7 +3,7 @@
    NETWORK FIRST + SAFE OFFLINE CACHE
 ========================================= */
 
-const CACHE_NAME = "petro-oms-v6-renewal-auto-renewal-20260902";
+const CACHE_NAME = "petro-oms-admin-customer-product-20261110";
 
 /* New service worker ko immediately activate karo */
 self.addEventListener("message", function (event) {
@@ -18,9 +18,15 @@ self.addEventListener("message", function (event) {
 const STATIC_ASSETS = [
   "/",
   "/index.html",
+  "/css/oms-home.css",
+  "/js/oms-home.js",
 
   "/vendor/bootstrap/css/bootstrap.min.css",
   "/css/style.css",
+  "/css/petro-admin-refresh.css",
+  "/css/petro-product-insights.css",
+  "/users/customers.css",
+  "/users/users.js",
   "/css/all.css",
 
   "/vendor/jquery/jquery.min.js",

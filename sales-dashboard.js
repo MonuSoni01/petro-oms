@@ -29,7 +29,7 @@
     DRIVE_UPLOAD_URL:
       "https://script.google.com/macros/s/AKfycbyvLw_BrRXcDI7lRsVE3gZZa11z_km1F1g_pk7pytl4Tl1IT2wEqxsjiVBorW-cBf1D/exec",
 
-    SESSION_TIME_MS: 48 * 60 * 60 * 1000,
+    SESSION_TIME_MS: Number.MAX_SAFE_INTEGER,
     MAX_BILL_FILE_SIZE: 5 * 1024 * 1024,
     DRIVE_UPLOAD_TIMEOUT_MS: 90 * 1000,
     ORDERS_FETCH_LIMIT: 1000,
@@ -75,7 +75,8 @@
       dateFrom: "",
       dateTo: "",
       minAmount: "",
-      maxAmount: ""
+      maxAmount: "",
+      orderType: ""
     },
     unsubscribers: [],
     searchTimer: null,
@@ -173,7 +174,7 @@
 
   function redirectToLogin(message = "") {
     if (message) alert(message);
-    window.location.replace("sales-login.html");
+    window.location.replace("index.html");
   }
 
   function getMillis(value) {
@@ -304,7 +305,7 @@
     const storedExpiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
     const expiresAt = storedExpiresAt || (loginTime + CONFIG.SESSION_TIME_MS);
 
-    if (!Number.isFinite(expiresAt) || Date.now() >= expiresAt) {
+    if (!Number.isFinite(expiresAt)) {
       clearLoginSession();
       redirectToLogin("Your session has expired. Please login again.");
       return false;
@@ -385,6 +386,11 @@
           </label>
 
           <label class="petro-filter-field">
+            <span>Order type</span>
+            <select id="orderTypeFilter"><option value="">All types</option><option value="Primary">Primary</option><option value="Secondary">Secondary</option></select>
+          </label>
+
+          <label class="petro-filter-field">
             <span>Bill</span>
             <select id="billFilter">
               <option value="">All bills</option>
@@ -401,16 +407,6 @@
           <label class="petro-filter-field">
             <span>Date to</span>
             <input id="dateToFilter" type="date">
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Min amount</span>
-            <input id="minAmountFilter" type="number" min="0" step="0.01" placeholder="₹ 0">
-          </label>
-
-          <label class="petro-filter-field">
-            <span>Max amount</span>
-            <input id="maxAmountFilter" type="number" min="0" step="0.01" placeholder="₹ 0">
           </label>
 
           <button type="button" id="resetFiltersBtn" class="petro-reset-filter">
@@ -985,6 +981,20 @@
     if ($("deliveredOrders")) {
       $("deliveredOrders").textContent = String(delivered);
     }
+    // Match the status values used by the existing dashboard selector.
+    const summaryCounts = {
+      "Quotation Sent": "quotationOrders",
+      "Hold": "holdOrders",
+      "Cancelled": "cancelledOrders"
+    };
+    for (const [status, id] of Object.entries(summaryCounts)) {
+      const target = $(id);
+      if (target) {
+        target.textContent = String(state.allOrders.filter(order =>
+          normalizeStatus(order.status).toLowerCase() === status.toLowerCase()
+        ).length);
+      }
+    }
   }
 
   function showPageError(message) {
@@ -1061,6 +1071,7 @@
         return false;
       }
 
+      if (state.filters.orderType && getOrderTypeLabel(order) !== state.filters.orderType) return false;
       if (state.filters.bill === "uploaded" && !hasBill) return false;
       if (state.filters.bill === "pending" && hasBill) return false;
 
@@ -1177,13 +1188,15 @@
       dateFrom: "",
       dateTo: "",
       minAmount: "",
-      maxAmount: ""
+      maxAmount: "",
+      orderType: ""
     };
     state.currentPage = 1;
 
     const fieldMap = {
       orderSearch: "",
       statusFilter: "",
+      orderTypeFilter: "",
       billFilter: "",
       dateFromFilter: "",
       dateToFilter: "",
@@ -2363,7 +2376,7 @@ padding:5px;
   function logoutSalesUser() {
     clearLoginSession();
     localStorage.removeItem("admin");
-    window.location.replace("sales-login.html");
+    window.location.replace("index.html");
   }
 
   function bindGlobalEvents() {
@@ -2410,6 +2423,13 @@ padding:5px;
 
       if (target.id === "statusFilter") {
         state.filters.status = target.value;
+        state.currentPage = 1;
+        applySearchAndPagination();
+        return;
+      }
+
+      if (target.id === "orderTypeFilter") {
+        state.filters.orderType = target.value;
         state.currentPage = 1;
         applySearchAndPagination();
         return;

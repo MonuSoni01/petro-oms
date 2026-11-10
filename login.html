@@ -502,10 +502,39 @@
         flex-direction: column;
       }
     }
+  
+    /* Compact admin form inside personalized index login (no duplicate PETRO logo). */
+    body.embedded{min-height:100%;height:auto;padding:0;background:transparent;display:block}
+    body.embedded .login-page{display:block;width:100%;max-width:none;border:none;box-shadow:none;border-radius:0;animation:none}
+    body.embedded .login-brand-panel,body.embedded .mobile-logo,body.embedded .footer-text,body.embedded .login-note{display:none!important}
+    body.embedded .login-form-panel{padding:0;min-height:0;display:block}
+    body.embedded .login-box{width:100%;max-width:none;padding:5px 0 0;box-shadow:none;border:0}
+    body.embedded .login-heading{display:none}
+    body.embedded .input-group{margin-bottom:11px}
+    body.embedded .input-field{border-radius:12px}
+    body.embedded .login-btn{border-radius:12px;min-height:47px}
+    body.embedded .form-options{margin-bottom:12px}
+
+/* V13: share the approved visual language with the Salesman login */
+body.embedded .form-options{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:0;margin-bottom:16px}
+body.embedded .login-form-panel{background:transparent}
+body.embedded .login-box{background:#fff!important}
+body.embedded .input-group{margin-bottom:17px}
+body.embedded .input-label{font-size:13px;font-weight:800;color:#103c45}
+body.embedded .input-field{min-height:52px;border-radius:15px;background:#fbfdfd;border:1px solid #cedfe5;box-shadow:0 3px 13px #16394308}
+body.embedded .input-field input{font-size:16px}
+body.embedded .login-btn{width:100%;min-height:54px;border-radius:15px;background:linear-gradient(100deg,#05ae9d,#00675f);box-shadow:0 12px 24px #08796b25;margin-top:7px}
+body.embedded .remember-box{font-size:11px;gap:6px;white-space:nowrap}
+.petro-reset-link{border:0;background:transparent;color:#06857a;text-decoration:underline;font-size:12px;font-weight:700;cursor:pointer;padding:5px}
+.petro-login-capabilities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:20px;padding-top:17px;border-top:1px solid #ecf2f2}
+.petro-login-capabilities>div{text-align:center;font-size:10px;font-weight:700;color:#173c49;line-height:1.35}
+.petro-login-capabilities i{display:grid;place-items:center;font-size:17px;color:#058b80;background:#e6f8f3;width:42px;height:42px;border-radius:14px;margin:0 auto 7px}
+@media(max-width:350px){.petro-reset-link{font-size:11px}body.embedded .remember-box{font-size:10px}body.embedded .input-group{margin-bottom:12px}}
+
   </style>
 </head>
 
-<body>
+<body><script>if(new URLSearchParams(location.search).has("embedded"))document.body.classList.add("embedded");</script>
 
   <main class="login-page">
 
@@ -513,7 +542,7 @@
       <div class="brand-content">
 
         <div class="brand-logo-box">
-          <img src="images/logo.webp" alt="PETRO LOGO">
+          <a href="/index.html" aria-label="Go to Home"><img src="images/logo.webp" alt="PETRO LOGO"></a>
         </div>
 
         <div class="brand-badge">
@@ -556,7 +585,7 @@
     <section class="login-form-panel">
       <div class="login-box">
 
-        <img src="images/logo.webp" alt="PETRO LOGO" class="mobile-logo">
+        <a href="/index.html" aria-label="Go to Home"><img src="images/logo.webp" alt="PETRO LOGO" class="mobile-logo"></a>
 
         <div class="login-heading">
           <h2>Admin Login</h2>
@@ -602,7 +631,7 @@
               Remember email
             </label>
 
-            <span class="help-text">Admins only</span>
+            <button class="petro-reset-link" type="button" id="petroForgotAdmin">Forgot Password?</button>
           </div>
 
           <button type="submit" class="login-btn" id="loginBtn">
@@ -649,6 +678,16 @@
 
   <!-- Login JS -->
   <script src="login.js"></script>
+  <script>
+    document.getElementById('petroForgotAdmin')?.addEventListener('click', async function(){
+      const email=document.getElementById('email')?.value.trim();
+      if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        alert('Enter your admin email address first.');return;
+      }
+      try {await firebase.auth().sendPasswordResetEmail(email);alert('If this email has an eligible account, a reset email will be sent.');}
+      catch(err){console.error('Password reset request failed',err);alert('Password reset could not be completed. Contact your administrator.');}
+    });
+  </script>
 
 </body>
 </html>

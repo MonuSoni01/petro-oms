@@ -1,0 +1,55 @@
+
+/* PETRO OMS — Salesman mobile UI refinement.
+   Non-destructive: existing Firebase, auth, order and reporting JS remains unchanged.
+   Follows the supplied 11-screen mobile references. */
+:root {
+  --petro-primary:#108082;
+  --petro-deep:#006a65;
+  --petro-text:#091934;
+  --petro-surface:#ffffff;
+  --petro-canvas:#f5f9fb;
+  --petro-border:#e2ecef;
+  --petro-warning:#ff9800;
+  --petro-success:#16a34a;
+  --petro-danger:#dc3545;
+}
+html { -webkit-text-size-adjust:100%; }
+body { color:var(--petro-text); }
+button, a, select, input, textarea { -webkit-tap-highlight-color:transparent; }
+button, a { touch-action:manipulation; }
+button:focus-visible, a:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+  outline:3px solid #fbcf2e;
+  outline-offset:2px;
+}
+.shell { background:var(--petro-canvas); }
+.app-header { background:#fff; border-bottom:1px solid var(--petro-border); }
+.view .page-heading h1 { color:var(--petro-text); }
+#homeStats .stat { border:1px solid rgba(16,128,130,.065); }
+#homeStats .stat.orange { background:#fff5e7; }
+#homeStats .stat.red { background:#fff0f2; }
+#homeStats .stat.blue { background:#edf6ff; }
+#homeStats .stat.purple { background:#f4efff; }
+#homeStats .stat.teal { background:#e4f8f4; }
+#homeStats .stat.green { background:#e9fbf4; }
+.login-roles button { transition:transform .14s ease, box-shadow .14s ease; }
+.login-roles button:active { transform:scale(.99); }
+.order-modal-card { max-width:430px; }
+@media (max-width:600px) {
+  .shell { width:100%; max-width:430px; }
+  .app-header { min-height:64px; }
+  .bottom-nav {
+    z-index:100;
+    padding-bottom:max(5px, env(safe-area-inset-bottom));
+    box-shadow:0 -8px 24px rgba(9,25,52,.09);
+  }
+  .nav-item { min-width:0; }
+  .view { padding-bottom:8px; }
+  .search-box input { min-width:0; width:100%; }
+  .report-filters, .order-tools, .customer-tools { min-width:0; }
+  .order-modal { padding:8px; }
+  .order-modal-card { max-height:calc(100dvh - 16px); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .login-roles button { transition:none; }
+}

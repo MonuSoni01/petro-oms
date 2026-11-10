@@ -1,28 +1,22 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>PETRO OMS - Admin Panel</title>
-
-    <link rel="icon" href="/images/app-icon.png" />
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-    <!-- Existing CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/all.css" rel="stylesheet" />
-
-    <!-- Firebase v9 Compat -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PETRO OMS - Admin Panel</title>
+<link href="/images/app-icon.png" rel="icon"/>
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<!-- Existing CSS -->
+<link href="css/style.css" rel="stylesheet"/>
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/all.css" rel="stylesheet"/>
+<!-- Firebase v9 Compat -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<style>
         :root {
             --petro-primary: #108082;
             --petro-primary-dark: #0c5f63;
@@ -451,282 +445,116 @@
             }
         }
     </style>
-</head>
-
-<body>
-
-    <!-- Whatsapp Section -->
-    <div class="whats_link">
-        <a target="_blank" href="https://wa.me/918000007336?text=">
-            <img src="images/whatsapp_logo.png" alt="WhatsApp" id="whatsapp-icon" />
-        </a>
-    </div>
-
-    <!-- App Section -->
-    <div class="phone_link">
-        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.radiant.petro">
-            <img src="https://www.petroindustech.com/images/app.webp" alt="Petro App" id="app-icon" />
-        </a>
-    </div>
-
-    <!-- SIDEBAR -->
-    <aside id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/petro-circle-logo.webp" alt="PETRO" />
-        </div>
-
-        <ul class="sidebar-menu">
-            <li data-page="admin-dashboard.html" onclick="goPage('admin-dashboard.html')">
-                <i class="fa-solid fa-chart-line"></i> Dashboard
+</link><link href="/css/petro-admin-refresh.css?v=20261110.16" rel="stylesheet"/><link href="/css/petro-admin-premium-compact.css?v=20261110.1" rel="stylesheet"/><link href="/css/petro-oms-final-compact.css?v=20261110.4" rel="stylesheet"/></head>
+<body data-petro-page="Admin Dashboard">
+<!-- SIDEBAR -->
+<aside id="sidebar">
+<div class="sidebar-logo"><a href="/admin-dashboard.html" class="petro-logo-home-link" aria-label="Go to Admin Dashboard" title="Admin Dashboard"><img alt="PETRO" src="/images/petro-circle-logo.webp"/></a></div>
+<ul class="sidebar-menu">
+<li data-page="admin-dashboard.html" onclick="goPage('admin-dashboard.html')">
+<i class="fa-solid fa-chart-line"></i> Dashboard
             </li>
-
-            <li data-page="orders/orders.html" onclick="goPage('orders/orders.html')">
-                <i class="fa-solid fa-list"></i> Orders
-            </li>
-
-            <!-- <li data-page="users/users.html" onclick="goPage('users/users.html')">
+<li data-page="orders/orders.html" onclick="goPage('orders/orders.html')">
+<i class="fa-solid fa-list"></i> Orders
+            </li><li class="" onclick="location.href='/users/users.html'"><i class="fa-solid fa-users"></i> Customers &amp; Parties</li>
+<!-- <li data-page="users/users.html" onclick="goPage('users/users.html')">
                 <i class="fa-solid fa-user"></i> Customers
             </li> -->
-
-            <li data-page="dashboard/sales.html" onclick="goPage('dashboard/sales.html')">
-                <i class="fa-solid fa-box"></i> Products Sales Report
-            </li>
-             <li data-page="automation.html" onclick="goPage('automation.html')">
-                <i class="fa-solid fa-box"></i> Mail Section
+<li data-page="dashboard/sales.html" onclick="goPage('dashboard/sales.html')">
+<i class="fa-solid fa-box"></i> Products Sales Report
             </li>
 
-            <li id="vendorSubscriptionMenu" data-page="subscription-control.html" onclick="goPage('subscription-control.html')" style="display:none;">
-                <i class="fa-solid fa-key"></i> Subscription Control
+<li data-page="subscription-control.html" id="vendorSubscriptionMenu" onclick="goPage('subscription-control.html')" style="display:none;">
+<i class="fa-solid fa-key"></i> Subscription Control
             </li>
-
-            <!-- <li data-page="activity.html" onclick="goPage('activity.html')">
+<!-- <li data-page="activity.html" onclick="goPage('activity.html')">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>Activity Logs</span>
             </li> -->
-
-            <li onclick="logout()">
-                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+<li onclick="logout()">
+<i class="fa-solid fa-right-from-bracket"></i> Log Out
             </li>
-        </ul>
-    </aside>
+</ul>
+</aside>
+<!-- MAIN CONTENT -->
+<main id="main">
+<!-- Top Navbar -->
 
-    <!-- MAIN CONTENT -->
-    <main id="main">
+<!-- Navbar Section -->
 
-        <!-- Top Navbar -->
-        <div class="top-bar" style="background: #108082;">
-            <div class="container-fluid">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
-                        <div class="contact-details">
-                            <ul class="d-flex">
-                                <li>
-                                    <a href="tel:+91-8000007336">
-                                        <i class="fa-solid fa-phone"></i> +91-8000007336
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="mailto:contact@petroindustech.com">
-                                        <i class="fa-solid fa-envelope"></i>
-                                        contact@petroindustech.com
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
-                        <div class="news-box">
-                            <ul class="footer-social topnav-social-icon">
-                                <li>
-                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank">
-                                        <i class="fa-brands fa-facebook"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.instagram.com/petroindustries/" target="_blank">
-                                        <i class="fa-brands fa-instagram"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank">
-                                        <i class="fa-brands fa-youtube"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://x.com/Petroindustech" target="_blank">
-                                        <i class="fa-brands fa-x-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank">
-                                        <i class="fa-brands fa-pinterest"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Navbar Section -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
-            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
-
-                <!-- LEFT : LOGO -->
-                <a class="navbar-brand" href="https://oms.rankchahiye.com/">
-                    <img src="images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
-                </a>
-
-                <!-- RIGHT : ADMIN -->
-                <div class="d-flex align-items-center">
-
-                    <!-- DARK MODE -->
-                    <label class="toggle-switch mb-0 mr-3">
-                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-                        <span class="slider"></span>
-                    </label>
-
-                    <!-- ADMIN DROPDOWN -->
-                    <div class="dropdown">
-                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
-                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                            style="border-radius:20px;">
-
-                            <i class="fa fa-user-circle text-success mr-2"></i>
-
-                            <span>
-                                <span id="adminName">Admin</span>
-                                <br>
-                                <small class="admin-meta" id="adminRoleText">ADMIN</small>
-                            </span>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
-                            <a class="dropdown-item" href="admin-profile.html">
-                                <i class="fa fa-user mr-2"></i> Profile
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
-                                <i class="fa fa-sign-out mr-2"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </nav>
-
-        <div id="renewalAlert"></div>
-
-        <!-- TOP CARDS -->
-        <div class="container-fluid mt-5 p-5">
-            <div class="row g-3">
-
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <div class="stat-title">Total Orders</div>
-                        <div class="stat-value" id="totalOrders">0</div>
-                        <div class="stat-icon">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <div class="stat-title">Total Sales (₹)</div>
-                        <div class="stat-value" id="totalSales">₹0</div>
-                        <div class="stat-icon">
-                            <i class="fa-solid fa-money-bill"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <div class="stat-title">Today Orders</div>
-                        <div class="stat-value" id="todayOrders">0</div>
-                        <div class="stat-icon">
-                            <i class="fa-solid fa-calendar-day"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <div class="stat-title">Total Users</div>
-                        <div class="stat-value" id="totalUsers">0</div>
-                        <div class="stat-icon">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- PRODUCTS TABLE -->
-        <div class="container-fluid mt-4">
-            <div class="table-card">
-                <h4 class="table-title">Display Recent Orders</h4>
-
-                <table class="table table-hover mt-3">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Party Name</th>
-                            <th>Party Type</th>
-                            <th>Grand Total</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="recentProductsBody">
-                        <tr>
-                            <td colspan="6" class="empty-row">Loading product orders...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- RECENT ORDERS TABLE -->
-        <div class="container-fluid mt-4 mb-5">
-            <div class="table-card">
-                <h4 class="table-title">Recent Orders</h4>
-
-                <table class="table table-hover mt-3">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Party Name</th>
-                            <th>Party Type</th>
-                            <th>Grand Total</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="recentOrdersBody">
-                        <tr>
-                            <td colspan="6" class="empty-row">Loading recent orders...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
-
-    <div class="session-alert" id="sessionAlert"></div>
-
-    <script>
+<div id="renewalAlert"></div>
+<!-- V13 dashboard header and live KPIs -->
+<div class="petro-dash-heading"><div><h1>Admin Dashboard</h1><p>Order management, performance and operations at a glance.</p></div><a class="petro-view-orders" href="/orders/orders.html"><i class="fa-solid fa-list"></i> View All Orders</a></div>
+<section class="petro-dashboard-kpis" aria-label="Live order status summary">
+ <article class="petro-dash-kpi teal"><span class="petro-kpi-icon"><i class="fa-solid fa-cart-shopping"></i></span><div class="petro-kpi-copy"><strong id="totalOrders">—</strong><span>Total Orders</span></div></article>
+ <article class="petro-dash-kpi green"><span class="petro-kpi-icon"><i class="fa-solid fa-circle-check"></i></span><div class="petro-kpi-copy"><strong id="petroKpiDelivered">—</strong><span>Delivered</span></div></article>
+ <article class="petro-dash-kpi orange"><span class="petro-kpi-icon"><i class="fa-solid fa-clock"></i></span><div class="petro-kpi-copy"><strong id="petroKpiPending">—</strong><span>Pending</span></div></article>
+ <article class="petro-dash-kpi purple"><span class="petro-kpi-icon"><i class="fa-solid fa-file-invoice"></i></span><div class="petro-kpi-copy"><strong id="petroKpiQuotation">—</strong><span>Quotation Sent</span></div></article>
+ <article class="petro-dash-kpi amber"><span class="petro-kpi-icon"><i class="fa-solid fa-pause"></i></span><div class="petro-kpi-copy"><strong id="petroKpiHold">—</strong><span>On Hold</span></div></article>
+ <article class="petro-dash-kpi red"><span class="petro-kpi-icon"><i class="fa-solid fa-circle-xmark"></i></span><div class="petro-kpi-copy"><strong id="petroKpiCancelled">—</strong><span>Cancelled</span></div></article>
+</section>
+<div class="petro-dashboard-minor">
+ <div><i class="fa-solid fa-indian-rupee-sign"></i><span><small>Total Order Value</small><b id="totalSales">—</b></span></div>
+ <div><i class="fa-regular fa-calendar"></i><span><small>Today's Orders</small><b id="todayOrders">—</b></span></div>
+ <div><i class="fa-solid fa-users"></i><span><small>Unique Party Names*</small><b id="totalUsers">—</b></span></div>
+</div>
+<section class="petro-dashboard-charts" aria-label="Live order charts">
+ <article class="petro-chart-card petro-chart-trend"><div class="petro-chart-head"><h3><i class="fa-solid fa-chart-line"></i> Orders Trend</h3><span>Last 7 Days</span></div><div id="petroOrderTrend" aria-label="Seven-day order trend" class="petro-live-trend">Loading orders...</div></article>
+ <article class="petro-chart-card petro-chart-distribution"><div class="petro-chart-head"><h3><i class="fa-solid fa-chart-pie"></i> Status Distribution</h3></div><div id="petroAdminStatuses" aria-label="Status distribution">Loading orders...</div></article>
+ <article class="petro-chart-card petro-chart-parties"><div class="petro-chart-head"><h3><i class="fa-solid fa-trophy"></i> Top 5 Parties</h3><span>By order value</span></div><div id="petroAdminTopParties">Loading orders...</div></article>
+</section>
+<section class="petro-dashboard-quick" aria-label="Quick links"><h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3><div><a href="/orders/orders.html"><i class="fa-solid fa-boxes-stacked"></i> Manage Orders</a><a href="/users/users.html"><i class="fa-solid fa-users"></i> Customers</a><a href="/dashboard/sales.html"><i class="fa-solid fa-chart-column"></i> Product Sales</a><a href="/index1.html"><i class="fa-solid fa-plus-circle"></i> Create Order</a></div></section>
+<div class="petro-recent-pair">
+<!-- PRODUCTS TABLE -->
+<div class="container-fluid mt-4 petro-recent-section">
+<div class="table-card">
+<h4 class="table-title">Recent Product Orders <a class="petro-recent-view" href="/orders/orders.html">View All <i class="fa-solid fa-arrow-right"></i></a></h4>
+<table class="table table-hover mt-3">
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Party Name</th>
+<th>Party Type</th>
+<th>Grand Total</th>
+<th>Status</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="recentProductsBody">
+<tr>
+<td class="empty-row" colspan="6">Loading product orders...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- RECENT ORDERS TABLE -->
+<div class="container-fluid mt-4 mb-5 petro-recent-section">
+<div class="table-card">
+<h4 class="table-title">Recent Orders <a class="petro-recent-view" href="/orders/orders.html">View All <i class="fa-solid fa-arrow-right"></i></a></h4>
+<table class="table table-hover mt-3">
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Party Name</th>
+<th>Party Type</th>
+<th>Grand Total</th>
+<th>Status</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="recentOrdersBody">
+<tr>
+<td class="empty-row" colspan="6">Loading recent orders...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><!-- /petro-recent-pair -->
+</main>
+<div class="session-alert" id="sessionAlert"></div>
+<script>
         "use strict";
 
         /* ==============================
@@ -759,8 +587,8 @@
         ============================== */
 
         const CONFIG = {
-            LOGIN_PAGE: "login.html",
-            SESSION_HOURS: 12,
+            LOGIN_PAGE: "index.html",
+            SESSION_HOURS: 24 * 365 * 100,
             ALLOWED_ROLES: ["admin", "super_admin", "manager"]
         };
 
@@ -807,7 +635,7 @@
                 !adminRole ||
                 adminStatus !== "active" ||
                 !CONFIG.ALLOWED_ROLES.includes(adminRole) ||
-                Date.now() > expiresAt
+                false
             ) {
                 clearSessionAndRedirect();
                 return false;
@@ -849,11 +677,11 @@
             localStorage.removeItem("sessionExpiresAt");
             localStorage.removeItem("firebaseAuthLogin");
 
-            window.location.replace(CONFIG.LOGIN_PAGE);
+            window.location.replace("index.html");
         }
 
         function refreshSessionTime() {
-            const expiresAt = Date.now() + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+            const expiresAt = Number.MAX_SAFE_INTEGER;
             localStorage.setItem("sessionExpiresAt", String(expiresAt));
         }
 
@@ -871,7 +699,7 @@
             setInterval(function () {
                 const expiresAt = Number(localStorage.getItem("sessionExpiresAt") || 0);
 
-                if (!expiresAt || Date.now() > expiresAt) {
+                if (!expiresAt || false) {
                     showSessionAlert("Session expired. Redirecting...");
                     setTimeout(clearSessionAndRedirect, 800);
                 }
@@ -997,6 +825,42 @@
                 );
         }
 
+        function renderAdminAnalytics(list) {
+            const colors={delivered:'#16a34a',pending:'#f59e0b',quotation:'#7c3aed',hold:'#d69b09',cancelled:'#e63852',partial:'#347fe5',other:'#0b9088'};
+            const types=[['Delivered','delivered'],['Pending','pending'],['Quotation Sent','quotation'],['Hold','hold'],['Cancelled','cancelled'],['Partial Delivered','partial']];
+            const grouped=new Map();
+            list.forEach(o=>{const raw=String(o.status||'Pending').trim().toLowerCase();
+              let group=raw.includes('partial')?'partial':raw.includes('deliver')||raw.includes('dispatch')?'delivered':raw.includes('cancel')?'cancelled':raw.includes('hold')?'hold':raw.includes('quotation')?'quotation':raw.includes('pending')?'pending':'other';
+              grouped.set(group,(grouped.get(group)||0)+1);
+            });
+            const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+            set('petroKpiDelivered',grouped.get('delivered')||0);
+            set('petroKpiPending',grouped.get('pending')||0);
+            set('petroKpiQuotation',grouped.get('quotation')||0);
+            set('petroKpiHold',grouped.get('hold')||0);
+            set('petroKpiCancelled',grouped.get('cancelled')||0);
+            const parts=[...grouped.entries()].filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);
+            const total=Math.max(1,list.length);
+            const colorFor=k=>colors[k]||colors.other;
+            let consumed=0;const stops=parts.map(([k,v])=>{const a=consumed/total*100;consumed+=v;return `${colorFor(k)} ${a}% ${consumed/total*100}%`;});
+            const dough=document.getElementById('petroAdminStatuses');
+            if(dough){
+              const names={delivered:'Delivered',pending:'Pending',quotation:'Quotation Sent',hold:'Hold',cancelled:'Cancelled',partial:'Partial Delivered',other:'Other Statuses'};
+              const safeText=x=>{const span=document.createElement('span');span.textContent=x;return span.innerHTML;};
+              dough.innerHTML=`<div class="petro-doughnut-layout"><div class="petro-doughnut" style="background:conic-gradient(${stops.length?stops.join(','):'#e7eff0 0% 100%'})"><div><strong>${list.length.toLocaleString('en-IN')}</strong><small>Total Orders</small></div></div><div class="petro-doughnut-legend">${parts.map(([k,v])=>`<div><i style="background:${colorFor(k)}"></i><span>${safeText(names[k]||k)}</span><b>${v.toLocaleString('en-IN')}</b><small>${Math.round(v/total*100)}%</small></div>`).join('')||'<p>No order data.</p>'}</div></div>`;
+            }
+            const now=new Date();now.setHours(0,0,0,0);
+            const days=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-(6-i));return d;});
+            const counts=days.map(d=>list.filter(o=>getOrderDateString(o)===`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`).length);
+            const deliveredCounts=days.map(d=>list.filter(o=>/deliver|dispatch/i.test(String(o.status||''))&&!/partial/i.test(String(o.status||''))&&getOrderDateString(o)===`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`).length);
+            const max=Math.max(1,...counts,...deliveredCounts);const px=i=>34+i*72;const py=v=>156-v/max*120;
+            const points=arr=>arr.map((v,i)=>`${px(i)},${py(v)}`).join(' ');
+            const trend=document.getElementById('petroOrderTrend');
+            if(trend){trend.innerHTML=`<div class="petro-trend-legend"><span><i style="background:#0b8e85"></i> Orders</span><span><i style="background:#53bf66"></i> Delivered</span></div><svg viewBox="0 0 505 195" role="img" aria-label="Orders for the last seven dates" preserveAspectRatio="xMidYMid meet">${[0,.25,.5,.75,1].map(fr=>`<line x1="34" x2="478" y1="${py(fr*max)}" y2="${py(fr*max)}" stroke="#e4ecef" stroke-width="1"/><text x="4" y="${py(fr*max)+4}" font-size="11" fill="#81919e">${Math.round(fr*max)}</text>`).join('')}<polyline points="${points(counts)}" fill="none" stroke="#088c83" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/><polyline points="${points(deliveredCounts)}" fill="none" stroke="#55ba62" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${counts.map((v,i)=>`<circle cx="${px(i)}" cy="${py(v)}" r="4.3" fill="#fff" stroke="#088c83" stroke-width="2.5"><title>${v} orders</title></circle>`).join('')}${deliveredCounts.map((v,i)=>`<circle cx="${px(i)}" cy="${py(v)}" r="3.4" fill="#fff" stroke="#55ba62" stroke-width="2"><title>${v} delivered</title></circle>`).join('')}${days.map((d,i)=>`<text x="${px(i)}" y="182" text-anchor="middle" font-size="11" fill="#6e8291">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}</text>`).join('')}</svg>`;}
+            const top=document.getElementById('petroAdminTopParties');
+            if(top){const m=new Map();list.forEach(o=>{const name=String(o.party?.name||o.partyName||o.customerName||'').trim();if(name)m.set(name,(m.get(name)||0)+parseAmount(o.grandTotal));});const sorted=[...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5);const high=Math.max(1,...sorted.map(x=>x[1]));const enc=x=>{const a=document.createElement('span');a.textContent=x;return a.innerHTML;};top.innerHTML=sorted.map(([n,v],i)=>`<div class="petro-top-party"><div><b>${i+1}. ${enc(n)}</b><strong>₹${Math.round(v).toLocaleString('en-IN')}</strong></div><span><i style="width:${Math.max(3,v/high*100)}%"></i></span></div>`).join('')||'<p class="petro-empty-chart">No party data available.</p>';}
+        }
+
         function loadDashboard() {
             const totalOrdersEl = document.getElementById("totalOrders");
             const totalSalesEl = document.getElementById("totalSales");
@@ -1035,6 +899,7 @@
             if (totalSalesEl) totalSalesEl.innerText = "₹" + totalSales.toLocaleString("en-IN");
             if (todayOrdersEl) todayOrdersEl.innerText = todayOrders;
             if (totalUsersEl) totalUsersEl.innerText = uniqueUsers.size;
+            renderAdminAnalytics(validOrders);
         }
 
         function loadRecentOrders() {
@@ -1072,7 +937,7 @@
 
                     return `
                         <tr>
-                            <td>${orderNo}</td>
+                            <td><a class="petro-order-no-link" href="/orders/orders.html?order=${encodeURIComponent(order.id)}" title="Open complete order details">${orderNo}</a></td>
                             <td>${partyName}</td>
                             <td>${partyType}</td>
                             <td>₹${grandTotal.toLocaleString("en-IN")}/-</td>
@@ -1158,7 +1023,7 @@
 
                     return `
                         <tr>
-                            <td>${orderNo}</td>
+                            <td><a class="petro-order-no-link" href="/orders/orders.html?order=${encodeURIComponent(order.partyDetails?.orderNo || order.orderNo || order.id)}" title="Open Admin Orders">${orderNo}</a></td>
                             <td>${partyName}</td>
                             <td>${partyType}</td>
                             <td>₹${grandTotal.toLocaleString("en-IN")}/-</td>
@@ -1284,16 +1149,12 @@
             }, 2500);
         }
     </script>
-
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery.appear.js"></script>
-    <script src="product.js"></script>
-    <script src="js/script.js"></script>
-
-
-    <!-- Global OMS Subscription & Renewal Manager -->
-    <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
-</body>
-
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery.appear.js"></script>
+<script src="product.js"></script>
+<script src="js/script.js"></script>
+<!-- Global OMS Subscription & Renewal Manager -->
+<script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
+<script src="/js/petro-admin-mobile.js?v=20261110.2"></script></body>
 </html>

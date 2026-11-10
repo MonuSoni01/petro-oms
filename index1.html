@@ -560,7 +560,14 @@
             }
         }
     </style>
-</head>
+<style>
+.order-app-nav{position:sticky;top:0;z-index:1000;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px clamp(12px,3vw,36px);box-shadow:0 4px 20px #123c4612;border-bottom:2px solid #d7eee8;min-height:67px}
+.order-logo{flex:none}.order-logo img{height:43px;width:auto;max-width:96px;object-fit:contain}
+.order-app-title{font-weight:800;font-size:clamp(12px,2.7vw,19px);color:#073842;display:flex;align-items:center;gap:8px;min-width:0}.order-app-title i{color:#088f80}.order-back{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #ccebe2;padding:10px 13px;border-radius:12px;text-decoration:none!important;font-weight:800;font-size:12px;background:#078f81;color:#fff;white-space:nowrap;min-height:42px;box-shadow:0 5px 14px #078f8129;transition:background .2s,transform .2s}
+.order-back:hover,.order-back:focus-visible{background:#056f66;color:#fff;transform:translateY(-1px)}.order-back i{color:#fff}.order-nav-status{margin:8px auto!important;max-width:95%;font-size:12px!important;padding:7px 12px!important;border-radius:10px!important}.party-autofill-hint{display:block;font-size:10px;color:#69838a;margin-top:4px}
+@media(max-width:375px){.order-app-nav{padding:8px 9px;gap:6px}.order-logo img{height:34px;max-width:73px}.order-app-title{font-size:11px;gap:4px}.order-back{padding:8px;font-size:10px}.order-back span{display:none}}
+.party-input-wrap{position:relative;width:100%}.party-input-wrap #partyName{width:100%;padding-right:45px}.party-input-wrap #clearPartyBtn{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;background:#f0f6f5;color:#087e74;border:1px solid #d3e6e2;border-radius:50%;width:30px;height:30px;cursor:pointer}.party-input-wrap #clearPartyBtn[hidden]{display:none!important}.party-input-wrap #clearPartyBtn:hover{background:#d8f2ec}@media print{.order-app-nav,.order-nav-status{display:none!important}}
+</style></head>
 
 <body>
 
@@ -568,96 +575,9 @@
 
 
 
-    <!-- Top Navbar -->
-    <div class="top-bar">
-        <div class="container-fluid">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
-                    <div class="contact-details">
-                        <ul class="d-flex">
-                            <li>
-                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
-                            </li>
-                            <li>
-                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
-                                    contact@petroindustech.com</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
-                    <div class="news-box">
-                        <ul class="footer-social topnav-social-icon">
-                            <li>
-                                <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
-                                        class="fa-brands fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
-                                        class="fa-brands fa-instagram"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
-                                        class="fa-brands fa-youtube"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://x.com/Petroindustech" target="_blank"><i
-                                        class="fa-brands fa-x-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
-                                        class="fa-brands fa-pinterest"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navbar Section -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
-        <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
-
-            <!-- LEFT : LOGO -->
-            <a class="navbar-brand" href="https://oms.rankchahiye.com">
-                <img src="images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
-            </a>
-
-            <!-- RIGHT : ADMIN -->
-            <div class="d-flex align-items-center">
-                <!-- ADMIN DROPDOWN -->
-                <div class="dropdown">
-                    <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
-                        id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="border-radius:20px;">
-
-                        <i class="fa fa-user-circle text-success mr-2"></i>
-                        <span id="adminName">Login</span>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
-                        <a class="dropdown-item" href="login.html">
-                            <i class="fa fa-user mr-2"></i> Admin
-                        </a>
-                        <a class="dropdown-item" href="sales-dashboard.html">
-                            <i class="fa fa-user mr-2"></i> Salesman
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </nav>
-
-
-
-
-    <!-- STATUS MESSAGE BAR -->
-    <div id="statusMsg" class="status-bar">
-        Ready to start new order
-    </div>
+    <!-- V4 streamlined order-entry navigation -->
+    <nav class="order-app-nav no-print"><a href="/index.html" class="order-logo"><img src="images/logo.webp" alt="PETRO"></a><span class="order-app-title"><i class="fa-solid fa-cart-plus"></i> Create New Order</span><a class="order-back" href="/index.html"><i class="fa-solid fa-arrow-left"></i><span>Back to Home</span></a></nav>
+    <div id="statusMsg" class="status-bar order-nav-status">Ready to start new order</div>
     <!-- PRINT HEADER -->
     <div class="print-header">
         <h2>PETRO INDUSTECH PVT. LTD.</h2>
@@ -747,7 +667,7 @@
 
                 <div class="form-field span-2">
                     <label>Party Name <span class="required-star">*</span></label>
-                    <input id="partyName" required placeholder="Enter party name">
+                    <div class="party-input-wrap"><input id="partyName" required placeholder="Search existing party or enter new name" autocomplete="off" list="knownPartySuggestions"><button id="clearPartyBtn" type="button" title="Clear selected party and its details" aria-label="Clear party and autofilled details" hidden><i class="fa-solid fa-xmark"></i></button></div><datalist id="knownPartySuggestions"></datalist><small class="party-autofill-hint" id="partyLookupHint">Type to find previous customers and fill their details automatically.</small>
                 </div>
 
                 <div class="form-field">
@@ -767,8 +687,8 @@
                 </div>
 
                 <div class="form-field">
-                    <label>City</label>
-                    <input id="partyCity" placeholder="Enter city">
+                    <label>City <span class="required-star">*</span></label>
+                    <input id="partyCity" required placeholder="Enter city" autocomplete="address-level2">
                 </div>
 
                 <div class="form-field">
@@ -777,7 +697,7 @@
                         placeholder="10 digit mobile no.">
                 </div>
 
-                <div class="form-field">
+                <div class="form-field" style="display:none" aria-hidden="true">
                     <label>Party GST No.</label>
                     <input id="partyGST" placeholder="GSTIN" style="text-transform:uppercase" maxlength="15">
                 </div>
@@ -1001,97 +921,6 @@
 
 
 
-    <!--FOOTER SECTION-->
-    <footer class="footer mt-5">
-        <div class="container bottom_border mt-3">
-            <div class="row">
-                <div class="col-md-6 col-sm-6">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img src="images/petro-circle-logo.webp" alt="" class="img-fluid" />
-                    </div>
-
-                    <ul class="mt-3 social-link-foot">
-                        <li>
-                            <i class="fa-solid fa-briefcase"></i><span style="font-weight: bold; color: yellow">
-                                Corporate Office:- </span><br />
-                            <b> Petro Industech Private Limited</b> <br />
-                            A-47B, Naresh Park Extension, Nangloi, New Delhi - 110041
-                        </li>
-                        <li>
-                            <a href="https://g.co/kgs/KhszSVx">
-                                <i class="fa-solid fa-location-dot"></i><span style="font-weight: bold; color: yellow">
-                                    Manufacturing (Unit - I) :- </span>
-                                A-48D, Naresh Park Extension, Nangloi, New Delhi - 110041</a>
-                        </li>
-                        <li>
-                            <a href="https://g.co/kgs/Vv9FQjM"><i class="fa-solid fa-location-dot"></i><span
-                                    style="font-weight: bold; color: yellow">
-                                    Manufacturing (Unit - II):- </span>
-                                Plot No. 812/F-45, Samtal Zone, RIICO Industrial Area, BHIWADI
-                                (Distt:- Khairthal-Tijara), Rajasthan - 301019, India</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <div class="news-box">
-                        <h5 class="headin5_amrc col_white_amrc pt2">
-                            Connect With Social Media
-                        </h5>
-
-                        <ul class="footer-social">
-                            <li>
-                                <a class="facebook hb-xs-margin" target="_blank"
-                                    href="https://www.facebook.com/www.petroindustries.in/"><span
-                                        class="hb hb-xs spin hb-facebook"><i class="fab fa-facebook-f"></i></span></a>
-                            </li>
-                            <li>
-                                <a class="instagram hb-xs-margin" target="_blank"
-                                    href="https://www.instagram.com/petroindustries/"><span
-                                        class="hb hb-xs spin hb-instagram"><i class="fab fa-instagram"></i></span></a>
-                            </li>
-                            <li>
-                                <a class="googleplus hb-xs-margin" target="_blank" href="https://x.com/Petroindustech"
-                                    target="_blank"><span class="hb hb-xs spin hb-x-twitter"><i
-                                            class="fab fa-x-twitter"></i></span></a>
-                            </li>
-                            <li>
-                                <a class="googleplus hb-xs-margin" target="_blank"
-                                    href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><span
-                                        class="hb hb-xs spin hb-google-plus"><i class="fab fa-youtube"></i></span></a>
-                            </li>
-                            <li>
-                                <a class="googleplus hb-xs-margin" target="_blank"
-                                    href="https://in.pinterest.com/petroindustech/" target="_blank"><span
-                                        class="hb hb-xs spin hb-google-plus"><i class="fab fa-pinterest"></i></span></a>
-                            </li>
-                            <li>
-                                <a class="googleplus hb-xs-margin" target="_blank"
-                                    href="https://wa.me/918000007336"><span class="hb hb-xs spin hb-whatsapp"><i
-                                            class="fab fa-whatsapp"></i></span></a>
-                            </li>
-                            <br />
-                            <li>
-                                <i class="fa-solid fa-phone"></i><a href="tel:+91-8000007336"> +91-8000007336</a>
-                            </li>
-                            <li>
-                                <i class="fa-solid fa-envelope"></i>
-                                <a href="mailto: contact@petroindustech.com">
-                                    contact@petroindustech.com</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <p class="copyright text-center">
-                Copyright Petro Industech Pvt Ltd © 2025. All Rights Reserved
-            </p>
-        </div>
-    </footer>
-
-
-
     <!-- Javascript & CDN -->
 
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -1107,6 +936,8 @@
     <!-- Firebase compat SDK for global subscription/renewal manager -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="/firebaseconfig.js"></script>
+    <script src="/js/order-entry-v4.js?v=20261108.5"></script>
     <!-- Global OMS Subscription & Renewal Manager -->
     <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
 </body>

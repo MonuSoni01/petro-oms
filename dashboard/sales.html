@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
 
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sales Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="/css/style.css" rel="stylesheet"/>
+<style>
         /* Dashboard Header */
         .dashboard-header {
             text-align: center;
@@ -439,36 +439,28 @@
             font-weight: 700;
         }
     </style>
+<link href="/css/petro-admin-refresh.css?v=20261110.2" rel="stylesheet"/><link href="/css/petro-product-insights.css?v=20261110.1" rel="stylesheet"/><link href="/css/petro-professional-v16.css?v=16.1" rel="stylesheet"/><link href="/css/petro-sales-premium-2026.css?v=3" rel="stylesheet"/>
 </head>
-
-<body>
-    <!-- SIDEBAR -->
-    <aside id="sidebar">
-
-        <div class="sidebar-logo">
-            <img src="/images/petro-circle-logo.webp" alt="PETRO" />
-        </div>
-        <ul class="sidebar-menu">
-
-            <li onclick="location.href='/admin-dashboard.html'">
-                <i class="fa-solid fa-chart-line"></i> Dashboard
+<body data-petro-page="Product Sales Analysis">
+<!-- SIDEBAR -->
+<aside id="sidebar">
+<div class="sidebar-logo">
+<img alt="PETRO" src="/images/petro-circle-logo.webp"/>
+</div>
+<ul class="sidebar-menu">
+<li onclick="location.href='/admin-dashboard.html'">
+<i class="fa-solid fa-chart-line"></i> Dashboard
             </li>
-
-            <li onclick="location.href='/orders/orders.html'">
-                <i class="fa-solid fa-list"></i> Orders
-            </li>
-
-            <!-- <li onclick="location.href='/users/users.html'">
+<li onclick="location.href='/orders/orders.html'">
+<i class="fa-solid fa-list"></i> Orders
+            </li><li class="" onclick="location.href='/users/users.html'"><i class="fa-solid fa-users"></i> Customers &amp; Parties</li>
+<!-- <li onclick="location.href='/users/users.html'">
                 <i class="fa-solid fa-user"></i> Customers
             </li> -->
-            <li class="active" onclick="location.href=''">
-                <i class="fa-solid fa-box"></i> Products Sales Report
+<li class="active" onclick="location.href=''">
+<i class="fa-solid fa-box"></i> Products Sales Report
             </li>
-            <li onclick="location.href='/automation.html'">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-                <span>Mail Section</span>
-            </li>
-            <!-- <li onclick="location.href='/activity.html'">
+<!-- <li onclick="location.href='/activity.html'">
 
                 <i class="fa-solid fa-clock-rotate-left"></i>
 
@@ -477,270 +469,166 @@
                 </span>
 
             </li> -->
-
-
-            <li onclick="location.href='/login.html'">
-                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+<li onclick="location.href='/login.html'">
+<i class="fa-solid fa-right-from-bracket"></i> Log Out
             </li>
-
-        </ul>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main id="main">
-
-        <!-- Top Navbar -->
-        <div class="top-bar" style="background: #108082;">
-            <div class="container-fluid">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-lg-4 col-md-6 d-flex justify-content-around p-0">
-                        <div class="contact-details">
-                            <ul class="d-flex">
-                                <li>
-                                    <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
-                                </li>
-                                <li>
-                                    <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
-                                        contact@petroindustech.com</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6 d-md-flex justify-content-center d-none">
-                        <div class="news-box">
-                            <ul class="footer-social topnav-social-icon">
-                                <li>
-                                    <a href="https://www.facebook.com/www.petroindustries.in/" target="_blank"><i
-                                            class="fa-brands fa-facebook"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://www.instagram.com/petroindustries/" target="_blank"><i
-                                            class="fa-brands fa-instagram"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://www.youtube.com/@petroindustechpvtltd" target="_blank"><i
-                                            class="fa-brands fa-youtube"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://x.com/Petroindustech" target="_blank"><i
-                                            class="fa-brands fa-x-twitter"></i></a>
-                                </li>
-                                <li>
-                                    <a href="https://in.pinterest.com/petroindustech/" target="_blank"><i
-                                            class="fa-brands fa-pinterest"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navbar Section -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
-            <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
-
-                <!-- LEFT : LOGO -->
-                <a class="navbar-brand" href="https://oms.rankchahiye.com/">
-                    <img src="/images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
-                </a>
-
-                <!-- RIGHT : ADMIN -->
-                <div class="d-flex align-items-center">
-
-                    <!-- DARK MODE -->
-                    <label class="toggle-switch mb-0 mr-3">
-                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-                        <span class="slider"></span>
-                    </label>
-
-                    <!-- ADMIN DROPDOWN -->
-                    <div class="dropdown">
-                        <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
-                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                            style="border-radius:20px;">
-
-                            <i class="fa fa-user-circle text-success mr-2"></i>
-                            <span id="adminName">Admin</span>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
-                            <a class="dropdown-item" href="/admin-profile.html">
-                                <i class="fa fa-user mr-2"></i> Profile
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/login.html">
-                                <i class="fa fa-sign-out mr-2"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </nav>
-
-        <div class="container" style="max-width: 100%;">
-            <!-- Dashboard Header -->
-            <div class="dashboard-header mt-4">
-                <span class="page-badge">
-                    <i class="fa-solid fa-chart-simple"></i>
+</ul>
+</aside>
+<!-- MAIN CONTENT -->
+<main id="main">
+<!-- Top Navbar -->
+<!-- Navbar Section -->
+<div class="container" style="max-width: 100%;">
+<!-- Dashboard Header -->
+<div class="dashboard-header mt-4 petro-compact-product-heading">
+<span class="page-badge">
+<i class="fa-solid fa-chart-simple"></i>
                     Product Wise Sales Report
                 </span>
-                <h1>Product Sales Analysis</h1>
-                <p>Track product quantity, party type, salesperson performance and order-wise sales in one report.</p>
-            </div>
-
-            <!-- Filters -->
-            <div class="filters-box mb-4">
-                <div class="row align-items-end">
-
-                    <!-- Salesman Filter -->
-                    <div class="col-md-2">
-                        <label for="salesmanFilter">Filter by Salesperson</label>
-                        <select id="salesmanFilter" class="form-control">
-                            <option value="">All Salesperson</option>
-                        </select>
-                    </div>
-
-                    <!-- Status Filter -->
-                    <div class="col-md-2">
-                        <label for="statusFilter">Filter by Status</label>
-                        <select id="statusFilter" class="form-control">
-                            <option value="">All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="partyTypeFilter">Filter by Type</label>
-                        <select id="partyTypeFilter" class="form-control">
-                            <option value="">All Type</option>
-                            <option value="Primary">Primary</option>
-                            <option value="Secondary">Secondary</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="categoryFilter">Filter by Category</label>
-
-                        <select id="categoryFilter" class="form-control">
-                            <option value="">All Categories</option>
-                            <option value="hardware">Hardware</option>
-                            <option value="bathroom">Bathroom</option>
-                            <option value="stainlesssteel">Stainless Steel</option>
-                        </select>
-                    </div>
-
-                    <!-- Product Code Filter -->
-                    <div class="col-md-3">
-                        <div
-                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-
-                            <label for="productCodeFilter" style="margin:0;">
+<h1>Product Sales Analysis</h1>
+<p>Track product quantity, party type, salesperson performance and order-wise sales in one report.</p>
+</div>
+<!-- Filters -->
+<div class="filters-box mb-4">
+<div class="row petro-five-filters">
+<!-- Salesman Filter -->
+<div class="col-md-2">
+<label for="salesmanFilter">Filter by Salesperson</label>
+<select class="form-control" id="salesmanFilter">
+<option value="">All Salesperson</option>
+</select>
+</div>
+<!-- Status Filter -->
+<div class="col-md-2">
+<label for="statusFilter">Filter by Status</label>
+<select class="form-control" id="statusFilter">
+<option value="">All Status</option>
+<option value="Pending">Pending</option>
+<option value="Delivered">Delivered</option>
+<option value="Cancelled">Cancelled</option>
+</select>
+</div>
+<div class="col-md-2">
+<label for="partyTypeFilter">Filter by Type</label>
+<select class="form-control" id="partyTypeFilter">
+<option value="">All Type</option>
+<option value="Primary">Primary</option>
+<option value="Secondary">Secondary</option>
+</select>
+</div>
+<div class="col-md-2">
+<label for="categoryFilter">Filter by Category</label>
+<select class="form-control" id="categoryFilter">
+<option value="">All Categories</option>
+<option value="hardware">Hardware</option>
+<option value="bathroom">Bathroom</option>
+<option value="stainlesssteel">Stainless Steel</option>
+</select>
+</div>
+<!-- Product Code Filter -->
+<div class="col-md-3">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+<label for="productCodeFilter" style="margin:0;">
                                 Filter by Product Code
                             </label>
+<div style="display:flex; align-items:center; gap:8px;">
+<small style="margin:0; font-weight:600;">Exact</small>
+<label class="mini-switch" style="margin:0;">
+<input id="exactMatchBtn" type="checkbox"/>
+<span class="mini-slider"></span>
+</label>
+</div>
+</div>
+<input class="form-control" id="productCodeFilter" placeholder="Enter Product Code" type="text"/>
+</div>
+<!-- Date From -->
 
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <small style="margin:0; font-weight:600;">Exact</small>
+<!-- Date To -->
 
-                                <label class="mini-switch" style="margin:0;">
-                                    <input type="checkbox" id="exactMatchBtn">
-                                    <span class="mini-slider"></span>
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <input type="text" id="productCodeFilter" class="form-control" placeholder="Enter Product Code">
-                    </div>
-
-                    <!-- Date From -->
-                    <div class="col-md-2">
-                        <label for="dateFrom">Date From</label>
-                        <input type="date" id="dateFrom" class="form-control">
-                    </div>
-
-                    <!-- Date To -->
-                    <div class="col-md-2">
-                        <label for="dateTo">Date To</label>
-                        <input type="date" id="dateTo" class="form-control">
-                    </div>
-
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12 d-flex justify-content-end" style="gap:12px;">
-
-                        <button type="button" id="clearFiltersBtn" class="action-btn clear-btn">
-                            <i class="fa-solid fa-rotate-right"></i>
+</div><div class="row petro-extra-filters petro-five-filters"><div class="col-md-2">
+<label for="dateTo">Date To</label>
+<input class="form-control" id="dateTo" type="date"/>
+</div><div class="col-md-2">
+<label for="dateFrom">Date From</label>
+<input class="form-control" id="dateFrom" type="date"/>
+</div>
+<div class="col-md-2"><label for="monthFilter">Sales Month</label><input aria-label="Filter sales by month" class="form-control" id="monthFilter" type="month"/></div>
+<div class="col-md-3"><label for="productNameFilter">Product / Item Name</label><input autocomplete="off" class="form-control" id="productNameFilter" placeholder="Search item name..." type="search"/></div>
+<div class="col-md-3"><label for="partyNameFilter">Party / Customer Name</label><input autocomplete="off" class="form-control" id="partyNameFilter" placeholder="Search party name..." type="search"/></div>
+</div>
+<div class="row mt-3 petro-sales-actions">
+<div class="col-12 d-flex justify-content-end" style="gap:12px;">
+<button class="action-btn clear-btn" id="clearFiltersBtn" type="button">
+<i class="fa-solid fa-rotate-right"></i>
                             Clear
                         </button>
-
-                        <button type="button" id="downloadCsvBtn" class="action-btn csv-btn">
-                            <i class="fa-solid fa-file-arrow-down"></i>
+<button class="action-btn csv-btn" id="downloadCsvBtn" type="button">
+<i class="fa-solid fa-file-arrow-down"></i>
                             Export CSV
                         </button>
-                        <button type="button" id="downloadPdfBtn" class="action-btn csv-btn">
-                            <i class="fa-solid fa-file-pdf"></i>
+<button class="action-btn csv-btn" id="downloadPdfBtn" type="button">
+<i class="fa-solid fa-file-pdf"></i>
                             Export PDF
                         </button>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sales Summary Cards (Optional, you can add Graphs here if needed) -->
-
-            <!-- Table for Product Sales Analysis -->
-            <div class="card table-container">
-                <div class="card-header">
-                    <h4>Product Sales Analysis</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>S.No</th>
-                                <th>Order NO</th>
-                                <th>Type</th>
-                                <th>Salesperson</th>
-                                <th>Party Name</th>
-                                <th>Product Code</th>
-                                <th>Product Name</th>
-                                <th>Unit</th>
-                                <th id="quantitySort" style="cursor:pointer;">
+</div>
+</div>
+</div><section class="petro-product-insights" id="petroProductInsights">
+<div class="insight-stat"><small>Filtered Orders</small><strong id="productOrdersCount">—</strong></div>
+<div class="insight-stat"><small>Quantity Sold</small><strong id="productUnitsSold">—</strong></div>
+<div class="insight-stat"><small>Product Lines</small><strong id="productLinesCount">—</strong></div>
+<div class="insight-stat"><small>Parties Sold To</small><strong id="productPartiesCount">—</strong></div>
+<div class="insight-stat"><small>Product Sales Value</small><strong id="productSalesValue">—</strong></div>
+</section><section aria-label="Product sales graphs" class="petro-product-charts">
+<div class="petro-chart-card"><h3>Sales Trend · Filtered Order Items</h3><div class="chart-fit"><canvas id="productSalesTrendChart"></canvas></div></div>
+<div class="petro-chart-card"><h3>Top 5 Products · Sales Value</h3><div id="topProductsVisual"></div></div>
+<div class="petro-chart-card"><h3>Sales by Category</h3><div class="chart-fit"><canvas id="productCategorySalesChart"></canvas></div></div>
+</section><section class="petro-party-breakdown"><div class="petro-party-head"><h3><i class="fa-solid fa-users"></i> Sales to Each Party — Item-wise</h3><p id="productDataScope">Sales figures are calculated from order product line items.</p></div><div class="petro-party-table-wrap"><table class="table"><thead><tr><th>Party</th><th>Salesperson</th><th>Orders</th><th>Qty Sold</th><th>Sales Value</th><th>Product Details</th></tr></thead><tbody id="petroPartyBreakdownBody"></tbody></table></div></section>
+<!-- Sales Summary Cards (Optional, you can add Graphs here if needed) -->
+<!-- Table for Product Sales Analysis -->
+<div class="card table-container petro-product-table">
+<div class="card-header">
+<h4>Product Sales Analysis</h4>
+</div>
+<div class="card-body">
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>S.No</th>
+<th>Order NO</th>
+<th>Type</th>
+<th>Salesperson</th>
+<th>Party Name</th>
+<th>Product Code</th>
+<th>Product Name</th>
+<th>Unit</th>
+<th id="quantitySort" style="cursor:pointer;">
                                     Total Quantity Sold <span id="quantityArrow">↓</span>
-                                </th>
-                                <th>Total Sales (₹)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="salesTableBody">
-                            <!-- Data will be populated here dynamically -->
-                        </tbody>
-                    </table>
-                    <div class="text-center mt-3">
-                        <button id="loadMoreBtn" class="btn btn-primary">
-                            Load More
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="../product.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
-
-    <script>
+</th>
+<th>Total Sales (₹)</th>
+</tr>
+</thead>
+<tbody id="salesTableBody">
+<!-- Data will be populated here dynamically -->
+</tbody>
+</table>
+<div class="petro-product-pagebar" id="petroProductPagebar">
+<span id="petroProductPageInfo">Showing 0 product rows</span>
+<div class="petro-product-page-actions"><label>Rows <select id="petroProductPageSize"><option value="20">20</option><option value="50">50</option><option value="100">100</option></select></label><button id="petroProductPrev" type="button">‹ Prev</button><span id="petroProductPages"></span><button id="petroProductNext" type="button">Next ›</button></div>
+</div>
+<div class="petro-fetch-more"><span>More historic records:</span><button class="btn btn-outline-secondary btn-sm" id="loadMoreBtn">Load More Orders</button></div>
+</div>
+</div>
+</div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="../product.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+<script>
         "use strict";
 
         const firebaseConfig = {
@@ -755,11 +643,13 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        const PAGE_SIZE = 25;
+        const PAGE_SIZE = 250;
         let orders = [];
         let lastVisibleDoc = null;
         let flatExportData = [];
         let quantitySortDirection = "desc";
+        let productPage = 1;
+        const productPageSize = () => Math.max(10, Number(document.getElementById('petroProductPageSize')?.value) || 20);
         let isLoadingMore = false;
 
         const el = {
@@ -771,6 +661,9 @@
             exact: document.getElementById("exactMatchBtn"),
             dateFrom: document.getElementById("dateFrom"),
             dateTo: document.getElementById("dateTo"),
+            month: document.getElementById("monthFilter"),
+            productName: document.getElementById("productNameFilter"),
+            partyName: document.getElementById("partyNameFilter"),
             clear: document.getElementById("clearFiltersBtn"),
             csv: document.getElementById("downloadCsvBtn"),
             pdf: document.getElementById("downloadPdfBtn"),
@@ -957,7 +850,10 @@
                 productCode: el.productCode.value,
                 exact: el.exact.checked,
                 dateFrom: el.dateFrom.value,
-                dateTo: el.dateTo.value
+                dateTo: el.dateTo.value,
+                month: el.month.value,
+                productName: el.productName.value,
+                partyName: el.partyName.value
             };
         }
 
@@ -970,6 +866,9 @@
             el.exact.checked = Boolean(state.exact);
             el.dateFrom.value = state.dateFrom || "";
             el.dateTo.value = state.dateTo || "";
+            el.month.value = state.month || "";
+            el.productName.value = state.productName || "";
+            el.partyName.value = state.partyName || "";
         }
 
         function searchCodes() {
@@ -1044,6 +943,16 @@
                 populateSalesmen(false);
                 updateLoadMore(snapshot.docs.length === PAGE_SIZE);
                 applyFilters();
+                // Automatically load remaining batches so monthly/category and party totals
+                // are not silently limited to the most recent 250 orders.
+                while (lastVisibleDoc && orders.length < 20000) {
+                    const previousCount=orders.length;
+                    await loadMoreOrders();
+                    if (orders.length===previousCount) break;
+                }
+                if (orders.length>=20000 && lastVisibleDoc) {
+                    document.getElementById('productDataScope').textContent='Historical load cap: first 20,000 orders. Narrow your date range or consult your administrator.';
+                }
             } catch (error) {
                 console.error("Order load error:", error);
                 tableMessage("Orders load nahi ho paaye. Firestore rules/index check karein.", true);
@@ -1107,24 +1016,30 @@
                 codes: searchCodes(),
                 exact: el.exact.checked,
                 from: el.dateFrom.value ? new Date(`${el.dateFrom.value}T00:00:00`) : null,
-                to: el.dateTo.value ? new Date(`${el.dateTo.value}T23:59:59.999`) : null
+                to: el.dateTo.value ? new Date(`${el.dateTo.value}T23:59:59.999`) : null,
+                month: el.month.value,
+                party: lower(el.partyName.value),
+                productName: lower(el.productName.value)
             };
 
             const filtered = orders.filter(order => {
                 if (filters.salesman && lower(salesman(order)) !== filters.salesman) return false;
                 if (filters.status && lower(order?.status) !== filters.status) return false;
                 if (filters.partyType && lower(partyType(order)) !== filters.partyType) return false;
+                if (filters.party && !lower(partyName(order)).includes(filters.party)) return false;
 
                 const date = orderDate(order);
+                if (filters.month && (!date || [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0')].join('-') !== filters.month)) return false;
                 if (filters.from && (!date || date < filters.from)) return false;
                 if (filters.to && (!date || date > filters.to)) return false;
 
                 const items = Array.isArray(order?.items) ? order.items : [];
 
-                if (filters.category || filters.codes.length) {
+                if (filters.category || filters.codes.length || filters.productName) {
                     const itemFound = items.some(item =>
                         matchItemCategory(item, filters.category) &&
-                        matchItemCode(item, filters.codes, filters.exact)
+                        matchItemCode(item, filters.codes, filters.exact) &&
+                        (!filters.productName || lower(itemName(item)).includes(filters.productName))
                     );
                     if (!itemFound) return false;
                 }
@@ -1151,6 +1066,7 @@
                 items.forEach(item => {
                     if (!matchItemCategory(item, filters.category)) return;
                     if (!matchItemCode(item, filters.codes, filters.exact)) return;
+                    if (filters.productName && !lower(itemName(item)).includes(filters.productName)) return;
 
                     const code = itemCode(item);
                     if (!code) return;
@@ -1206,47 +1122,85 @@
             return rows;
         }
 
+        let productTrendChart=null,productCategoryChart=null;
+        function renderProductCharts(rows, filteredOrders, filters) {
+            const top = new Map(), cats=new Map();
+            rows.forEach(r=>{const productKey=r.productName||r.productCode;
+                top.set(productKey,(top.get(productKey)||0)+r.sales);
+                const m=masterProduct(r.productCode);const category=normalizeCategory(m?.category||m?.type||'')||'others';
+                cats.set(category,(cats.get(category)||0)+r.sales);
+            });
+            const best=[...top.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5),max=best[0]?.[1]||1;
+            document.getElementById('topProductsVisual').innerHTML=best.map(([name,v])=>`<div class="petro-product-rank"><div><span>${esc(name)}</span><b>₹${v.toLocaleString('en-IN',{maximumFractionDigits:2})}</b></div><div class="petro-product-bar"><span style="width:${Math.max(1,v/max*100)}%"></span></div></div>`).join('')||'<p class="petro-no-data">No matching product sales.</p>';
+            if(productTrendChart){productTrendChart.destroy();productTrendChart=null;}
+            if(productCategoryChart){productCategoryChart.destroy();productCategoryChart=null;}
+            if(!window.Chart)return;
+            const months=[];const now=new Date();for(let k=5;k>=0;k--){const d=new Date(now.getFullYear(),now.getMonth()-k,1);months.push({y:d.getFullYear(),m:d.getMonth(),label:d.toLocaleDateString('en-IN',{month:'short',year:'2-digit'})});}
+            const monthly=months.map(({y,m})=>filteredOrders.filter(o=>{const d=orderDate(o);return d&&d.getFullYear()===y&&d.getMonth()===m;}).reduce((sum,o)=>sum+(Array.isArray(o.items)?o.items:[]).filter(i=>matchItemCategory(i,filters.category)&&matchItemCode(i,filters.codes,filters.exact)&&(!filters.productName||lower(itemName(i)).includes(filters.productName))).reduce((v,i)=>v+itemAmount(i),0),0));
+            productTrendChart=new Chart(document.getElementById('productSalesTrendChart'),{type:'line',data:{labels:months.map(x=>x.label),datasets:[{label:'Sales Value (₹)',data:monthly,borderColor:'#108082',backgroundColor:'rgba(16,128,130,.13)',fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+            productCategoryChart=new Chart(document.getElementById('productCategorySalesChart'),{type:'doughnut',data:{labels:[...cats.keys()].map(x=>x.replace(/([a-z])([A-Z])/g,'$1 $2')),datasets:[{data:[...cats.values()],backgroundColor:['#108082','#ffc542','#8663e5','#4491fa','#f17895']}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:10}}}}}});
+        }
+
+        function renderPartyInsights(rows) {
+            const groups = new Map();
+            const orderIds = new Set();
+            let totalQty = 0, totalValue = 0;
+            rows.forEach(row => {
+                totalQty += row.qty;
+                totalValue += row.sales;
+                orderIds.add(row.orderNo);
+                const key = [row.partyName, row.salesman].join('||');
+                if (!groups.has(key)) groups.set(key,{name:row.partyName,salesman:row.salesman,qty:0,value:0,orders:new Set(),items:new Map()});
+                const g=groups.get(key);g.qty+=row.qty;g.value+=row.sales;g.orders.add(row.orderNo);
+                const productKey = `${row.productCode} | ${row.productName} (${row.unit})`;
+                const prev=g.items.get(productKey)||{qty:0,value:0};prev.qty+=row.qty;prev.value+=row.sales;g.items.set(productKey,prev);
+            });
+            document.getElementById('productOrdersCount').textContent=orderIds.size.toLocaleString('en-IN');
+            document.getElementById('productUnitsSold').textContent=totalQty.toLocaleString('en-IN',{maximumFractionDigits:2});
+            document.getElementById('productLinesCount').textContent=rows.length.toLocaleString('en-IN');
+            document.getElementById('productPartiesCount').textContent=new Set(rows.map(r=>r.partyName.toLowerCase())).size.toLocaleString('en-IN');
+            document.getElementById('productSalesValue').textContent='₹'+totalValue.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+            document.getElementById('productDataScope').textContent=`${groups.size} party / salesperson combinations · ${orders.length} order records loaded. Click 'Products' for the exact item breakdown.`;
+            const body=document.getElementById('petroPartyBreakdownBody');
+            body.innerHTML=[...groups.values()].sort((a,b)=>b.value-a.value).map(g=>{
+                const items=[...g.items.entries()].sort((a,b)=>b[1].value-a[1].value);
+                const details=items.map(([item,val])=>`<div class="petro-item-row"><span>${esc(item)}</span><span>${val.qty.toLocaleString('en-IN')} · ₹${val.value.toLocaleString('en-IN',{maximumFractionDigits:2})}</span></div>`).join('');
+                return `<tr><td><b>${esc(g.name)}</b></td><td>${esc(g.salesman)}</td><td>${g.orders.size}</td><td>${g.qty.toLocaleString('en-IN',{maximumFractionDigits:2})}</td><td>₹${g.value.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td><details><summary>Products (${items.length})</summary><div class="petro-item-list">${details}</div></details></td></tr>`;
+            }).join('')||'<tr><td colspan="6" style="text-align:center;padding:20px">No product sales match the selected filters.</td></tr>';
+        }
+
         function render(filteredOrders, filters) {
             const rows = buildRows(filteredOrders, filters);
             flatExportData = rows.map((row, index) => ({ sno: index + 1, ...row }));
+            productPage = 1;
+            renderPartyInsights(rows);
+            renderProductCharts(rows, filteredOrders, filters);
 
-            if (!flatExportData.length) {
-                tableMessage("Selected filters ke according koi sales data nahi mila.");
-                return;
+            renderProductPage();
+        }
+
+        function renderProductPage() {
+            const total=flatExportData.length, size=productPageSize();
+            const pages=Math.max(1,Math.ceil(total/size));
+            productPage=Math.min(Math.max(1,productPage),pages);
+            const start=(productPage-1)*size;
+            const showing=flatExportData.slice(start,start+size);
+            el.tbody.innerHTML='';
+            if(!total){tableMessage('Selected filters ke according koi sales data nahi mila.');}
+            else {
+                let activeType='';
+                showing.forEach(row=>{
+                    if(row.partyType!==activeType){activeType=row.partyType;const section=document.createElement('tr');section.className='petro-product-group-row';section.innerHTML=`<td colspan="10">${esc(activeType)} Orders</td>`;el.tbody.appendChild(section);}
+                    const tr=document.createElement('tr');
+                    tr.innerHTML=`<td>${row.sno}</td><td><a class="petro-order-no-link" href="/orders/orders.html?order=${encodeURIComponent(row.orderNo)}">${esc(row.orderNo)}</a></td><td><span class="petro-type-pill ${row.partyType==='Primary'?'primary':'secondary'}">${esc(row.partyType)}</span></td><td>${esc(row.salesman)}</td><td>${esc(row.partyName)}</td><td>${esc(row.productCode)}</td><td>${esc(row.productName)}</td><td>${esc(row.unit)}</td><td class="petro-qty">${Number(row.qty).toLocaleString('en-IN',{maximumFractionDigits:2})}</td><td class="petro-money">₹${Number(row.sales).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>`;
+                    el.tbody.appendChild(tr);
+                });
             }
-
-            el.tbody.innerHTML = "";
-            let activeType = "";
-
-            flatExportData.forEach(row => {
-                if (row.partyType !== activeType) {
-                    activeType = row.partyType;
-                    const section = document.createElement("tr");
-                    section.innerHTML = `
-                        <td colspan="10" style="background:#108082;color:#fff;font-weight:700;text-align:left;font-size:16px;padding:12px 15px;">
-                            ${esc(activeType)} Orders
-                        </td>
-                    `;
-                    el.tbody.appendChild(section);
-                }
-
-                const tr = document.createElement("tr");
-                const typeColor = row.partyType === "Primary" ? "#198754" : "#b7791f";
-
-                tr.innerHTML = `
-                    <td>${row.sno}</td>
-                    <td style="background:#fafafa;font-weight:600;">${esc(row.orderNo)}</td>
-                    <td style="background:#fafafa;font-weight:700;color:${typeColor};">${esc(row.partyType)}</td>
-                    <td style="background:#fafafa;">${esc(row.salesman)}</td>
-                    <td style="background:#fafafa;">${esc(row.partyName)}</td>
-                    <td>${esc(row.productCode)}</td>
-                    <td>${esc(row.productName)}</td>
-                    <td>${esc(row.unit)}</td>
-                    <td>${row.qty}</td>
-                    <td>₹${row.sales.toFixed(2)}</td>
-                `;
-                el.tbody.appendChild(tr);
-            });
+            const info=document.getElementById('petroProductPageInfo');
+            if(info)info.textContent=`Showing ${total?start+1:0}–${Math.min(total,start+size)} of ${total} product lines (loaded orders)`;
+            const prev=document.getElementById('petroProductPrev'),next=document.getElementById('petroProductNext');if(prev)prev.disabled=productPage===1;if(next)next.disabled=productPage===pages;
+            const bar=document.getElementById('petroProductPages');
+            if(bar){const set=new Set([1,pages]);for(let n=Math.max(1,productPage-2);n<=Math.min(pages,productPage+2);n++)set.add(n);let last=0;bar.innerHTML=[...set].sort((a,b)=>a-b).map(n=>{const gap=n-last>1?'<span class="petro-page-dots">…</span>':'';last=n;return gap+`<button type="button" data-product-page="${n}" class="${n===productPage?'active':''}" ${n===productPage?'aria-current="page"':''}>${n}</button>`}).join('');}
         }
 
         function clearFilters() {
@@ -1258,6 +1212,9 @@
             el.exact.checked = false;
             el.dateFrom.value = "";
             el.dateTo.value = "";
+            el.month.value = "";
+            el.productName.value = "";
+            el.partyName.value = "";
             quantitySortDirection = "desc";
             el.quantityArrow.textContent = "↓";
             applyFilters();
@@ -1346,12 +1303,16 @@
             doc.save(fileName("pdf"));
         }
 
-        [el.salesman, el.status, el.partyType, el.category, el.dateFrom, el.dateTo]
+        [el.salesman, el.status, el.partyType, el.category, el.dateFrom, el.dateTo, el.month]
             .forEach(input => input.addEventListener("change", applyFilters));
 
-        el.productCode.addEventListener("input", applyFilters);
+        [el.productCode, el.productName, el.partyName].forEach(input => input.addEventListener('input',applyFilters));
         el.exact.addEventListener("change", applyFilters);
         el.quantitySort.addEventListener("click", toggleQuantitySort);
+        document.getElementById('petroProductPageSize')?.addEventListener('change',()=>{productPage=1;renderProductPage();});
+        document.getElementById('petroProductPrev')?.addEventListener('click',()=>{if(productPage>1){productPage--;renderProductPage();}});
+        document.getElementById('petroProductNext')?.addEventListener('click',()=>{if(productPage*productPageSize()<flatExportData.length){productPage++;renderProductPage();}});
+        document.getElementById('petroProductPages')?.addEventListener('click',e=>{const b=e.target.closest('[data-product-page]');if(b){productPage=Number(b.dataset.productPage)||1;renderProductPage();}});
         el.clear.addEventListener("click", clearFilters);
         el.csv.addEventListener("click", downloadCsv);
         el.pdf.addEventListener("click", downloadPdf);
@@ -1364,12 +1325,8 @@
             loadInitialOrders();
         });
     </script>
-
-    <script src="js/dev.js"></script>
-
-
-    <!-- Global OMS Subscription & Renewal Manager -->
-    <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
-</body>
-
+<script src="js/dev.js"></script>
+<!-- Global OMS Subscription & Renewal Manager -->
+<script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
+<script src="/js/petro-admin-mobile.js?v=20261110.2"></script></body>
 </html>

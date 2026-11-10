@@ -1,0 +1,40 @@
+/* PETRO OMS final compact UI. Preserve the existing sidebar styling and logo. */
+:root { --petro-pending:#c2410c; --petro-pending-bg:#fff1db; --petro-delivered:#15803d; --petro-delivered-bg:#dcfce7; --petro-cancelled:#be123c; --petro-cancelled-bg:#ffe4e6; }
+/* Status semantic consistency across both recent-order tables and orders page */
+.status-badge.pending, .status-badge[class*="pending"],
+.orders-table .status-pending, .orders-table .badge-pending,
+.orders-table .status-badge.pending,
+.petro-order-status.pending, .order-status.pending,
+span[class*="status"][class*="pending"],
+span[class*="badge"][class*="pending"] {background:var(--petro-pending-bg)!important;color:var(--petro-pending)!important;border-color:#fed7aa!important;}
+.status-badge.success, .status-badge.delivered, .orders-table .status-delivered,
+span[class*="badge"][class*="delivered"]:not([class*="partial"]) {background:var(--petro-delivered-bg)!important;color:var(--petro-delivered)!important;}
+.status-badge.cancelled, .orders-table .status-cancelled,
+span[class*="badge"][class*="cancelled"] {background:var(--petro-cancelled-bg)!important;color:var(--petro-cancelled)!important;}
+/* Do not touch #sidebar, .sidebar-menu, or logo: original dark sidebar remains intact */
+body[data-petro-page="Orders Management"] .orders-page {padding-top:12px!important;}
+.orders-kpi-section {margin-bottom:10px!important;}
+.orders-kpi-grid {gap:9px!important;}
+.order-kpi-card {min-height:unset!important;padding:12px 14px!important;border-radius:12px!important;box-shadow:0 2px 8px rgba(13,38,52,.055)!important;}
+.order-kpi-card .kpi-top {margin-bottom:6px!important;}
+.order-kpi-card .kpi-main {margin-bottom:5px!important;}
+.order-kpi-card .kpi-number {line-height:1.15!important;}
+.order-kpi-card .kpi-progress {margin-top:7px!important;margin-bottom:6px!important;}
+.order-kpi-card .kpi-footer {font-size:11px!important;}
+.filters-box {padding:13px 15px!important;margin:10px 0!important;border-radius:12px!important;}
+.filter-card-head {margin-bottom:9px!important;}
+.filter-card-head h3 {margin-bottom:2px!important;}
+.filter-card-head p {margin-bottom:0!important;}
+.filter-divider {margin:9px 0!important;}
+.filter-grid {gap:10px!important;align-items:end!important;}
+.filter-field label {margin-bottom:4px!important;font-size:11px!important;font-weight:700!important;}
+.filter-field .form-control {min-height:36px!important;height:36px!important;font-size:12px!important;border-radius:8px!important;}
+.filter-action .btn {min-height:36px!important;border-radius:8px!important;}
+.orders-table-card {margin-top:10px!important;border-radius:12px!important;}
+.table-card-head {padding:12px 15px!important;}
+.orders-table th {white-space:nowrap!important;}
+.orders-table td,.orders-table th {vertical-align:middle!important;}
+/* Admin dashboard compact rhythm */
+.petro-dash-kpi {min-height:82px!important;}
+.petro-chart-card {border-radius:12px!important;}
+@media(max-width:900px){.orders-kpi-grid{gap:8px!important}.order-kpi-card{padding:10px!important}.filters-box{padding:11px!important}}

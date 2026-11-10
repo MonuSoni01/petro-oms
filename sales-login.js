@@ -1,6 +1,6 @@
 "use strict";
 
-const SESSION_DURATION = 48 * 60 * 60 * 1000; // 48 hours
+const SESSION_DURATION = Number.MAX_SAFE_INTEGER; // Persistent until explicit logout
 
 const SALESMAN_PREFIX = Object.freeze({
     "Sariya Murtuza": "SM",
@@ -10,7 +10,7 @@ const SALESMAN_PREFIX = Object.freeze({
     "Vivek Srivastava": "VS",
     "Prince Gupta": "PG",
     "Shubham Meena": "SS",
-    "Sumanta Kumar": "Sk"
+    "Sumanta Kumar": "SK"
 });
 
 const SALESMAN_PASSWORDS = Object.freeze({
@@ -50,13 +50,13 @@ function checkExistingSession() {
     const calculatedExpiresAt = loginTime ? loginTime + SESSION_DURATION : 0;
     const expiresAt = storedExpiresAt || calculatedExpiresAt;
 
-    if (!role || !name || !loginTime || !expiresAt) return;
+    if (!role || !name || !loginTime) return;
 
     const validAccount =
         role === "sales" &&
         Object.prototype.hasOwnProperty.call(SALESMAN_PREFIX, name);
 
-    if (!validAccount || Date.now() >= expiresAt) {
+    if (!validAccount) {
         clearSalesSession();
         return;
     }
@@ -65,31 +65,12 @@ function checkExistingSession() {
     localStorage.setItem("prefix", SALESMAN_PREFIX[name]);
     localStorage.setItem("salesmanPrefix", SALESMAN_PREFIX[name]);
 
-    window.location.replace("sales-dashboard.html");
+    window.top.location.replace("index.html");
 }
 
 function openPasswordModal() {
-    const salesman = document.getElementById("salesman");
     const passwordField = document.getElementById("passwordField");
-    const errorMsg = document.getElementById("errorMsg");
-    const passwordModal = document.getElementById("passwordModal");
-
-    if (!salesman || !passwordField || !errorMsg || !passwordModal) return;
-
-    const name = salesman.value.trim();
-
-    if (!name) {
-        alert("Please select your name");
-        salesman.focus();
-        return;
-    }
-
-    passwordField.value = "";
-    errorMsg.textContent = "";
-    errorMsg.style.display = "none";
-    passwordModal.style.display = "flex";
-
-    setTimeout(() => passwordField.focus(), 100);
+    passwordField?.focus();
 }
 
 function verifyPassword() {
@@ -103,7 +84,6 @@ function verifyPassword() {
     const password = passwordField.value;
 
     if (!name) {
-        closeModal();
         alert("Please select your name");
         salesman.focus();
         return;
@@ -131,7 +111,7 @@ function verifyPassword() {
     }
 
     const loginTime = Date.now();
-    const expiresAt = loginTime + SESSION_DURATION;
+    const expiresAt = Number.MAX_SAFE_INTEGER;
 
     clearSalesSession();
 
@@ -148,12 +128,13 @@ function verifyPassword() {
     localStorage.setItem("sessionExpiresAt", String(expiresAt));
     localStorage.removeItem("admin");
 
-    window.location.replace("sales-dashboard.html");
+    window.top.location.replace("index.html");
 }
 
 function togglePassword() {
     const passwordField = document.getElementById("passwordField");
-    const icon = document.getElementById("togglePassword");
+    const iconBtn = document.getElementById("togglePassword");
+    const icon = iconBtn?.querySelector("i") || iconBtn;
     if (!passwordField || !icon) return;
 
     const show = passwordField.type === "password";
@@ -168,17 +149,24 @@ function closeModal() {
 }
 
 function goBack() {
-    window.location.href = "https://oms.rankchahiye.com/";
+    if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: "petro-change-role" }, "*");
+        return;
+    }
+    window.location.href = "index.html";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     checkExistingSession();
 
-    const modal = document.getElementById("passwordModal");
+    const salesman = document.getElementById("salesman");
     const passwordField = document.getElementById("passwordField");
+    const errorMsg = document.getElementById("errorMsg");
 
-    modal?.addEventListener("click", (event) => {
-        if (event.target === modal) closeModal();
+    salesman?.addEventListener("change", () => {
+        if (!errorMsg) return;
+        errorMsg.style.display = "none";
+        errorMsg.textContent = "";
     });
 
     passwordField?.addEventListener("keydown", (event) => {

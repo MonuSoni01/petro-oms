@@ -46,12 +46,12 @@
     <!-- Firebase SDK (Remove async) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="sales-dashboard.css?v=2026.09.12.1">
+    <link rel="stylesheet" href="sales-dashboard.css?v=2026.11.09.cards6">
     <link rel="stylesheet" href="/css/style.css?v=2026.07.11.3">
 
     <link href="vendor/bootstrap/css/bootstrap.min.css?v=2026.07.11.3" rel="stylesheet" />
 
-</head>
+<style>.oms-contact-hidden{display:none!important}html,body{max-width:100%;overflow-x:clip}.oms-back-home{white-space:nowrap}@media(max-width:600px){.top-nav .container{flex-wrap:nowrap}.oms-back-home{font-size:11px!important;padding:8px 10px!important}.petro-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.petro-filter-field{min-width:0}.petro-filter-field input,.petro-filter-field select{min-width:0;max-width:100%}.myq-table-wrap{max-width:100%;overflow-x:auto}}</style></head>
 
 <body>
 
@@ -63,10 +63,10 @@
                     <div class="contact-details">
                         <ul class="d-flex">
                             <li>
-                                <a href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
+                                <a class="oms-contact-hidden" href="tel:+91-8000007336"><i class="fa-solid fa-phone"></i> +91-8000007336</a>
                             </li>
                             <li>
-                                <a href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
+                                <a class="oms-contact-hidden" href="mailto:contact@petroindustech.com"><i class="fa-solid fa-envelope"></i>
                                     contact@petroindustech.com</a>
                             </li>
                         </ul>
@@ -103,45 +103,19 @@
         </div>
     </div>
 
+    <style>.erp-topbar{display:none!important}</style>
     <!-- Navbar Section -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-light top-nav" style="border-bottom:1px solid #000;">
         <div class="container d-flex justify-content-between align-items-center" style="max-width:1280px;">
 
             <!-- LEFT : LOGO -->
-            <a class="navbar-brand" href="https://oms.rankchahiye.com/">
+            <a class="navbar-brand" href="/index.html" aria-label="Go to Home">
                 <img src="images/logo.webp" alt="logo" class="img-fluid" style="height:40px;">
             </a>
 
-            <!-- RIGHT : ADMIN -->
-            <div class="d-flex align-items-center">
+            <!-- RETURN TO THE PERSONALIZED HOME -->
+            <a href="/index.html" class="btn btn-outline-success oms-back-home" style="border-radius:999px;font-weight:700;font-size:13px;padding:10px 14px;"><i class="fa fa-arrow-left mr-2"></i>Back to Home</a>
 
-                <!-- DARK MODE -->
-                <label class="toggle-switch mb-0 mr-3">
-                    <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-                    <span class="slider"></span>
-                </label>
-
-                <!-- ADMIN DROPDOWN -->
-                <div class="dropdown">
-                    <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
-                        id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="border-radius:20px;">
-
-                        <i class="fa fa-user-circle text-success mr-2"></i>
-                        <span id="adminName">Login</span>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
-                        <a class="dropdown-item" href="index.html">
-                            <i class="fa fa-user mr-2"></i> Home
-                        </a>
-                        <a class="dropdown-item" style="color: red;" href="#" id="salesLogoutBtn">
-                            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
-                        </a>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </nav>
 
@@ -257,7 +231,22 @@
 
             </div>
 
-        </div>
+                    <!-- QUOTATION SENT -->
+            <div class="stat-card quotation" data-summary-filter="Quotation Sent" title="Show quotation sent orders">
+                <div class="stat-icon purple"><i class="fa fa-file-invoice"></i></div>
+                <div><span id="quotationOrders">0</span><p>Quotation</p></div>
+            </div>
+            <!-- HOLD -->
+            <div class="stat-card hold" data-summary-filter="Hold" title="Show orders on hold">
+                <div class="stat-icon amber"><i class="fa fa-pause"></i></div>
+                <div><span id="holdOrders">0</span><p>Hold</p></div>
+            </div>
+            <!-- CANCELLED -->
+            <div class="stat-card cancelled" data-summary-filter="Cancelled" title="Show cancelled orders">
+                <div class="stat-icon red"><i class="fa fa-circle-xmark"></i></div>
+                <div><span id="cancelledOrders">0</span><p>Cancelled</p></div>
+            </div>
+</div>
         
 
         <div class="myq-table-wrap mt-4">
@@ -395,7 +384,7 @@
 
     <!-- Import Firebase configuration and JavaScript file -->
     <script src="../firebaseconfig.js?v=2026.07.11.3"></script>
-    <script src="sales-dashboard.js?v=2026.09.12.1"></script>
+    <script src="sales-dashboard.js?v=2026.11.09.cards6"></script>
 
     <script>
 

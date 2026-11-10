@@ -888,6 +888,12 @@ window.submitTableOrder = async function () {
         return;
     }
 
+    // City is mandatory for customer identification and reporting.
+    if (!partyCity.value.trim()) {
+        showPetroMessage("error", "City Required", "Please enter the customer's city.", partyCity);
+        return;
+    }
+
     // ✅ PARTY MOBILE VALIDATION
 
     if (!partyMobile.value.trim()) {
@@ -976,8 +982,10 @@ window.submitTableOrder = async function () {
 function resetOrderFormAfterSubmit() {
 
     // ✅ Basic fields reset
-    salesman.value = "";
-    orderNo.value = "";
+    salesman.value = localStorage.getItem("user_role") === "sales"
+        ? (localStorage.getItem("loggedSalesman") || localStorage.getItem("salesman") || "") : "";
+    salesman.dispatchEvent(new Event("change", { bubbles: true }));
+    orderNo.value = salesman.value ? autoOrderNo() : "";
     orderNo.placeholder = "AUTO";
 
     const today = new Date().toISOString().split("T")[0];
@@ -1428,8 +1436,10 @@ window.confirmNewOrder = function () {
 
     closeNewOrderModal();
 
-    salesman.value = "";
-    orderNo.value = "";
+    salesman.value = localStorage.getItem("user_role") === "sales"
+        ? (localStorage.getItem("loggedSalesman") || localStorage.getItem("salesman") || "") : "";
+    salesman.dispatchEvent(new Event("change", { bubbles: true }));
+    orderNo.value = salesman.value ? autoOrderNo() : "";
     orderNo.placeholder = "AUTO";
 
     const today = new Date()

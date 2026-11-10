@@ -1,935 +1,445 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
-
-
 <head>
-
-    <meta charset="UTF-8" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
-
-    <title>PETRO OMS | Orders</title>
-
-
-
-    <link rel="icon" href="/images/app-icon.png" />
-
-
-
-    <!-- Font Awesome -->
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <!-- Bootstrap -->
-
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <!-- Common CSS -->
-
-    <link rel="stylesheet" href="/css/style.css">
-
-
-
-    <!-- Page CSS -->
-
-    <link rel="stylesheet" href="orders.css?v=2026.08.24.5">
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PETRO OMS | Orders</title>
+<link href="/images/app-icon.png" rel="icon"/>
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<!-- Bootstrap -->
+<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<!-- Common CSS -->
+<link href="/css/style.css" rel="stylesheet"/>
+<!-- Page CSS -->
+<link href="orders.css?v=2026.08.24.5" rel="stylesheet"/>
+<link href="/css/petro-admin-refresh.css?v=20261110.2" rel="stylesheet"/><link href="/css/petro-professional-v16.css?v=16.1" rel="stylesheet"/><link href="/css/petro-oms-final-compact.css?v=20261110.4" rel="stylesheet"/><link rel="stylesheet" href="orders-premium.css?v=20261110.8"/>
 </head>
-
-
-
-<body>
-
-
-
-    <!-- SIDEBAR -->
-
-    <aside id="sidebar">
-
-        <div class="sidebar-logo">
-
-            <img src="/images/petro-circle-logo.webp" alt="PETRO" />
-
-        </div>
-
-
-
-        <ul class="sidebar-menu">
-
-            <li onclick="location.href='/admin-dashboard.html'">
-
-                <i class="fa-solid fa-chart-line"></i>
+<body data-petro-page="Orders Management">
+<!-- SIDEBAR -->
+<aside id="sidebar">
+<div class="sidebar-logo">
+<img alt="PETRO" src="/images/petro-circle-logo.webp"/>
+</div>
+<ul class="sidebar-menu">
+<li onclick="location.href='/admin-dashboard.html'">
+<i class="fa-solid fa-chart-line"></i>
 
                 Dashboard
 
             </li>
-
-
-
-            <li class="active" onclick="location.href='/orders/orders.html'">
-
-                <i class="fa-solid fa-list"></i>
+<li class="active" onclick="location.href='/orders/orders.html'">
+<i class="fa-solid fa-list"></i>
 
                 Orders
 
-            </li>
-
-
-
-            <!-- <li onclick="location.href='/users/users.html'">
+            </li><li class="" onclick="location.href='/users/users.html'"><i class="fa-solid fa-users"></i> Customers &amp; Parties</li>
+<!-- <li onclick="location.href='/users/users.html'">
 
                 <i class="fa-solid fa-user"></i>
 
                 Customers
 
             </li> -->
-
-
-
-            <li onclick="location.href='/dashboard/sales.html'">
-
-                <i class="fa-solid fa-box"></i>
+<li onclick="location.href='/dashboard/sales.html'">
+<i class="fa-solid fa-box"></i>
 
                 Products Sales Report
 
             </li>
 
-            <li onclick="location.href='/automation.html'">
-
-                <i class="fa-solid fa-clock-rotate-left"></i>
-
-                <span>Mail Section</span>
-
-            </li>
-
-
-
-            <!-- <li onclick="location.href='/activity.html'">
+<!-- <li onclick="location.href='/activity.html'">
 
                 <i class="fa-solid fa-clock-rotate-left"></i>
 
                 <span>Activity Logs</span>
 
             </li> -->
-
-
-
-
-
-            <li onclick="location.href='/login.html'">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
+<li onclick="location.href='/login.html'">
+<i class="fa-solid fa-right-from-bracket"></i>
 
                 Log Out
 
             </li>
+</ul>
+</aside>
+<!-- MAIN CONTENT -->
+<main class="orders-page" id="main">
+<header class="petro-orders-title"><div class="petro-orders-title-icon"><i class="fa-solid fa-box-open"></i></div><div><h1>Orders Management</h1><p>Track, filter and manage all customer orders in one place.</p></div></header>
+<!-- NAVBAR -->
 
-        </ul>
-
-    </aside>
-
-
-
-    <!-- MAIN CONTENT -->
-
-    <main id="main" class="orders-page">
-
-
-
-
-
-
-
-
-
-        <!-- NAVBAR -->
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-white top-nav petro-navbar">
-
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-
-
-
-                <a class="navbar-brand" href="https\://oms.rankchahiye.com/">
-
-                    <img src="/images/logo.webp" alt="PETRO Logo" class="img-fluid petro-logo">
-
-                </a>
-
-
-
-                <div class="d-flex align-items-center">
-
-
-
-                    <label class="toggle-switch mb-0 mr-3">
-
-                        <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-
-                        <span class="slider"></span>
-
-                    </label>
-
-
-
-                    <div class="dropdown">
-
-                        <a class="btn admin-btn dropdown-toggle d-flex align-items-center" href="#" role="button"
-                            id="adminDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                            <i class="fa fa-user-circle mr-2"></i>
-
-                            <span id="adminName">Admin</span>
-
-                        </a>
-
-
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
-
-                            <a class="dropdown-item" href="/admin-profile.html">
-
-                                <i class="fa fa-user mr-2"></i>
-
-                                Profile
-
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item text-danger" href="/login.html">
-
-                                <i class="fa fa-sign-out mr-2"></i>
-
-                                Logout
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-
-            </div>
-
-        </nav>
-
-
-
-        <!-- =====================================================
+<!-- =====================================================
      PETRO OMS - ORDER KPI CARDS
 ===================================================== -->
-
-        <section class="orders-kpi-section">
-
-            <div class="orders-kpi-grid">
-
-                <!-- TOTAL ORDERS -->
-                <button type="button" class="order-kpi-card kpi-total active" data-kpi-status=""
-                    onclick="filterByKpiStatus('')">
-
-                    <div class="kpi-top">
-                        <div class="kpi-icon">
-                            <i class="fa-solid fa-boxes-stacked"></i>
-                        </div>
-
-                        <span class="kpi-percentage" id="totalOrdersPercent">
+<section class="orders-kpi-section">
+<div class="orders-kpi-grid">
+<!-- TOTAL ORDERS -->
+<button class="order-kpi-card kpi-total active" data-kpi-status="" onclick="filterByKpiStatus('')" type="button">
+<div class="kpi-top">
+<div class="kpi-icon">
+<i class="fa-solid fa-boxes-stacked"></i>
+</div>
+<span class="kpi-percentage" id="totalOrdersPercent">
                             100%
                         </span>
-                    </div>
-
-                    <div class="kpi-main">
-                        <span class="kpi-title">Total Orders</span>
-                        <strong class="kpi-number" id="totalOrdersCount">0</strong>
-                    </div>
-
-                    <div class="kpi-progress">
-                        <span id="totalOrdersProgress" style="width:100%"></span>
-                    </div>
-
-                    <div class="kpi-footer">
-                        <span>Total Orders</span>
-                        <strong id="totalOrdersBottomPercent">100%</strong>
-                    </div>
-
-                </button>
-
-
-                <!-- DELIVERED -->
-                <button type="button" class="order-kpi-card kpi-delivered" data-kpi-status="Delivered"
-                    onclick="filterByKpiStatus('Delivered')">
-
-                    <div class="kpi-top">
-                        <div class="kpi-icon">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-
-                        <span class="kpi-percentage" id="deliveredPercent">
+</div>
+<div class="kpi-main">
+<span class="kpi-title">Total Orders</span>
+<strong class="kpi-number" id="totalOrdersCount">0</strong>
+</div>
+<div class="kpi-progress">
+<span id="totalOrdersProgress" style="width:100%"></span>
+</div>
+<div class="kpi-footer">
+<span>Total Orders</span>
+<strong id="totalOrdersBottomPercent">100%</strong>
+</div>
+</button>
+<!-- DELIVERED -->
+<button class="order-kpi-card kpi-delivered" data-kpi-status="Delivered" onclick="filterByKpiStatus('Delivered')" type="button">
+<div class="kpi-top">
+<div class="kpi-icon">
+<i class="fa-solid fa-circle-check"></i>
+</div>
+<span class="kpi-percentage" id="deliveredPercent">
                             0%
                         </span>
-                    </div>
-
-                    <div class="kpi-main">
-                        <span class="kpi-title">Delivered</span>
-                        <strong class="kpi-number" id="deliveredCount">0</strong>
-                    </div>
-
-                    <div class="kpi-progress">
-                        <span id="deliveredProgress"></span>
-                    </div>
-
-                    <div class="kpi-footer">
-                        <span>Delivery Rate</span>
-                        <strong id="deliveredBottomPercent">0%</strong>
-                    </div>
-
-                </button>
-
-
-                <!-- PARTIAL DELIVERED -->
-                <button type="button" class="order-kpi-card kpi-partial" data-kpi-status="Partial Delivered"
-                    onclick="filterByKpiStatus('Partial Delivered')">
-
-                    <div class="kpi-top">
-                        <div class="kpi-icon">
-                            <i class="fa-solid fa-truck-fast"></i>
-                        </div>
-
-                        <span class="kpi-percentage" id="partialPercent">
+</div>
+<div class="kpi-main">
+<span class="kpi-title">Delivered</span>
+<strong class="kpi-number" id="deliveredCount">0</strong>
+</div>
+<div class="kpi-progress">
+<span id="deliveredProgress"></span>
+</div>
+<div class="kpi-footer">
+<span>Delivery Rate</span>
+<strong id="deliveredBottomPercent">0%</strong>
+</div>
+</button>
+<!-- PARTIAL DELIVERED -->
+<button class="order-kpi-card kpi-partial" data-kpi-status="Partial Delivered" onclick="filterByKpiStatus('Partial Delivered')" type="button">
+<div class="kpi-top">
+<div class="kpi-icon">
+<i class="fa-solid fa-truck-fast"></i>
+</div>
+<span class="kpi-percentage" id="partialPercent">
                             0%
                         </span>
-                    </div>
-
-                    <div class="kpi-main">
-                        <span class="kpi-title">Partial Delivered</span>
-                        <strong class="kpi-number" id="partialCount">0</strong>
-                    </div>
-
-                    <div class="kpi-progress">
-                        <span id="partialProgress"></span>
-                    </div>
-
-                    <div class="kpi-footer">
-                        <span>Partial Rate</span>
-                        <strong id="partialBottomPercent">0%</strong>
-                    </div>
-
-                </button>
-
-
-                <!-- PENDING -->
-                <button type="button" class="order-kpi-card kpi-pending" data-kpi-status="Pending"
-                    onclick="filterByKpiStatus('Pending')">
-
-                    <div class="kpi-top">
-                        <div class="kpi-icon">
-                            <i class="fa-solid fa-clock"></i>
-                        </div>
-
-                        <span class="kpi-percentage" id="pendingPercent">
+</div>
+<div class="kpi-main">
+<span class="kpi-title">Partial Delivered</span>
+<strong class="kpi-number" id="partialCount">0</strong>
+</div>
+<div class="kpi-progress">
+<span id="partialProgress"></span>
+</div>
+<div class="kpi-footer">
+<span>Partial Rate</span>
+<strong id="partialBottomPercent">0%</strong>
+</div>
+</button>
+<!-- PENDING -->
+<button class="order-kpi-card kpi-pending" data-kpi-status="Pending" onclick="filterByKpiStatus('Pending')" type="button">
+<div class="kpi-top">
+<div class="kpi-icon">
+<i class="fa-solid fa-clock"></i>
+</div>
+<span class="kpi-percentage" id="pendingPercent">
                             0%
                         </span>
-                    </div>
-
-                    <div class="kpi-main">
-                        <span class="kpi-title">Pending</span>
-                        <strong class="kpi-number" id="pendingCount">0</strong>
-                    </div>
-
-                    <div class="kpi-progress">
-                        <span id="pendingProgress"></span>
-                    </div>
-
-                    <div class="kpi-footer">
-                        <span>Pending Rate</span>
-                        <strong id="pendingBottomPercent">0%</strong>
-                    </div>
-
-                </button>
-
-
-                <!-- HOLD -->
-                <button type="button" class="order-kpi-card kpi-hold" data-kpi-status="Hold"
-                    onclick="filterByKpiStatus('Hold')">
-
-                    <div class="kpi-top">
-                        <div class="kpi-icon">
-                            <i class="fa-solid fa-pause"></i>
-                        </div>
-
-                        <span class="kpi-percentage" id="holdPercent">
+</div>
+<div class="kpi-main">
+<span class="kpi-title">Pending</span>
+<strong class="kpi-number" id="pendingCount">0</strong>
+</div>
+<div class="kpi-progress">
+<span id="pendingProgress"></span>
+</div>
+<div class="kpi-footer">
+<span>Pending Rate</span>
+<strong id="pendingBottomPercent">0%</strong>
+</div>
+</button>
+<!-- HOLD -->
+<button class="order-kpi-card kpi-hold" data-kpi-status="Hold" onclick="filterByKpiStatus('Hold')" type="button">
+<div class="kpi-top">
+<div class="kpi-icon">
+<i class="fa-solid fa-pause"></i>
+</div>
+<span class="kpi-percentage" id="holdPercent">
                             0%
                         </span>
-                    </div>
-
-                    <div class="kpi-main">
-                        <span class="kpi-title">Hold</span>
-                        <strong class="kpi-number" id="holdCount">0</strong>
-                    </div>
-
-                    <div class="kpi-progress">
-                        <span id="holdProgress"></span>
-                    </div>
-
-                    <div class="kpi-footer">
-                        <span>Hold Rate</span>
-                        <strong id="holdBottomPercent">0%</strong>
-                    </div>
-
-                </button>
-
-
-                <!-- CANCELLED -->
-                <button type="button" class="order-kpi-card kpi-cancelled" data-kpi-status="Cancelled"
-                    onclick="filterByKpiStatus('Cancelled')">
-
-                    <div class="kpi-top">
-                        <div class="kpi-icon">
-                            <i class="fa-solid fa-ban"></i>
-                        </div>
-
-                        <span class="kpi-percentage" id="cancelledPercent">
+</div>
+<div class="kpi-main">
+<span class="kpi-title">Hold</span>
+<strong class="kpi-number" id="holdCount">0</strong>
+</div>
+<div class="kpi-progress">
+<span id="holdProgress"></span>
+</div>
+<div class="kpi-footer">
+<span>Hold Rate</span>
+<strong id="holdBottomPercent">0%</strong>
+</div>
+</button>
+<!-- CANCELLED -->
+<button class="order-kpi-card kpi-cancelled" data-kpi-status="Cancelled" onclick="filterByKpiStatus('Cancelled')" type="button">
+<div class="kpi-top">
+<div class="kpi-icon">
+<i class="fa-solid fa-ban"></i>
+</div>
+<span class="kpi-percentage" id="cancelledPercent">
                             0%
                         </span>
-                    </div>
+</div>
+<div class="kpi-main">
+<span class="kpi-title">Cancelled</span>
+<strong class="kpi-number" id="cancelledCount">0</strong>
+</div>
+<div class="kpi-progress">
+<span id="cancelledProgress"></span>
+</div>
+<div class="kpi-footer">
+<span>Cancel Rate</span>
+<strong id="cancelledBottomPercent">0%</strong>
+</div>
+</button>
+</div>
+</section>
+<!-- FILTER SECTION -->
+<section class="filters-box">
+<div class="filter-card-head">
+<div>
+<h3>
+<i class="fa-solid fa-filter"></i>
 
-                    <div class="kpi-main">
-                        <span class="kpi-title">Cancelled</span>
-                        <strong class="kpi-number" id="cancelledCount">0</strong>
-                    </div>
-
-                    <div class="kpi-progress">
-                        <span id="cancelledProgress"></span>
-                    </div>
-
-                    <div class="kpi-footer">
-                        <span>Cancel Rate</span>
-                        <strong id="cancelledBottomPercent">0%</strong>
-                    </div>
-
-                </button>
-
-            </div>
-
-        </section>
-
-        <!-- FILTER SECTION -->
-
-        <section class="filters-box">
-
-            <div class="filter-card-head">
-
-                <div>
-
-                    <h3>
-
-                        <i class="fa-solid fa-filter"></i>
-
-                        Search & Filter Orders
+                        Search &amp; Filter Orders
 
                     </h3>
-
-                    <p>Use filters to find specific orders quickly.</p>
-
-                </div>
-
-
-
-                <button id="clearFiltersBtn" class="btn btn-clear" onclick="clearAllFilters()">
-
-                    <i class="fa-solid fa-xmark"></i>
+<p>Use filters to find specific orders quickly.</p>
+</div>
+<button class="btn btn-clear" id="clearFiltersBtn" onclick="clearAllFilters()">
+<i class="fa-solid fa-xmark"></i>
 
                     Clear All
 
                 </button>
-
-            </div>
-
-
-
-            <div class="filter-divider"></div>
-
-
-
-            <div class="filter-grid">
-
-
-
-                <div class="filter-field">
-
-                    <label for="dateFrom">From Date</label>
-
-                    <div class="input-icon-wrap">
-
-                        <input type="date" id="dateFrom" class="form-control">
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="filter-field">
-
-                    <label for="dateTo">To Date</label>
-
-                    <div class="input-icon-wrap">
-
-                        <input type="date" id="dateTo" class="form-control">
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="filter-field">
-
-                    <label for="filterStatus">Status</label>
-
-                    <select id="filterStatus" class="form-control">
-
-                        <option value="">All Status</option>
-
-                        <option value="Pending">Pending</option>
-
-                        <option value="Quotation Sent">Quotation Sent</option>
-
-                        <option value="Payment Received">Payment Received</option>
-
-                        <option value="Partial Delivered">Partial Delivered</option>
-
-                        <option value="Delivered">Delivered</option>
-
-                        <option value="Hold">Hold</option>
-
-                        <option value="Cancelled">Cancelled</option>
-
-                    </select>
-
-                </div>
-
-
-
-                <div class="filter-field">
-
-                    <label for="filterType">Type</label>
-
-                    <select id="filterType" class="form-control">
-
-                        <option value="">All Types</option>
-
-                        <option value="Primary">Primary</option>
-
-                        <option value="Secondary">Secondary</option>
-
-                    </select>
-
-                </div>
-
-
-
-                <div class="filter-field filter-search">
-
-                    <label for="searchBox">Search</label>
-
-                    <div class="search-wrap">
-
-                        <i class="fa-solid fa-magnifying-glass"></i>
-
-                        <input type="text" id="searchBox" class="form-control"
-                            placeholder="Search Order No / Party Name">
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="filter-field">
-
-                    <label for="salesmanFilter">Salesman</label>
-
-                    <select id="salesmanFilter" class="form-control">
-
-                        <option value="">All Salesmen</option>
-
-                    </select>
-
-                </div>
-                <div class="filter-field">
-
-    <label for="distributorFilter">Distributor</label>
-
-    <select id="distributorFilter" class="form-control">
-        <option value="">All Distributors</option>
-    </select>
-
 </div>
-
-
-
-                <div class="filter-field filter-action">
-
-                    <label>&nbsp;</label>
-
-                    <button class="btn btn-petro w-100" onclick="applyFiltersAndRender()">
-
-                        <i class="fa-solid fa-filter"></i>
+<div class="filter-divider"></div>
+<div class="filter-grid">
+<div class="filter-field">
+<label for="dateFrom">From Date</label>
+<div class="input-icon-wrap">
+<input class="form-control" id="dateFrom" type="date"/>
+</div>
+</div>
+<div class="filter-field">
+<label for="dateTo">To Date</label>
+<div class="input-icon-wrap">
+<input class="form-control" id="dateTo" type="date"/>
+</div>
+</div>
+<div class="filter-field">
+<label for="filterStatus">Status</label>
+<select class="form-control" id="filterStatus">
+<option value="">All Status</option>
+<option value="Pending">Pending</option>
+<option value="Quotation Sent">Quotation Sent</option>
+<option value="Payment Received">Payment Received</option>
+<option value="Partial Delivered">Partial Delivered</option>
+<option value="Delivered">Delivered</option>
+<option value="Hold">Hold</option>
+<option value="Cancelled">Cancelled</option>
+</select>
+</div>
+<div class="filter-field">
+<label for="filterType">Type</label>
+<select class="form-control" id="filterType">
+<option value="">All Types</option>
+<option value="Primary">Primary</option>
+<option value="Secondary">Secondary</option>
+</select>
+</div>
+<div class="filter-field filter-search">
+<label for="searchBox">Search</label>
+<div class="search-wrap">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input class="form-control" id="searchBox" placeholder="Search Order No / Party Name" type="text"/>
+</div>
+</div>
+<div class="filter-field">
+<label for="salesmanFilter">Salesman</label>
+<select class="form-control" id="salesmanFilter">
+<option value="">All Salesmen</option>
+</select>
+</div>
+<div class="filter-field">
+<label for="distributorFilter">Distributor</label>
+<select class="form-control" id="distributorFilter">
+<option value="">All Distributors</option>
+</select>
+</div>
+<div class="filter-field filter-action">
+<label> </label>
+<button class="btn btn-petro w-100" onclick="applyFiltersAndRender()">
+<i class="fa-solid fa-filter"></i>
 
                         Apply
 
                     </button>
-
-                </div>
-
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ORDERS TABLE -->
-
-        <section class="orders-table-card">
-
-
-
-            <div class="table-card-head">
-
-                <div>
-
-                    <h3>
-
-                        <i class="fa-solid fa-table-list"></i>
+</div>
+</div>
+</section>
+<!-- ORDERS TABLE -->
+<section class="orders-table-card">
+<div class="table-card-head">
+<div>
+<h3>
+<i class="fa-solid fa-table-list"></i>
 
                         All Orders
 
                     </h3>
-
-                    <p id="tableSubText">Showing filtered order results</p>
-
-                </div>
-
-
-
-                <button class="btn btn-petro" onclick="openExportModal()">
-
-                    <i class="fa fa-download"></i>
+<p id="tableSubText">Showing filtered order results</p>
+</div>
+<button class="btn btn-petro" onclick="openExportModal()">
+<i class="fa fa-download"></i>
 
                     Download Data
 
                 </button>
-
-            </div>
-
-
-
-            <div class="table-responsive orders-table-wrap">
-
-                <table class="table table-hover orders-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-
-                                <input type="checkbox" id="selectAllRows" onchange="toggleAllRows(this)">
-
-                            </th>
-
-                            <th>Sr No</th>
-
-                            <th>Salesman</th>
-
-                            <th>Order No</th>
-
-                            <th>Order Date</th>
-
-                            <th>Party Name</th>
-
-                            <th>Distributor</th>
-
-                            <th>Type</th>
-
-                            <th>Total (₹)</th>
-
-                            <th>Status</th>
-
-                            <th class="text-center">Action</th>
-
-                            <th>Bill Image</th>
-
-                        </tr>
-
-                    </thead>
-
-
-
-                    <tbody id="ordersBody"></tbody>
-
-                </table>
-
-            </div>
-
-
-
-            <div class="orders-footer">
-
-                <p id="emptyState" class="empty-state" style="display:none;">
-
-                    <i class="fa-regular fa-folder-open"></i>
+</div>
+<div class="table-responsive orders-table-wrap">
+<table class="table table-hover orders-table">
+<thead>
+<tr>
+<th>
+<input id="selectAllRows" onchange="toggleAllRows(this)" type="checkbox"/>
+</th>
+<th>Sr No</th>
+<th>Salesman</th>
+<th>Order No</th>
+<th>Order Date</th>
+<th>Party Name</th>
+<th>Distributor</th>
+<th>Type</th>
+<th>Total (₹)</th>
+<th>Status</th>
+<th class="text-center">Action</th>
+<th>Bill Image</th>
+</tr>
+</thead>
+<tbody id="ordersBody"></tbody>
+</table>
+</div>
+<div class="orders-footer">
+<p class="empty-state" id="emptyState" style="display:none;">
+<i class="fa-regular fa-folder-open"></i>
 
                     No orders found.
 
                 </p>
-
-
-
-                <div class="pagination-wrap">
-
-                    <button id="prevPageBtn" class="btn btn-page">
-
-                        <i class="fa fa-chevron-left"></i>
+<div class="pagination-wrap">
+<button class="btn btn-page" id="prevPageBtn">
+<i class="fa fa-chevron-left"></i>
 
                         Prev
 
                     </button>
-
-
-
-                    <span id="pageIndicator">Page 1</span>
-
-
-
-                    <button id="nextPageBtn" class="btn btn-page active">
+<span id="pageIndicator">Page 1</span>
+<button class="btn btn-page active" id="nextPageBtn">
 
                         Next
 
                         <i class="fa fa-chevron-right"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-        </section>
-
-
-
-    </main>
-
-
-
-    <!-- EXPORT MODAL -->
-
-    <div id="exportModal" class="modal-overlay" style="display:none;">
-
-        <div class="modal-box export-modal-box">
-
-
-
-            <div class="modal-head">
-
-                <div>
-
-                    <h4>Download Custom Report</h4>
-
-                    <p>Select columns and download filtered data in CSV format.</p>
-
-                </div>
-
-
-
-                <button class="btn modal-close-btn" onclick="closeExportModal()">
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-            </div>
-
-
-
-            <input type="text" id="columnSearch" class="form-control mb-3" placeholder="Search columns..."
-                oninput="renderExportColumns()">
-
-
-
-            <div class="export-top-bar">
-
-                <label class="export-select-all">
-
-                    <input type="checkbox" id="selectAllColumns" onchange="toggleAllColumns(this)">
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="exportModal" style="display:none;">
+<div class="modal-box export-modal-box">
+<div class="modal-head">
+<div>
+<h4>Download Custom Report</h4>
+<p>Select columns and download filtered data in CSV format.</p>
+</div>
+<button class="btn modal-close-btn" onclick="closeExportModal()">
+<i class="fa-solid fa-xmark"></i>
+</button>
+</div>
+<input class="form-control mb-3" id="columnSearch" oninput="renderExportColumns()" placeholder="Search columns..." type="text"/>
+<div class="export-top-bar">
+<label class="export-select-all">
+<input id="selectAllColumns" onchange="toggleAllColumns(this)" type="checkbox"/>
 
                     Select All Columns
 
                 </label>
-
-
-
-                <b id="selectedColumnCount">0 Selected</b>
-
-            </div>
-
-
-
-            <div id="exportColumnsList"></div>
-
-
-
-            <div class="export-btn-wrap">
-
-                <button class="btn btn-light w-50" onclick="closeExportModal()">Cancel</button>
-
-                <button class="btn btn-petro w-50" onclick="downloadCustomCSV()">
-
-                    <i class="fa-solid fa-download"></i>
+<b id="selectedColumnCount">0 Selected</b>
+</div>
+<div id="exportColumnsList"></div>
+<div class="export-btn-wrap">
+<button class="btn btn-light w-50" onclick="closeExportModal()">Cancel</button>
+<button class="btn btn-petro w-50" onclick="downloadCustomCSV()">
+<i class="fa-solid fa-download"></i>
 
                     Download CSV
 
                 </button>
-
-            </div>
-
-
-
-        </div>
-
-    </div>
-
-
-
-    <!-- IMAGE MODAL -->
-
-    <div id="imageModal" class="modal-overlay" style="display:none;">
-
-        <div class="modal-box image-modal-box">
-
-            <span class="testingclose" onclick="closeImageModal()">✖</span>
-
-
-
-            <div id="imageSkeleton" class="skeleton-loader"></div>
-
-
-
-            <img id="modalImage" src="" alt="Order Image">
-
-        </div>
-
-    </div>
-
-
-
-    <!-- VIEW ORDER MODAL -->
-
-    <div id="modal">
-
-        <div id="modalBox">
-
-            <div id="modalContent"></div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- DELETE MODAL -->
-
-    <div id="deleteModal" class="modal-overlay" style="display:none;">
-
-        <div class="modal-box delete-modal-box">
-
-
-
-            <div class="delete-icon">
-
-                <i class="fa-solid fa-trash"></i>
-
-            </div>
-
-
-
-            <h3>Delete Order</h3>
-
-            <p>Enter admin password to delete this order.</p>
-
-
-
-            <p id="deleteMsg" style="display:none;"></p>
-
-
-
-            <div class="password-wrapper">
-
-                <input type="text" id="deletePass" class="form-control" placeholder="Enter Admin Password"
-                    autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-                    data-lpignore="true" data-1p-ignore="true" style="-webkit-text-security: disc;" />
-
-
-
-                <i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
-
-            </div>
-
-
-
-            <div class="delete-actions">
-
-                <button class="btn btn-light" onclick="closeDeleteModal()">Cancel</button>
-
-                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
-
-            </div>
-
-
-
-        </div>
-
-    </div>
-
-
-
-    <!-- FIREBASE -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
-    <!-- jQuery -->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Common JS -->
-    <script src="../js/script.js"></script>
-
-    <!-- Orders JS -->
-    <script src="orders.js?v=2026.09.24.3"></script>
-
-    <!-- Global OMS Subscription & Renewal Manager -->
-
-    <script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
-
-</body>
-
-
-
+</div>
+</div>
+</div>
+<!-- IMAGE MODAL -->
+<div class="modal-overlay" id="imageModal" style="display:none;">
+<div class="modal-box image-modal-box">
+<span class="testingclose" onclick="closeImageModal()">✖</span>
+<div class="skeleton-loader" id="imageSkeleton"></div>
+<img alt="Order Image" id="modalImage" src=""/>
+</div>
+</div>
+<!-- VIEW ORDER MODAL -->
+<div id="modal">
+<div id="modalBox">
+<div id="modalContent"></div>
+</div>
+</div>
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+<div class="modal-box delete-modal-box">
+<div class="delete-icon">
+<i class="fa-solid fa-trash"></i>
+</div>
+<h3>Delete Order</h3>
+<p>Enter admin password to delete this order.</p>
+<p id="deleteMsg" style="display:none;"></p>
+<div class="password-wrapper">
+<input autocapitalize="off" autocomplete="new-password" autocorrect="off" class="form-control" data-1p-ignore="true" data-lpignore="true" id="deletePass" placeholder="Enter Admin Password" spellcheck="false" style="-webkit-text-security: disc;" type="text">
+<i class="fa fa-eye-slash toggle-eye" onclick="togglePass()"></i>
+</input></div>
+<div class="delete-actions">
+<button class="btn btn-light" onclick="closeDeleteModal()">Cancel</button>
+<button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+</div>
+</div>
+</div>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<!-- jQuery -->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Common JS -->
+<script src="../js/script.js"></script>
+<!-- Orders JS -->
+<script src="orders.js?v=2026.09.24.3"></script>
+<!-- Global OMS Subscription & Renewal Manager -->
+<script src="/js/subscription-manager.js?v=2026.09.02.3"></script>
+<script src="/js/petro-admin-mobile.js?v=20261110.2"></script></body>
 </html>

@@ -1,0 +1,8 @@
+/* Read existing live KPI text. No new Firestore reads or changes to counts. */
+(()=>{'use strict';
+const root=document.getElementById('petroOrdersStatusBars');if(!root)return;
+const metrics=[['Delivered','deliveredCount','#16a34a'],['Partial Delivered','partialCount','#2563eb'],['Pending','pendingCount','#e98a0a'],['Hold','holdCount','#8b5cf6'],['Cancelled','cancelledCount','#ed4358']];
+const render=()=>{const total=Number((document.getElementById('totalOrdersCount')?.textContent||'0').replace(/[^0-9]/g,''))||0;root.replaceChildren();for(const [name,id,color] of metrics){const count=Number((document.getElementById(id)?.textContent||'0').replace(/[^0-9]/g,''))||0;const row=document.createElement('div');row.className='petro-order-status-bar';const label=document.createElement('span');label.textContent=name;const track=document.createElement('span');track.className='petro-order-track';const fill=document.createElement('i');fill.style.width=(total?count/total*100:0)+'%';fill.style.background=color;track.appendChild(fill);const value=document.createElement('b');value.textContent=String(count);row.append(label,track,value);root.appendChild(row);}};
+const ids=['totalOrdersCount',...metrics.map(x=>x[1])];const obs=new MutationObserver(render);ids.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el,{childList:true,characterData:true,subtree:true});});render();
+const toggle=document.getElementById('petroOrdersAnalyticsToggle');toggle?.addEventListener('click',()=>{const show=root.hidden;root.hidden=!show;toggle.setAttribute('aria-expanded',String(show));toggle.innerHTML=show?'Hide Chart <i class="fa-solid fa-chevron-up"></i>':'Show Chart <i class="fa-solid fa-chevron-down"></i>';});
+})();

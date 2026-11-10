@@ -2,110 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Login - PETRO OMS</title>
-    <link rel="icon" href="/images/app-icon.png">
-    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sales Team Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            min-height:100vh; display:flex; justify-content:center; align-items:center;
-            background:#eef2f5; font-family:"Segoe UI",sans-serif; padding:20px;
-        }
-        .login-box {
-            width:90%; max-width:420px; background:#fff; padding:35px 28px;
-            border-radius:14px; box-shadow:0 6px 25px rgba(0,0,0,.15);
-            text-align:center; animation:fadeIn .3s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity:0; transform:translateY(10px); }
-            to { opacity:1; transform:translateY(0); }
-        }
-        .login-box img { width:160px; max-width:100%; margin-bottom:14px; }
-        h3 { color:#108082; margin-bottom:20px; font-size:20px; font-weight:600; }
-        select, input {
-            width:100%; padding:14px; border:1px solid #ccc; border-radius:8px;
-            font-size:16px; margin-bottom:15px; background:#fff;
-        }
-        .login-btn,.modal-btn {
-            width:100%; padding:14px; border:none; border-radius:8px;
-            font-size:16px; cursor:pointer; font-weight:600;
-        }
-        .login-btn { background:#108082; color:#fff; }
-        .modal-btn { background:#108082; color:#fff; }
-        .login-btn:hover,.modal-btn:hover { filter:brightness(.95); }
-        .modal-bg {
-            display:none; position:fixed; inset:0; background:rgba(0,0,0,.45);
-            justify-content:center; align-items:center; z-index:999; padding:18px;
-        }
-        .modal-box {
-            position:relative; background:#fff; padding:25px 20px; width:90%;
-            max-width:350px; border-radius:12px; text-align:center;
-            animation:fadeIn .2s ease-out; box-shadow:0 8px 25px rgba(0,0,0,.2);
-        }
-        .error-text { color:#d93025; font-size:14px; margin-top:6px; margin-bottom:12px; }
-        #btn-section { display:flex; justify-content:center; gap:10px; }
-        .close-btn {
-            position:absolute; right:14px; top:10px; font-size:20px;
-            cursor:pointer; color:#555;
-        }
-        .close-btn:hover { color:#000; }
+        :root{--teal:#078f81;--teal-dark:#06665f;--navy:#0c2440;--muted:#6f7d91;--line:#dbe7ea;--bg:#f4f8f9;--orange:#f8aa19}
+        *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Poppins,Arial,sans-serif;background:transparent;color:var(--navy)}
+        body{padding:0}
+        .login-shell{background:#fff;border:1px solid #e2eded;border-radius:24px;padding:18px 16px 16px;box-shadow:0 10px 30px rgba(6,33,48,.08)}
+        .login-head{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+        .login-head .icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#0aa293,#0a8278);color:#fff;font-size:24px;box-shadow:0 10px 20px rgba(8,143,129,.18)}
+        .login-head h2{margin:0;font-size:22px;line-height:1.15;font-weight:800}
+        .login-head p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+        .change-role{margin:4px 0 16px;display:inline-flex;align-items:center;gap:8px;border:0;background:#ddf5ee;color:var(--teal);padding:10px 14px;border-radius:999px;font-weight:700;font-size:14px}
+        .field{margin-bottom:14px}.field label{display:block;font-size:13px;font-weight:700;color:#143f47;margin-bottom:8px}.req{color:#df4141}
+        .input-wrap{position:relative}
+        select,input{width:100%;height:56px;border:1px solid var(--line);border-radius:16px;background:#fbfcfc;padding:0 16px;font-size:16px;color:#12263e;outline:none;transition:border-color .2s,box-shadow .2s}
+        select{appearance:none;-webkit-appearance:none;padding-right:48px}
+        input{padding-right:48px}
+        select:focus,input:focus{border-color:#62c3b4;box-shadow:0 0 0 4px rgba(8,143,129,.11)}
+        .input-wrap .fa-user,.input-wrap .fa-lock{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#8597a0;font-size:18px}
+        .input-wrap input,.input-wrap select{padding-left:48px}
+        .input-wrap .chev,.toggle-pass{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#506276;background:none;border:0;font-size:18px;cursor:pointer}
+        .error-text{display:none;margin:3px 2px 0;color:#c93333;font-size:12px;font-weight:600}
+        .login-btn{width:100%;height:58px;border:0;border-radius:18px;background:linear-gradient(95deg,var(--teal),var(--teal-dark));color:#fff;font-size:26px;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 14px 28px rgba(8,143,129,.2);margin-top:8px}
+        .helper{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:0 6px;color:#65758a;font-size:12px;line-height:1.45}.helper i{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#e8f7f3;color:var(--teal);flex:none}
+        .brand-footer{text-align:center;margin-top:18px;color:#0b847b;font-weight:800;letter-spacing:1.6px;font-size:12px}.brand-footer small{display:block;font-size:11px;letter-spacing:2.2px;color:#2a3d57;margin-top:8px}
+        body.embedded{padding:0;background:transparent}.standalone-logo{display:none}
+        body:not(.embedded){min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(155deg,#e9f9f6,#f7f9fc 60%,#e8f2f8)}
+        body:not(.embedded) .login-shell{width:min(100%,420px)}
+        body:not(.embedded) .standalone-logo{display:block;text-align:center;margin-bottom:16px} body:not(.embedded) .standalone-logo img{height:58px;object-fit:contain}
+        @media (max-width:390px){.login-shell{padding:15px 13px 14px;border-radius:20px}.login-head{gap:11px}.login-head .icon{width:50px;height:50px;border-radius:14px;font-size:21px}.login-head h2{font-size:19px}.login-head p{font-size:12px}.change-role{font-size:13px;padding:9px 13px}.field label{font-size:12px}select,input{height:52px;font-size:15px;border-radius:14px}.login-btn{height:54px;font-size:16px;border-radius:16px}.helper{font-size:11px}}
+
+        /* Embedded: outer app owns page heading and change-role control. */
+        body.embedded .login-shell{border:0;border-radius:0;box-shadow:none;padding:4px 0 0;background:transparent}
+        body.embedded .login-head,body.embedded .change-role,body.embedded .brand-footer{display:none!important}
+        body.embedded .field{margin-bottom:18px}
+        body.embedded .login-btn{margin-top:22px}
+        body.embedded .helper{margin-top:14px; padding:10px 11px; border-radius:12px; background:#e9f9f5; color:#415b62; align-items:center}
+        body.embedded .helper i{width:31px;height:31px}
+        body.embedded .login-btn{margin-top:12px}
+        body.embedded .field{margin-bottom:15px}
+        body.embedded .login-shell{padding:0}
+        /* Dropdown native on touch devices, polished field without clipped options */
+        #salesman{cursor:pointer;font-weight:600;color:#154554;line-height:1.4}
+        #salesman option{background:#fff;color:#153248;padding:10px;font-size:16px}
+        .input-wrap:focus-within .chev{color:#078f81;pointer-events:none}
+        body.embedded .helper{display:none!important}
+        body.embedded select,body.embedded input{font-size:16px!important}
+        @media(max-width:420px){.login-shell{width:100%;max-width:100%}select,input{font-size:16px!important}}
+        @media(max-height:680px){body.embedded .field{margin-bottom:10px}body.embedded select,body.embedded input{height:49px}body.embedded .login-btn{height:50px;margin-top:8px}body.embedded .helper{margin-top:10px}}
+
+
+/* V11 polished selectable dropdown, preserves existing select value for authentication */
+#salesman.petro-select-proxy{pointer-events:none;background:#fff}
+#salesman.petro-select-proxy + .chev{pointer-events:none}
+.petro-sales-dropdown{position:relative;border:1px solid #c9e9e1;background:#fff;padding:10px;border-radius:15px;box-shadow:0 10px 25px #052e2d18;margin:7px 0 3px;z-index:10}
+.petro-sales-dropdown[hidden]{display:none!important}
+.petro-drop-label{font-size:11px!important;margin:0 0 5px!important;color:#547575!important}
+#petroSalesSearch{height:42px!important;padding:9px 12px!important;font-size:16px!important;border-radius:10px!important}
+.petro-sales-options{overflow-y:auto;max-height:min(220px,35dvh);overscroll-behavior:contain;margin-top:5px}
+.petro-sales-options button{width:100%;min-height:43px;border:0;border-radius:9px;background:#fff;color:#173148;text-align:left;padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.petro-sales-options button:hover,.petro-sales-options button[aria-selected="true"]{background:#dff6ef;color:#047d72}
+.petro-sales-options .petro-no-match{padding:13px;font-size:12px;color:#687886}
+.petro-sales-trigger{cursor:pointer!important;position:absolute;inset:0;border:0;background:transparent;z-index:4;border-radius:16px}
+    .petro-login-capabilities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:19px;padding-top:15px;border-top:1px solid #ebf1f1}
+    .petro-login-capabilities>div{text-align:center;font-size:10px;font-weight:700;color:#153a48;line-height:1.35}
+    .petro-login-capabilities i{display:grid;place-items:center;width:42px;height:42px;font-size:18px;color:#078c80;border-radius:14px;background:#e6f8f3;margin:0 auto 7px}
+    body.embedded .petro-login-capabilities{margin-top:17px}
+    body.embedded .field label{font-size:13px;font-weight:800}
+    body.embedded .login-btn{background:linear-gradient(100deg,#05ab9d,#00675d);box-shadow:0 10px 22px #08796b25}
+    @media(max-width:350px){.petro-login-capabilities i{width:36px;height:36px}.petro-login-capabilities>div{font-size:9px}}
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <img src="images/logo.webp" alt="PETRO Logo">
-        <h3>Sales Team Login</h3>
-
-        <select id="salesman">
-            <option value="">-- Select Salesman --</option>
-            <option>Rup Ranjan Bora</option>
-            <option>Sariya Murtuza</option>
-            <option>Ankit Kalra</option>
-            <option>Vivek Srivastava</option>
-            <option>Amit Soni</option>
-            <option>Prince Gupta</option>
-            <option>Shubham Meena</option>
-            <option>Sumanta Kumar</option>
-        </select>
-
-        <div id="btn-section">
-            <button type="button" class="modal-btn" onclick="goBack()">Back</button>
-            <button type="button" class="login-btn" onclick="openPasswordModal()">Login</button>
+<script>if(new URLSearchParams(location.search).has('embedded'))document.body.classList.add('embedded');</script>
+<div class="standalone-logo"><a href="/index.html" aria-label="Go to Home" title="Home"><img src="images/logo.webp" alt="PETRO"></a></div>
+<div class="login-shell">
+    <div class="login-head">
+        <div class="icon"><i class="fa-regular fa-user"></i></div>
+        <div>
+            <h2>Salesman Login</h2>
+            <p>Select your name and enter your password</p>
         </div>
     </div>
-
-    <div class="modal-bg" id="passwordModal" role="dialog" aria-modal="true" aria-labelledby="passwordTitle">
-        <div class="modal-box">
-            <span class="close-btn" onclick="closeModal()" aria-label="Close">×</span>
-            <h3 id="passwordTitle" style="color:#108082;margin-bottom:10px;">Enter Password</h3>
-
-            <div style="position:relative;">
-                <input
-                    type="password"
-                    id="passwordField"
-                    placeholder="Enter Password"
-                    autocomplete="current-password"
-                    autocorrect="off"
-                    autocapitalize="off"
-                    spellcheck="false"
-                    data-lpignore="true"
-                    data-form-type="other"
-                    name="sales_password_petrooms"
-                >
-                <i class="fa-solid fa-eye" id="togglePassword" onclick="togglePassword()" style="
-                    position:absolute; right:14px; top:22px; cursor:pointer; color:#666;
-                "></i>
-            </div>
-
-            <p class="error-text" id="errorMsg" style="display:none;" aria-live="polite">❌ Wrong Password!</p>
-            <button type="button" class="modal-btn" onclick="verifyPassword()">Login</button>
+    <button type="button" class="change-role" onclick="goBack()"><i class="fa-solid fa-arrow-right-arrow-left"></i> Change Role</button>
+    <div class="field">
+        <label for="salesman">Select Salesperson <span class="req">*</span></label>
+        <div class="input-wrap">
+            <i class="fa-regular fa-user"></i>
+            <select id="salesman" autocomplete="off" aria-label="Selected salesperson">
+                <option value="">-- Select Salesman --</option>
+                <option>Rup Ranjan Bora</option>
+                <option>Sariya Murtuza</option>
+                <option>Ankit Kalra</option>
+                <option>Vivek Srivastava</option>
+                <option>Amit Soni</option>
+                <option>Prince Gupta</option>
+                <option>Shubham Meena</option>
+                <option>Sumanta Kumar</option>
+            </select>
+            <i class="fa-solid fa-chevron-down chev"></i>
+        </div>
+        <div class="petro-sales-dropdown" id="petroSalesDropdown" hidden>
+          <label for="petroSalesSearch" class="petro-drop-label">Find salesperson</label>
+          <input id="petroSalesSearch" type="search" placeholder="Search by name..." autocomplete="off">
+          <div id="petroSalesOptions" class="petro-sales-options" role="listbox" aria-label="Salesperson options"></div>
         </div>
     </div>
-
-    <script src="sales-login.js?v=2026.09.12.1"></script>
+    <div class="field">
+        <label for="passwordField">Password <span class="req">*</span></label>
+        <div class="input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="passwordField" placeholder="Enter Password" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" name="sales_password_petrooms">
+            <button type="button" class="toggle-pass" id="togglePassword" onclick="togglePassword()" aria-label="Show or hide password"><i class="fa-regular fa-eye"></i></button>
+        </div>
+        <p class="error-text" id="errorMsg" aria-live="polite"></p>
+    </div>
+    <button type="button" class="login-btn" onclick="verifyPassword()"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</button>
+    <div class="petro-login-capabilities" aria-label="Sales portal features"><div><i class="fa-solid fa-cart-shopping"></i><span>Create Orders</span></div><div><i class="fa-solid fa-chart-simple"></i><span>Performance</span></div><div><i class="fa-regular fa-file-lines"></i><span>View Reports</span></div></div>
+    <div class="helper"><i class="fa-solid fa-shield-halved"></i><span>Use your existing PETRO OMS credentials to continue.</span></div>
+    <div class="brand-footer">PETRO OMS<small>SIMPLE • SMART • STRONGER TOGETHER</small></div>
+</div>
+<script>
+(function(){
+const select=document.getElementById('salesman'),panel=document.getElementById('petroSalesDropdown'),results=document.getElementById('petroSalesOptions'),search=document.getElementById('petroSalesSearch');
+if(!select||!panel||!results)return;
+const wrap=select.closest('.input-wrap'),trigger=document.createElement('button');trigger.type='button';trigger.className='petro-sales-trigger';trigger.setAttribute('aria-label','Select salesperson');trigger.setAttribute('aria-expanded','false');wrap.appendChild(trigger);select.classList.add('petro-select-proxy');
+const options=[...select.options].filter(o=>o.value).map(o=>o.value);
+function render(){const q=search.value.trim().toLowerCase();results.replaceChildren();const found=options.filter(n=>n.toLowerCase().includes(q));for(const n of found){const b=document.createElement('button');b.type='button';b.textContent=n;b.setAttribute('role','option');b.setAttribute('aria-selected',String(select.value===n));b.onclick=()=>{select.value=n;select.dispatchEvent(new Event('change',{bubbles:true}));close();};results.appendChild(b);}if(!found.length){const d=document.createElement('div');d.className='petro-no-match';d.textContent='No matching salesperson';results.appendChild(d);}}
+function close(){panel.hidden=true;trigger.setAttribute('aria-expanded','false');search.value='';}function open(){panel.hidden=false;trigger.setAttribute('aria-expanded','true');render();search.focus();}
+trigger.addEventListener('click',()=>panel.hidden?open():close());search.addEventListener('input',render);
+document.addEventListener('click',e=>{if(!panel.contains(e.target)&&!wrap.contains(e.target))close();});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+})();
+</script>
+<script src="sales-login.js?v=20261109.1"></script>
 </body>
 </html>

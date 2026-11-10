@@ -5125,3 +5125,33 @@ body.dark-mode .orders-footer,
         gap: 10px;
     }
 }
+/* PETRO OMS: consistent status colors in orders management */
+:root {
+  --oms-status-pending:#ff9800;
+  --oms-status-delivered:#16a34a;
+  --oms-status-cancelled:#dc3545;
+  --oms-status-hold:#8b5cf6;
+  --oms-status-partial:#2563eb;
+}
+.status-pending,.order-status-badge.status-pending,
+.badge-status.status-pending,.status-badge.status-pending {
+  background:#fff2dc!important;color:#b45309!important;border-color:#ffd49a!important;
+}
+.status-delivered,.order-status-badge.status-delivered,
+.badge-status.status-delivered,.status-badge.status-delivered {
+  background:#dcfce7!important;color:#15803d!important;border-color:#bbf7d0!important;
+}
+.status-cancelled,.order-status-badge.status-cancelled,
+.badge-status.status-cancelled,.status-badge.status-cancelled {
+  background:#fee2e2!important;color:#b91c1c!important;border-color:#fecaca!important;
+}
+.status-hold,.order-status-badge.status-hold {
+  background:#f3e8ff!important;color:#7e22ce!important;
+}
+.status-partial,.order-status-badge.status-partial {
+  background:#dbeafe!important;color:#1d4ed8!important;
+}
+@media(min-width:1100px){
+  .orders-dashboard .dashboard-cards,
+  .kpi-grid {min-width:0;}
+}

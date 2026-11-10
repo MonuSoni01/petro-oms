@@ -856,6 +856,16 @@ async function fetchFirstOrdersPage() {
     populateDistributorMasterList();
 
     applyFiltersAndRender();
+    // Customer → Admin Orders deep link: reuse the existing full viewOrder modal.
+    const requestedOrder = new URLSearchParams(location.search).get('order');
+    if (requestedOrder) {
+      const selected = allOrdersMaster.find(o => String(o.id) === requestedOrder || String(o.orderNo || '').toLowerCase() === requestedOrder.toLowerCase());
+      if (selected && typeof viewOrder === 'function') {
+        window.setTimeout(() => viewOrder(selected.id), 100);
+      } else if (!selected) {
+        console.warn('PETRO OMS: linked order not found', requestedOrder);
+      }
+    }
 
 
 
@@ -1475,7 +1485,7 @@ function renderCurrentPage() {
 
 
 
-          <td>${escapeHTML(order?.orderNo || "-")}</td>
+          <td><button type="button" class="js-view-order petro-order-no-link" data-id="${escapeAttr(orderId)}">${escapeHTML(order?.orderNo || "-")}</button></td>
 
 
 

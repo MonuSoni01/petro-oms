@@ -37,14 +37,14 @@ const db = firebase.firestore();
 -------------------------------------- */
 
 const CONFIG = {
-  DASHBOARD_URL: "admin-dashboard.html",
+  DASHBOARD_URL: "index.html",
 
   LOGIN_COLLECTION: "sales-login",
   LOGIN_LOG_COLLECTION: "admin_login_logs",
 
   REMEMBER_EMAIL_KEY: "petro_admin_saved_email",
 
-  SESSION_HOURS: 12,
+  SESSION_HOURS: 24 * 365 * 100,
 
   ALLOWED_ROLES: [
     "admin",
@@ -252,7 +252,7 @@ async function adminLogin() {
     );
 
     setTimeout(function () {
-      window.location.href = CONFIG.DASHBOARD_URL;
+      window.top.location.href = CONFIG.DASHBOARD_URL;
     }, 900);
 
   } catch (error) {
@@ -307,7 +307,7 @@ function saveAdminSession(admin) {
   const now = Date.now();
 
   const expiresAt =
-    now + CONFIG.SESSION_HOURS * 60 * 60 * 1000;
+    Number.MAX_SAFE_INTEGER;
 
   localStorage.setItem("adminUid", admin.uid || "");
   localStorage.setItem("adminEmail", admin.email || "");
