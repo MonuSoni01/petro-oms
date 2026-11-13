@@ -3,7 +3,7 @@
    NETWORK FIRST + SAFE OFFLINE CACHE
 ========================================= */
 
-const CACHE_NAME = "petro-oms-admin-customer-product-20261110";
+const CACHE_NAME = "petro-oms-sonia-20261112-v2";
 
 /* New service worker ko immediately activate karo */
 self.addEventListener("message", function (event) {

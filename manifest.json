@@ -52,24 +52,26 @@
     {
       "name": "Orders",
       "short_name": "Orders",
-      "description": "Manage orders", 
+      "description": "Manage orders",
       "icons": [
         {
           "src": "/images/petro-erp.png",
           "sizes": "192x192"
         }
-      ]
+      ],
+      "url": "/sales-dashboard.html"
     },
     {
       "name": "Dispatch",
       "short_name": "Dispatch",
-      "description": "Open dispatch section", 
+      "description": "Open dispatch section",
       "icons": [
         {
           "src": "/images/petro-erp.png",
           "sizes": "192x192"
         }
-      ]
+      ],
+      "url": "/sales-dashboard.html"
     }
   ],
   "screenshots": [

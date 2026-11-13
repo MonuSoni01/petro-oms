@@ -54,7 +54,8 @@
       "Rup Ranjan Bora": "RRB",
       "Prince Gupta": "PG", 
       "Shubham Meena": "SS",
-      "Sumanta Kumar": "SK"
+      "Sumanta Kumar": "SK",
+    "Sonia": "SN"
     })
   });
 

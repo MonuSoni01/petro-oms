@@ -1,7 +1,7 @@
 /* PETRO OMS unified home. Existing credentials and operational pages are reused. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id), money=n=>'₹'+Math.round(n||0).toLocaleString('en-IN'), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const PREFIX={"Sariya Murtuza":"SM","Roshan Sharma":"RS","Rup Ranjan Bora":"RRB","Ankit Kalra":"AK","Amit Soni":"AS","Vivek Srivastava":"VS","Prince Gupta":"PG","Shubham Meena":"SS","Sumanta Kumar":"SK"};
+const PREFIX={"Sariya Murtuza":"SM","Roshan Sharma":"RS","Rup Ranjan Bora":"RRB","Ankit Kalra":"AK","Amit Soni":"AS","Vivek Srivastava":"VS","Prince Gupta":"PG","Shubham Meena":"SS","Sumanta Kumar":"SK","Sonia":"SN"};
 let role='',name='',orders=[],orderPage=1,unsubs=[],loaded={orders:false,products:false,nested:false},views='home';
 const login=$('loginOverlay');
 function isAdmin(){return ['admin','super_admin','manager'].includes(localStorage.getItem('adminRole')||'')&&localStorage.getItem('adminStatus')==='active'&&!!localStorage.getItem('adminEmail');}

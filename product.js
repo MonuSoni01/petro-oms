@@ -463,16 +463,18 @@ window.itemMaster = {
     "photo": "/images/products/hardware/162.webp"
   },
 
-  "170": {
-    "name": "Cable Manager (Single Pc Packing)",
-    "category": "hardware",
-    "units": {
-      "PCS": { "rate": 51.70 },
-      "PKT": { "rate": 51.70 * 12 }
-    },
-    "photo": "/images/products/hardware/170.webp"
-  },
 
+"170": {
+  "name": "Cable Manager (Single Pc Packing)",
+  "category": "hardware",
+  "units": {
+    "PCS": { "rate": 51.70 },
+    "PKT": { "rate": 51.70 * 48 },
+    "CTN": { "rate": 51.70 * 48 * 12 }
+  },
+  "photo": "/images/products/hardware/170.webp"
+}
+,
   "180": {
     "name": "Glass Vacuum No. 0 (Lock Type)",
     "category": "hardware",
